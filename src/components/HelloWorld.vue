@@ -3,7 +3,8 @@
     <!-- <h1>{{ msg }}</h1> -->
     <h2>跳转</h2>
     <ul>
-      <router-link tag="li" to="/detailsList">页面</router-link>
+      <router-link tag="li" to="/detailsList">TA的发布</router-link>
+       <router-link tag="li" to="/sitedetail">场地详情</router-link>
       <!-- <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
       <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
       <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>

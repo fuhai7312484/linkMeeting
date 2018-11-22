@@ -6,18 +6,24 @@
     ></div>
     <div class="my-top-boxsMak"></div>
     <div class="my-top-boxsContent">
-      <x-header
+
+        <x-header :right-options="{showMore: true}" @on-click-more="showMenus = true">
+        
+          </x-header>
+
+        
+      <!-- <x-header
         :right-options="{showMore: true}"
         @on-click-more="showMenus = true"
       >
-        <!-- <span slot="overwrite-left"><img :src="img"/></span> -->
+        <span slot="overwrite-left"><img :src="img"/></span>
         <x-icon
           slot="overwrite-left"
           type="navicon"
           size="35"
           style="fill:#fff;position:relative;top:-8px;left:-3px;"
         ></x-icon>
-      </x-header>
+      </x-header> -->
       <div class="my-top-AvatarBox">
         <flexbox>
           <flexbox-item :span="1/3">
@@ -46,7 +52,15 @@
             2 场地 | 0 会议 | 5 粉丝
           </flexbox-item>
           <flexbox-item :span="1/3">
-            <div class="my-top-attention">关注</div>
+            <div class="my-top-attention" @click="attChange" :style="{background:attention?'#FF576B':'#C8C8C8'}">{{attention?'关注':'已关注'}}</div>
+          <toast 
+          v-model="showPositionValue"
+           :type="InfoType" 
+           :time="800" 
+           is-show-mask 
+           :text="textInfo" 
+           :position="position">
+          </toast>
           </flexbox-item>
         </flexbox>
       </div>
@@ -78,9 +92,15 @@
     </tab>
     </sticky>
     </div>
-    <swiper ref="aaa" v-model="index" :show-dots="false" :style="{height:swiperH}" :height="swiperH" :autoheight="true" :loop="true" :min-moving-distance="120"  >
+    <swiper ref="swiperHeight" v-model="index" 
+    :show-dots="false" 
+    :style="{height:swiperH}" 
+    :height="swiperH" 
+    :autoheight="true" 
+    :loop="true" 
+    :min-moving-distance="120"  >
       <swiper-item> 
-        <ul class="my-tab-swiper vux-center" :ref="index">
+        <ul class="my-tab-swiper vux-center" ref="pubUiHF">
           <li v-for="(taPos,index) in TaPosted" :key="index">
             <flexbox v-if="taPos.type=='pub'">
               <flexbox-item :span="1/4">
@@ -140,7 +160,7 @@
 
       <swiper-item> 
         
-         <ul class="my-tab-swiper vux-center" ref="bbb">
+         <ul class="my-tab-swiper vux-center" ref="parUiHF">
  <li v-for="(taPos,index) in TaPosted" :key="index" v-if="taPos.type=='par'">
    <flexbox>
               <flexbox-item :span="2/3">
@@ -181,7 +201,8 @@
     XHeader,
     Flexbox,
     FlexboxItem,
-    Sticky
+    Sticky,
+    Toast
   } from "vux";
 
   export default {
@@ -197,13 +218,15 @@
       XHeader,
       Flexbox,
       FlexboxItem,
-      Sticky
+      Sticky,
+      Toast
     },
     data() {
       return {
         img: require("../../assets/images/a.jpeg"),
         tabTitle: "Ta发布的",
         index: 0,
+        attention:false,
         swiperH:'',
         list2: ["Ta发布的", "Ta参与的"],
         TaPosted: [
@@ -261,36 +284,55 @@
               time:'2018.10.09',
               price: "1800"
           }
-        ]
+        ],
+         position: 'default',
+      showPositionValue: false,
+      textInfo:'',
+      InfoType:'success',
       };
     },
 
     methods: {
       handChange() {
-        console.log("11111111");
+        // console.log("11111111");
       },
       handler(index) {
-        console.log(index);
-      }
+        // console.log(index);
+      },
+      attChange(){
+        if(this.attention){
+              this.attention = false;
+              this.InfoType = 'success'
+               this.textInfo = '关注成功！'
+              
+              this.showPosition('middle')
+              
+
+        }else{
+           this.attention = true;
+            this.InfoType = 'cancel'
+          this.textInfo = '已取消关注'
+            this.showPosition('middle')
+        }
+
+      },
+
+       showPosition (position) {
+      this.position = position
+      this.showPositionValue = true
+    },
     },
     mounted () {
-      this.swiperH = '1000px';
-      // console.log(this.swiperH)
+     this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height = this.$refs.pubUiHF.offsetHeight +'px'
     },
     watch: {
-    
       index(n,o){
-        console.log(this.$refs)
-          console.log(this.$refs.bbb.offsetHeight)
-//         if(n==0){
-//  this.swiperH = "1000px";
-//   console.log(this.swiperH)
-//         }else if(n==1){
-//  this.swiperH = "300px";
-//   console.log(this.swiperH)
-//         }
-
-        console.log(n,o)
+        if(n==0){
+this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height = this.$refs.pubUiHF.offsetHeight +'px'
+        }else if(n==1){
+ this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height =  this.$refs.parUiHF.offsetHeight +'px'
+ 
+        }
       }
     }
   };
@@ -300,11 +342,7 @@
   @import "../../assets/style/tools.less";
   @import "../../assets/style/global.less";
   @import "~vux/src/styles/reset.less";
-//   .vux-slider > .vux-swiper > .vux-swiper-item {
-//     height: 100% !important ;
-//   // height: calc(100% - 46px) !important;
-//   overflow: auto;
-// }
+
 .swiper-container {
 /* Specify Swiper's Size: */
 width: 100%;
