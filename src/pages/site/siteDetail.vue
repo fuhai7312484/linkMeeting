@@ -2,7 +2,6 @@
   <div class="box">
 
 
-    
 
     <div class="footer">
       <flexbox :gutter="0" class="footer-nav-box">
@@ -21,7 +20,7 @@
               <span> <img src="../../assets/images/comment.png" /></span>
             评论</div></flexbox-item>
         <flexbox-item :span="1/2" :order="4"
-          ><div class="footer-nav-destineBtn">立即预定</div></flexbox-item
+          ><div class="footer-nav-destineBtn" @click="goAnchor('#anchor')">立即预定</div></flexbox-item
         >
       </flexbox>
     </div>
@@ -88,9 +87,25 @@
         :show-lr-borders="false"
         class="padlr"
       >
-        <grid-item v-for="i in 3" :key="i" :label="i">
-          <img slot="icon" src="../../assets/images/a.jpeg" />
-          <span class="">60间</span>
+        <grid-item>
+       
+          <img slot="icon" src="../../assets/images/siteicon.png" />
+           <span class="siteAmountTitle" slot="label">会场/场地</span>
+          <span class="siteAmount">60间</span>
+        </grid-item>
+
+     
+
+        <grid-item>
+          <img slot="icon" src="../../assets/images/siteicon.png" />
+           <span class="siteAmountTitle" slot="label">最大面积</span>
+          <span class="siteAmount">500㎡</span>
+        </grid-item>
+
+        <grid-item>
+          <img slot="icon" src="../../assets/images/siteicon.png" />
+           <span class="siteAmountTitle" slot="label">最多容纳</span>
+          <span class="siteAmount">1800人</span>
         </grid-item>
       </grid>
 
@@ -145,7 +160,7 @@
     <div class="borBottm padlr">
       <flexbox class="site-room-title">
         <flexbox-item :span="1/3"
-          ><h3>会议室</h3>
+          ><h3 id="anchor">会议室</h3>
           <span> {{ roomData.length }}间</span></flexbox-item
         >
       </flexbox>
@@ -305,7 +320,7 @@
       </div>
     </div>
 
-  <div class="borBottm padlr">
+  <div class="padlr">
       <flexbox class="site-room-title">
         <flexbox-item :span="1/3"
           ><h3>会友评价</h3>
@@ -327,7 +342,7 @@
         </tab>
 
         <div v-if="assessIndex==0">
-          <div class="site-assess-Box" v-for="(as,index) in assessData" v-if="index<3" :key="index">
+          <div class="site-assess-Box" v-for="(as,index) in assessData" v-if="index<5" :key="index">
     <flexbox>
       <flexbox-item :span="1/6">
       <div class="assess-Avatar">
@@ -355,7 +370,7 @@
 
 
      <div v-if="assessIndex==1">
-          <div class="site-assess-Box" v-for="(as,index) in assessData" :key="index" v-if="as.status==1&&index<3">
+          <div class="site-assess-Box" v-for="(as,index) in assessData" :key="index" v-if="as.status==1">
     <flexbox>
       <flexbox-item :span="1/6">
       <div class="assess-Avatar">
@@ -382,7 +397,7 @@
 </div>
 
   <div v-if="assessIndex==2">
-          <div class="site-assess-Box" v-for="(as,index) in assessData" :key="index" v-if="as.status==2&&index<3">
+          <div class="site-assess-Box" v-for="(as,index) in assessData" :key="index" v-if="as.status==2">
     <flexbox>
       <flexbox-item :span="1/6">
       <div class="assess-Avatar">
@@ -411,7 +426,7 @@
 
 
   <div v-if="assessIndex==3">
-          <div class="site-assess-Box" v-for="(as,index) in assessData" :key="index" v-if="as.status==3&&index<3">
+          <div class="site-assess-Box" v-for="(as,index) in assessData" :key="index" v-if="as.status==3">
     <flexbox>
       <flexbox-item :span="1/6">
       <div class="assess-Avatar">
@@ -452,6 +467,83 @@
         ></x-icon>
     
       </div>
+
+
+ <flexbox class="site-room-title">
+        <flexbox-item :span="1/3"
+          ><h3>周边推荐</h3>
+          </flexbox-item>
+      </flexbox>
+
+<div>
+  <div class="site-room-list" v-for="(i,index) in 3" :key="index">
+ <flexbox>
+      <flexbox-item :span="1/4" class="site-room-imgBox">
+      <img src="https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg"/>
+      </flexbox-item>
+      <flexbox-item :span="2/4">
+<flexbox orient="vertical" :gutter="0">
+ <flexbox-item>
+<h4 class="site-recommend-title">北京凯宾斯基会议中心</h4>
+ </flexbox-item>
+
+ <flexbox-item>
+   <flexbox>
+<flexbox-item class="site-recommend-info">面积320㎡</flexbox-item>
+<flexbox-item class="site-recommend-info">容纳30人</flexbox-item>
+   </flexbox>
+ </flexbox-item>
+ <flexbox-item>
+     <flexbox>
+        <flexbox-item class="site-recommend-info">会场50间</flexbox-item>
+        <flexbox-item class="site-recommend-info">客房10间</flexbox-item>
+   </flexbox>
+ </flexbox-item>
+
+</flexbox>
+
+
+      </flexbox-item>
+       <flexbox-item :span="0.8/4">
+
+       <flexbox orient="vertical">
+        <flexbox-item class="site-recommend-distance">距离130米</flexbox-item>
+        <flexbox-item>
+           <x-button  mini plain type="warn" style="border-color:#fe666b; color:#fe666b;">询价</x-button>
+          
+          </flexbox-item>
+   </flexbox>
+
+
+   
+       </flexbox-item>
+    </flexbox>
+</div>
+</div>
+
+
+
+         <div class="site-room-dropDown">
+        查看更多推荐
+        <x-icon type="ios-arrow-right"
+          class="site-icon-down"
+          size="20"
+        ></x-icon>
+    
+      </div>
+
+
+<div>
+
+
+
+
+</div>
+
+
+
+
+
 
   </div>
 
@@ -892,6 +984,12 @@
       };
     },
     methods: {
+      //锚点跳转
+        goAnchor(selector) {
+        var anchor = this.$el.querySelector(selector)
+        document.body.scrollTop = anchor.offsetTop; //chrome
+        document.documentElement.scrollTop = anchor.offsetTop; //firefox
+    },
       swiporArrListChange() {
         console.log(this.demo01_index, this.swiperType);
         // console.log(type);
@@ -905,7 +1003,6 @@
         console.log(index);
       },
       assessLenChange(index){
-      
         switch(index){
           case 0:
           return this.assessData.length
