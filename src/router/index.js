@@ -4,6 +4,7 @@ import HelloWorld from '@/components/HelloWorld'
 import MyDetailsList from '@/pages/my/MydetailsList'
 import SiteDetail from '@/pages/site/siteDetail'
 import roomDetail from '@/pages/site/RoomDetail'
+import gallery from '@/components/gallery'
 Vue.use(Router)
 
 export default new Router({
@@ -27,6 +28,11 @@ export default new Router({
       path: '/roomdetail',
       name: 'roomDetail',
       component: roomDetail
+    },
+    {
+      path: '/gallery',
+      name: 'gallery',
+      component: gallery
     },
     
   ]

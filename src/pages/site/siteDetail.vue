@@ -34,6 +34,7 @@
         :show-desc-mask="false"
         v-model="demo01_index"
         :show-dots="false"
+        :auto="true"
         :loop="true"
       >
         <div v-if="swiperType=='video'" class="video-btn-box">
