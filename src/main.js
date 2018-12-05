@@ -18,6 +18,13 @@ import App from './App'
 //   routes
 // })
 
+
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+
+Vue.use(ElementUI);
+
+
 FastClick.attach(document.body)
 
 Vue.config.productionTip = false

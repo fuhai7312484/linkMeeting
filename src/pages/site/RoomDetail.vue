@@ -1,5 +1,10 @@
 <template>
   <div class="box">
+
+
+
+
+
     <div class="footer">
       <flexbox :gutter="0" class="footer-nav-box">
         <flexbox-item :span="1/4" :order="1">
@@ -71,58 +76,44 @@
             <h4>选择时段</h4>
           </flexbox-item>
         </flexbox>
-        <flexbox class="linH">
-          <flexbox-item :span="3/5">
-            <div class="site-siteFather">2018年10月 未选择</div>
+        <flexbox class="linH" :gutter="0">
+          <flexbox-item :span="3.8/5">
+            <div class="site-siteFather">{{nowDays}}   {{selectedList(this.demo21)}}</div>
           </flexbox-item>
-          <flexbox-item :span="2/5">
+          <flexbox-item :span="1.2/5">
             <div class="site-siteFather-info">全部日期
               <x-icon type="ios-arrow-right" class="site-icon-down" size="20"></x-icon>
             </div>
           </flexbox-item>
         </flexbox>
         <div class="site-TimeSlot-box">
-          <!-- 
-
-<checker v-model="demo21" type="checkbox" default-item-class="TimeSlotListBox" 
-disabled-item-class="site-TimeSlot-active"
-selected-item-class="site-TimeSlot-selected">
-        <checker-item :value="item" v-for="(item, index) in items1"
-         :key="index"
-         :disabled="item.status==0?true:false"
-         @on-item-click="onItemClick(index,item)">
-        
-            <div class="TimeSlot-week"> {{item.timeWeek}}</div>
-             <h3>{{item.day}}</h3>
-              <div class="TimeSlot-price"> {{item.price}}</div>
-         </checker-item>
-      </checker>
-
-
-          <toast v-model="showPositionValue" type="text" :time="800" is-show-mask text="当前日期不可选！" :position="position"></toast>-->
           <ul>
-            <!-- <li class="site-TimeSlot-active">
-              <div class="TimeSlot-week">周三</div>
-              <h3>2</h3>
-              <div class="TimeSlot-price">已预订</div>
-            </li>-->
             <li
               :class="item.status==0?'TimeSlotListBox site-TimeSlot-active':item.Start||item.end?'TimeSlotListBox site-TimeSlot-selected':item.range?'TimeSlotListBox site-TimeSlot-range':'TimeSlotListBox'"
               v-for="(item, index) in items1"
               :key="index"
-              @click="onItemClick(index,item)"
             >
-              <!-- <div class="site-TimeSlot-btnsBox" v-if="item.checkShow">
-  <span>上午</span>
-   <span>下午</span>
-   <span>全天</span>
-   <span>取消</span>
-              </div>-->
+             <el-popover
+    placement="top"
+    width="260"
+    trigger="manual"
+    v-model="item.visible"
+    popper-class="TimeSlotVisibleBox"
+    >
+<div :class="item.NumDays==0?'TimeSlotVisibleDiv VisibleDiv-active':'TimeSlotVisibleDiv'" @click="SetNumDays(0,index)"><i v-if="item.NumDays==0" class="el-icon-check"></i>上午
+</div>
+<div :class="item.NumDays==1?'TimeSlotVisibleDiv VisibleDiv-active':'TimeSlotVisibleDiv'"  @click="SetNumDays(1,index)" ><i v-if="item.NumDays==1" class="el-icon-check"></i>下午</div>
+<div :class="item.NumDays==2?'TimeSlotVisibleDiv VisibleDiv-active':'TimeSlotVisibleDiv'"  @click="SetNumDays(2,index)"><i v-if="item.NumDays==2" class="el-icon-check"></i>全天</div>
+<div class="TimeSlotVisibleDiv" @click="delNumDay(item.id,index)">删除</div>
+<div slot="reference" @click="onItemClick(index,item)">
               <div class="TimeSlot-week">{{item.timeWeek}}</div>
               <h3>
-                <!-- {{item.Start&&item.end?'入/离场':item.Start?'入场':item.end?'离场':item.day}}{{item.end}}  -->
                 {{item.Start&&item.end?'入/离场':item.Start?'入场':item.end?'离场':item.day}}</h3>
-              <div class="TimeSlot-price">{{item.status==0?'已预订':item.price}}</div>
+              <!-- <div class="TimeSlot-price">{{item.status==0?'已预订':item.price}}</div> -->
+
+               <div class="TimeSlot-price">{{item.status==0?'已预订':item.NumDays==0?'上午¥'+item.price.price1:item.NumDays==1?'下午¥'+item.price.price2:'全天¥'+item.price.price3}}</div>
+                </div>
+               </el-popover>
             </li>
           </ul>
 
@@ -135,10 +126,7 @@ selected-item-class="site-TimeSlot-selected">
             :position="position"
           ></toast>
         </div>
-        <div>当前选择了:
-           <span v-for="(day,index) in demo21" :key="index">{{day.day}}日,</span>
-           共{{demo21.length}}天
-        </div>
+       
        
 
         <!-- <div class="padlr">
@@ -221,7 +209,14 @@ selected-item-class="site-TimeSlot-selected">
       >房间装修精致、简约，配套设施完善，住宿环境十分温馨另外酒店设有大型宴会厅及不同规格的18间会议室，专业的宴会会议策划与全程跟踪服务，精选的中西式菜单，致力于为宾客提供最高水准的服务，以求每一个细节都达到尽善尽美</p>
     </div>
 
+     
+
     <div class="Placeholder"></div>
+
+
+  
+
+
   </div>
 </template>
 <script>
@@ -255,6 +250,7 @@ export default {
       showPositionValue: false,
       items1: [],
       demo21: [],
+      nowDays:'',
       swiperType: "img",
       SImgList: [
         {
@@ -358,9 +354,29 @@ export default {
     currentChan() {
       console.log(11111);
     },
+    
     showPosition(position) {
       this.position = position;
       this.showPositionValue = true;
+    },
+    selectedList(days){
+ let Count = 0;
+days.forEach((e,i)=>{
+  if(e.NumDays==2){
+    Count = Count+ 1
+  }else{
+    Count = Count+0.5
+  }
+})
+
+if(days.length ==0){
+return '未选择'
+}else if(days.length==1){
+return '已选:' + days[0].M + '-' + days[0].day + ',共' +  Count +'天'
+}else{
+  return '已选:' + days[0].M + '-' + days[0].day + '至' + days[days.length-1].M + '-' + days[days.length-1].day + ',共'+ Count+'天' 
+}
+
     },
     getNewTime() {
       function todu(num) {
@@ -400,6 +416,7 @@ export default {
       let D = myDate.getDate();
       let Week = myDate.getDay();
       // console.log(Y+''+ todu(M) +''+ todu(D) + ''+ weekChan(Week))
+      this.nowDays = Y +'年' + todu(M) + '月'
 
       let timeArr = [];
 
@@ -413,13 +430,22 @@ export default {
             todu(date2.getMonth() + 1) +
             "" +
             todu(date2.getDate()),
+            M:date2.getMonth()+1,
           day: date2.getDate(),
           timeWeek: weekChan(date2.getDay()),
-          price: "全天¥5000",
+          price:{
+                price1:'3000',
+               price2:'2500',
+              price3:'5000',
+          },
           status: 1,
           Start: false,
           end: false,
-          range: false
+          range: false,
+          visible:false,
+          NumDays:2,
+
+
         };
         //  console.log(date2.getFullYear()+""+todu((date2.getMonth()+1))+""+todu(date2.getDate()),Y+''+ todu(M)+''+todu(D))
         if (
@@ -437,15 +463,65 @@ export default {
             obj.status = 0;
         }
         //  timeArr.push(date2.getFullYear()+"-"+(date2.getMonth()+1)+"-"+date2.getDate())
+        
         timeArr.push(obj);
       }
       this.items1 = timeArr;
-      console.log(timeArr);
+      // console.log(timeArr);
     },
+    //设置选择日期的天数
+    SetNumDays(Num,index){
+      this.items1[index].NumDays = Num
+      let _that = this
+      setTimeout(function(){
+        _that.items1[index].visible = false;
+      },200)
+// console.log(Num,index)
+
+    },
+delNumDay(id,index){
+
+   this.demo21 = this.demo21.filter(e=>{
+  return e.id != id
+  })
+
+if(this.items1[index].Start && this.items1[index].end){
+  this.demo21 = []
+    this.items1.forEach(e=>{
+      e.Start = e.end = e.range = e.visible = false;
+    
+    })
+  }else if(this.items1[index].end){
+     this.items1[index].end = this.items1[index].range =  false
+     this.items1[index].visible = false
+     this.demo21[this.demo21.length-1].end = true
+     this.demo21[this.demo21.length-1].range =  false
+  }else if(this.items1[index].range){
+    this.items1[index].range = false;
+    this.items1[index].visible = false
+  }else if(this.items1[index].Start){
+  
+    this.demo21 = []
+    this.items1.forEach(e=>{
+      e.Start = e.end = e.range = e.visible = false;
+    
+    })
+  }
+
+  // console.log(this.demo21)
+},
+
     onItemClick(index, item) {
-       
+      this.items1.forEach(e=>{
+        e.visible = false;
+      })
+
+     
+
       if (item.status == 0) {
         this.showPosition("middle");
+        this.items1[index].visible = false;
+       
       } else {
         let isStart = this.items1.some(e => {
           return e.Start;
@@ -455,7 +531,7 @@ export default {
         });
 
         if (isStart) {
-        
+        this.items1[index].visible = true;
           let StartIndex = this.items1.findIndex(e => {
             return e.Start;
           });
@@ -475,18 +551,26 @@ export default {
               this.items1[index].Start = true;
               this.demo21 =[];
               this.demo21.push(this.items1[index])
-            }else if(item.Start || item.end || item.range){
-
-  console.log('选择范围内容')
-
-
+            }else if(index > StartIndex || index < EndIndex){
+         
+           
+              if(!this.items1[index].range&& !this.items1[index].Start && !this.items1[index].end){
+         
+               this.items1[index].range = true;
+               this.demo21 =[];
+               this.items1.forEach(e=>{
+                 if(e.Start || e.range || e.end){
+                   this.demo21.push(e)
+                 }
+                 
+               })
+              }
+              // console.log(this.demo21)
             }
-            console.log(StartIndex, EndIndex, index);
-
 
           } else {
             if (index < StartIndex) {
-              console.log('小于')
+              // console.log('小于')
                this.demo21 = [this.items1[index]]
               // this.showPosition("middle");
                this.items1[StartIndex].Start = false;
@@ -499,27 +583,25 @@ export default {
               //入场等于离场
               // console.log('点击的等于入场')  
               this.items1[index].end = true;
-              console.log(this.demo21)
-              // this.demo21.push(this.items1[index])
-              console.log(this.items1[index])
+   
 
             } else {
               this.items1[index].end = true;
-              // this.demo21.push(this.items1[StartIndex])
+        
               this.items1.forEach((e, i) => {
                 if (StartIndex < i && i < index) {
                   if(this.items1[i].status !=0){
                       this.items1[i].range = true;
                       this.demo21.push(e)
-                  // console.log(e);
+            
                   }
                 
                 }
               });
              this.demo21.push(this.items1[index])
-            
+          
             }
-            // this.demo21 = timeValue;
+            
           }
         } else {
           // this.items1.forEach((e,i)=>{
@@ -528,13 +610,10 @@ export default {
           //   }
           // })
           this.items1[index].Start = true;
-          
+            this.items1[index].visible = true;
             this.demo21 = [this.items1[index]];
           // timeValue.push(this.items1[index])
         }
-
-        
-        console.log(this.demo21)
       }
     }
   },
@@ -547,6 +626,38 @@ export default {
 @import "../../assets/style/tools.less";
 @import "../../assets/style/global.less";
 @import "~vux/src/styles/reset.less";
+
+
+.TimeSlotVisibleBox{
+  width: 100%;
+  padding: 0;
+   background: #787878 !important;
+   border-radius:10px; 
+  
+.popper__arrow{
+      border-top-color: #787878 !important;
+    }
+ .popper__arrow:after {
+       border-top-color: #787878 !important;
+    }
+  .TimeSlotVisibleDiv{
+    width: 25%;
+    text-align: center;
+    background: #787878;
+    color: #fff;
+    float: left;
+    box-sizing: border-box;
+    padding:.5rem .3rem;
+    // display: inline-block;
+
+
+  }
+  .VisibleDiv-active{
+    background: #505050;
+  }
+}
+
+
 
 //   .box {
 //   padding: 0 15px;
