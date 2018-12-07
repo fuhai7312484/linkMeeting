@@ -4,6 +4,7 @@
     <h2>跳转</h2>
     <ul>
       <router-link tag="li" to="/detailsList">TA的发布</router-link>
+             <router-link tag="li" to="/siteindex">场地首页</router-link>
        <router-link tag="li" to="/sitedetail">场地详情</router-link>
        <router-link tag="li" to="/roomdetail">会议室详情</router-link>
        <router-link tag="li" to="/gallery">场地全部图片列表</router-link>

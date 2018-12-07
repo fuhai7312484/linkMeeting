@@ -1,15 +1,9 @@
 <template>
   <div class="box">
 
-<!--  
-<video-player  class="video-player vjs-custom-skin"
-     ref="videoPlayer"
-     :playsinline="true"
-     :options="playerOptions"
-     @play="onPlayerPlay($event)"
-      @pause="onPlayerPause($event)"
-></video-player>
- -->
+
+
+
 
     <div class="footer">
       <flexbox :gutter="0" class="footer-nav-box">
@@ -28,9 +22,8 @@
     </div>
 
     <div class="site-img-showBox">
-
-<!-- <swiper
-        :list="SVideoList"
+      <swiper
+        :list="swiperType=='img'?SImgList:SVideoList"
         height="240px"
         :show-desc-mask="false"
         v-model="demo01_index"
@@ -38,12 +31,10 @@
         @click.native="currentChan"
         :loop="true"
       >
-
-
-</swiper> -->
-
-
-  <div class="site-img-markBox">
+        <div v-if="swiperType=='video'" class="video-btn-box">
+          <div class="jiao"></div>
+        </div>
+        <div class="site-img-markBox">
           <span
             @click="swiperType='img'"
             :class="swiperType=='img'?'site-img-type':'site-img-length'"
@@ -58,58 +49,8 @@
             }}
           </span>
         </div>
-
-
-
-<swiper height="390px" :show-desc-mask="false" :show-dots="false"  v-if="swiperType=='video'"
- v-model="demo01_index"
-  >
-      <swiper-item class="swiper-demo-img" v-for="(video,index) in SVideoList" :key="index">
-<video-player  class="video-player vjs-custom-skin"
-     ref="videoPlayer"
-     :playsinline="true"
-     :options="video.playerOptions"
-     @play="onPlayerPlay($event)"
-      @pause="onPlayerPause($event)"
-></video-player>
-        
-        </swiper-item>
-         
-    </swiper>
-
-
-
-
-
-
-
-<!-- {{demo01_index}} -->
-      <swiper
-      v-if="swiperType=='img'"
-        :list="swiperType=='img'?SImgList:SVideoList"
-        height="240px"
-        :show-desc-mask="false"
-        v-model="demo01_index"
-        :show-dots="false"
-        @click.native="currentChan"
-        :loop="true"
-      >
-  
-
-      
-        <!-- <div v-if="swiperType=='video'" class="video-btn-box">
-          <div class="jiao"></div>
-        </div> -->
-      
       </swiper>
-
-
-
-
     </div>
-
-
-
 
     <div class="site-content-box borBottm">
       <flexbox class="linH padlr">
@@ -283,7 +224,6 @@ import {
   Flexbox,
   FlexboxItem,
   Swiper,
-  SwiperItem,
   Grid,
   GridItem,
   Checker,
@@ -297,7 +237,6 @@ export default {
     Flexbox,
     FlexboxItem,
     Swiper,
-    SwiperItem,
     Grid,
     GridItem,
     Checker,
@@ -307,34 +246,6 @@ export default {
   },
   data() {
     return {
-
-
-
- playerOptions : {
-        playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
-        autoplay: true, //如果true,浏览器准备好时开始回放。
-        muted: false, // 默认情况下将会消除任何音频。
-        loop: false, // 导致视频一结束就重新开始。
-        preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
-        language: 'zh-CN',
-        aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
-        fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
-        sources: [{
-          type: "video/mp4",
-          src: "http://59.110.95.211:81/image/2018/12/06/5b29e8f9aec24a97b3f54c763a3d448d.mp4" //url地址
-        }
-        ],
-        poster: "http://59.110.95.211:81/image/2C9136AE66CE8BD301678190E06C154D.jpg", //你的封面地址
-        // width: document.documentElement.clientWidth,
-        notSupportedMessage: '此视频暂无法播放，请稍后再试', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
-        controlBar: {
-          timeDivider: true,
-          durationDisplay: true,
-          remainingTimeDisplay: true,
-          fullscreenToggle: true  //全屏按钮
-        }
-    },
-    scrollTop:0,
       position: "default",
       showPositionValue: false,
       items1: [],
@@ -344,14 +255,12 @@ export default {
       SImgList: [
         {
           url: "javascript:",
-           type: "image/jpg",
           img:
             "https://ww1.sinaimg.cn/large/663d3650gy1fq66vvsr72j20p00gogo2.jpg",
           title: "送你一朵fua"
         },
         {
           url: "javascript:",
-            type: "image/jpg",
           img:
             "https://ww1.sinaimg.cn/large/663d3650gy1fq66vw1k2wj20p00goq7n.jpg",
           title: "送你一辆车"
@@ -359,28 +268,24 @@ export default {
         {
           url: "javascript:",
           img: "https://static.vux.li/demo/5.jpg", // 404
-            type: "image/jpg",
           title: "送你一次旅行",
           fallbackImg:
             "https://ww1.sinaimg.cn/large/663d3650gy1fq66vw50iwj20ff0aaaci.jpg"
         },
         {
           url: "javascript:",
-            type: "image/jpg",
           img:
             "https://ww1.sinaimg.cn/large/663d3650gy1fq66vvsr72j20p00gogo2.jpg",
           title: "送你一朵fua"
         },
         {
           url: "javascript:",
-            type: "image/jpg",
           img:
             "https://ww1.sinaimg.cn/large/663d3650gy1fq66vw1k2wj20p00goq7n.jpg",
           title: "送你一辆车"
         },
         {
           url: "javascript:",
-            type: "image/jpg",
           img: "https://static.vux.li/demo/5.jpg", // 404
           title: "送你一次旅行",
           fallbackImg:
@@ -391,98 +296,15 @@ export default {
       SVideoList: [
         {
           url: "javascript:",
-           type: "video/mp4",
-          img: "http://59.110.95.211:81/image/2C9136AE66CE8BD301678190E06C154D.jpg",
-          title: "这里是视频",
-          src:'http://59.110.95.211:81/image/2018/12/06/5b29e8f9aec24a97b3f54c763a3d448d.mp4',
-
-          playerOptions : {
-        playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
-        autoplay: true, //如果true,浏览器准备好时开始回放。
-        muted: false, // 默认情况下将会消除任何音频。
-        loop: false, // 导致视频一结束就重新开始。
-        preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
-        language: 'zh-CN',
-        aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
-        fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
-        sources: [{
-          type: "video/mp4",
-          src: "http://59.110.95.211:81/image/2018/12/06/5b29e8f9aec24a97b3f54c763a3d448d.mp4" //url地址
-        }
-        ],
-        poster: "http://59.110.95.211:81/image/2C9136AE66CE8BD301678190E06C154D.jpg", //你的封面地址
-        // width: document.documentElement.clientWidth,
-        notSupportedMessage: '此视频暂无法播放，请稍后再试', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
-        controlBar: {
-          timeDivider: true,
-          durationDisplay: true,
-          remainingTimeDisplay: false,
-          fullscreenToggle: true  //全屏按钮
-        }
-    },
-
+          img:
+            "https://ww1.sinaimg.cn/large/663d3650gy1fq66vvsr72j20p00gogo2.jpg",
+          title: "这里是视频"
         },
         {
           url: "javascript:",
-           type: "video/mp4",
           img:
-            "http://59.110.95.211:81/image/2C9136AE66CE8BD3016781AC81B81552.jpg",
-          title: "这里是视频",
-              src:'http://59.110.95.211:81/image/2018/12/06/3c654b9e7c144ba498dadc0006ad2531.mp4',
-              playerOptions : {
-        playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
-        autoplay: true, //如果true,浏览器准备好时开始回放。
-        muted: false, // 默认情况下将会消除任何音频。
-        loop: false, // 导致视频一结束就重新开始。
-        preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
-        language: 'zh-CN',
-        aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
-        fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
-        sources: [{
-          type: "video/mp4",
-          src: "http://59.110.95.211:81/image/2018/12/06/3c654b9e7c144ba498dadc0006ad2531.mp4" //url地址
-        }],
-        poster: "http://59.110.95.211:81/image/2C9136AE66CE8BD3016781AC81B81552.jpg", //你的封面地址
-        // width: document.documentElement.clientWidth,
-        notSupportedMessage: '此视频暂无法播放，请稍后再试', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
-        controlBar: {
-          timeDivider: true,
-          durationDisplay: true,
-          remainingTimeDisplay: false,
-          fullscreenToggle: true  //全屏按钮
-        }
-    },
-        },
-          {
-          url: "javascript:",
-           type: "video/mp4",
-          img:
-            "http://59.110.95.211:81/image/2C9136AE66CE8BD3016781AC81B81552.jpg",
-          title: "这里是视频",
-              src:'http://59.110.95.211:81/image/2018/12/06/3c654b9e7c144ba498dadc0006ad2531.mp4',
-              playerOptions : {
-        playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
-        autoplay: true, //如果true,浏览器准备好时开始回放。
-        muted: false, // 默认情况下将会消除任何音频。
-        loop: false, // 导致视频一结束就重新开始。
-        preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
-        language: 'zh-CN',
-        aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
-        fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
-        sources: [{
-          type: "video/mp4",
-          src: "http://59.110.95.211:81/image/2018/12/06/3c654b9e7c144ba498dadc0006ad2531.mp4" //url地址
-        }],
-        poster: "http://59.110.95.211:81/image/2C9136AE66CE8BD3016781AC81B81552.jpg", //你的封面地址
-        // width: document.documentElement.clientWidth,
-        notSupportedMessage: '此视频暂无法播放，请稍后再试', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
-        controlBar: {
-          timeDivider: true,
-          durationDisplay: true,
-          remainingTimeDisplay: false,
-          fullscreenToggle: true  //全屏按钮
-        }
-    },
+            "https://ww1.sinaimg.cn/large/663d3650gy1fq66vw1k2wj20p00goq7n.jpg",
+          title: "这里是视频"
         }
       ],
       demo01_index: 0,
@@ -533,18 +355,6 @@ export default {
       console.log(11111);
     },
     
-
-  onPlayerPlay(player) {
-    // console.log('播放回调',player)
-    //   alert("play");
-    },
-    onPlayerPause(player){
-      //  console.log('暂停回调',player)
-      // alert("pause");
-    },
-
-
-
     showPosition(position) {
       this.position = position;
       this.showPositionValue = true;
@@ -701,8 +511,6 @@ if(this.items1[index].Start && this.items1[index].end){
   // console.log(this.demo21)
 },
 
-
-
     onItemClick(index, item) {
       this.items1.forEach(e=>{
         e.visible = false;
@@ -807,75 +615,10 @@ if(this.items1[index].Start && this.items1[index].end){
           // timeValue.push(this.items1[index])
         }
       }
-    },
-    //获取当前滚动条的位置
-     handleScroll(){
- this.scrollTop = document.documentElement.scrollTop || document.body.scrollTop
-                // console.log(page)
-//                 console.log("可视区高度"+document.documentElement.clientHeight+
-//                             '-----------'+window.innerHeight); // 可视区域高度  
-//                 console.log("滚动高度"+document.body.scrollTop+
-//                          `------`+document.documentElement.scrollTop); // 滚动高度  
-                // console.log("文档高度"+document.body.offsetHeight); // 文档高度  
-//                 // 判断是否滚动到底部  
-//                 if(document.body.scrollTop + window.innerHeight >=
-//                                      document.body.offsetHeight || 
-//                     document.documentElement.scrollTop + window.innerHeight >=
-//                     document.body.offsetHeight) {  //滚动高度+可视区高度>=文档高度
-//                     console.log(sw);   
-//                     // 如果开关打开则加载数据  
-//                     if(sw==true){  
-//                         // 将开关关闭  
-//                         sw = false;                         
-//                         ajax({
-//                             method:'get',
-//                         })
-//                     }                
-//                 }  
-            }
-
-  },
-  watch:{
-    swiperType(n,o){
-      // console.log(n,o,this.demo01_index)
-      this.demo01_index = 0;
-    },
-    demo01_index(n,o){
-    
-      if(this.swiperType=='video'){
-        if( this.$refs.videoPlayer && this.$refs.videoPlayer[o]!=undefined && this.$refs.videoPlayer[n]!=undefined){
-         
-     this.$refs.videoPlayer[o].player.pause()
-       this.$refs.videoPlayer[n].player.play()
-        }
-     
-      }
-    
-    },
-    scrollTop(n,o){
-      // console.log( this.$refs.videoPlayer)
-      if(this.$refs.videoPlayer!=undefined){
-        if(n>240){
-      
-           this.$refs.videoPlayer[this.demo01_index].player.pause()
-        }else if(n<240){
-         
-        this.$refs.videoPlayer[this.demo01_index].player.play()
- 
-        }
-      
-      }
-     
-    
     }
-
   },
   mounted() {
     this.getNewTime();
-
-    window.addEventListener('scroll',this.handleScroll); 
-       
-
   }
 };
 </script>
@@ -884,15 +627,6 @@ if(this.items1[index].Start && this.items1[index].end){
 @import "../../assets/style/global.less";
 @import "~vux/src/styles/reset.less";
 
-.video-js .vjs-big-play-button{
-     /*
-      播放按钮换成圆形
-     */
-    height: 2em;
-    width: 2em;
-    line-height: 2em;
-    border-radius: 1em;
-  }
 
 .TimeSlotVisibleBox{
   width: 100%;
