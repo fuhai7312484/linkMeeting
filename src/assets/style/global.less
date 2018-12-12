@@ -794,6 +794,9 @@ margin: .5rem 0;
     text-align: center;
     color: #323232;
     font-size: .9rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     i{
       color: #ccc;
     }
@@ -808,4 +811,110 @@ margin: .5rem 0;
 .siteFiltersContent{
   width: 100%;
   position: absolute ;
+}
+.siteFiltersPublic{
+
+  position: relative;
+  // padding-bottom:50px;
+}
+.crumbs-nav-main{
+  span{
+    font-size: .8rem;
+    display: inline-block;
+    padding: .2rem .8rem;
+    background: #fef4f4;
+    margin:.3rem;
+    border-radius:.3rem; 
+  }
+}
+
+// .vux-popup-dialog{
+//   background: #fff !important;
+// }
+.FeaturesFilterBox{
+  background: #fff;
+  height: 100%;
+  position: relative;
+  .FeaturesConten{
+    width: 100%;
+    height: 93%;
+    overflow-y:auto;
+  }
+  .footer-nav-FieldPlace{
+    height: 50px;
+    background: #F0F0F0;
+    text-align: center;
+    line-height: 50px;
+  }
+  .FeaturesCheckeTitle{
+    overflow: hidden;
+    h4{
+      margin-right:1rem; 
+    }
+    .CheckeInfo{
+      color: #B4B4B4;
+      font-size: .9rem;
+    }
+  }
+  .FeaturesFilterBtns{
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+  }
+}
+.transition-box{
+  z-index: 9999;
+}
+.transition-mak{
+  z-index: 9998;
+}
+
+// 底部公用导航
+.footer-active{
+   color: #FE666B !important;
+}
+.footerNavBox{
+  // height: 70px;
+  max-height: 70px;
+  position: fixed;
+  font-weight: bold;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  border-top:1px solid rgb(240, 240, 240);
+  padding-top:.3rem;
+  background: #fff;
+  // background: #000;
+}
+.footerNav{
+  text-align: center;
+ 
+}
+.footerNavIcons{
+  text-align:center;
+  // background: #000;
+  color:#A0A0A0;
+  font-size: .7rem;
+  height: 50px;
+  span{
+    display:block;
+    img{
+      width: 24px;
+    }
+  }
+  
+}
+.footerNavRelease{
+  text-align: center;
+  img{
+    width: 85%;
+  }
+}
+.anchorBL{
+ 
+  img{
+    display:none;
+  }
+ 
 }
