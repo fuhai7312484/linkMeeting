@@ -1,3 +1,4 @@
+
 .box {
   position: relative;
 }
@@ -780,10 +781,19 @@ ul{
     margin:.4rem .8rem 0 .8rem;
    
   }
+  .siteListIcosBox{
+    overflow: hidden;
+    width: 25%;
+  }
   .HeaderSearch{
+    width: 40px;
+    // background: #000;
+    text-align: center;
+    // height: 30px;
+    padding: 1px 1px;
     img{
-      width: 1.3rem;
-      height: 1.3rem;
+      width: 1rem;
+      // margin: .5rem .6rem;
     }
   }
 
@@ -885,6 +895,7 @@ margin: .5rem 0;
   border-top:1px solid rgb(240, 240, 240);
   padding-top:.3rem;
   background: #fff;
+  z-index: 500;
   // background: #000;
 }
 .footerNav{
@@ -917,4 +928,240 @@ margin: .5rem 0;
     display:none;
   }
  
+}
+
+.Bmap-infoBox{
+  background:rgba(255, 255, 255, .75);
+  padding:.6rem .8rem;
+  color:#323232;
+  border:1px solid #C8C8C8;
+  border-radius:1rem;
+  // width:160px;
+  // overflow: hidden;
+  line-height: 1rem;
+  position: absolute;
+  box-shadow: 0px 3px 3px rgba(0, 0, 0, .2);
+  .bg-arrow-off{
+    width: 20px;
+    height: 10px;
+    // background: #000;
+    position: absolute;
+    bottom:-10px;
+    left: 45%;
+    background:url(../images/bg-arrow-off.png) no-repeat;
+  }
+ 
+  h4{
+    width: 100%;
+    font-size: .8rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    line-height: 1rem;
+    span{
+      display: inline-block;
+      max-width: 100px;
+      overflow: hidden;
+      color: #323232;
+      font-size: .8rem;
+      vertical-align: top;
+      text-overflow: ellipsis;
+      
+    }
+  }
+  span{
+    display:inline-block;
+    margin-right:.4rem;
+    font-size: .6rem; 
+    color:#787878;
+    background: transparent; 
+ 
+  }
+}
+.Bmap-infoBox-actver{
+  background:#FE666B;
+  padding:.6rem .8rem;
+  color:#fff;
+  border:1px solid #FE666B;
+  border-radius:1rem;
+  // width:160px;
+  // overflow: hidden;
+  line-height: 1rem;
+  position: absolute;
+  box-shadow: 0px 3px 3px rgba(0, 0, 0, .2);
+
+  .bg-arrow-off{
+    width: 20px;
+    height: 10px;
+    // background: #000;
+    position: absolute;
+    bottom:-11px;
+    left: 45%;
+ 
+    background:url(../images/bg-arrow-on.png) no-repeat;
+  }
+
+  h4{
+    width: 100%;
+    font-size: .8rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    span{
+      display: inline-block;
+      max-width: 100px;
+      overflow: hidden;
+      color: #fff;
+      font-size: .8rem;
+      vertical-align: top;
+      text-overflow: ellipsis;
+      
+    }
+  }
+  span{
+    display:inline-block;
+    margin-right:.4rem;
+    font-size: .6rem; 
+    color:#787878;
+    background: transparent; 
+ 
+  }
+}
+
+.siteGotoMap{
+  // background: #000;
+  width: 50px;
+  height: 50px;
+  border-radius:50%;
+  position: fixed;
+  bottom: 90px;
+  right: 20px; 
+  z-index: 501;
+  img{
+    width: 100%;
+  }
+}
+.siteMapBox{
+  position: relative;
+}
+.siteIndex-listBox{
+  position: relative;
+}
+
+.siteSearchInput{
+  font-size: .8rem;
+  color: #C8C8C8;
+}
+.siteSearchCancel{
+text-align: right;
+padding: 0 .8rem;
+box-sizing: border-box;
+font-size: .8rem;
+color: #969696;
+
+}
+.siteSearchHistory{
+  margin: 1rem 0;
+}
+.HistoryTitle{
+  color: #505050;
+  font-size: .9rem;
+}
+.HistoryDelete{
+  text-align: right;
+  padding: 0 .8rem;
+  box-sizing: border-box;
+  img{
+    width: 15px;
+  }
+}
+.siteSearchList{
+  padding: .5rem;
+  line-height: 2rem;
+  li{
+    color: #323232;
+    border-bottom:1px solid rgb(240, 240, 240);
+    padding: .2rem .3rem;
+    font-size: .8rem;
+    color:#323232;
+  }
+}
+.siteHotSearchList{
+  overflow: hidden;
+  margin: .5rem 0;
+  li{
+float: left;
+padding:.5rem .7rem;
+background: #F6F6F6;
+border-radius:.3rem; 
+margin: .3rem;
+color: #323232;
+font-size: .8rem;
+  }
+}
+.siteSearchBox{
+  position: relative;
+}
+.search-content{
+  position: absolute;
+  height: 100%;
+  background: #fff;
+  // width: 100%;
+  top: 40px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: .8rem;
+  box-sizing: border-box;
+}
+.search-item-list{
+   font-size: .8rem;
+   margin-top: .3rem;
+   color: rgb(180, 180, 180);
+}
+
+.map-headerBox{
+  height: 40px;
+  border-bottom:1px solid #C8C8C8;
+  overflow: hidden;
+  .map-go-back{
+    width: 10%;
+    height: 40px;
+    float: left; 
+    background: url('../images/map-go-back.png') no-repeat center;
+    background-size: 60%;
+    
+    }
+  .map-headerTitle{
+text-align: center;
+line-height: 40px;
+width: 70%;
+float: left;
+color: #323232;
+  }
+  .map-headerIcos{
+    width: 10%;
+    height: 40px;
+    float: left; 
+    text-align: center;
+    img{
+      width: 40%;
+      margin-top:.7rem;
+    }
+    // background: #000;
+  }
+
+}
+
+.evDataBox{
+  width: 100%;
+  height: 173px;
+  background: #fff;
+  overflow: hidden;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  box-sizing:border-box;
 }

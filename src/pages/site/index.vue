@@ -1,14 +1,27 @@
 <template>
   <div class="box">
+    <div v-if="!IsShowMap">
     <div class="siteHeaderBox">
       <h3 class="fl siteHeaderTitle">搜场地</h3>
       <div class="fl siteCity">
         北京
         <i class="el-icon-caret-bottom"></i>
       </div>
-      <div class="fr HeaderSearch">
+
+<div class="siteListIcosBox fr">
+
+      <div class="fl HeaderSearch">
         <img src="../../assets/images/HeaderSearch.png">
       </div>
+       <div class="fr HeaderSearch" @click="gotoMapChange">
+        <img src="../../assets/images/b-map-position.png">
+      </div>
+
+
+</div>
+
+
+
     </div>
 
     <!-- {{filterData}} -->
@@ -134,13 +147,13 @@
           v-for="(menuConten,index) in filterMenu"
           :key="index"
           v-if="menuConten.show"
-          :style="{height:OrderHight}"
+          :style="{height:(OrderHight -100 )+'px'}"
         >
           <div
             v-if="menuConten.show"
             class="transition-mak"
             @click="ClearMenuChange"
-            :style="{height:OrderHight}"
+            :style="{height:(OrderHight - 100 )+'px'}"
           ></div>
 
           <div class="transition-box">
@@ -179,19 +192,100 @@
 </footer-nav>
 
 
+
+    <div class="siteIndex-listBox">
+   <ul class="my-tab-swiper vux-center" ref="pubUiHF">
+          <li v-for="(taPos,index) in TaPosted" :key="index">
+            <flexbox v-if="taPos.type=='pub'">
+              <flexbox-item :span="1/4">
+                <div class="my-tab-swiperListImg"><img :src="taPos.img" /></div>
+              </flexbox-item>
+              <flexbox-item :span="3/4">
+                <div class="my-tab-listContent">
+                  <h3>{{ taPos.city }}{{ taPos.title }}</h3>
+                </div>
+
+                <div class="my-tab-listContent mylistInfo">
+                  距离:{{ taPos.distance }} {{ taPos.area }}
+                </div>
+
+                <div class="my-tab-listContent mylistInfo">
+                  面积:{{ taPos.proportion }} 容纳:{{ taPos.hold }}
+                </div>
+
+                <div class="my-tab-listContent mylistInfo">
+                  会议室:{{ taPos.meetingRoom }} 客房:{{ taPos.guestRoom }}
+                </div>
+                <flexbox :gutter="0">
+                  <flexbox-item :span="1/2" class="listContent-tagbox">
+                    <span
+                      v-for="(tag,index) in taPos.tag"
+                      :key="index"
+                      class="listContent-tags"
+                    >
+                      {{ tag }}
+                    </span>
+                  </flexbox-item>
+                  <flexbox-item :span="1/2"> <h4>¥{{ taPos.price }}</h4> </flexbox-item>
+                </flexbox>
+              </flexbox-item>
+            </flexbox>
+
+            <flexbox v-if="taPos.type=='par'">
+              <flexbox-item :span="2/3">
+                <div class="listContentPar">
+                <h3> {{ taPos.title }}</h3>
+                </div>
+                <div class="mylistInfo">{{taPos.time}}</div>
+                <h4>¥{{ taPos.price }}</h4>
+              </flexbox-item>
+              <flexbox-item :span="1/3"> 
+              
+              <div class="my-tab-parListImg">
+              
+                <img :src="taPos.img" />
+                </div>
+              
+              </flexbox-item>
+            </flexbox>
+          </li>
+        </ul>
+    </div>
+
+    </div>
+
+
+<div v-if="IsShowMap">
+
+<div class="map-headerBox">
+<div class="map-go-back">
+</div>
+<h3 class="map-headerTitle">
+  找场地
+</h3>
+<div class="map-headerIcos">
+<img src="../../assets/images/button-search-balck.png"/>
+</div>
+
+<div class="map-headerIcos">
+<img src="../../assets/images/button-screen-black.png"/>
+</div>
+</div>
+
+
+
     <div class="siteMapBox">
+<div class="siteGotoMap" @click="gotoMapChange">
+  <img src="../../assets/images/button-backlist.png"/>
 
-<b-map>
-
-  
+</div>
+<b-map :OrderHight="OrderHight-40" :data_info="TaPosted">
 </b-map>
 
 
 
     </div>
-
-
-
+</div>
 
   </div>
 </template>
@@ -205,7 +299,8 @@ import {
   Checker,
   CheckerItem,
   Popup,
-  TransferDom
+  TransferDom,
+  Sticky 
 } from "vux";
 export default {
   directives: {
@@ -220,13 +315,86 @@ export default {
     CheckerItem,
     Popup,
     FooterNav,
-    BMap
+    BMap,
+    Sticky 
   },
   data() {
     return {
       show9: false,
+      IsShowMap:true,
       filterData: [],
        FeatureData:[],
+         TaPosted: [
+          {
+            id:'001',
+            type: "pub",
+            img:
+              "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
+            city: "北京",
+            area: "朝阳地区",
+            title: "昆泰国家大酒店昆泰国家大酒店",
+            distance: "130米",
+            proportion: "320㎡",
+            hold: "30人",
+            meetingRoom: "50间",
+            guestRoom: "10间",
+            tag: ["机场", "餐厅", "无柱"],
+            price: "5000半天起",
+             lng: 116.417854,
+          lat: 39.921988,
+          },
+          {
+            id:'002',
+            type: "pub",
+            img:
+              "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
+            city: "北京",
+            area: "朝阳地区",
+            title: "2昆泰国家大酒店",
+            distance: "130米",
+            proportion: "320㎡",
+            hold: "30人",
+            meetingRoom: "50间",
+            guestRoom: "10间",
+            tag: ["机场", "餐厅", "无柱"],
+            price: "5000半天起",
+            lng: 116.406605,
+          lat: 39.921585,
+          }, {
+            id:'003',
+            type: "pub",
+            img:
+              "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
+            city: "北京",
+            area: "朝阳地区",
+            title: "3昆泰国家大酒店",
+            distance: "130米",
+            proportion: "320㎡",
+            hold: "30人",
+            meetingRoom: "50间",
+            guestRoom: "10间",
+            tag: ["机场", "餐厅", "无柱"],
+            price: "5000半天起",
+            lng: 116.412222,
+          lat: 39.912345,
+          },
+          {id:'004',
+            type: "pub",
+            img:
+              "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
+            city: "北京",
+            area: "朝阳地区",
+            title: "昆泰国家大酒店",
+            distance: "130米",
+            proportion: "320㎡",
+            hold: "30人",
+            meetingRoom: "50间",
+            guestRoom: "10间",
+            tag: ["机场", "餐厅", "无柱"],
+            price: "5000半天起",
+            lng: 116.447854,
+          lat: 39.921988,
+          }],
       Features:[{
           title: "场地特色",
           show: false,
@@ -236,15 +404,19 @@ export default {
           showData: [
             "无柱",
             "场地方正","豪华","美食","自然采光","园林草坪","温泉","景区周边","水景","泳池","中式院落","西式装修","少数民族","会场进车","高尔夫"
-          ]
+          ],
+          lng: 116.447854,
+          lat: 39.921988,
         },
-        {
+        {id:'005',
           title: "场地价格",
           show: false,
           type: "price",
           info:'单位：元',
           value: "0",
           name:'',
+          lng: 116.447854,
+          lat: 39.921988,
           showData: [
             "2千以内","2千-5千","5千-1万","1万-5万","5万-8万","8万以上" ]
         }],
@@ -341,7 +513,7 @@ export default {
       showCity: false,
       showType: false,
       demo1: "0",
-      OrderHight: "",
+      OrderHight:0,
       regionData: [
         "东城区",
         "西城区",
@@ -365,6 +537,10 @@ export default {
     };
   },
   methods: {
+    //地图和列表显示互相切换
+    gotoMapChange(){
+     this.IsShowMap = !this.IsShowMap
+    },
     //筛选点击选择获取value值
     changeValue(val, item) {
       //这里请求接口获取当前选择条件
@@ -516,7 +692,7 @@ this.Features.forEach(e=>{
     getOrderHight() {
       var orderHight =
         document.documentElement.clientHeight || document.body.clientHeight;
-      this.OrderHight = orderHight - 92.19 + "px";
+      this.OrderHight = orderHight;
     },
     setFilterName(type){
       switch(type){
