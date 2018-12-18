@@ -14,6 +14,7 @@
 
    <ul class="my-tab-swiper vux-center" ref="pubUiHF">
           <li v-for="(taPos,index) in evData" :key="index">
+            {{taPos.lng}} {{taPos.lat}}
             <flexbox v-if="taPos.type=='pub'">
               <flexbox-item :span="1/4">
                 <div class="my-tab-swiperListImg"><img :src="taPos.img" /></div>
@@ -114,10 +115,10 @@ export default {
       geolocation.getCurrentPosition(
         function(r) {
           if (this.getStatus() == BMAP_STATUS_SUCCESS) {
-            // var myIcon = new BMap.Icon(
-            //   require("../assets/images/mypoint.png"),
-            //   new BMap.Size(35, 40)
-            // );
+            // console.log(r)
+
+            // alert('您当前定位为：'+r.address.city);
+           
             var mk = new BMap.Marker(r.point, { icon: myIcon });
             map.addOverlay(mk);
             map.panTo(r.point);

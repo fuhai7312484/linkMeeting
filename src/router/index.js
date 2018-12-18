@@ -7,6 +7,7 @@ import SiteSearch from '@/pages/site/siteSearch'
 import SiteDetail from '@/pages/site/siteDetail'
 import roomDetail from '@/pages/site/RoomDetail'
 import gallery from '@/components/gallery'
+import city from '@/components/City'
 Vue.use(Router)
 
 export default new Router({
@@ -45,6 +46,11 @@ export default new Router({
       path: '/gallery',
       name: 'gallery',
       component: gallery
+    },
+    {
+      path: '/city',
+      name: 'city',
+      component: city
     },
     
   ]

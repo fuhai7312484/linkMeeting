@@ -1,6 +1,8 @@
 
 .box {
   position: relative;
+  // overflow: hidden;
+  // height: 100%;
 }
 .my-top-boxs {
   height: 14rem;
@@ -1165,3 +1167,73 @@ color: #323232;
   padding: 1rem;
   box-sizing:border-box;
 }
+
+// 城市选择
+.cityHeaderBox{
+  height: 40px;
+  .cityBack{
+    width: 10%;
+    height: 40px;
+    float: left; 
+    // background: url('../images/map-go-back.png') no-repeat center;
+    background-size: 60%;
+    font-weight: bold;
+    // padding-top:5px; 
+
+  }
+  .cityTitle{
+    height: 40px;
+    text-align: center;
+    float: left;
+    line-height: 40px;
+    color: #323232;
+    width: 80%;
+  }
+ 
+}
+
+.cityListBox{
+ margin: 1rem 0;
+ .cityListTitle{
+   font-size: .8rem;
+   color: #A0A0A0;
+ }
+     .cityList{
+       margin: .5rem 0;
+      //  background: #000;
+       width: 90%;
+       overflow: hidden;
+       display: flex;
+       flex-direction: row;
+       flex-wrap:wrap;
+       justify-content:space-between;
+       align-content:flex-start;
+    //  align-items: center;
+  
+      li{
+        background: #F6F6F6;
+        float: left;
+        color: #323232;
+        border-radius:.3rem; 
+        width: 30%;
+        text-align: center;
+        height: 40px;
+        line-height: 40px;
+        font-size: .8rem;
+        font-weight: bold;
+        margin: .3rem 0;
+        img{
+          width: 12px;
+          vertical-align: middle;
+          margin-right:.2rem; 
+        }
+
+      }
+      .positionCity{
+        background: #FEF4F4 !important;
+        color: #FE666B !important;
+      }
+     } 
+   }
+
+  
