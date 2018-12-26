@@ -11,6 +11,7 @@ import SiteDetail from '@/pages/site/siteDetail'
 import roomDetail from '@/pages/site/RoomDetail'
 import MeetingIndex from '@/pages/meeting/index'
 import MsgIndex from '@/pages/Message/index'
+import OrderMsg from '@/pages/Message/Order.vue'
 import MyIndex from '@/pages/my/index'
 import gallery from '@/components/gallery'
 import city from '@/components/City'
@@ -88,6 +89,14 @@ export default new Router({
       //   index: 1,
       // },
       component: MsgIndex
+    },
+    {
+      path: '/ordermsg',
+      name: 'OrderMsg',
+      // meta: {
+      //   index: 1,
+      // },
+      component: OrderMsg
     },
     {
       path: '/myindex',
