@@ -14,7 +14,7 @@ v-model="keyword"
 
       </flexbox-item>
       <flexbox-item :span="1/5">
-<div class="siteSearchCancel">取消</div>
+<div class="siteSearchCancel" @click="$router.go(-1)">取消</div>
 
       </flexbox-item>
      

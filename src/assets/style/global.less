@@ -1,8 +1,10 @@
 
 .box {
   position: relative;
+ 
   // overflow: hidden;
   // height: 100%;
+  // height: 1vh;
 }
 .my-top-boxs {
   height: 14rem;
@@ -886,6 +888,9 @@ margin: .5rem 0;
 .footer-active{
    color: #FE666B !important;
 }
+
+
+
 .footerNavBox{
   // height: 70px;
   max-height: 70px;
@@ -898,7 +903,30 @@ margin: .5rem 0;
   padding-top:.3rem;
   background: #fff;
   z-index: 500;
+  
   // background: #000;
+  
+
+
+
+  // .meetingBg{
+  //   span{
+  //     width: 100%;
+  //     height: 30px;
+  //     background: url('../../assets/images/menu-meeting-gray.png') no-repeat;
+  //     background-position: center;
+  //     background-size:25px 25px; 
+  //   }
+  //   .router-link-active{
+  //     color: #FE666B;
+  //     span{
+  //       background: url('../../assets/images/menu-field-red.png') no-repeat !important;
+  //       background-position: center;
+  //       background-size:25px 25px; 
+  //     }
+  //   }
+
+  // }
 }
 .footerNav{
   text-align: center;
@@ -910,14 +938,67 @@ margin: .5rem 0;
   color:#A0A0A0;
   font-size: .7rem;
   height: 50px;
+span{
+  width: 100%;
+  height: 30px;
+  display: block;
+}
+  .siteBg{
+    background: url('../../assets/images/menu-field-gray.png') no-repeat;
+    background-position: center;
+    background-size:24px 24px; 
+  }
+  .meetingBg{
+    background: url('../../assets/images/menu-meeting-gray.png') no-repeat;
+    background-position: center;
+    background-size:24px 24px; 
+  }
+  .menuMsgBg{
+    background: url('../../assets/images/menu-news-gray.png') no-repeat;
+    background-position: center;
+    background-size:24px 24px; 
+  }
+  .menuMyBg{
+    background: url('../../assets/images/menu-my-gray.png') no-repeat;
+    background-position: center;
+    background-size:24px 24px; 
+  }
+}
+
+
+.router-link-active{
+  color: #FE666B;
   span{
-    display:block;
-    img{
-      width: 24px;
-    }
+    width: 100%;
+    height: 30px;
+   
+    display: block;
+  }
+  .siteBg{
+    background: url('../../assets/images/menu-field-red.png') no-repeat !important;
+    background-position: center !important;
+    background-size:24px 24px !important; 
+  }
+  .meetingBg{
+    background: url('../../assets/images/menu-meeting-red.png') no-repeat;
+    background-position: center;
+    background-size:24px 24px; 
+  }
+  .menuMsgBg{
+    background: url('../../assets/images/menu-news-red.png') no-repeat;
+    background-position: center;
+    background-size:24px 24px; 
+  }
+  .menuMyBg{
+    background: url('../../assets/images/menu-my-red.png') no-repeat;
+    background-position: center;
+    background-size:24px 24px; 
   }
   
+
 }
+
+
 .footerNavRelease{
   text-align: center;
   img{
@@ -1124,7 +1205,7 @@ font-size: .8rem;
 
 .map-headerBox{
   height: 40px;
-  border-bottom:1px solid #C8C8C8;
+  // border-bottom:1px solid #C8C8C8;
   overflow: hidden;
   .map-go-back{
     width: 10%;
@@ -1235,5 +1316,237 @@ color: #323232;
       }
      } 
    }
+   .CityPopup1Box{
+    height: 100%;
+    overflow: hidden;
+    background: #fff;
+    .CityPopup1{
+      background: #fff;
+      height: 100%;
+      // overflow: hidden;
+    }
+      
 
+   }
+// 登录注册找回密码
+
+.login-contentBox{
+ padding: 1rem 1.5rem;
+  .login-contentTitle{
+    margin: .5rem 0;
+    font-weight: 600;
+  }
+  .login-contentinfoTitle{
+    margin: 1rem 0;
+  }
+  .login-subtitle{
+    color: #A0A0A0;
+    font-size: 1rem;
+    span{
+      color: #FE666B;
+      margin: 0 .5rem;
+    }
+  }
+}
+
+.login-account{
+  // border-bottom:1px solid #e4e4e4; 
+  padding:.6rem 0;
+  margin: 1rem 0; 
+
+  .weui-cells{
+    font-size: .9rem;
+    color: #000;
+    margin-top:-10px; 
+  }
+  .weui-cells:before{
+   border: 0;
+  }
+  .weui-cells:after{
+    border: 0;
+   }
+}
+.login-formBox{
+  margin: 3rem 0;
+}
+.loginBtnBox{
+  height: 50px;
+  overflow: hidden;
+  margin: 1rem 0 ;
   
+}
+.weixinBtns{
+  span{
+    display: inline-block;
+    margin-right:1.5rem; 
+    img{
+      width: 40px;
+      vertical-align: bottom ;
+    }
+  }
+
+}
+
+.loginBtn{
+ 
+  // width: 100px;
+  // padding: .5rem 1.2rem;
+  // height: 40px;
+ 
+ 
+  // line-height: 40px;
+ 
+  .custom-primary{
+   padding: .3rem 1rem;
+    border-radius:25px; 
+    text-align: center;
+    font-size: .8rem;
+    font-weight: 400;
+    min-width: 100px;
+ background: #DDDDDD !important;
+ color: #fff !important;
+  }
+  .custom-primary-red{
+    padding: .3rem 1rem;
+    min-width: 100px;
+    border-radius:25px; 
+    text-align: center;
+    font-size: .8rem;
+    font-weight: 400;
+ background: #FD626C !important;
+ color: #fff !important;
+  }
+
+  .weui-btn:after{
+    border: 0 !important;
+  }
+}
+.forgetPass{
+  // height: 40px;
+  // line-height: 40px;
+  margin-top:.8rem; 
+  font-size: .8rem;
+}
+.backLogin{ width: 15%;
+height: 40px;
+text-align: center;
+line-height: 40px;
+font-weight: bold;
+color: #323232;
+font-size: .8rem;
+}
+//会议首页
+.meeting-tabBox{
+  overflow: hidden;
+}
+.meeting-tab{
+  width: 88%;
+}
+.meeting-swiperBox{
+  .vux-icon-dot{
+    width: 8px !important;
+    height: 8px !important;
+    border-radius:50% !important;
+    background: rgba(255,255,255,0.4) !important;
+    margin:0 .3rem;
+
+  }
+  .active{
+    background:rgba(255,255,255,1) !important;
+  }
+}
+.meetingfilterIcon{
+  width: 12%;
+  line-height: 38px;
+  height: 43px;
+  // background: #000;
+  text-align: center;
+  img{
+    height: 15px;
+    vertical-align: middle;
+  }
+  
+}
+.meetingIcons{
+  overflow: hidden;
+  padding: .7rem 0;
+  border-bottom:1px solid #E6E6E6;
+.meetingIconBox{
+  width: 20%;
+  height: 90px;
+  // background: #000;
+  text-align: center;
+  overflow: hidden;
+  .meetingIcon-img{
+    img{
+      width: 45px;
+    }
+  }
+  p{
+    font-size: .8rem;
+    font-weight: bold;
+  }
+}
+}
+
+//消息
+.msgTitle{
+   margin:1rem 0;
+}
+.msgContent{
+  // background: #000;
+  overflow: hidden;
+  padding: 1rem 0;
+  .msgAvatar{
+    width: 15%;
+    position: relative;
+    padding-top:.3rem; 
+    // background: #000;
+    .msgAvatarBadge{
+      position: absolute;
+      top: 0rem;
+      right: 4px;
+      border: 1px solid #fff;
+      
+    }
+    .msgAvatarDian{
+      position: absolute;
+      top: .3rem;
+      right: 10px;
+      border: 1px solid #fff;
+    }
+    img{
+      width: 40px;
+    }
+  }
+  .msgListBox{
+    width: 85%;
+    border-bottom: 1px solid #E6E6E6;
+    margin-bottom:1rem; 
+    padding:0 0 1rem 0; 
+    .msgListTopBox{
+      overflow: hidden;
+      // background: #000;
+      .msgListTitle{
+        width: 80%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      .msgListTime{
+        font-size: .8rem;
+        color: #C8C8C8;
+      }
+    }
+    .msgListInfo{
+      // width: 85%;
+      overflow: hidden;
+      font-size: .9rem;
+      color: #A0A0A0;
+      font-weight: bold;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+
+}

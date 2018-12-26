@@ -1,17 +1,8 @@
 <template>
     <div>
-
-
         <ul class="scrollList"
  :ref="1"
  >
- <!-- <li class="scrollItem"
- v-for="(i,index) in 1" :key="index"
-  @touchstart="touchStart"
-@touchend="touchEnd"
-@touchmove="touchMove"
-@click="handClick"
- ref="Hot">推荐</li> -->
 
 <li class="scrollItem" 
 v-for="item of sletter" 
@@ -25,8 +16,8 @@ v-for="item of sletter"
 </ul>
        
  <div class="cityHeaderBox">
-   
-<div class="cityBack">
+  
+<div class="cityBack" @click="$router.go(-1)">
  <x-icon type="ios-close-empty" size="35"></x-icon>
 </div>
 <h3 class="cityTitle">
@@ -42,8 +33,9 @@ v-for="item of sletter"
          根据您的定位推荐
      </div>
      <ul class="cityList">
-         <li>
-             <img src="../assets/images/b-map-position.png" v-if="positionCity!==''">{{positionCity}}
+         <li  @click="handCityClick(positionCity)">
+             <img src="../assets/images/b-map-position.png" v-if="positionCity!==''"/>
+             {{positionCity}}
          </li>
          
      </ul>
@@ -57,7 +49,10 @@ v-for="item of sletter"
      </div>
      <ul class="cityList">
 
-           <li v-for="(his,index) in historyCity" :key="index" :class="his==positionCity?'positionCity':''">
+           <li v-for="(his,index) in historyCity" :key="index"
+            :class="his==positionCity?'positionCity':''"
+            @click="handCityClick(his)"
+            >
            {{his}}
          </li>
          
@@ -71,7 +66,9 @@ v-for="item of sletter"
          热门城市
      </div>
      <ul class="cityList">
-         <li v-for="(Hot,index) in HotCity" :key="index" :class="Hot==positionCity?'positionCity':''">
+         <li v-for="(Hot,index) in HotCity" :key="index" :class="Hot==positionCity?'positionCity':''"
+         @click="handCityClick(Hot)"
+         >
            {{Hot}}
          </li>
      
@@ -104,13 +101,14 @@ v-for="item of sletter"
 </template>
 <script>
 import Bscroll from "better-scroll";
+import {mapState,mapMutations} from 'vuex'
 export default {
     name:'city',
     data(){
         return{
             positionCity:'城市定位中...',
-            historyCity:['北京市','上海','广州'],
-            HotCity:['北京市','上海','广州','深圳','杭州','成都'],
+            historyCity:['北京','上海','广州'],
+            HotCity:['北京','上海','广州','深圳','杭州','成都'],
              touchStatus:false,
             startY:0,
             timer:0,
@@ -244,6 +242,7 @@ export default {
         }
     },
      computed:{
+          ...mapState(['city']),
         sletter(){
            const letters = ['Rec','His','Hot'];
         //    console.log(this.cities)
@@ -255,6 +254,14 @@ export default {
         }
     },
      methods: {
+          ...mapMutations(['changeCity']),
+         handCityClick(city){
+            //  console.log(city)
+             this.changeCity(city)
+            //  this.$router.push('/siteindex')
+            //  this.$router.back(-1)
+                this.$router.go(-1)
+         },
          //初始化定位
          setpositionCity(){
              let _that = this;
@@ -262,11 +269,52 @@ export default {
       geolocation.getCurrentPosition(
         function(r) {
           if (this.getStatus() == BMAP_STATUS_SUCCESS) {
-          
-           _that.positionCity = r.address.city
+              function setCity(city){
+                 
+                  if(city.charAt(city.length-1)=='市'){
+                     
+                        return city.slice(0,city.length-1)
+                  }else{
+                  
+                      return city
+                  }
+                
+                
+              }
+            //   setCity('北京市')
+        //   setCity(r.address.city)
+           _that.positionCity = setCity(r.address.city)
            
           } else {
-            alert("failed" + this.getStatus());
+            // alert("failed" + this.getStatus());
+
+            switch( this.getStatus() ) {
+		        case 2:
+		        	alert( '位置结果未知 获取位置失败.' );
+		        break;
+		        case 3:
+		        	alert( '导航结果未知 获取位置失败..' );
+		        break;
+		        case 4:
+		        	alert( '非法密钥 获取位置失败.' );
+		        break;
+		        case 5:
+		        	alert( '对不起,非法请求位置  获取位置失败.' );
+		        break;
+		        case 6:
+		        	alert( '对不起,当前 没有权限 获取位置失败.' );
+		        break;
+		        case 7:
+		        	alert( '对不起,服务不可用 获取位置失败.' );
+		        break;
+		        case 8:
+		        	alert( '对不起,请求超时 获取位置失败.' );
+		        break;
+		        
+	        }
+        
+        
+
           }
         },
         { enableHighAccuracy: true }
@@ -315,6 +363,7 @@ export default {
                 this.timer = setTimeout(()=>{
                     const touchY = ev.touches[0].clientY
                     const index =Math.floor((touchY-this.startY)/23)
+                    // console.log(this.sletter[index])
             
                    this.letter = this.sletter[index]
                
@@ -336,10 +385,14 @@ export default {
       }
     }
   },
+//    updated() {
+//         this.startY = this.$refs['1'].offsetTop
+//     },
      mounted () {
      
           this.scroll = new Bscroll(this.$refs.wrapper,{});
            this.startY = this.$refs['1'].offsetTop
+        //    console.log(this.$refs['1'].offsetTop)
          this.setpositionCity()
      }
 }
@@ -355,6 +408,7 @@ export default {
     left: 0;
     right: 0;
     bottom: 0;
+    // background: #000;
 }
 .cityAreaTage{
     color: #A0A0A0;

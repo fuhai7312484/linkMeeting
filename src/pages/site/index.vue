@@ -3,22 +3,29 @@
     <div v-if="!IsShowMap">
     <div class="siteHeaderBox">
       <h3 class="fl siteHeaderTitle">搜场地</h3>
-      <div class="fl siteCity">
+      <router-link tag="div" class="fl siteCity" to="/city">
+      {{city}}
+        <i class="el-icon-caret-bottom"></i>
+      
+      </router-link>
+      <!-- <div class="fl siteCity">
         北京
         <i class="el-icon-caret-bottom"></i>
-      </div>
+      </div> -->
 
 <div class="siteListIcosBox fr">
 
-      <div class="fl HeaderSearch">
+      <router-link tag="div" to="siteSearch" class="fl HeaderSearch" >
         <img src="../../assets/images/HeaderSearch.png">
-      </div>
+        </router-link>
        <div class="fr HeaderSearch" @click="gotoMapChange">
         <img src="../../assets/images/b-map-position.png">
       </div>
 
 
 </div>
+
+
 
 
 
@@ -258,7 +265,7 @@
 <div v-if="IsShowMap">
 
 <div class="map-headerBox">
-<div class="map-go-back">
+<div class="map-go-back" @click="IsShowMap = !IsShowMap">
 </div>
 <h3 class="map-headerTitle">
   找场地
@@ -287,12 +294,20 @@
     </div>
 </div>
 
+
+
+
+
+
+
+
   </div>
 </template>
 <script>
+import {mapState} from 'vuex'
 import FooterNav from "@/components/footerNav";
 import BMap from "@/components/BMap"
-
+import City from "@/components/City"
 import {
   Flexbox,
   FlexboxItem,
@@ -300,7 +315,7 @@ import {
   CheckerItem,
   Popup,
   TransferDom,
-  Sticky 
+  Sticky,Group 
 } from "vux";
 export default {
   directives: {
@@ -316,12 +331,13 @@ export default {
     Popup,
     FooterNav,
     BMap,
-    Sticky 
+    Sticky,Group,City
   },
   data() {
     return {
       show9: false,
-      IsShowMap:true,
+      show1:false,
+      IsShowMap:false,
       filterData: [],
        FeatureData:[],
          TaPosted: [
@@ -514,6 +530,7 @@ export default {
       showType: false,
       demo1: "0",
       OrderHight:0,
+      positionCity:'',
       regionData: [
         "东城区",
         "西城区",
@@ -536,7 +553,14 @@ export default {
       ]
     };
   },
+   computed:{
+          ...mapState(['city']),
+          },
   methods: {
+    
+    handChange(){
+      this.show1 = false;
+    },
     //地图和列表显示互相切换
     gotoMapChange(){
      this.IsShowMap = !this.IsShowMap
@@ -711,6 +735,8 @@ this.Features.forEach(e=>{
 
       }
     },
+   
+
   },
   mounted() {
     this.getOrderHight();

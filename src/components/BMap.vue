@@ -118,6 +118,16 @@ export default {
             // console.log(r)
 
             // alert('您当前定位为：'+r.address.city);
+
+              function setCity(city){
+                  if(city.charAt(city.length-1)=='市'){
+                        return city.slice(0,city.length-1)
+                  }else{
+                      return city
+                  }  
+              }
+              // alert(setCity(r.address.city))
+              // console.log(setCity(r.address.city))
            
             var mk = new BMap.Marker(r.point, { icon: myIcon });
             map.addOverlay(mk);
@@ -150,7 +160,7 @@ export default {
       // geolocationControl.locationIcon = require("../assets/images/mypoint.png");
       geolocationControl.addEventListener("locationSuccess", function(e) {
         // 定位成功事件
-        console.log(e)
+        // console.log(e)
         var address = "";
         var lng = e.point.lng;
         var lat = e.point.lat;

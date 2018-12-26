@@ -5,6 +5,7 @@ import FastClick from 'fastclick'
 // import VueRouter from 'vue-router'
 import router from "./router"
 import App from './App'
+import store from './store'
 // import Home from './components/HelloFromVux'
 
 // Vue.use(VueRouter)
@@ -36,6 +37,7 @@ Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
+  store,
   router,
   render: h => h(App)
 }).$mount('#app-box')

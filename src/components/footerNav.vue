@@ -1,38 +1,57 @@
 <template>
    <div class="footerNavBox">
 <flexbox>
-      <flexbox-item :span="1/6"><div class="footerNavIcons footer-active">
-          <span>
-            <img :src="require('../assets/images/menu-field-red.png')"/>
+      <flexbox-item :span="1/6">
+      
+      <router-link tag="div" to="/siteindex" class="footerNavIcons">
+          <span class="siteBg">
+            <!-- <img :src="require('../assets/images/menu-field-red.png')"/> -->
           </span>
           场地
-          </div></flexbox-item>
-      <flexbox-item :span="1/6"><div class="footerNavIcons">
-          <span>
-           <img :src="require('../assets/images/menu-meeting-gray.png')"/>
+          </router-link>
+          
+          </flexbox-item>
+      <flexbox-item :span="1/6">
+      <router-link tag="div" to="/meeting" class="footerNavIcons">
+          <span class="meetingBg">
+           <!-- <img :src="require('../assets/images/menu-meeting-gray.png')"/> -->
           </span>
           会议
-          </div></flexbox-item>
+          </router-link></flexbox-item>
       <flexbox-item><div class="footerNavRelease">
       
           <img :src="require('../assets/images/menu-release.png')"/>
        
          
           </div></flexbox-item>
-      <flexbox-item :span="1/6"><div class="footerNavIcons">
+      <flexbox-item :span="1/6">
+
+ <router-link tag="div" to="/msgindex" class="footerNavIcons">
+             <span class="menuMsgBg">
+            <!-- <img :src="require('../assets/images/menu-news-gray.png')"/> -->
+          </span>
+          消息
+ </router-link>
+
+      <!-- <div class="footerNavIcons">
             <span>
             <img :src="require('../assets/images/menu-news-gray.png')"/>
           </span>
           消息
-          </div></flexbox-item>
-      <flexbox-item :span="1/6"><div class="footerNavIcons">
-          <span>
-             <img :src="require('../assets/images/menu-my-gray.png')"/>
-          </span>
+          </div> -->
 
-        
-          我的
-          </div></flexbox-item>
+          </flexbox-item>
+      <flexbox-item :span="1/6">
+
+      <router-link tag="div" to="/myindex" class="footerNavIcons">
+             <span class="menuMyBg">
+            <!-- <img :src="require('../assets/images/menu-news-gray.png')"/> -->
+          </span>
+            我的
+ </router-link>
+
+
+</flexbox-item>
       
     </flexbox>
 </div>

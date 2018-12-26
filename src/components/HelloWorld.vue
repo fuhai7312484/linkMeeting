@@ -10,6 +10,13 @@
        <router-link tag="li" to="/roomdetail">会议室详情</router-link>
        <router-link tag="li" to="/gallery">场地全部图片列表</router-link>
        <router-link tag="li" to="/city">切换城市</router-link>
+        <router-link tag="li" to="/login">登录</router-link>
+        <router-link tag="li" to="/reg">注册</router-link>
+         <router-link tag="li" to="/retpass">找回密码</router-link>
+              <router-link tag="li" to="/meeting">会议首页</router-link>
+              <router-link tag="li" to="/msgindex">消息</router-link>
+              <router-link tag="li" to="/myindex">我的</router-link>
+         
       <!-- <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
       <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
       <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
