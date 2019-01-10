@@ -157,6 +157,19 @@
 .site-img-showBox{
   position: relative;
 }
+.meetingAnnex{
+  position: absolute;
+  background:linear-gradient(to right,#FE5196,#F77062);
+  // width: 70px;
+  padding: .5rem 1rem;
+font-size: .8rem;
+border-radius: 0 1.1rem 0 0; 
+  // height: 50px;
+  left: 0;
+  bottom: 0;
+  z-index: 9996;
+  color: #fff;
+}
 .site-img-markBox{
   // background: #000;
   height: 2.5rem;
@@ -1488,7 +1501,330 @@ font-size: .8rem;
   }
 }
 }
+//会议详情
+.downloadAppBox{
+  // height: 40px;
+ 
+  overflow: hidden;
+ 
+  height: 50px;
+  width: 100%;
+  box-sizing: border-box;
+  // position: fixed;
+  background: #fff;
+  .downLogo{
+    height: 40px;
+    width: 40px;
+    // width: 10%;
+    margin: .2rem .2rem;
+    background: #D8D8D8;
+    border-radius:50%;
+    border: 1px solid  #979797;
+    line-height: 40px;
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+  }
+  .downAppTitle{
+    color: #FE666B;
+    height: 40px;
+    line-height: 50px;
+    margin: 0 .2rem;
+    
+  }
+  .downAppBtn{
+    background: #FC6D6D;
+    font-size: .8rem;
+    padding: .2rem .4rem;
+    color: #fff;
+    border-radius:.2rem; 
+    margin: 15px 0;
+  }
+}
+.meetingContent{
+  // margin: 60px 0 ;
+  margin-bottom:4rem; 
+  .meeting-title{
+    line-height: 25px;
+    margin: 0.6rem 0;
+  }
+  .site-flex-v{
+    text-align: right;
+  }
+  .meetingdetailTitles{
+    font-size: .9rem;
+    color: #969696;
+    font-weight: bold;
+  }
+  .meetingdetailInfoPrice{
+    font-size: .9rem;
+    font-weight: bold;
+    overflow: hidden;
+    color: #FE666B;
+  }
+  .meetingdetailInfo{
+    font-size: .9rem;
+    font-weight: bold;
+    color: #323232;
+    overflow: hidden;
+    .meetingdetailInfoBox{
+      width: 90%;
+      overflow: hidden;
+     
+      // height: 60px;
+      line-height: 30px;
+      .meetingdetailInfoA{
+        width: 70%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      .meetingdetailInfoB{
+        color: #969696;
+      }
 
+    }
+    .meetingdetailInfoC{
+      width: 80%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      // height: 60px;
+      line-height: 30px;
+    }
+    .meetingdetailInfoIcons{
+      width: 20%;
+      text-align: right;
+      .vux-x-icon {
+        vertical-align: middle;
+        fill: #969696;
+      }
+    }
+    .meetingdetailInfoIcons2{
+      width: 10%;
+      text-align: right;
+      .vux-x-icon {
+        vertical-align: middle;
+        fill: #969696;
+      }
+    }
+  }
+
+
+
+  .attentionOrganizerBox{
+    // background: #000;
+    margin: 1.2rem 0;
+    width: 100%;
+    height: 70px;
+    overflow: hidden;
+    .OrganizerLogo{
+      width: 70px;
+      height: 70px;
+      margin-right:.5rem; 
+      overflow: hidden;
+      border-radius:50%; 
+      img{
+        width: 70px;
+        height: 70px;
+      }
+      
+    }
+    .OrganizerNameBox{
+      // background: #000;
+     
+      max-width: 54%;
+      .OrganizerName{
+        height: 30px;
+        width: 100%;
+        padding: .5rem 0 0 0;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      .OrganizerInfo{
+        color: #D8D8D8;
+         span{
+           display: inline-block;
+           font-size: .8rem;
+           color: #969696;
+        
+         }
+      }
+    }
+    .attentionBtn{
+      width: 10%;
+      text-align: center;
+      font-size: .9rem;
+      border: 1px solid #FE666B;
+      color: #FE666B;
+      padding: .3rem 1.2rem;
+      font-weight: bold;
+      border-radius:25px; 
+      margin-top:1rem; 
+    }
+  }
+
+
+  .meetingRegListBox{
+    width: 100%;
+    margin: .8rem 0;
+    height: 90px;
+    overflow: hidden;
+    // height: 70px;
+    // background: #000;
+    .meetingRegListTitle{
+      overflow: hidden;
+     
+    .RegListTitle{
+      
+    }
+    .RegListPeopleNumBox{
+       .Reg-PeopleNum{
+         color: #787878;
+         font-size: .9rem;
+         .vux-x-icon {
+          vertical-align: middle;
+          fill: #969696;
+        }
+       }
+    }
+    }
+    ul.RegListUl{
+      // width: 100%;
+      overflow: auto;
+      white-space: nowrap;
+      // height: 50px;
+      // margin:.5rem 0; 
+      padding:.8rem 0;
+      li{
+        
+        width: 45px;
+        height: 45px;
+        // background: #000;
+        margin-right:.9rem;
+        border-radius:50%;  
+        color: #fff;
+        text-align: center;
+        display: inline-block;
+        line-height: 45px;
+        img{
+        width: 100%;
+        }
+      }
+    }
+  }
+}
+.showMeetingContent{
+padding:.8rem 0 6rem 0;
+overflow: hidden;
+position: relative;
+
+.bottomMarkBox{
+  width: 100%;
+  height: 100px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  .bottomMark{
+    width: 100%;
+    height: 50px;
+    background: linear-gradient(rgba(255,255,255,0),rgba(255,255,255,1));
+  }
+  .bottomMarkTitle{
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    background: #fff;
+    line-height: 50px;
+    font-size: .8rem;
+    font-weight: bold;
+    color: #FE666B;
+     
+    .vux-x-icon {
+      vertical-align: middle;
+      fill: #FE666B;
+    }
+  }
+  
+
+}
+.bottomMarkTitle{
+  height: 150px;
+  width: 100%;
+  position: relative;
+
+}
+}
+
+.howDialogSoltBox{
+  width: 100%;
+  height: 50px;
+  // background: #000;
+  .showDialogCancel{
+    width: 40px;
+    height: 40px;
+    // background: #000;
+    text-align: center;
+    line-height: 30px;
+    
+    position: absolute;
+    top: 0;
+    right: 0;
+    .vux-x-icon {
+      vertical-align: middle;
+      font-weight: bold;
+      fill: #808080;
+    }
+  }
+  .showDialogTitle{
+    padding: 0 1.4rem;
+    margin-top:2.4rem; 
+    h4{
+      color: #505050;
+    }
+    .showDialogDown{
+      padding: .8rem 2.5rem;
+    display: inline-block;
+      background: #FC6D6D;
+      color: #fff;
+      border-radius:3px; 
+      margin-top:.8rem; 
+    }
+  }
+}
+//支持单位
+.SupportListBox{
+  text-align: center;
+  padding: 0 1rem;
+  box-sizing: border-box;
+  position: relative;
+  height:100%;
+  h3{
+    padding: 2rem 0;
+  }
+  ul{
+    // background: #000;
+    max-height: 60%;
+    overflow-y: auto;
+    li{
+      font-size: .8rem;
+      line-height: 2rem;
+      color: #505050;
+    }
+  
+  }
+  .Suppor-close{
+    position: absolute;
+    border-top: 1px solid #C8C8C8;
+    padding:.8rem 0; 
+    // background: #000;
+    bottom: .6rem;
+    margin: 0 auto;
+  
+    width: 90%;
+  }
+}
 //消息
 .msgTitle{
    margin:1rem 0;
@@ -1616,4 +1952,142 @@ font-size: .8rem;
       }
     }
   }
+}
+
+.Homepage{
+  color: #505050;
+  font-size: 1rem;
+  width: 20%;
+  font-weight: bold;
+  line-height: 50px;
+  padding:0 .2rem;
+  box-sizing: border-box;
+ 
+    img{
+      width: 18px;
+      vertical-align: middle;
+      margin-top:-5px; 
+      
+    
+  }
+}
+.potFStyle{
+  background: #fff;
+  width: 100%;
+  z-index: 9996;
+}
+
+
+.x-messageBox{
+//  margin-top:40px; 
+ margin-bottom:20px; 
+ padding-top:40px;
+ padding-bottom:40px;  
+ overflow-y:hidden ;
+ background: #F8F8F8;
+ min-height: 95vh;
+
+
+}
+.x-messageFormBox{
+  bottom: 0;
+  // padding: .4rem 0;
+  padding-top:.6rem; 
+  // box-sizing: border-box;
+  left: 0;
+  height: 40px;
+  background: #F8F8F8;
+  overflow: hidden;
+  width: 100%;
+  .x-messageTabBtn{
+    width: 15%;
+    // background: #000;
+    // height: 40px;
+    // line-height: 40px;
+    text-align: center;
+    img{
+      width: 30px;
+      vertical-align: middle;
+    }
+  }
+  .x-msg-formBox{
+    width:65%;
+    // background: #000; 
+    height: 40px;
+    .x-msg-form{
+      border-right:1px solid #DCDCDC;
+      .weui-cell{
+        padding: 0;
+      }
+    }
+  }
+  .x-msg-sendBtn{
+    width: 20%;
+    text-align: center;
+    font-weight: bold;
+    color: #A0A0A0;
+  }
+}
+.x-message-imgBox{
+  width: 50px;
+  height: 50px;
+  margin: 0 10px 0 0;
+ 
+  background: #000;
+  overflow: hidden;
+  border-radius:50%; 
+}
+.x-message-left{
+  overflow: hidden;
+}
+
+//百度导航样式
+
+.mapNavigationBox{
+  position:absolute;
+  background: rgba(255,255,255,.9);
+  color: #000;
+  padding:.4rem 1rem;
+  line-height: 18px;
+  white-space: nowrap;
+  font-size: .8rem;
+  border-radius:.4rem; 
+  text-align: center;
+  font-weight: bold;
+  -moz-user-select: none;
+  border: 1px solid #a0a0a0;
+  height: 60px;
+  box-shadow: 0px 3px 5px #a0a0a0;
+  max-width: 220px;
+  min-width: 220px;
+  span{
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+.mapNavigationBtn{
+  width: 120px;
+  height: 30px;
+  background: #fe666b;
+  margin: 10px auto;
+  border-radius:15px; 
+  color: #fff;
+  text-align: center;
+  font-size: .8rem;
+  line-height: 30px;
+}
+.mapNavigationArrow{
+  // width: 20px;
+  // height: 10px;
+  // background: #000;
+  // position: absolute;
+  // bottom:-11px;
+  // left: 45%;
+
+  background:url(../images/bg-arrow-off.png) no-repeat;
+  background-size:100%; 
+}
 }

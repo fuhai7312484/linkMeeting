@@ -14,7 +14,10 @@
         <router-link tag="li" to="/reg">注册</router-link>
          <router-link tag="li" to="/retpass">找回密码</router-link>
               <router-link tag="li" to="/meeting">会议首页</router-link>
+               <router-link tag="li" to="/meetDetail">会议详情</router-link>
+                <router-link tag="li" to="/navmap">会议导航</router-link>
               <router-link tag="li" to="/msgindex">消息</router-link>
+                   <router-link tag="li" to="/dialog">消息对话框</router-link>
                 <router-link tag="li" to="/ordermsg">订单消息</router-link>
               <router-link tag="li" to="/myindex">我的</router-link>
          

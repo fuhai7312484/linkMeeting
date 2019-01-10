@@ -10,8 +10,11 @@ import SiteSearch from '@/pages/site/siteSearch'
 import SiteDetail from '@/pages/site/siteDetail'
 import roomDetail from '@/pages/site/RoomDetail'
 import MeetingIndex from '@/pages/meeting/index'
+import MeetDetail from '@/pages/meeting/meetDetail'
+import NavMap from '@/components/NavMap'
 import MsgIndex from '@/pages/Message/index'
 import OrderMsg from '@/pages/Message/Order.vue'
+import Dialog from '@/pages/Message/Dialog.vue'
 import MyIndex from '@/pages/my/index'
 import gallery from '@/components/gallery'
 import city from '@/components/City'
@@ -83,6 +86,22 @@ export default new Router({
       component: MeetingIndex
     },
     {
+      path: '/meetDetail',
+      name: 'MeetDetail',
+      // meta: {
+      //   index: 1,
+      // },
+      component: MeetDetail
+    },
+    {
+      path: '/navmap',
+      name: 'NavMap',
+      // meta: {
+      //   index: 1,
+      // },
+      component: NavMap
+    },
+    {
       path: '/msgindex',
       name: 'MsgIndex',
       // meta: {
@@ -97,6 +116,11 @@ export default new Router({
       //   index: 1,
       // },
       component: OrderMsg
+    },
+    {
+      path:'/dialog',
+      name:'Dialog',
+      component:Dialog,
     },
     {
       path: '/myindex',

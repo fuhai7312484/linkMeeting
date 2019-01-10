@@ -532,25 +532,10 @@
           class="site-icon-down"
           size="20"
         ></x-icon>
-    
       </div>
-
-
 <div>
-
-
-
-
 </div>
-
-
-
-
-
-
   </div>
-
-
     <div class="Placeholder"></div>
   </div>
 </template>
