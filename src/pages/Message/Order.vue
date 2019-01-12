@@ -1,14 +1,31 @@
 <template>
     <div class="box">
        
-
-        <div class="map-headerBox borBottm">
+<div>
+<div style="height:44px;">
+      <sticky
+      
+        ref="sticky"
+    
+        :check-sticky-support="false"
+        :disabled="disabled">
+     <div class="map-headerBox borBottm">
             <div class="map-go-back" @click="$router.go(-1)">
             </div>
             <h3 class="map-headerTitle">
             订单消息
             </h3>
          </div>
+      </sticky>
+    </div>
+
+
+        
+
+
+
+
+
 
          <div class="msgOrderlistBox">
 <ul class="msgOrderlistUl padlr">
@@ -40,20 +57,32 @@
          </div>
 
 
+ <!-- <p v-for="i in 100">{{i}}<br></p> -->
 
+
+ </div>
 
     </div>
 </template>
 <script>
+import { Sticky } from 'vux'
 export default {
+   components: {
+    Sticky
+  },
     name:'OrderMsg',
+    data(){
+        return{
+          
+      disabled: typeof navigator !== 'undefined' && /iphone/i.test(navigator.userAgent) && /ucbrowser/i.test(navigator.userAgent)
+        }
+    }
 }
 </script>
 <style lang="less">
 @import "../../assets/style/tools.less";
 @import "../../assets/style/global.less";
 @import "~vux/src/styles/reset.less";
-
 
 </style>
 

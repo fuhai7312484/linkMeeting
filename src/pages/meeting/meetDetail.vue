@@ -112,7 +112,8 @@
           </div>
         </flexbox-item>
         <flexbox-item :span="4/6" :order="4">
-          <div class="footer-nav-destineBtn">报名参会</div>
+        <router-link tag="div" class="footer-nav-destineBtn" :to=" {path:'/ticket', query:{meeting_id:'123654'}}">报名参会</router-link>
+          <!-- <div class="footer-nav-destineBtn">报名参会</div> -->
         </flexbox-item>
       </flexbox>
     </div>
@@ -414,7 +415,7 @@ export default {
         /ucbrowser/i.test(navigator.userAgent),
       tabsIndex: 0,
       tabMunes: ["会议详情", "会议嘉宾", "合作单位"],
-      tabTitle: "会场介绍"
+      tabTitle: "会议详情"
     };
   },
   methods: {

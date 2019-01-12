@@ -487,6 +487,13 @@ span{
  
 }
 }
+.footer-nav-price{
+  padding: 0 .8rem;
+  box-sizing: border-box;
+  font-weight: bold;
+  color: #FE666B;
+  text-align: left;
+}
 .footer-nav-FieldPlace{
   text-align: center;
   font-size: .6rem;
@@ -1218,6 +1225,7 @@ font-size: .8rem;
 
 .map-headerBox{
   height: 40px;
+  background: #fff;
   // border-bottom:1px solid #C8C8C8;
   overflow: hidden;
   .map-go-back{
@@ -2090,4 +2098,128 @@ position: relative;
   background:url(../images/bg-arrow-off.png) no-repeat;
   background-size:100%; 
 }
+}
+
+//票种选择
+.ticket-contentBox{
+  margin-top:20px; 
+  .ticketTitleBox{
+    width: 100%;
+    border-bottom:1px solid  #E6E6E6;
+    overflow: hidden;
+    padding: .5rem 0;
+    .ticketTitle{
+      width: 75%;
+      font-size: .9rem;
+      font-weight: bold;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .ticketPrice{
+      width: 25%;
+      font-size: .8rem;
+      text-align: right;
+      color: #FE666B;
+      font-weight: bold;
+    }
+  }
+  .ticketInfo{
+    padding: .8rem 0;
+    color: #969696;
+    font-size: .8rem;
+    line-height: 1.4rem;
+  }
+}
+
+//报名信息
+.signUpInfoBox{
+  overflow: hidden;
+  border-bottom:1px solid  #E6E6E6;
+
+  padding-top:.3rem;
+  padding-bottom:.8rem;  
+  margin-bottom:.8rem;
+  .signUpInfoImg{
+    width: 30%;
+    margin-right:2%; 
+    img{
+      width: 100%;
+      vertical-align: middle;
+    }
+
+  }
+  .signUpInfoContent{
+    h4{
+      font-size: .9rem;
+      line-height: 1rem;
+     
+    }
+    width: 68%;
+    .signUpTime{
+      font-size: .7rem;
+      color: #A0A0A0;
+    }
+  }
+}
+
+.signUpTicket{
+.signUpTicketTitle{
+width: 75%;
+h4{
+  display: inline-block;
+  margin-right:.8rem; 
+  font-size: .9rem;
+  // width: 50px;
+  max-width:59%; 
+  vertical-align: middle;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+img{
+  width: 70px;
+  vertical-align: middle;
+}
+}
+.signUpTicketPrice{
+  width: 25%;
+  text-align: right;
+  color: #B4B4B4;
+  font-size: .8rem;
+  font-weight: bold;
+  line-height: 1.8rem;
+  span{
+    color: #FE666B;
+  }
+}
+
+}
+
+.signUpFormBox{
+  overflow: hidden;
+  margin: 1rem 0 ;
+  width: 100%;
+  .signUpInputs{
+    overflow: hidden;
+    padding-top: .5rem;
+    padding-bottom:.5rem; 
+    
+    .signUpLabel{
+      width: 25%;
+      font-size: 1rem;
+      color: #787878;
+      font-weight: bold;
+    }
+    .signUpInput{
+      .weui-cell{
+        padding: 0 !important;
+        font-size: 1rem;
+        color: #B4B4B4 !important;
+      }
+      width: 75%;
+    }
+  }
+ 
+
 }

@@ -12,6 +12,8 @@ import roomDetail from '@/pages/site/RoomDetail'
 import MeetingIndex from '@/pages/meeting/index'
 import MeetDetail from '@/pages/meeting/meetDetail'
 import NavMap from '@/components/NavMap'
+import Ticket from '@/pages/meeting/Ticket'
+import SignInfo from '@/pages/meeting/signUpInfo'
 import MsgIndex from '@/pages/Message/index'
 import OrderMsg from '@/pages/Message/Order.vue'
 import Dialog from '@/pages/Message/Dialog.vue'
@@ -101,6 +103,25 @@ export default new Router({
       // },
       component: NavMap
     },
+    {
+      path: '/ticket',
+      name: 'Ticket',
+      // meta: {
+      //   index: 1,
+      // },
+      component: Ticket
+    },
+    {
+      path: '/signinfo',
+      name: 'SignInfo',
+      // meta: {
+      //   index: 1,
+      // },
+      component: SignInfo
+    },
+
+
+
     {
       path: '/msgindex',
       name: 'MsgIndex',
