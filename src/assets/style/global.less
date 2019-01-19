@@ -810,7 +810,7 @@ ul{
     width: 25%;
   }
   .HeaderSearch{
-    width: 40px;
+    width: 30px;
     // background: #000;
     text-align: center;
     // height: 30px;
@@ -1061,9 +1061,19 @@ span{
     white-space: nowrap;
     text-overflow: ellipsis;
     line-height: 1rem;
-    span{
+    .Bmap-span{
       display: inline-block;
       max-width: 100px;
+      overflow: hidden;
+      color: #323232;
+      font-size: .8rem;
+      vertical-align: top;
+      text-overflow: ellipsis;
+      
+    }
+    .Mmap-span{
+      display: inline-block;
+      max-width: 200px;
       overflow: hidden;
       color: #323232;
       font-size: .8rem;
@@ -1110,9 +1120,19 @@ span{
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    span{
+    .Bmap-span{
       display: inline-block;
       max-width: 100px;
+      overflow: hidden;
+      color: #fff;
+      font-size: .8rem;
+      vertical-align: top;
+      text-overflow: ellipsis;
+      
+    }
+    .Mmap-span{
+      display: inline-block;
+      max-width: 200px;
       overflow: hidden;
       color: #fff;
       font-size: .8rem;
@@ -1133,12 +1153,12 @@ span{
 
 .siteGotoMap{
   // background: #000;
-  width: 50px;
-  height: 50px;
+  width: 70px;
+  height: 70px;
   border-radius:50%;
   position: fixed;
   bottom: 90px;
-  right: 20px; 
+  right: 10px; 
   z-index: 501;
   img{
     width: 100%;
@@ -1459,6 +1479,12 @@ font-size: .8rem;
 //会议首页
 .meeting-tabBox{
   overflow: hidden;
+  border-bottom:1px solid #DCDCDC; 
+  background: #fff;
+ 
+ 
+ 
+  
 }
 .meeting-tab{
   width: 88%;
@@ -2222,4 +2248,293 @@ img{
   }
  
 
+}
+
+//附件下载
+
+.AnnexListBox{
+  .AnnexList{
+    width: 100%;
+    // height: 170px;
+    border-radius:5px;
+    box-shadow: 0px 0px 10px rgb(212, 212, 212); 
+    margin: 1rem 0;
+    
+    .AnnexTitleBox{
+      border-bottom:1px solid #E6E6E6;
+    overflow: hidden;
+    padding: .6rem;
+      .AnnexImg{
+        width: 20%;
+        height: 50px;
+        text-align: center;
+        img{
+          
+          vertical-align: middle;
+         width: 70%;
+         height:50px;
+        // height: 100%;
+        }
+      
+      }
+      .AnnexTitle{
+        height: 45px;
+        width: 80%;
+        position: relative;
+        
+        h4{
+          font-size: .8rem;
+          color: #323232;
+          line-height: 1.4rem;
+        
+        }
+        span{
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          font-size: .8rem;
+          color: #969696;
+        }
+      }
+
+    }
+    .AnnexBtnsBox{
+      width: 100%;
+      overflow: hidden;
+      // margin-left:-1px; 
+      span{
+        display:block;
+        // background: #000;
+        width: 50%;
+        float: left;
+        text-align: center;
+        font-size: .8rem;
+        font-weight: bold;
+        padding:.4rem 0;
+        border-left: 1px solid #E6E6E6;
+        margin-left:-1px; 
+        color: #666666;
+      }
+    }
+  }
+
+
+}
+//会议首页
+.IntereClosed{
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  top: 10px;
+  right: 0px;
+}
+.InterestedInBox{
+  padding: .8rem .6rem;
+h4{
+  width: 100%;
+  text-align: left;
+  padding: .5rem 0;
+
+}
+}
+.FMeetingList{
+  overflow-y:auto !important;
+  // height: 100%;
+  height: 87vh !important;
+}
+.tabMeetingListUl{
+ 
+
+  .tabMeetingTopBox{
+    overflow: hidden;
+    margin: .5rem 0;
+    .orgLogo{
+      width: 24px;
+      height: 24px;
+      border-radius:50%;
+      overflow: hidden;
+      margin-right:.8rem; 
+      vertical-align: middle;
+    
+      img{
+        width: 100%;
+        height: 100%;
+       
+      } 
+    }
+    .orgname{
+      font-weight: bold;
+      font-size: .7rem;
+      line-height: 24px;
+      width: 60%;
+      // background: #000;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .orgUptime{
+      font-size: .6rem;
+      color: #B4B4B4;
+    }
+  }
+  li.ListNoContent{
+    padding: 6rem 0;
+    border: none;
+    text-align: center;
+    p{
+      color: #A0A0A0;
+      font-size: .9rem;
+    }
+    .ListNoContentBtn{
+      margin: .8rem 0;
+      color: #fff;
+      border-radius:5px;
+      display: inline-block; 
+      background: #FC6D6D;
+      padding: .6rem 4rem;
+    }
+  }
+  li{
+    list-style: none;
+    overflow: hidden;
+    border-bottom:1px solid #E6E6E6;
+    padding: 1rem 0;
+  }
+  .tabMeetingImg{
+    width: 30%;
+    height: 80px;
+    margin-right:3%;
+    // background: #000; 
+    overflow: hidden;
+    border-radius:5px; 
+    img{
+      width: 100%;
+      height:100%;
+    }
+
+  }
+  .tabMeetingTextBox{
+    width: 67%;
+    .tabMeetingTextTitle{
+      font-size: .9rem;
+      line-height: 1rem;
+    }
+    .tabMeetingTime{
+      font-size: .7rem;
+      color: #A0A0A0;
+      padding: .2rem 0;
+    
+    }
+    .tabMeetingTagBox{
+      overflow: hidden;
+      .tabMeetingPrice{
+        color: #FE666B;
+        font-weight: bold;
+      }
+      .tabMeetingTag{
+        font-size: .5rem;
+        
+        span{
+          border: 1px;
+          border-style:solid; 
+          border-radius:3px;
+          display: inline-block;
+          padding:0 .1rem;  
+        }
+        .LiveIn{
+          border-color: #FD8D91;
+          color: #FD8D91;
+        }
+        .processing{
+          border-color: #A1E45D;
+          color: #A1E45D;
+        }
+        .notStarted{
+          border-color: #89D0F5;
+          color: #89D0F5;
+        }
+        .IsOver{
+          border-color: #C8C8C8;
+          color: #C8C8C8;
+        }
+      }
+
+      .tabMeetingNum{
+        font-size: .8rem;
+        color: #FF8F93;
+        font-weight: bold;
+      }
+    }
+
+  }
+}
+
+.filterResult{
+  padding: .2rem .5rem;
+  width: 100%;
+  position: absolute;
+  top: 0px;
+  left: 0;
+  // height: 40px;
+  line-height: 25px;
+  background:rgba(255,255,255,.7);
+  z-index: 499;
+  border-top:1px solid #C8C8C8;
+  box-shadow: 0px 3px 3px rgba(151, 151, 151,.5);
+  font-size: .8rem;
+  box-sizing: border-box;
+  color: #505050;
+.filterInfoTags{
+  span{
+    display: inline-block;
+    line-height: 20px;
+    background: #F5F5F6;
+    padding: .2rem .6rem;
+    text-align: center;
+    border-radius:.3rem; 
+    margin: .2rem .2rem;
+    font-size: .6rem;
+  }
+  width: 95%;
+}
+.filterInfoNum{
+  position: absolute;
+  bottom: .6rem;
+  right: .8rem;
+  width: 20%;
+  text-align: right;
+}
+}
+
+.FilterListBox{
+
+  
+  .FilterTags{
+ 
+    top: 0;
+    padding: .8rem 0;
+    width: 100%;
+    position: relative;
+    .filterInfoTags{
+      span{
+        display: inline-block;
+        line-height: 20px;
+        background: #F5F5F6;
+        padding: .2rem .6rem;
+        text-align: center;
+        border-radius:.3rem; 
+        margin: .2rem .2rem;
+        font-size: .6rem;
+      }
+      width: 80%;
+    }
+.filterInfoNum{
+  position: absolute;
+  top:.3rem;
+  right: 0;
+  width: 10%;
+  text-align: right;
+}
+
+  }
 }

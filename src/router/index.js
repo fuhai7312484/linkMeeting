@@ -13,6 +13,8 @@ import MeetingIndex from '@/pages/meeting/index'
 import MeetDetail from '@/pages/meeting/meetDetail'
 import NavMap from '@/components/NavMap'
 import Ticket from '@/pages/meeting/Ticket'
+import DownAnnex from '@/pages/meeting/downAnnex'
+
 import SignInfo from '@/pages/meeting/signUpInfo'
 import MsgIndex from '@/pages/Message/index'
 import OrderMsg from '@/pages/Message/Order.vue'
@@ -95,6 +97,17 @@ export default new Router({
       // },
       component: MeetDetail
     },
+
+    {
+      path: '/downannex',
+      name: 'DownAnnex',
+      // meta: {
+      //   index: 1,
+      // },
+      component: DownAnnex
+    },
+
+
     {
       path: '/navmap',
       name: 'NavMap',

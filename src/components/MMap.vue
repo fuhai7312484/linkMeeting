@@ -1,78 +1,54 @@
 <template>
   <div class="home">
-   
-    <div id="allmap" ref="allmap" :style="{height:showData?OrderHight-173 +'px':OrderHight+'px'}"></div>
-    <!-- <div id="r-result" ref="r-result"></div> -->
-   
-    <!-- <div class="evDataBox" v-if="showData">{{evData}}</div> -->
- <!-- <x-switch title="bottom" v-model="showData"></x-switch> -->
-
+    <div class="filterResult">
+      <div class="filterInfoTags">
+  <span v-for="(tab,index) in  tabTitle" :key="index">{{tab}}</span>
+      </div>
+      <div class="filterInfoNum">
+        共{{data_info.length}}场
+      </div>
+    </div>
+    <div id="allmap" ref="allmap" :style="{height:showData?OrderHight-93 +'px':OrderHight+'px'}">
+    </div>
     <div v-transfer-dom>
       <popup v-model="showData" position="bottom" :show-mask="false">
         <div class="position-vertical-demo">
+  <ul class="tabMeetingListUl padlr">
+        <li class="tabMeetingList" v-for="(DataItem,index) in evData" :key="index">
+          <div>
+            <div class="tabMeetingImg fl">
+              <img :src="DataItem.img">
+              <!-- {{DataItem.img}} -->
+            </div>
 
+            <div class="tabMeetingTextBox fl">
+              <h4 class="tabMeetingTextTitle">{{DataItem.title}}</h4>
+              <div class="tabMeetingTime">
+                <span>{{DataItem.time}}</span>
+                <span>{{DataItem.region}}</span>
+              </div>
+              <div class="tabMeetingTagBox">
+                <div class="tabMeetingPrice fl">
+                 ¥{{DataItem.price}} 
 
-   <ul class="my-tab-swiper vux-center" ref="pubUiHF">
-          <li v-for="(taPos,index) in evData" :key="index">
-            {{taPos.lng}} {{taPos.lat}}
-            <flexbox v-if="taPos.type=='pub'">
-              <flexbox-item :span="1/4">
-                <div class="my-tab-swiperListImg"><img :src="taPos.img" /></div>
-              </flexbox-item>
-              <flexbox-item :span="3/4">
-                <div class="my-tab-listContent">
-                  <h3>{{ taPos.city }}{{ taPos.title }}</h3>
                 </div>
+                <!-- <div class="tabMeetingTag fl">
+                  <span v-if="DataItem.status==0" class="IsOver">已结束</span>
+                  <span v-else-if="DataItem.status==1" class="LiveIn">直播中</span>
+                  <span v-else-if="DataItem.status==2" class="processing">进行中</span>
+                  <span v-else-if="DataItem.status==3" class="notStarted">未开始</span>
+                </div> -->
+                <div
+                  class="tabMeetingNum fr"
+                >
 
-                <div class="my-tab-listContent mylistInfo">
-                  距离:{{ taPos.distance }}&nbsp; &nbsp;  {{ taPos.area }}
+                {{DataItem.status==0?'查看附件':DataItem.status==2?'报名将截止':DataItem.status==3?'马上抢票':DataItem.pepople+'人已报名'}}
                 </div>
-
-                <div class="my-tab-listContent mylistInfo">
-                  面积:{{ taPos.proportion }}&nbsp; &nbsp;  容纳:{{ taPos.hold }}
-                </div>
-
-                <div class="my-tab-listContent mylistInfo">
-                  会议室:{{ taPos.meetingRoom }}&nbsp; &nbsp;  客房:{{ taPos.guestRoom }}
-                </div>
-                <flexbox :gutter="0">
-                  <flexbox-item :span="1/2" class="listContent-tagbox">
-                    <span
-                      v-for="(tag,index) in taPos.tag"
-                      :key="index"
-                      class="listContent-tags"
-                    >
-                      {{ tag }}
-                    </span>
-                  </flexbox-item>
-                  <flexbox-item :span="1/2"> <h4>¥{{ taPos.price }}</h4> </flexbox-item>
-                </flexbox>
-              </flexbox-item>
-            </flexbox>
-
-            <flexbox v-if="taPos.type=='par'">
-              <flexbox-item :span="2/3">
-                <div class="listContentPar">
-                <h3> {{ taPos.title }}</h3>
-                </div>
-                <div class="mylistInfo">{{taPos.time}}</div>
-                <h4>¥{{ taPos.price }}</h4>
-              </flexbox-item>
-              <flexbox-item :span="1/3"> 
-              
-              <div class="my-tab-parListImg">
-              
-                <img :src="taPos.img" />
-                </div>
-              
-              </flexbox-item>
-            </flexbox>
-          </li>
-        </ul>
-
-
-
-      <!-- {{evData}} -->
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
         </div>
       </popup>
     </div>
@@ -88,7 +64,7 @@ export default {
     TransferDom
   },
   name: "BMap",
-  props:['OrderHight','data_info'],
+  props:['OrderHight','data_info','tabTitle'],
   data() {
     return {
       showData:false,
@@ -100,6 +76,10 @@ export default {
     FlexboxItem
       },
   methods: {
+    change(){
+     let H = this.showData?'190px':'90px'
+      this.$emit("GotoMapHeight",H)
+    },
     map() {
       // 百度地图API功能
       var map = new BMap.Map("allmap"); // 创建Map实例
@@ -111,13 +91,15 @@ export default {
               new BMap.Size(25, 25)
             );
       //获取用户当前位置
+
+
       var geolocation = new BMap.Geolocation();
       geolocation.getCurrentPosition(
         function(r) {
           if (this.getStatus() == BMAP_STATUS_SUCCESS) {
             // console.log(r)
 
-            // alert('您当前定位为：'+r.address.city);
+            alert('您当前定位为：'+r.address.city);
 
               function setCity(city){
                   if(city.charAt(city.length-1)=='市'){
@@ -139,6 +121,8 @@ export default {
         },
         { enableHighAccuracy: true }
       );
+
+
       //关于状态码
       //BMAP_STATUS_SUCCESS	检索成功。对应数值“0”。
       //BMAP_STATUS_CITY_LIST	城市列表。对应数值“1”。
@@ -182,7 +166,7 @@ export default {
       for (var i = 0; i < this.data_info.length; i++) {
 
            var htm =
-          "<div class='Bmap-infoBox' data-id='"+ this.data_info[i].id +"'><h4 class='fl'><span class='Bmap-span'>"+ this.data_info[i].title +"</span>有空(1间)</h4><i class='bg-arrow-off'></i></div>";
+          "<div class='Bmap-infoBox' data-id='"+ this.data_info[i].id +"'><h4 class='fl'><span class='Mmap-span'>"+ this.data_info[i].title +"</span></h4><i class='bg-arrow-off'></i></div>";
 
 
         var point = new BMap.Point(
@@ -208,6 +192,7 @@ for (var i = 0; i < this.data_info.length; i ++)
                   for(let j=0;j<_that.data_info.length;j++){
                      markers[j]._container.firstChild.className ='Bmap-infoBox'
                       markers[j]._container.style['z-index'] = 9998;
+                       _that.$emit("GotoMapHeight",'90px')
                       _that.showData = false;
                   }
                   let setId = e.target._container.firstChild.dataset.id
@@ -215,7 +200,9 @@ for (var i = 0; i < this.data_info.length; i ++)
                    return e.id == setId;
                  })
                  setTimeout(function(){
+
             _that.showData = true;
+             _that.$emit("GotoMapHeight",'120px')
                  },100)
                   
                   e.target._container.style['z-index'] = 9999
@@ -249,6 +236,7 @@ for (var i = 0; i < this.data_info.length; i ++)
 </script>
 <style lang='less'>
 @import '~vux/src/styles/close.less';
+.home{position: relative;}
 #allmap {
 
   overflow: hidden;

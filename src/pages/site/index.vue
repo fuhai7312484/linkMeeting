@@ -59,7 +59,7 @@
     
 
     <div v-transfer-dom>
-      <popup v-model="show9" position="right" width="80%">
+      <popup v-model="show9" position="right" width="90%">
 
 <div class="FeaturesFilterBox ">
 
@@ -143,6 +143,11 @@
 
       </popup>
     </div>
+
+
+
+
+
 
     <!-- {{OrderHight}} -->
     <!-- {{demo1}} -->
@@ -284,22 +289,11 @@
     <div class="siteMapBox">
 <div class="siteGotoMap" @click="gotoMapChange">
   <img src="../../assets/images/button-backlist.png"/>
-
 </div>
 <b-map :OrderHight="OrderHight-40" :data_info="TaPosted">
 </b-map>
-
-
-
     </div>
 </div>
-
-
-
-
-
-
-
 
   </div>
 </template>

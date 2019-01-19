@@ -2,6 +2,14 @@
    <div class="footerNavBox">
 <flexbox>
       <flexbox-item :span="1/6">
+      <router-link tag="div" to="/meeting" class="footerNavIcons">
+          <span class="meetingBg">
+           <!-- <img :src="require('../assets/images/menu-meeting-gray.png')"/> -->
+          </span>
+          会议
+          </router-link></flexbox-item>
+          
+      <flexbox-item :span="1/6">
       
       <router-link tag="div" to="/siteindex" class="footerNavIcons">
           <span class="siteBg">
@@ -11,13 +19,7 @@
           </router-link>
           
           </flexbox-item>
-      <flexbox-item :span="1/6">
-      <router-link tag="div" to="/meeting" class="footerNavIcons">
-          <span class="meetingBg">
-           <!-- <img :src="require('../assets/images/menu-meeting-gray.png')"/> -->
-          </span>
-          会议
-          </router-link></flexbox-item>
+    
       <flexbox-item><div class="footerNavRelease">
       
           <img :src="require('../assets/images/menu-release.png')"/>

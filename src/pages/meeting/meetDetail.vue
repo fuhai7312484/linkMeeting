@@ -131,7 +131,10 @@
         <div v-if="swiperType=='video'" class="video-btn-box">
           <div class="jiao"></div>
         </div>
-        <div class="meetingAnnex">附件下载 ></div>
+        <router-link tag="div" class="meetingAnnex" to="/downannex" >
+        附件下载
+        </router-link>
+        <!-- <div class="meetingAnnex">附件下载 ></div> -->
         <div class="site-img-markBox">
           <span
             @click="swiperType='img'"

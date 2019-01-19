@@ -113,6 +113,7 @@
     </div>
 </template>
 <script>
+import { getPostInfo } from "../../assets/lib/myStorage.js";
 import {
  Group, XInput,XButton,Toast
 } from "vux";

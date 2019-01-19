@@ -9,7 +9,7 @@
           </div>
         </sticky>
       </div>
-
+<!-- {{ticketValue}} -->
       <div class="ticket-contentBox padlr">
         <!-- {{ticketValue}} -->
         <checker
@@ -114,7 +114,12 @@
             ticketInfo: "活动两天通票+活动会刊资料+午餐+茶歇；不含交 通、住宿"
           }
         ],
-        ticketValue: ""
+        ticketValue:  {
+            id: "0001",
+            title: "免费票",
+            price: 0,
+            ticketInfo: "活动两天通票+活动会刊资料+午餐+茶歇"
+          },
       };
     },
     methods: {
