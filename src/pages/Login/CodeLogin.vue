@@ -2,10 +2,10 @@
   <div class="box" :style="{height:OrderHight+'px'}">
     <div class="map-headerBox">
       <div class="map-go-back" @click="$router.go(-1)"></div>
-      <router-link tag="div" class="backLogin fr" to="/login" v-if="showNext==='1'">登录</router-link>
+      <!-- <router-link tag="div" class="backLogin fr" to="/login" v-if="showNext==='1'">登录</router-link> -->
     </div>
     <div class="login-contentBox" v-if="showNext==='1'">
-      <h1 class="login-contentTitle">手机号注册</h1>
+      <h1 class="login-contentTitle">手机验证码登录</h1>
       <!-- <p class="login-subtitle">欢迎来到链会议,立即<span>注册</span></p> -->
       <div class="login-formBox">
         <!-- @on-click-error-icon="mobileErrorChange"    :should-toast-error="false" -->
@@ -46,12 +46,13 @@
     </div>
 
     <div class="login-contentBox" v-else-if="showNext==='2'">
-      <h5 class="login-contentinfoTitle">验证码已经发送至 {{maskValue}}</h5>
+       <h1 class="login-contentTitle">请输入验证码登录</h1>
+      <!-- <h5 class="login-contentinfoTitle">验证码已经发送至 {{maskValue}}</h5> -->
       <!-- <p class="login-subtitle">欢迎来到链会议,立即<span>注册</span></p> -->
       <div class="login-formBox">
         <!-- @on-click-error-icon="mobileErrorChange"    :should-toast-error="false" -->
         <group class="login-account">
-          <div class="fl" :style="{width:'70%'}">
+          <div class="fl" :style="{width:'100%'}">
             <x-input
               placeholder="请输入验证码"
               ref="refcode"
@@ -65,7 +66,7 @@
             ></x-input>
           </div>
 
-          <div
+          <!-- <div
             class="forgetPass fr"
             v-if="!Resend"
             :style="{width:'30%',textAlign:'center'}"
@@ -75,10 +76,10 @@
             v-if="Resend"
             :style="{width:'30%',textAlign:'center',color:'#FE666B'}"
             @click="ReacquireCode"
-          >获取验证码</div>
+          >获取验证码</div> -->
         </group>
 
-        <group class="login-account">
+        <!-- <group class="login-account">
           <div class="fl" :style="{width:'80%'}">
             <x-input
               placeholder="请输入密码(8-18位,数字+字母)"
@@ -95,7 +96,7 @@
             :style="{width:'15%',fontSize:'0.8rem'}"
             @click="showPass=!showPass"
           >{{showPass?'隐藏':'显示'}}</div>
-        </group>
+        </group> -->
 
         <div class="loginBtnBox">
           <toast
@@ -222,7 +223,7 @@ export default {
         // console.log("验证码已经发送至：" + this.maskValue);
       
         let SmsObj = {
-          type: "register",
+          type: "login",
           mobile: this.maskValue
         };
         // console.log(this.showNext, SmsObj);
@@ -288,13 +289,10 @@ export default {
       this.OrderHight = orderHight;
     },
     refCodeChange(ev) {
-      if (this.codeValue.length == 0 || this.passW.length == 0) {
+      if (this.codeValue.length == 0) {
         this.ResBtn = true;
       } else {
-        if (
-          this.$refs.refcode.valid == true &&
-          this.$refs.refpass.valid == true
-        ) {
+        if (this.$refs.refcode.valid == true) {
           this.ResBtn = false;
         } else {
           this.ResBtn = true;
