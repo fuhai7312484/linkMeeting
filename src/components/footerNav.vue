@@ -1,7 +1,7 @@
 <template>
    <div class="footerNavBox">
-<flexbox>
-      <flexbox-item :span="1/6">
+<flexbox :gutter="0">
+      <flexbox-item>
       <router-link tag="div" to="/meeting" class="footerNavIcons">
           <span class="meetingBg">
            <!-- <img :src="require('../assets/images/menu-meeting-gray.png')"/> -->
@@ -9,7 +9,7 @@
           会议
           </router-link></flexbox-item>
           
-      <flexbox-item :span="1/6">
+      <flexbox-item>
       
       <router-link tag="div" to="/siteindex" class="footerNavIcons">
           <span class="siteBg">
@@ -20,13 +20,13 @@
           
           </flexbox-item>
     
-      <flexbox-item><div class="footerNavRelease">
+      <!-- <flexbox-item><div class="footerNavRelease">
       
           <img :src="require('../assets/images/menu-release.png')"/>
        
          
-          </div></flexbox-item>
-      <flexbox-item :span="1/6">
+          </div></flexbox-item> -->
+      <flexbox-item>
 
  <router-link tag="div" to="/msgindex" class="footerNavIcons">
              <span class="menuMsgBg">
@@ -43,7 +43,7 @@
           </div> -->
 
           </flexbox-item>
-      <flexbox-item :span="1/6">
+      <flexbox-item>
 
       <router-link tag="div" to="/myindex" class="footerNavIcons">
              <span class="menuMyBg">

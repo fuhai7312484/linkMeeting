@@ -1,71 +1,7 @@
 <template>
   <div class="box">
-    <div
-      class="my-top-boxs"
-      :style="{backgroundImage: 'url(' + img + ')' }"
-    ></div>
-    <div class="my-top-boxsMak"></div>
-    <div class="my-top-boxsContent">
-
-        <x-header :right-options="{showMore: true}" @on-click-more="showMenus = true">
-        
-          </x-header>
-
-        
-      <!-- <x-header
-        :right-options="{showMore: true}"
-        @on-click-more="showMenus = true"
-      >
-        <span slot="overwrite-left"><img :src="img"/></span>
-        <x-icon
-          slot="overwrite-left"
-          type="navicon"
-          size="35"
-          style="fill:#fff;position:relative;top:-8px;left:-3px;"
-        ></x-icon>
-      </x-header> -->
-      <div class="my-top-AvatarBox">
-        <flexbox>
-          <flexbox-item :span="1/3">
-            <div class="my-top-Avatar">
-              <img src="../../assets/images/a.jpeg" />
-            </div>
-          </flexbox-item>
-          <flexbox-item :span="2/3">
-            <div class="my-top-userNamebox">
-              <flexbox orient="vertical" :gutter="0">
-                <flexbox-item class="my-top-userName">
-                  柳林东 <img src="../../assets/images/v.png" />
-                </flexbox-item>
-                <flexbox-item
-                  ><div class="flex-demo">
-                    中国建设集团 建造师
-                  </div></flexbox-item
-                >
-              </flexbox>
-            </div>
-          </flexbox-item>
-        </flexbox>
-
-        <flexbox class="my-top-SubBtnsBox">
-          <flexbox-item :span="2/3" class="my-top-SubtotalInfo">
-            2 场地 | 0 会议 | 5 粉丝
-          </flexbox-item>
-          <flexbox-item :span="1/3">
-            <div class="my-top-attention" @click="attChange" :style="{background:attention?'#FF576B':'#C8C8C8'}">{{attention?'关注':'已关注'}}</div>
-          <toast 
-          v-model="showPositionValue"
-           :type="InfoType" 
-           :time="800" 
-           is-show-mask 
-           :text="textInfo" 
-           :position="position">
-          </toast>
-          </flexbox-item>
-        </flexbox>
-      </div>
-    </div>
-
+   
+ 
 
 <!-- <sticky :check-sticky-support="false" :offset="0">
       <tab :line-width=1>
@@ -73,8 +9,13 @@
       </tab>
     </sticky>
     <div v-for="(i,index) in 40" :key="index">{{i}}</div> -->
-<div style="height:44px;">
+<div style="height:84px;">
+    <div class="map-headerBox borBottm">
+            <div class="map-go-back" @click="$router.go(-1)"></div>
+            <h3 class="map-headerTitle">我的收藏</h3>
+          </div>
 <sticky :check-sticky-support="false" :offset="0">
+  
     <tab
       active-color="#fe666b"
       default-color="#a0a0a0"
@@ -228,7 +169,7 @@
         index: 0,
         attention:false,
         swiperH:'',
-        list2: ["我发布的", "我参与的"],
+        list2: ["场地", "会议"],
         TaPosted: [
           {
             type: "pub",

@@ -302,6 +302,7 @@ import {mapState} from 'vuex'
 import FooterNav from "@/components/footerNav";
 import BMap from "@/components/BMap"
 import City from "@/components/City"
+import { getDataInfo} from "../../assets/lib/myStorage.js";
 import {
   Flexbox,
   FlexboxItem,
@@ -729,11 +730,24 @@ this.Features.forEach(e=>{
 
       }
     },
+
+getPlaceData(){
+  let placeObj={
+    
+  }
+     getDataInfo("post", "place", placeObj).then(res => {
+       console.log(res)
+     })
+
+}
+
+
    
 
   },
   mounted() {
     this.getOrderHight();
+    this.getPlaceData()
   }
 };
 </script>

@@ -47,10 +47,9 @@
 
     <div class="login-contentBox" v-else-if="showNext==='2'">
        <h1 class="login-contentTitle">请输入验证码登录</h1>
-      <!-- <h5 class="login-contentinfoTitle">验证码已经发送至 {{maskValue}}</h5> -->
-      <!-- <p class="login-subtitle">欢迎来到链会议,立即<span>注册</span></p> -->
+      
       <div class="login-formBox">
-        <!-- @on-click-error-icon="mobileErrorChange"    :should-toast-error="false" -->
+     
         <group class="login-account">
           <div class="fl" :style="{width:'100%'}">
             <x-input
@@ -65,39 +64,7 @@
               @on-change="refCodeChange"
             ></x-input>
           </div>
-
-          <!-- <div
-            class="forgetPass fr"
-            v-if="!Resend"
-            :style="{width:'30%',textAlign:'center'}"
-          >{{time}}s后重发</div>
-          <div
-            class="forgetPass fr"
-            v-if="Resend"
-            :style="{width:'30%',textAlign:'center',color:'#FE666B'}"
-            @click="ReacquireCode"
-          >获取验证码</div> -->
         </group>
-
-        <!-- <group class="login-account">
-          <div class="fl" :style="{width:'80%'}">
-            <x-input
-              placeholder="请输入密码(8-18位,数字+字母)"
-              ref="refpass"
-              :is-type="codePassValue"
-              @on-change="refCodeChange"
-              :type="showPass?'text':'password'"
-              v-model="passW"
-            ></x-input>
-          </div>
-
-          <div
-            class="forgetPass fr"
-            :style="{width:'15%',fontSize:'0.8rem'}"
-            @click="showPass=!showPass"
-          >{{showPass?'隐藏':'显示'}}</div>
-        </group> -->
-
         <div class="loginBtnBox">
           <toast
             v-model="showPositionValue"
@@ -110,12 +77,21 @@
 
           <div class="loginBtn fr">
             <x-button
+            v-if="!Resend"
               action-type="submit"
-              :class="ResBtn?'custom-primary':'custom-primary-red'"
-              :disabled="ResBtn"
-              @click.native="submitData"
-              :show-loading="showLoading"
-            >注册</x-button>
+              class="custom-primary"
+              :disabled="!Resend"
+              @click.native="ReacquireCode"
+            >{{time}}s</x-button>
+            <x-button
+            v-if="Resend"
+              action-type="submit"
+              class="custom-primary-red"
+              :disabled="Resend"
+              @click.native="ReacquireCode"
+            >重新获取</x-button>
+
+
           </div>
         </div>
       </div>
@@ -125,8 +101,9 @@
   </div>
 </template>
 <script>
-import { getPostInfo } from "../../assets/lib/myStorage.js";
+import { getDataInfo } from "../../assets/lib/myStorage.js";
 import { Group, XInput, XButton, Toast } from "vux";
+import axios from "axios";
 export default {
   components: {
     Group,
@@ -184,11 +161,11 @@ export default {
 
 
         let SmsObj = {
-          type: "register",
+          type: "login",
           mobile: this.maskValue
         };
         // console.log(this.showNext, SmsObj);
-        getPostInfo("user/sendSms", SmsObj).then(res => {
+        getDataInfo('post',"user/sendSms", SmsObj).then(res => {
           let data = res.data;
           if (data.code === 200) {
               console.log(data.data)
@@ -226,11 +203,14 @@ export default {
           type: "login",
           mobile: this.maskValue
         };
-        // console.log(this.showNext, SmsObj);
-        getPostInfo("user/sendSms", SmsObj).then(res => {
+        // console.log(SmsObj);
+       
+        getDataInfo('post',"user/sendSms", SmsObj).then(res => {
+         alert(SmsObj)
           let data = res.data;
           if (data.code === 200) {
               console.log(data.data)
+              alert(data.data)
             _that.VerCode = data.data;
             _that.showNext = "2";
             _that.Resend = false;
@@ -248,31 +228,33 @@ export default {
             password: this.passW,
             mobileCode: this.VerCode
           };
-          getPostInfo("user/register", regObj).then(res => {
-            //   console.log(res)
-              if(res.data.code ==200){
-                 _that.showPositionValue = true;
-             _that.showMsg = res.data.msg;
-             let loginObj={
-                mobile: _that.maskValue,
-                 password:_that.passW,
-             }
-              getPostInfo("user/login", loginObj).then(resd=>{
-                  if(resd.data.code==200){
-                         _that.showPositionValue = true;
-                     _that.showMsg = resd.data.msg;
-                     setTimeout(function(){
-                          _that.$router.push('/myindex')
-                     },500)
+
+
+          // getDataInfo('post',"user/register", regObj).then(res => {
+          //   //   console.log(res)
+          //     if(res.data.code ==200){
+          //        _that.showPositionValue = true;
+          //    _that.showMsg = res.data.msg;
+          //    let loginObj={
+          //       mobile: _that.maskValue,
+          //        password:_that.passW,
+          //    }
+          //     getDataInfo('post',"user/login", loginObj).then(resd=>{
+          //         if(resd.data.code==200){
+          //                _that.showPositionValue = true;
+          //            _that.showMsg = resd.data.msg;
+          //            setTimeout(function(){
+          //                 _that.$router.push('/myindex')
+          //            },800)
                     
-                  }
-                //   console.log(resd)
-              })
-              }else if(res.data.code==1004){
-                   _that.showPositionValue = true;
-             _that.showMsg = res.data.msg;
-              }
-          });
+          //         }
+          //       //   console.log(resd)
+          //     })
+          //     }else if(res.data.code==1004){
+          //          _that.showPositionValue = true;
+          //    _that.showMsg = res.data.msg;
+          //     }
+          // });
 
       
         } else {
@@ -289,15 +271,34 @@ export default {
       this.OrderHight = orderHight;
     },
     refCodeChange(ev) {
-      if (this.codeValue.length == 0) {
-        this.ResBtn = true;
-      } else {
-        if (this.$refs.refcode.valid == true) {
-          this.ResBtn = false;
-        } else {
-          this.ResBtn = true;
+      let _that = this;
+      if(this.$refs.refcode.valid == true){
+        let codeObj={
+          mobileCode:ev,
+          mobile:this.maskValue,
         }
+
+           getDataInfo('post',"user/user", codeObj).then(res=>{
+         
+                  if(res.data.code==200){
+                       this.showPositionValue = true;
+                     this.showMsg = res.data.msg;
+                     console.log(res)
+                     setTimeout(function(){
+                          _that.$router.push('/myindex')
+                     },500)
+                    
+                  }else if(res.data.code==1004){
+                      this.showMsg = res.data.msg;
+                       this.showPositionValue = true;
+                  }
+            
+              })
+
+
+        
       }
+ 
     },
     //验证输入的手机号是否正确来控制btn是否可点 refcode
     mobileChange(ev) {

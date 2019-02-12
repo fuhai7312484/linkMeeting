@@ -2,10 +2,8 @@
   <div class="box" :style="{height:OrderHight+'px'}">
     <div class="map-headerBox">
       <div class="map-go-back" @click="$router.go(-1)"></div>
-
       <router-link tag="div" class="backLogin fr" to="/login" v-if="showNext==='1'">登录</router-link>
     </div>
-
     <div class="login-contentBox" v-if="showNext==='1'">
       <h1 class="login-contentTitle">找回密码</h1>
       <!-- <p class="login-subtitle">欢迎来到链会议,立即<span>注册</span></p> -->
@@ -24,17 +22,15 @@
             ref="mobile"
           ></x-input>
         </group>
-
         <div class="loginBtnBox">
           <toast
             v-model="showPositionValue"
             type="text"
             width="20em"
             position="middle"
-            :time="800"
+            :time="1500"
             is-show-mask
           >{{showMsg}}</toast>
-
           <div class="loginBtn fr">
             <x-button
               action-type="submit"
@@ -46,7 +42,6 @@
         </div>
       </div>
     </div>
-
     <div class="login-contentBox" v-else-if="showNext==='2'">
       <h5 class="login-contentinfoTitle">验证码已经发送至 {{maskValue}}</h5>
       <!-- <p class="login-subtitle">欢迎来到链会议,立即<span>注册</span></p> -->
@@ -66,7 +61,6 @@
               @on-change="refCodeChange"
             ></x-input>
           </div>
-
           <div
             class="forgetPass fr"
             v-if="!Resend"
@@ -79,7 +73,6 @@
             @click="ReacquireCode"
           >获取验证码</div>
         </group>
-
         <group class="login-account">
           <div class="fl" :style="{width:'80%'}">
             <x-input
@@ -91,24 +84,21 @@
               v-model="passW"
             ></x-input>
           </div>
-
           <div
             class="forgetPass fr"
             :style="{width:'15%',fontSize:'0.8rem'}"
             @click="showPass=!showPass"
           >{{showPass?'隐藏':'显示'}}</div>
         </group>
-
         <div class="loginBtnBox">
           <toast
             v-model="showPositionValue"
             type="text"
             width="20em"
             position="middle"
-            :time="800"
+            :time="1500"
             is-show-mask
           >{{showMsg}}</toast>
-
           <div class="loginBtn fr">
             <x-button
               action-type="submit"
@@ -121,11 +111,11 @@
         </div>
       </div>
     </div>
-
     <div class="loginFooter">找回密码即表示同意链会议 服务条款 和 隐私条款</div>
   </div>
 </template>
 <script>
+import { getDataInfo } from "../../assets/lib/myStorage.js";
 import { Group, XInput, XButton, Toast } from "vux";
 export default {
   components: {
@@ -175,9 +165,24 @@ export default {
   methods: {
     //重新获取验证码
     ReacquireCode() {
-      this.Resend = false;
-      //这里单独请求获取验证码接口
-      this.Reacquire();
+          let _that = this;
+        let SmsObj = {
+          type: "changePassword",
+          mobile: this.maskValue
+        };
+       
+        getDataInfo('post',"user/sendSms", SmsObj).then(res => {
+          let data = res.data;
+          if (data.code === 200) {
+              console.log(data.data)
+            _that.VerCode = data.data;
+            _that.Resend = false;
+            _that.Reacquire();
+          } else if (data.code === 400) {
+              _that.showPositionValue = true;
+             _that.showMsg = data.msg;
+          }
+        });
     },
     //验证码倒数
     Reacquire() {
@@ -192,26 +197,49 @@ export default {
     },
     //提交手机号表单
     submitData() {
-
-        
+      let _that = this;
       if (this.showNext == "1") {
-        //showNext为1时这里请求发送验证码接口并且把showNext状态改为2
-        console.log("验证码已经发送至：" + this.maskValue);
-
-
-
-        this.showNext = "2";
-        this.Resend = false;
-        this.Reacquire();
+         let SmsObj = {
+          type: "changePassword",
+          mobile: this.maskValue
+        };
+             getDataInfo('post',"user/sendSms", SmsObj).then(res => {
+          let data = res.data;
+          if (data.code === 200) {
+              console.log(data.data)
+            _that.VerCode = data.data;
+            _that.showNext = "2";
+            _that.Resend = false;
+            _that.Reacquire();
+          } else if (data.code === 400) {
+              _that.showPositionValue = true;
+             _that.showMsg = data.msg;
+          }
+        });
       } else if (this.showNext == "2") {
-        (this.showLoading = true), (this.ResBtn = true);
-        console.log("这里提交验证码和密码给接口");
-        //showNext为2时这里请求注册接口
+        if(this.codeValue == this.VerCode){
+          (this.showLoading = true), (this.ResBtn = true);
+           let newPass = {
+            mobile: this.maskValue,
+            newPassword: this.passW,
+            mobileCode: this.VerCode
+          };
+             getDataInfo('put',"user/password", newPass).then(res => {
+             if(res.data.code ==200){
+              _that.showPositionValue = true;
+             _that.showMsg = res.data.msg;
+             setTimeout(function(){
+                          _that.$router.push('/login')
+                     },1000)
+             }
+             console.log(res)
+           })
+        }else{
+           this.showPositionValue = true;
+             this.showMsg = '验证码不正确';
+        }
       }
-
-
     },
-
     getOrderHight() {
       var orderHight =
         document.documentElement.clientHeight || document.body.clientHeight;

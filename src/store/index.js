@@ -6,6 +6,7 @@ Vue.use(vuex);
 export default new vuex.Store({
   state: {
     city: localStorage.city || '北京',
+    isLogin: 0,
     
 
   },

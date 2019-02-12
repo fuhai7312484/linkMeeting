@@ -228,7 +228,7 @@
         index: 0,
         attention:false,
         swiperH:'',
-        list2: ["我发布的", "我参与的"],
+        list2: ["Ta发布的", "Ta参与的"],
         TaPosted: [
           {
             type: "pub",

@@ -249,17 +249,13 @@ export default {
             for(let i in this.cities){
                 letters.push(i)
             }
-           
             return letters;
         }
     },
      methods: {
           ...mapMutations(['changeCity']),
          handCityClick(city){
-            //  console.log(city)
-             this.changeCity(city)
-            //  this.$router.push('/siteindex')
-            //  this.$router.back(-1)
+                 this.changeCity(city)
                 this.$router.go(-1)
          },
          //初始化定位
@@ -270,24 +266,14 @@ export default {
         function(r) {
           if (this.getStatus() == BMAP_STATUS_SUCCESS) {
               function setCity(city){
-                 
                   if(city.charAt(city.length-1)=='市'){
-                     
                         return city.slice(0,city.length-1)
                   }else{
-                  
                       return city
                   }
-                
-                
               }
-            //   setCity('北京市')
-        //   setCity(r.address.city)
            _that.positionCity = setCity(r.address.city)
-           
           } else {
-            // alert("failed" + this.getStatus());
-
             switch( this.getStatus() ) {
 		        case 2:
 		        	alert( '位置结果未知 获取位置失败.' );
@@ -343,13 +329,9 @@ export default {
                  case 'Hot':
                  return '热门';
                  break;
-                
-                
-                 
              }
          },
            handClick(ev){
-            // this.$emit('change',ev.target.innerText)
                   },
         touchStart(){
             this.touchStatus = true;
@@ -363,36 +345,25 @@ export default {
                 this.timer = setTimeout(()=>{
                     const touchY = ev.touches[0].clientY
                     const index =Math.floor((touchY-this.startY)/23)
-                    // console.log(this.sletter[index])
-            
                    this.letter = this.sletter[index]
-               
                 },16.7)
             }
         },
         touchEnd(){
             this.touchStatus = false;
         }
-
      },
       watch: {
     letter() {
       if (this.letter) {
-        //   console.log(this.$refs)
         let el = this.$refs[this.letter][1];
-        // console.log(el)
         this.scroll.scrollToElement(el);
       }
     }
   },
-//    updated() {
-//         this.startY = this.$refs['1'].offsetTop
-//     },
      mounted () {
-     
           this.scroll = new Bscroll(this.$refs.wrapper,{});
            this.startY = this.$refs['1'].offsetTop
-        //    console.log(this.$refs['1'].offsetTop)
          this.setpositionCity()
      }
 }

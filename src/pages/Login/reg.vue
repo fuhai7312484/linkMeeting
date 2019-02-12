@@ -124,7 +124,7 @@
   </div>
 </template>
 <script>
-import { getPostInfo } from "../../assets/lib/myStorage.js";
+import { getDataInfo } from "../../assets/lib/myStorage.js";
 import { Group, XInput, XButton, Toast } from "vux";
 export default {
   components: {
@@ -187,7 +187,7 @@ export default {
           mobile: this.maskValue
         };
         // console.log(this.showNext, SmsObj);
-        getPostInfo("user/sendSms", SmsObj).then(res => {
+        getDataInfo('post',"user/sendSms", SmsObj).then(res => {
           let data = res.data;
           if (data.code === 200) {
               console.log(data.data)
@@ -226,7 +226,7 @@ export default {
           mobile: this.maskValue
         };
         // console.log(this.showNext, SmsObj);
-        getPostInfo("user/sendSms", SmsObj).then(res => {
+        getDataInfo('post',"user/sendSms", SmsObj).then(res => {
           let data = res.data;
           if (data.code === 200) {
               console.log(data.data)
@@ -247,7 +247,7 @@ export default {
             password: this.passW,
             mobileCode: this.VerCode
           };
-          getPostInfo("user/register", regObj).then(res => {
+          getDataInfo('post',"user/register", regObj).then(res => {
             //   console.log(res)
               if(res.data.code ==200){
                  _that.showPositionValue = true;
@@ -256,13 +256,13 @@ export default {
                 mobile: _that.maskValue,
                  password:_that.passW,
              }
-              getPostInfo("user/login", loginObj).then(resd=>{
+              getDataInfo('post',"user/login", loginObj).then(resd=>{
                   if(resd.data.code==200){
                          _that.showPositionValue = true;
                      _that.showMsg = resd.data.msg;
                      setTimeout(function(){
                           _that.$router.push('/myindex')
-                     },500)
+                     },1000)
                     
                   }
                 //   console.log(resd)
