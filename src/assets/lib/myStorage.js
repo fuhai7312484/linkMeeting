@@ -19,7 +19,6 @@ export function getDataInfo(mode, url, obj) {
       return axios.patch(ipUrl + url, qs.stringify(obj));
       break;
     case "get":
-    
       return axios.get(ipUrl + url, obj);
       break;
   }

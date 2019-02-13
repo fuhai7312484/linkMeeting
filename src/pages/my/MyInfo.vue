@@ -291,14 +291,7 @@ export default {
 .vux-popup-dialog{
   background: #fff !important;
 }
-.my-saveBtn{
- font-weight: bold;
- font-size: 1rem;
-  height: 40px;
-  line-height: 40px;
-  width: 20%;
-  text-align: center;
-}
+
 </style>
 
 

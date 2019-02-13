@@ -23,6 +23,9 @@ import OrderMsg from "@/pages/Message/Order.vue";
 import Dialog from "@/pages/Message/Dialog.vue";
 import MyIndex from "@/pages/my/index";
 import MyColle from "@/pages/my/MyCollection";
+import MyFan from "@/pages/my/MyFan";
+import MyfansDetail from "@/pages/my/myFansDetail";
+import Feedback from "@/pages/my/Feedback";
 
 import Cpage from "@/pages/my/myInfo";
 
@@ -91,13 +94,9 @@ export default new Router({
     {
       path: "/siteindex",
       name: "SiteIndex",
-      meta: {
-        requireAuth: true // 添加该字段，表示进入这个路由是需要登录的
-      },
       // meta: {
-      //   index: 1,
+      //   requireAuth: true // 添加该字段，表示进入这个路由是需要登录的
       // },
-
       component: SiteIndex
     },
     {
@@ -199,6 +198,37 @@ export default new Router({
 
       component: MyColle
     },
+    {
+      path: "/myfan",
+      name: "MyFan",
+      meta: {
+        requireAuth: true // 添加该字段，表示进入这个路由是需要登录的
+      },
+     
+      component: MyFan,
+    },
+    {
+      path: "/myfan/myfanDetail/:id",
+      name: "MyfansDetail",
+      meta: {
+        requireAuth: true // 添加该字段，表示进入这个路由是需要登录的
+      },
+      // redirect: '/diary/EditDiary',
+      component: MyfansDetail,
+    
+      
+    },
+    {
+      path: "/feedback",
+      name: "Feedback",
+      meta: {
+        requireAuth: true // 添加该字段，表示进入这个路由是需要登录的
+      },
+     
+      component: Feedback,
+    },
+
+
     {
       path: "/roomdetail",
       name: "roomDetail",

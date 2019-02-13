@@ -43,15 +43,14 @@
     </span>
 我关注的
   </div>
-   <div class="my-CollectionIcos fl">
-    <span>
+
+  <router-link tag="div" to="/myfan" class="my-CollectionIcos fl">
+  <span>
        <img src="../../assets/images/my-Fan.png" />
      
     </span>
 我的粉丝
-  </div>
-  
-
+  </router-link>
 </div>
 
 
@@ -61,7 +60,7 @@
       <cell is-link title="场地订单" link="/"></cell>
       <cell is-link title="会议票券" link="/"></cell>
        <cell is-link title="浏览记录" link="/"></cell>
-      <cell is-link title="用户反馈" link="/"></cell>
+      <cell is-link title="用户反馈" link="/feedback"></cell>
        <cell is-link title="设置" link="/"></cell>
     </group>
 <br/><br/>
