@@ -65,11 +65,11 @@ import {
     },
     data() {
       return {
-        toastInfo:{ 
-     showMsg: "",
-   showPositionValue: false,
-   toastType:"success",
-   },
+          toastInfo:{ 
+            showMsg: "",
+          showPositionValue: false,
+          toastType:"success",
+              },
     feedbackData:{
       content:'',
       contact:'',

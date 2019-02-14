@@ -23,6 +23,15 @@ export function getDataInfo(mode, url, obj) {
       break;
   }
 }
+//判断用户是否登录
+export function isLogin(){
+  let token = getCookie("accessToken");
+  if(token){
+    return true;
+  }else{
+    return false;
+  }
+}
 // 请求拦截器
 export function checkToken() {
   let token = getCookie("accessToken");

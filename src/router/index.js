@@ -26,6 +26,8 @@ import MyColle from "@/pages/my/MyCollection";
 import MyFan from "@/pages/my/MyFan";
 import MyfansDetail from "@/pages/my/myFansDetail";
 import Feedback from "@/pages/my/Feedback";
+import MySetting from "@/pages/my/MySetting";
+import BindAccount from "@/pages/my/BindAccount";
 
 import Cpage from "@/pages/my/myInfo";
 
@@ -128,34 +130,28 @@ export default new Router({
     {
       path: "/navmap",
       name: "NavMap",
-      // meta: {
-      //   index: 1,
-      // },
+     
       component: NavMap
     },
     {
       path: "/ticket",
       name: "Ticket",
-      // meta: {
-      //   index: 1,
-      // },
+     
       component: Ticket
     },
     {
       path: "/signinfo",
       name: "SignInfo",
-      // meta: {
-      //   index: 1,
-      // },
+    
       component: SignInfo
     },
 
     {
       path: "/msgindex",
       name: "MsgIndex",
-      // meta: {
-      //   index: 1,
-      // },
+      meta: {
+        requireAuth: true // 添加该字段，表示进入这个路由是需要登录的
+      },
       component: MsgIndex
     },
     {
@@ -174,9 +170,9 @@ export default new Router({
     {
       path: "/myindex",
       name: "MyIndex",
-      meta: {
-        requireAuth: true // 添加该字段，表示进入这个路由是需要登录的
-      },
+      // meta: {
+      //   requireAuth: true // 添加该字段，表示进入这个路由是需要登录的
+      // },
 
       component: MyIndex
     },
@@ -227,7 +223,24 @@ export default new Router({
      
       component: Feedback,
     },
+    {
+      path: "/setting",
+      name: "MySetting",
+      meta: {
+        requireAuth: true // 添加该字段，表示进入这个路由是需要登录的
+      },
+     
+      component: MySetting,
+    },
+    {
+      path: "/setting/bindAccount",
+      name: "BindAccount",
+      meta: {
+        requireAuth: true // 添加该字段，表示进入这个路由是需要登录的
+      },
 
+      component: BindAccount
+    },
 
     {
       path: "/roomdetail",

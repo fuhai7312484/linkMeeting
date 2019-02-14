@@ -35,6 +35,7 @@
              <router-link tag="li" to="/mycolle">我的收藏</router-link>
              <router-link tag="li" to="/myfan">我的粉丝</router-link>
              <router-link tag="li" to="/feedback">用户反馈</router-link>
+              <router-link tag="li" to="/setting">设置</router-link>
 
 
       <div @click="submitData">用户登录</div>
