@@ -168,6 +168,7 @@ export default {
       getDataInfo("post", "user/sendSms", SmsObj).then(res => {
         let data = res.data;
         if (data.code === 200) {
+          alert(data.data)
           console.log(data.data);
           _that.VerCode = data.data;
           _that.Resend = false;
@@ -206,6 +207,7 @@ export default {
         getDataInfo("post", "user/sendSms", SmsObj).then(res => {
           let data = res.data;
           if (data.code === 200) {
+            alert(data.data)
             console.log(data.data);
 
             _that.VerCode = data.data;

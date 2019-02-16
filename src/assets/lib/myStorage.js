@@ -5,6 +5,7 @@ export function getDataInfo(mode, url, obj) {
   axios.defaults.headers["APP-User-Token"] = token;
   //测试环境
   let ipUrl = "http://192.168.1.179/lhy/v0.1/api/";
+  // let ipUrl = "http://192.168.1.125:8080/v0.1/api/";
   var qs = require("qs");
 
   // axios.defaults.headers.common["APP-User-Token"] = token;

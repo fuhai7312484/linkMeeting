@@ -12,7 +12,7 @@
 <div style="height:84px;">
     <div class="map-headerBox borBottm">
             <div class="map-go-back" @click="$router.go(-1)"></div>
-            <h3 class="map-headerTitle">我的收藏</h3>
+            <h3 class="map-headerTitle">浏览记录</h3>
           </div>
 <sticky :check-sticky-support="false" :offset="0">
   

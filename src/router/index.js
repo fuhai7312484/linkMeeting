@@ -28,6 +28,10 @@ import MyfansDetail from "@/pages/my/myFansDetail";
 import Feedback from "@/pages/my/Feedback";
 import MySetting from "@/pages/my/MySetting";
 import BindAccount from "@/pages/my/BindAccount";
+import MyBrowse from "@/pages/my/MyBrowse";
+import MyTicket from "@/pages/my/MyTicket";
+import MyFollow from "@/pages/my/MyFollow"
+
 
 import Cpage from "@/pages/my/myInfo";
 
@@ -194,6 +198,39 @@ export default new Router({
 
       component: MyColle
     },
+
+    {
+      path: "/myticket",
+      name: "MyTicket",
+      meta: {
+        requireAuth: true // 添加该字段，表示进入这个路由是需要登录的
+      },
+
+      component: MyTicket
+    },
+
+    {
+      path: "/myfollow",
+      name: "MyFollow",
+      meta: {
+        requireAuth: true // 添加该字段，表示进入这个路由是需要登录的
+      },
+
+      component: MyFollow
+    },
+
+
+    {
+      path: "/mybrowse",
+      name: "MyBrowse",
+      meta: {
+        requireAuth: true // 添加该字段，表示进入这个路由是需要登录的
+      },
+
+      component: MyBrowse
+    },
+
+
     {
       path: "/myfan",
       name: "MyFan",

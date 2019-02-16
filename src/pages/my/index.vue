@@ -8,12 +8,15 @@
       <div class="my-UserInfoBox padlr">
         <router-link v-if="isLogin" tag="div" to="/detailsList" class="my-Homepage">我的主页</router-link>
         <router-link tag="div" class="my-UserInfoAvatar fl" to="/myInfo">
-          <img :src="isLogin?myData.mainPic:require('../../assets/images/myFans-Mask.png')"> 
+          <img :src="isLogin?myData.mainPic==null?require('../../assets/images/myFans-Mask.png'):myData.mainPic:require('../../assets/images/myFans-Mask.png')"> 
         </router-link>
         <div class="my-UserInfoName fl" v-if="isLogin">
-          <router-link tag="h3" to="/myInfo">{{myData.name}}</router-link>
+          <router-link tag="h3" to="/myInfo">{{myData.name==null?'Ta还没取名字':myData.name}}</router-link>
           <span>
-            <img src="../../assets/images/v.png">已认证
+            <img src="../../assets/images/v.png">认证场地方
+          </span>
+           <span class="spang">
+            <img src="../../assets/images/meeting-v.png">认证主办方
           </span>
         </div>
          <div class="my-UserInfoName fl" v-if="!isLogin">
@@ -28,17 +31,15 @@
           <span>
             <img src="../../assets/images/my-Collection.png">
           </span>
-
-          
           我的收藏
         </router-link>
 
-        <div class="my-CollectionIcos fl">
+        <router-link tag="div" to="/myfollow" class="my-CollectionIcos fl">
           <span>
             <img src="../../assets/images/my-Attention.png">
           </span>
-          我关注的
-        </div>
+           我关注的
+        </router-link>
 
         <router-link tag="div" to="/myfan" class="my-CollectionIcos fl">
           <span>
@@ -50,8 +51,8 @@
 
       <group class="my-navList">
         <cell is-link title="场地订单" link="/"></cell>
-        <cell is-link title="会议票券" link="/"></cell>
-        <cell is-link title="浏览记录" link="/"></cell>
+        <cell is-link title="会议票券" link="/MyTicket"></cell>
+        <cell is-link title="浏览记录" link="/mybrowse"></cell>
         <cell is-link title="用户反馈" link="/feedback"></cell>
         <cell is-link title="设置" link="/setting"></cell>
       </group>
@@ -128,6 +129,7 @@ export default {
   },
 
   mounted() {
+
     if(isLogin()){
       this.isLogin = isLogin()
       this.getMyData()

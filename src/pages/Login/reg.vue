@@ -124,7 +124,7 @@
   </div>
 </template>
 <script>
-import { getDataInfo } from "../../assets/lib/myStorage.js";
+import { getDataInfo,setCookie,setStorage } from "../../assets/lib/myStorage.js";
 import { Group, XInput, XButton, Toast } from "vux";
 export default {
   components: {
@@ -177,19 +177,14 @@ export default {
     //重新获取验证码
     ReacquireCode() {
         let _that = this;
-    //   this.Resend = false;
-      //这里单独请求获取验证码接口
-    //   this.Reacquire();
-
-
         let SmsObj = {
           type: "register",
           mobile: this.maskValue
         };
-        // console.log(this.showNext, SmsObj);
         getDataInfo('post',"user/sendSms", SmsObj).then(res => {
           let data = res.data;
           if (data.code === 200) {
+            alert(data.data)
               console.log(data.data)
             _that.VerCode = data.data;
             _that.Resend = false;
@@ -199,8 +194,6 @@ export default {
              _that.showMsg = data.msg;
           }
         });
-
-
     },
     //验证码倒数
     Reacquire() {
@@ -218,9 +211,6 @@ export default {
     submitData() {
       let _that = this;
       if (this.showNext == "1") {
-        //showNext为1时这里请求发送验证码接口并且把showNext状态改为2
-        // console.log("验证码已经发送至：" + this.maskValue);
-      
         let SmsObj = {
           type: "register",
           mobile: this.maskValue
@@ -229,7 +219,8 @@ export default {
         getDataInfo('post',"user/sendSms", SmsObj).then(res => {
           let data = res.data;
           if (data.code === 200) {
-              console.log(data.data)
+            alert(data.data)
+              // console.log(data.data)
             _that.VerCode = data.data;
             _that.showNext = "2";
             _that.Resend = false;
@@ -260,6 +251,15 @@ export default {
                   if(resd.data.code==200){
                          _that.showPositionValue = true;
                      _that.showMsg = resd.data.msg;
+
+                     let tokenInfo = resd.data.data.tokenMap
+                    let userInfo={
+                      userId:resd.data.data.user.id,
+                      access_token:tokenInfo.access_token,
+                      refresh_token:tokenInfo.refresh_token,
+                    }
+                      setCookie('accessToken',tokenInfo.access_token)
+                     setStorage('userToken',userInfo)
                      setTimeout(function(){
                           _that.$router.push('/myindex')
                      },1000)

@@ -8,20 +8,22 @@
       </div>
 
       <!-- </sticky> -->
-      <!-- <div v-transfer-dom>
-        <loading :show="show2" text="数据加载中..."></loading>
-      </div>-->
       <div v-transfer-dom>
         <loading :show="show2" text="数据加载中..."></loading>
       </div>
       <!-- {{userData}} -->
-      <div class="bgF8 heightP" v-if="!show2">
+      <div class="bgF8" v-if="!show2">
         <group class="myfan-fanlistBox">
           <!-- {{pwdStatus}} -->
           <cell :title="userData.pwdStatus?'修改密码':'设置密码'" is-link @click.native="showInput=true"></cell>
           <cell title="绑定账号" is-link link="/setting/bindAccount"></cell>
-          <cell title="关于链会议" is-link></cell>
+          
         </group>
+
+<group class="myfan-fanlistBox">
+        <cell title="关于链会议" is-link></cell>
+
+    </group>
         <div class="sign-out" @click="signOut">退出登录</div>
       </div>
     </div>
@@ -36,7 +38,7 @@
             <div class="my-saveBtn fr" @click="submitInputForm">保存</div>
           </div>
 
-          <div v-if="userData.pwdStatus">
+          <div v-if="userData.pwdStatus" class="change-Password">
             <x-input
               placeholder="输入旧密码(8-18位,数字+字母)"
               ref="Oldpass"
@@ -60,7 +62,7 @@
               :equal-with="passObj.newPassword"
             ></x-input>
           </div>
-          <div v-else>
+          <div v-else class="change-Password">
             <x-input
               type="password"
               :is-type="codePassValue"
@@ -311,7 +313,7 @@ export default {
 @import "~vux/src/styles/reset.less";
 .myfan-fanlistBox {
   .weui-cells {
-    margin-top: 0;
+    // margin-top: 0;
   }
   .weui-cells::before {
     border: none;
@@ -371,5 +373,10 @@ export default {
 }
 .vux-popup-dialog {
   background: #fff !important;
+}
+.change-Password{
+.weui-input{
+  height: 2rem;
+}
 }
 </style>

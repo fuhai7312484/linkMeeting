@@ -1,8 +1,8 @@
 <template>
   <div class="box" :style="{height:OrderHight+'px'}">
-    <div class="map-headerBox">
+    <!-- <div class="map-headerBox">
       <div class="map-go-back" @click="$router.go(-1)"></div>
-    </div>
+    </div> -->
     <div class="login-contentBox">
       <h1 class="login-contentTitle">您好</h1>
       <p class="login-subtitle">欢迎来到链会议,立即
@@ -18,6 +18,7 @@
             placeholder="请输入手机号"
             mask="99999999999"
             v-model="maskValue"
+          
             :max="11"
             is-type="china-mobile"
             :should-toast-error="false"
@@ -55,12 +56,12 @@
     </div>
     <div class="loginFooter">
       <div class="weixinBtns">
-        <span>
+        <!-- <span>
           <img src="../../assets/images/QQLogin.png">
         </span>
         <span>
           <img src="../../assets/images/weixin.png">
-        </span>
+        </span> -->
       </div>登录即表示同意链会议 服务条款 和 隐私条款
     </div>
     <toast
@@ -200,4 +201,14 @@ export default {
   color: #a0a0a0;
   font-size: 0.8rem;
 }
+
+.login-account{
+.weui-cells{
+border-bottom:1px solid #E6E6E6; 
+.weui-input{
+  height: 2rem;
+}
+}
+}
+
 </style>
