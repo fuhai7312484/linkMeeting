@@ -1,6 +1,10 @@
 <template>
   <div class="box">
     <!-- {{myData}} -->
+
+
+
+
     <div v-transfer-dom>
       <loading :show="show2" text="数据加载中..."></loading>
     </div>
@@ -96,6 +100,7 @@ export default {
   },
   methods: {
     //获取当前用户是否在登录状态
+  
 
     //获取当前用户信息
     getMyData() {
@@ -129,7 +134,6 @@ export default {
   },
 
   mounted() {
-
     if(isLogin()){
       this.isLogin = isLogin()
       this.getMyData()

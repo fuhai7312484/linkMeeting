@@ -243,7 +243,7 @@ for (var i = 0; i < this.data_info.length; i ++)
     }
   },
   mounted() {
-    this.map();
+    // this.map();
   }
 };
 </script>
