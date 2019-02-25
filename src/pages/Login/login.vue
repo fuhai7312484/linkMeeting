@@ -75,7 +75,7 @@
   </div>
 </template>
 <script>
-import { getDataInfo,setCookie,setStorage,getCookie,removeCookie} from "../../assets/lib/myStorage.js";
+import { getDataInfo,setCookie,setStorage,getCookie,removeCookie,checkToken} from "../../assets/lib/myStorage.js";
 import { Group, XInput, XButton, Toast } from "vux";
 import axios from "axios";
 import router from "../../router"
@@ -160,6 +160,8 @@ export default {
           setCookie('accessToken',tokenInfo.access_token)
           setStorage('userToken',userInfo)
 
+          // this.JIMinitchange();
+
           // if(_that.$router.go() == undefined){
           //   _that.$router.push("/myindex");
           // }else{
@@ -174,7 +176,47 @@ export default {
           this.showMsg = res.data.msg;
         }
       });
+    },
+//初始化IM消息
+   JIMinitchange() {
+      window.JIM = new JMessage({
+        debug: true
+      });
+      this.JIMinit();
+    },
+    JIMinit() {
+      let strTime = new Date().getTime();
+      let string =
+        "appkey=21c14066bd7b213c7822caa9&timestamp=" +
+        strTime +
+        "&random_str=404&key=6db1783c4b7a02a67012e0ce";
+      console.log(string);
+      let stringObj = {
+        params: {
+          str: string
+        }
+      };
+      checkToken().then(Pdata => {
+        getDataInfo("get", "/common/md5", stringObj).then(res => {
+          if (res.data.code == 200) {
+            JIM.init({
+              appkey: "21c14066bd7b213c7822caa9",
+              random_str: "404",
+              signature: res.data.data,
+              timestamp: strTime,
+              flag: 1
+            })
+              .onSuccess(function(data) {
+                console.log("success:" + JSON.stringify(data));
+              })
+              .onFail(function(data) {
+                console.log("error:" + JSON.stringify(data));
+              });
+          }
+        });
+      });
     }
+
   },
   created() {
     this.getOrderHight();

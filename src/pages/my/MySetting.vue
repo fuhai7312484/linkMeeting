@@ -379,4 +379,13 @@ export default {
   height: 2rem;
 }
 }
+.my-inputsBox{
+  .weui-cell{
+    border-bottom:1px solid #e6e6e6; 
+  }
+  .weui-cell::before{
+    border: none;
+  }
+
+}
 </style>

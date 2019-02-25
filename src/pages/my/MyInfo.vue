@@ -22,9 +22,12 @@
         </group>
         <group class="my-myInfoBox">
           <!-- <cell :title="$t('Money')" @click.native="sexSelect" :is-loading="!money" :value="money"></cell> -->
-          <cell title="名字" :value="myData.name==null?'未填写':myData.name" 
-          @click.native="myInputChange('name')"
-           is-link></cell>
+          <cell
+            title="名字"
+            :value="myData.name==null?'未填写':myData.name"
+            @click.native="myInputChange('name')"
+            is-link
+          ></cell>
 
           <cell
             title="性别"
@@ -34,8 +37,18 @@
           ></cell>
         </group>
         <group class="my-myInfoBox">
-          <cell title="职位" :value="myData.technical==null?'未填写':myData.technical" is-link @click.native="myInputChange('technical')"></cell>
-          <cell title="公司" :value="myData.company==null?'未填写':myData.company" @click.native="myInputChange('company')" is-link></cell>
+          <cell
+            title="职位"
+            :value="myData.technical==null?'未填写':myData.technical"
+            is-link
+            @click.native="myInputChange('technical')"
+          ></cell>
+          <cell
+            title="公司"
+            :value="myData.company==null?'未填写':myData.company"
+            @click.native="myInputChange('company')"
+            is-link
+          ></cell>
         </group>
         <actionsheet v-model="sexSelect" :menus="sexMenus" @on-click-menu="sexClick" show-cancel></actionsheet>
 
@@ -48,38 +61,34 @@
         <!-- {{myData}} -->
       </div>
     </div>
-<div v-transfer-dom>
+    <div v-transfer-dom>
       <popup v-model="showInput" height="100%">
         <div class="my-inputsBox">
           <!-- <div @click="show11=false">关闭1111111111111111</div> -->
-
-      
           <div class="map-headerBox borBottm">
             <div class="map-go-back" @click="showInput=false"></div>
             <h3 class="map-headerTitle">{{inputTypeTitle(inputType)}}</h3>
-            <div class="my-saveBtn fr" @click="submitInputForm">
-            保存
+            <div class="my-saveBtn fr" @click="submitInputForm">保存</div>
           </div>
-          </div>
-     
+
           <div v-if="inputType=='name'">
-              <x-input :placeholder="myData.name==null?'请填写名字':myData.name" v-model="inputValue" ></x-input>
-
+            <x-input :placeholder="myData.name==null?'请填写名字':myData.name" v-model="inputValue"></x-input>
           </div>
-           <div v-if="inputType=='technical'">
-              <x-input :placeholder="myData.technical==null?'请填写职位':myData.technical" v-model="inputValue" ></x-input>
-
+          <div v-if="inputType=='technical'">
+            <x-input
+              :placeholder="myData.technical==null?'请填写职位':myData.technical"
+              v-model="inputValue"
+            ></x-input>
           </div>
-           <div v-if="inputType=='company'">
-              <x-input :placeholder="myData.company==null?'请填写公司名称':myData.company" v-model="inputValue" ></x-input>
-
+          <div v-if="inputType=='company'">
+            <x-input
+              :placeholder="myData.company==null?'请填写公司名称':myData.company"
+              v-model="inputValue"
+            ></x-input>
           </div>
-         
-         
         </div>
       </popup>
     </div>
-
 
     <toast
       v-model="showPositionValue"
@@ -96,7 +105,9 @@ import {
   setCookie,
   getStorage,
   getCookie,
-  checkToken
+  checkToken,
+  JIMinitchange,
+  JIMlogin
 } from "../../assets/lib/myStorage.js";
 import {
   Group,
@@ -131,10 +142,9 @@ export default {
       showMsg: "",
       showPositionValue: false,
       showInput: false,
-      inputType:'',
-      inputValue:'',
+      inputType: "",
+      inputValue: ""
     };
-    
   },
   directives: {
     TransferDom
@@ -195,52 +205,83 @@ export default {
       }
     },
     //修改名称、职位、公司
-    myInputChange(type){
+    myInputChange(type) {
       this.showInput = true;
       this.inputType = type;
     },
-    inputTypeTitle(title){
-      switch(title){
-        case 'name':
-        return '名字';
-        break;
-        case 'technical':
-        return '职位';
-        break;
-        case 'company':
-        return '公司'
-        break;
+    inputTypeTitle(title) {
+      switch (title) {
+        case "name":
+          return "名字";
+          break;
+        case "technical":
+          return "职位";
+          break;
+        case "company":
+          return "公司";
+          break;
       }
     },
+    //登录IM
+
+    //更新IM消息个人资料
+    updateSelfInfo() {
+      let _that = this;
+      let Obj = {};
+      if (this.inputType == "name") {
+        Obj.nickname = this.inputValue;
+      }
+      let userId = getStorage("userToken").userId;
+      JIM.login({
+        username: userId,
+        password: userId
+      }).onSuccess(function(data) {
+        JIM.updateSelfInfo(Obj)
+          .onSuccess(function(data) {
+            console.log(data);
+            if (data.code == 0) {
+              _that.showPositionValue = true;
+              _that.showMsg = "名称更新成功！";
+              _that.inputValue = _that.inputType = "";
+                _that.showInput = false;
+              //data.code 返回码
+              //data.message 描述
+            }
+          })
+          .onFail(function(data) {
+            //同上
+          });
+      });
+    },
+
     //提交要修改的Input内容
-    submitInputForm(){
-      // console.log(this.inputType,this.inputValue)
-      if(this.inputValue!=''){
-
-        // console.log('不是空的')
-        //  this.inputType
+    submitInputForm() {
+  
+      if (this.inputValue != "") {
         let inputObj = {
-          id: getStorage("userToken").userId,
-        }
-        inputObj[this.inputType] = this.inputValue
-        console.log(inputObj)
-          
-
-          checkToken().then(Pdata => {
+          id: getStorage("userToken").userId
+        };
+        inputObj[this.inputType] = this.inputValue;
+  
+        checkToken().then(Pdata => {
           getDataInfo("patch", "user/userByCondition", inputObj).then(res => {
             if (res.data.code == 200) {
-           this.myData[this.inputType] = this.inputValue;
-              this.showPositionValue = true;
-              this.showMsg = res.data.msg;
-              this.inputValue = this.inputType = ''
+         
+              this.myData[this.inputType] = this.inputValue;
+              if (this.inputType == "name") {
+                JIMinitchange(this.updateSelfInfo);
+              } else {
+                this.showPositionValue = true;
+                this.showMsg = res.data.msg;
+                this.inputValue = this.inputType = "";
+                this.showInput = false;
+                
+              }
             }
           });
         });
-
-
-
       }
-      this.showInput = false;
+      
     }
   },
 
@@ -284,14 +325,13 @@ export default {
     color: #c8c8c8;
   }
 }
-.position-horizontal-demo{
+.position-horizontal-demo {
   position: relative;
-   height: 100%;
+  height: 100%;
 }
-.vux-popup-dialog{
+.vux-popup-dialog {
   background: #fff !important;
 }
-
 </style>
 
 

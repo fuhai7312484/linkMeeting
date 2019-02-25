@@ -7,6 +7,7 @@ import CodeLogin from "@/pages/Login/CodeLogin";
 import Reg from "@/pages/Login/reg";
 import Retpass from "@/pages/Login/Retpass";
 import MyDetailsList from "@/pages/my/MydetailsList";
+import TaDetail from "@/pages/my/TaDetail";
 import SiteIndex from "@/pages/site/index";
 import SiteSearch from "@/pages/site/siteSearch";
 import SiteDetail from "@/pages/site/siteDetail";
@@ -19,6 +20,9 @@ import DownAnnex from "@/pages/meeting/downAnnex";
 
 import SignInfo from "@/pages/meeting/signUpInfo";
 import MsgIndex from "@/pages/Message/index";
+import Reminder from "@/pages/Message/Reminder"
+
+
 import OrderMsg from "@/pages/Message/Order.vue";
 import Dialog from "@/pages/Message/Dialog.vue";
 import MyIndex from "@/pages/my/index";
@@ -88,6 +92,11 @@ export default new Router({
       component: MyDetailsList
     },
     {
+      path: "/tadetail/:id",
+      name: "TaDetail",
+      component: TaDetail
+    },
+    {
       path: "/sitedetail",
       name: "SiteDetail",
       component: SiteDetail
@@ -114,7 +123,7 @@ export default new Router({
       component: MeetingIndex
     },
     {
-      path: "/meetDetail",
+      path: "/meetDetail/:id",
       name: "MeetDetail",
       // meta: {
       //   index: 1,
@@ -158,6 +167,14 @@ export default new Router({
       },
       component: MsgIndex
     },
+
+    {
+      path: "/Reminder/:id",
+      name: "Reminder",
+      component: Reminder
+    },
+
+
     {
       path: "/ordermsg",
       name: "OrderMsg",
@@ -167,7 +184,7 @@ export default new Router({
       component: OrderMsg
     },
     {
-      path: "/dialog",
+      path: "/dialog/:id",
       name: "Dialog",
       component: Dialog
     },

@@ -1,55 +1,13 @@
 import axios from "axios";
-export function getPositioning(){
-  // 百度地图API功能
-  let self = this
-  let obj={
-    lng:'',
-    lat:''
-  }
-	var geolocation = new BMap.Geolocation();
-	geolocation.getCurrentPosition(function(r){
-    
-		if(this.getStatus() == BMAP_STATUS_SUCCESS){
-			// var mk = new BMap.Marker(r.point);
-			// map.addOverlay(mk);
-			// map.panTo(r.point);
-      // alert('您的位置：'+r.point.lng+','+r.point.lat);
-      // console.log( r.point.lng,r.point.lat)
-      obj.lng = r.point.lng;
-      obj.lat = r.point.lat;
-      // console.log(obj)
-      // console.log(obj)
-      // return obj
 
-      // return {lng:r.point.lng,lat:r.point.lat}
-		}
-		else {
-      // return this.getStatus()
-			alert('failed'+this.getStatus());
-		}        
-  },{enableHighAccuracy: true})
-  
-	//关于状态码
-	//BMAP_STATUS_SUCCESS	检索成功。对应数值“0”。
-	//BMAP_STATUS_CITY_LIST	城市列表。对应数值“1”。
-	//BMAP_STATUS_UNKNOWN_LOCATION	位置结果未知。对应数值“2”。
-	//BMAP_STATUS_UNKNOWN_ROUTE	导航结果未知。对应数值“3”。
-	//BMAP_STATUS_INVALID_KEY	非法密钥。对应数值“4”。
-	//BMAP_STATUS_INVALID_REQUEST	非法请求。对应数值“5”。
-	//BMAP_STATUS_PERMISSION_DENIED	没有权限。对应数值“6”。(自 1.1 新增)
-	//BMAP_STATUS_SERVICE_UNAVAILABLE	服务不可用。对应数值“7”。(自 1.1 新增)
-  //BMAP_STATUS_TIMEOUT	超时。对应数值“8”。(自 1.1 新增)
-  // console.log(obj)
-    return obj
-
-    
-}
 //post接口请求公共调用
 export function getDataInfo(mode, url, obj) {
   let token = getCookie("accessToken");
   axios.defaults.headers["APP-User-Token"] = token;
+ 
   //测试环境
   let ipUrl = "http://192.168.1.179/lhy/v0.1/api/";
+  // let ipUrl = "http://192.168.1.170:8080/v0.1/api/";
   // let ipUrl = "http://192.168.1.125:8080/v0.1/api/";
   var qs = require("qs");
 
@@ -61,7 +19,7 @@ export function getDataInfo(mode, url, obj) {
     case "post":
       return axios.post(ipUrl + url, qs.stringify(obj));
       break;
-      case "patch":
+    case "patch":
       return axios.patch(ipUrl + url, qs.stringify(obj));
       break;
     case "get":
@@ -70,11 +28,11 @@ export function getDataInfo(mode, url, obj) {
   }
 }
 //判断用户是否登录
-export function isLogin(){
+export function isLogin() {
   let token = getCookie("accessToken");
-  if(token){
+  if (token) {
     return true;
-  }else{
+  } else {
     return false;
   }
 }
@@ -83,20 +41,20 @@ export function checkToken() {
   let token = getCookie("accessToken");
   let p = new Promise(function(resolve, reject) {
     if (token) {
-      const TokenInfo = getStorage('userToken')
+      const TokenInfo = getStorage("userToken");
       const refreshToken = TokenInfo.refresh_token;
       getDataInfo("put", "token", { refreshToken: refreshToken }).then(res => {
-      //  console.log(res)
-      // alert(refreshToken)
-        if(res.data.code==200){
-          TokenInfo.access_token = res.data.data.access_token
+        //  console.log(res)
+        // alert(refreshToken)
+        if (res.data.code == 200) {
+          TokenInfo.access_token = res.data.data.access_token;
           setCookie("accessToken", res.data.data.access_token);
-          setStorage('userToken',TokenInfo)
-          resolve()
-        }else if(res.data.code==400){
+          setStorage("userToken", TokenInfo);
+          resolve();
+        } else if (res.data.code == 400) {
           // console.log(res)
           resolve(400);
-        
+
           // _that.$router.push('/login')
         }
       });
@@ -160,4 +118,156 @@ export function getCookie(key) {
 //清除Cookie
 export function removeCookie(key) {
   setCookie(key, "", -1); //把cookie设置为过期
+}
+//定位当前用户位置
+export function getPositioning() {
+  let self = this;
+  let obj = {
+    lng: "",
+    lat: ""
+  };
+  var geolocation = new BMap.Geolocation();
+  geolocation.getCurrentPosition(
+    function(r) {
+      if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+        obj.lng = r.point.lng;
+        obj.lat = r.point.lat;
+      } else {
+        // return this.getStatus()
+        alert("failed" + this.getStatus());
+      }
+    },
+    { enableHighAccuracy: true }
+  );
+
+  //关于状态码
+  //BMAP_STATUS_SUCCESS	检索成功。对应数值“0”。
+  //BMAP_STATUS_CITY_LIST	城市列表。对应数值“1”。
+  //BMAP_STATUS_UNKNOWN_LOCATION	位置结果未知。对应数值“2”。
+  //BMAP_STATUS_UNKNOWN_ROUTE	导航结果未知。对应数值“3”。
+  //BMAP_STATUS_INVALID_KEY	非法密钥。对应数值“4”。
+  //BMAP_STATUS_INVALID_REQUEST	非法请求。对应数值“5”。
+  //BMAP_STATUS_PERMISSION_DENIED	没有权限。对应数值“6”。(自 1.1 新增)
+  //BMAP_STATUS_SERVICE_UNAVAILABLE	服务不可用。对应数值“7”。(自 1.1 新增)
+  //BMAP_STATUS_TIMEOUT	超时。对应数值“8”。(自 1.1 新增)
+  // console.log(obj)
+  return obj;
+}
+//初始化IM
+
+export function JIMinitchange(callback) {
+  window.JIM = new JMessage({
+    debug: true
+  });
+  JIMinit(callback);
+}
+function JIMinit(callback) {
+  let Obj = {};
+  checkToken().then(Pdata => {
+    // console.log(Pdata)
+    getDataInfo("get", "jpush/im/auth", Obj).then(res => {
+      console.log(res)
+      if (res.data.code == 200) {
+        let stringObj = res.data.data;
+        stringObj.flag = 1;
+        JIM.init(stringObj)
+          .onSuccess(function(data) {
+            // console.log("success:" + JSON.stringify(data));
+            callback();
+          })
+          .onFail(function(data) {
+            // console.log("error:" + JSON.stringify(data));
+          });
+      } else if (res.data.code == 400 || res.data.code == 100101) {
+      }
+    });
+  });
+}
+//登录IM
+export function JIMlogin(callback){
+  let _that = this;
+  let userId = getStorage("userToken").userId;
+  JIM.login({
+    username: userId,
+    password: userId
+  }).onSuccess(function(data) {
+    callback()
+
+  })
+
+}
+
+
+//时间戳转时间
+export function getToTime(timeStamp, str) {
+  if (!timeStamp) return;
+  function toDou(n) {
+    return n < 10 ? "0" + n : "" + n;
+  }
+  str = str
+    ? { dateY: str, dateM: str, dateD: " " }
+    : { dateY: "年", dateM: "月", dateD: "日" };
+  var date = new Date(timeStamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+  let Y = date.getFullYear() + str.dateY;
+  let M = toDou(date.getMonth() + 1) + str.dateM;
+  let D = toDou(date.getDate()) + str.dateD;
+  let h = toDou(date.getHours()) + ":";
+  let m = toDou(date.getMinutes()) + ":";
+  let s = toDou(date.getSeconds());
+  return Y + M + D + h + m + s;
+}
+
+
+// 时间统一函数
+export function transDate(time) {
+  // var $time =document.getElementById("share-time");
+
+  var date = time;
+  var weekday=["星期日","星期一","星期二","星期三","星期四","星期五","星期六"];
+  var tt = new Date(parseInt(date));
+  var days = parseInt((new Date().getTime() - date) / 86400000);
+  var today = new Date().getDate();
+  var year = tt.getFullYear();
+  var mouth = tt.getMonth() + 1;
+  var day = tt.getDate();
+  var time = tt.getHours() < 10 ? "0" + tt.getHours() : tt.getHours();
+  var min = tt.getMinutes() < 10 ? "0" + tt.getMinutes() : tt.getMinutes();
+  var day = tt.getDate();
+  var week = tt.getDay()
+  var result, offset;
+  offset = Math.abs(today - day);
+  if (days < 2 && offset < 2) {
+    if (offset === 0) {
+      result = "今天" + time + ":" + min;
+    } else if (offset === 1) {
+      result = "昨天" + time + ":" + min;
+    }else if (offset > 2&& offset <= 6){
+      result = weekday[week] ;
+    }
+  } else {
+    result = year + "-" + mouth + "-" + day;
+  }
+  return result;
+}
+
+export function getGetAxios(){
+  // console.log(1111)
+  axios.get('https://api.im.jpush.cn/v1/resource',  {
+    // headers: {
+    //     'Authorization':'YXBwS2V5JTNBNmRiMTc4M2M0YjdhMDJhNjcwMTJlMGNl',
+    // },
+    params: {
+      mediaId: 'qiniu/image/j/CC24BF3978905DACCBABB2B6FFF29ABE.png',
+     
+    },
+ 
+})
+
+  .then(function (response) {
+   console.log(response);
+  })
+  .catch(function (error) {
+   console.log(error);
+  });
+
 }

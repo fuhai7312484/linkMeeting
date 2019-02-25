@@ -129,7 +129,7 @@
                   <p>更换成功</p>
                 </div>
                 <p>您可通过
-                  <span>{{newMobile}}</span> 登录当前链会议账号
+                  <span>{{disMobile}}</span> 登录当前链会议账号
                 </p>
               </div>
             </div>
@@ -224,6 +224,7 @@ export default {
       OldCodeVal: "",
       OldCode: "",
       newMobile: "",
+      disMobile: "",
       newCodeVal: "",
       newCode: "",
       dx_djs: null,
@@ -359,7 +360,7 @@ export default {
             getDataInfo("post", "user/sendSms", SmsObj).then(res => {
               let data = res.data;
               if (data.code === 200) {
-                // alert(data.data)
+                alert(data.data)
                 // console.log(data.data);
                 _that.newCode = data.data;
                 _that.Resend = false;
@@ -439,6 +440,7 @@ export default {
         checkToken().then(Pdata => {
           getDataInfo("patch", "user/userMobile", newmObj).then(res => {
             if (res.data.code == 200) {
+              this.disMobile = this.newMobile
               this.step = 3;
               this.OldCodeVal = this.newMobile = this.newCodeVal = "";
               this.clearCodeTime();
@@ -501,6 +503,11 @@ export default {
 }
 .vux-popup-dialog {
   background: #fff !important;
+}
+.my-inputsBox{
+  .weui-cell{
+    border: none;
+  }
 }
 </style>
 

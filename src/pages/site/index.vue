@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    {{PositObj}}
+    <!-- {{PositObj}} -->
     <div v-if="!IsShowMap">
       <div class="siteHeaderBox">
         <h3 class="fl siteHeaderTitle">搜场地</h3>
@@ -236,7 +236,7 @@
         <div class="siteGotoMap" @click="gotoMapChange">
           <img src="../../assets/images/button-backlist.png">
         </div>
-        <b-map :OrderHight="OrderHight-40" :data_info="TaPosted" @getPositioning="getPositioning"></b-map>
+        <b-map :OrderHight="OrderHight-40" :data_info="TaPosted"></b-map>
       </div>
     </div>
 
@@ -531,9 +531,9 @@ export default {
       this.show1 = false;
     },
     //获取用户当前定位信息
-    geting(){
- this.PositObj = getPositioning()
-    },
+//     geting(){
+//  this.PositObj = getPositioning()
+//     },
     //地图和列表显示互相切换
     gotoMapChange() {
       this.IsShowMap = !this.IsShowMap;
@@ -708,18 +708,18 @@ export default {
       };
         checkToken().then(Pdata => {
         getDataInfo("get", "place", placeObj).then(res => {
-          if(res.data.code==200){
-            this.TaPosted = res.data.data.data
-            console.log(this.TaPosted)
-            //  console.log(res)
-          }
+          // if(res.data.code==200){
+          //   this.TaPosted = res.data.data.data
+          //   console.log(this.TaPosted)
+          //   //  console.log(res)
+          // }
          
         })
         })
     }
   },
   mounted() {
-     this.geting()
+    //  this.geting()
     this.getOrderHight();
     this.getPlaceData();
   }

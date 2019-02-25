@@ -164,8 +164,8 @@
 
 
 
-
-          <li class="tabMeetingList" v-for="(DataItem,index) in listData" :key="index">
+          <li class="tabMeetingList" v-for="(DataItem,index) in listData" :key="index" @click="gotoDetil(DataItem.id)" >
+            <!-- {{DataItem}} -->
             <div class="tabMeetingTopBox" v-if="tabsIndex==0">
               <div class="orgLogo fl">
                 <img :src="DataItem.orgLogo">
@@ -629,6 +629,13 @@ export default {
     ...mapState(["city"])
   },
   methods: {
+    gotoDetil(id){
+      console.log(id)
+      this.$router.push({
+        path: "/meetDetail/"+id,
+        query: { meetingId: id }
+      })
+    },
     tabClick(index) {
       // this.infoTab = !this.infoTab
     },

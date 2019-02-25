@@ -124,7 +124,7 @@
   </div>
 </template>
 <script>
-import { getDataInfo,setCookie,setStorage } from "../../assets/lib/myStorage.js";
+import { getDataInfo,setCookie,setStorage,JIMinitchange } from "../../assets/lib/myStorage.js";
 import { Group, XInput, XButton, Toast } from "vux";
 export default {
   components: {
@@ -239,8 +239,10 @@ export default {
             mobileCode: this.VerCode
           };
           getDataInfo('post',"user/register", regObj).then(res => {
-            //   console.log(res)
+              
               if(res.data.code ==200){
+                console.log(res.data.data.user.id)
+                let userId = res.data.data.user.id
                  _that.showPositionValue = true;
              _that.showMsg = res.data.msg;
              let loginObj={
@@ -267,6 +269,9 @@ export default {
                   }
                 //   console.log(resd)
               })
+
+           JIMinitchange(_that.JIMregister)
+
               }else if(res.data.code==1004){
                    _that.showPositionValue = true;
              _that.showMsg = res.data.msg;
@@ -281,7 +286,18 @@ export default {
     
       }
     },
+JIMregister(){
+		     JIM.register({
+            'username' :userId ,
+            'password': userId,
+            'nickname' : ''
+        }).onSuccess(function(data) {
+            // console.log('success:' + JSON.stringify(data));
+          }).onFail(function(data) {
+            // console.log('error:' + JSON.stringify(data))
+        });
 
+	},
     getOrderHight() {
       var orderHight =
         document.documentElement.clientHeight || document.body.clientHeight;
@@ -319,7 +335,10 @@ export default {
   created() {
     this.getOrderHight();
   },
-  mounted() {}
+  mounted() {
+
+
+  }
 };
 </script>
 <style lang="less">

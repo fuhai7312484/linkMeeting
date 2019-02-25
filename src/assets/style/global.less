@@ -2102,7 +2102,7 @@ h4.site-room-title {
       overflow: hidden;
       // background: #000;
       .msgListTitle {
-        width: 80%;
+        width: 60%;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -2134,10 +2134,10 @@ h4.site-room-title {
   .msgOrderlistUl {
     .msgOrderlist {
       width: 100%;
-      height: 170px;
+      // height: 170px;
       margin: 1rem 0;
       background: #fff;
-      padding: 0.6rem 0;
+      padding: 0.6rem 0 .3rem 0;
       box-sizing: border-box;
       border-radius: 0.5rem;
       .msgOrderTitleBox {
@@ -2149,12 +2149,15 @@ h4.site-room-title {
         }
       }
       .msgOrderInt {
-        max-height: 50px;
+        // max-height: 50px;
         overflow: hidden;
         font-size: 0.9rem;
         font-weight: 400;
         span {
           color: #4a90e2;
+        }
+        b{
+          font-size: 1.2rem;
         }
         // white-space: nowrap;
         // text-overflow: ellipsis;
@@ -2167,11 +2170,13 @@ h4.site-room-title {
       .msgOrderSeeDetailsBox {
         border-top: 1px solid #e6e6e6;
         overflow: hidden;
-        padding: 0.6rem;
-        margin: 0.6rem 0;
+        height: 30px;
+        line-height: 30px;
+        padding: 0.6rem 0.6rem 0 0.6rem;
+        margin: 0.6rem 0 0 0;
         .msgOrderSeeDetails {
           font-size: 0.8rem;
-          color: #fe666b;
+          color: #323232;
         }
         .msgOrderIcon {
           color: #c8c8c8;
@@ -2206,12 +2211,16 @@ h4.site-room-title {
 }
 
 .x-messageBox {
-  //  margin-top:40px;
+  // position: absolute;
+  overflow-x: hidden;
+  overflow-y: auto;
+   margin-top:30px;
   margin-bottom: 20px;
   padding-top: 40px;
   padding-bottom: 40px;
-  overflow-y: hidden;
+  // overflow-y: hidden;
   background: #f8f8f8;
+  // background: #000;
   min-height: 95vh;
 }
 .x-messageFormBox {
@@ -2253,17 +2262,67 @@ h4.site-room-title {
     color: #a0a0a0;
   }
 }
-.x-message-imgBox {
-  width: 50px;
-  height: 50px;
-  margin: 0 10px 0 0;
 
-  background: #000;
-  overflow: hidden;
-  border-radius: 50%;
-}
+
+
 .x-message-left {
   overflow: hidden;
+  margin:.4rem 0;
+  .x-message-imgBox {
+    width: 50px;
+    height: 50px;
+    margin: 0 10px 0 0;
+    text-align: center;
+    float: left;
+    // background: #ccc;
+    overflow: hidden;
+    border-radius: 50%;
+  }
+  .x-message-TextBox{
+    max-width: 60%;
+    padding: .8rem;
+    font-size: 1rem;
+    font-weight: bold ;
+    margin-top:1rem; 
+    float: left;
+  }
+  .x-message-self{
+    background: #fff;
+    border: 1px solid #F0F0F0;
+    border-radius: 0 1rem 1rem 1rem; 
+    color: #000;
+    
+  }
+}
+
+.x-message-right {
+  overflow: hidden;
+  margin:.4rem 0;
+  .x-message-imgBox {
+    width: 50px;
+    height: 50px;
+    margin: 0  0 0 10px;
+    text-align: center;
+    float: right;
+    // background: #ccc;
+    overflow: hidden;
+    border-radius: 50%;
+  }
+  .x-message-TextBox{
+    max-width: 60%;
+    padding: .8rem;
+    font-size: 1rem;
+    font-weight: bold ;
+    margin-top:1rem; 
+    float: right;
+  }
+  .x-message-self{
+    background: #7DC7F6;
+    border: 1px solid #7DC7F6;
+    border-radius: 1rem 0 1rem 1rem; 
+    color: #fff;
+    
+  }
 }
 
 //百度导航样式
@@ -2721,5 +2780,71 @@ h4.site-room-title {
       height: 125px;
       margin: 1rem 0;
     }
+  }
+}
+
+
+
+/*-----参会提醒-----*/
+.reminder-contentBox{
+  height: 100%;
+  position: relative;
+  top: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  // margin-top:44px; 
+  // padding-top:44px; 
+  h2{
+    text-align: center;
+    margin: 4rem 0 2rem 0;
+  }
+  .reminder-dlBox{
+    overflow: hidden;
+    font-size: .9rem;
+   
+    dl{
+      // margin: 1rem 0;
+      overflow: hidden;
+      padding: 0.4rem 0;
+    }
+    dt{
+      width: 30%;
+      text-align: right;
+      padding-right:.6rem; 
+      color: #969696;
+      box-sizing: border-box;
+      vertical-align: bottom ;
+    }
+    dd{
+      width: 70%;
+      color: #323232;
+      font-weight: bold;
+      b{
+        display: inline-block;
+        font-size: 1.5rem;
+        margin-top:-1.5rem; 
+        // font-size: 1.5rem;
+        vertical-align: bottom ;
+      }
+    }
+  }
+  .reminder-checkerBox{
+    margin: 1rem 0;
+  }
+  
+  .reminder-btn{
+position: fixed;
+background: #DCDCDC;
+height: 50px;
+width: 100%;
+bottom: 0;
+left: 0;
+color: #fff;
+font-weight: bold;
+font-size: 1rem;
+text-align: center;
+line-height: 50px;
+
   }
 }

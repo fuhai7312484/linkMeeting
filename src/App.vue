@@ -1,20 +1,24 @@
 <template>
   <div id="app">
     <!-- <transition :name="transitionName"> -->
-          <router-view class="child-view"></router-view>
-        <!-- </transition> -->
+    <router-view class="child-view"></router-view>
+    <!-- </transition> -->
     <!-- <router-view></router-view> -->
   </div>
 </template>
 
 <script>
+// import {JIMinitchange} from "./assets/lib/myStorage.js";
 export default {
-  name: 'app',
-data(){
-  return {
-     transitionName: '',
-  }
-},
+  name: "app",
+  data() {
+    return {
+      transitionName: ""
+    };
+  },
+   created() {
+    // JIMinitchange()
+  },
   watch: {
     //路由跳转 添加动画
     // $route(to, from) {
@@ -25,17 +29,14 @@ data(){
     //     this.transitionName = 'slide-right';
     //   }
     // }
-  },
-
-}
+  }
+};
 </script>
 
 <style lang="less">
-@import '~vux/src/styles/reset.less';
+@import "~vux/src/styles/reset.less";
 body {
   background-color: #fff;
-
-
 }
 
 /*路由切换动画*/
@@ -43,7 +44,7 @@ body {
 // .slide-right-leave-active,
 // .slide-left-enter-active,
 // .slide-left-leave-active {
-//   will-change: transform; 
+//   will-change: transform;
 //   transition: all 400ms;
 //   position: absolute;
 // }
