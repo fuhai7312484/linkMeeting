@@ -248,6 +248,7 @@ export default {
           mobile: this.maskValue
         };
         getDataInfo("post", "user/user", codeObj).then(res => {
+          console.log(res)
           if (res.data.code == 200) {
             this.showPositionValue = true;
             this.showMsg = res.data.msg;

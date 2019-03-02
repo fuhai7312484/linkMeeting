@@ -39,6 +39,7 @@
 
 
       </div>
+      <div class="reminder-meetingDetails" @click="gotoMeeting"> 查看详情 >></div>
         </div>
       </div>
 
@@ -96,6 +97,9 @@ export default {
   },
   methods: {
     //获取本地服务器用户信息
+    gotoMeeting(){
+      console.log(this.ReminderId)
+    },
     getMyInfochange() {},
     //提交选择
     submitVal(){

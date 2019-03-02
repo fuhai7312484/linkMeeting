@@ -110,45 +110,45 @@ export default {
               require("../assets/images/mypoint.png"),
               new BMap.Size(25, 25)
             );
-      //获取用户当前位置
-      var geolocation = new BMap.Geolocation();
-      geolocation.getCurrentPosition(
-        function(r) {
-          if (this.getStatus() == BMAP_STATUS_SUCCESS) {
-            // console.log(r)
+      // //获取用户当前位置
+      // var geolocation = new BMap.Geolocation();
+      // geolocation.getCurrentPosition(
+      //   function(r) {
+      //     if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+      //       // console.log(r)
 
-            // alert('您当前定位为：'+r.address.city);
+      //       // alert('您当前定位为：'+r.address.city);
 
-              function setCity(city){
-                  if(city.charAt(city.length-1)=='市'){
-                        return city.slice(0,city.length-1)
-                  }else{
-                      return city
-                  }  
-              }
-              // alert(setCity(r.address.city))
-              // console.log(setCity(r.address.city))
+      //         function setCity(city){
+      //             if(city.charAt(city.length-1)=='市'){
+      //                   return city.slice(0,city.length-1)
+      //             }else{
+      //                 return city
+      //             }  
+      //         }
+      //         // alert(setCity(r.address.city))
+      //         // console.log(setCity(r.address.city))
            
-            var mk = new BMap.Marker(r.point, { icon: myIcon });
-            map.addOverlay(mk);
-            map.panTo(r.point);
-            // alert('您的位置：'+r.point.lng+','+r.point.lat);
-          } else {
-            alert("failed" + this.getStatus());
-          }
-        },
-        { enableHighAccuracy: true }
-      );
-      //关于状态码
-      //BMAP_STATUS_SUCCESS	检索成功。对应数值“0”。
-      //BMAP_STATUS_CITY_LIST	城市列表。对应数值“1”。
-      //BMAP_STATUS_UNKNOWN_LOCATION	位置结果未知。对应数值“2”。
-      //BMAP_STATUS_UNKNOWN_ROUTE	导航结果未知。对应数值“3”。
-      //BMAP_STATUS_INVALID_KEY	非法密钥。对应数值“4”。
-      //BMAP_STATUS_INVALID_REQUEST	非法请求。对应数值“5”。
-      //BMAP_STATUS_PERMISSION_DENIED	没有权限。对应数值“6”。(自 1.1 新增)
-      //BMAP_STATUS_SERVICE_UNAVAILABLE	服务不可用。对应数值“7”。(自 1.1 新增)
-      //BMAP_STATUS_TIMEOUT	超时。对应数值“8”。(自 1.1 新增)
+      //       var mk = new BMap.Marker(r.point, { icon: myIcon });
+      //       map.addOverlay(mk);
+      //       map.panTo(r.point);
+      //       // alert('您的位置：'+r.point.lng+','+r.point.lat);
+      //     } else {
+      //       alert("failed" + this.getStatus());
+      //     }
+      //   },
+      //   { enableHighAccuracy: true }
+      // );
+      // //关于状态码
+      // //BMAP_STATUS_SUCCESS	检索成功。对应数值“0”。
+      // //BMAP_STATUS_CITY_LIST	城市列表。对应数值“1”。
+      // //BMAP_STATUS_UNKNOWN_LOCATION	位置结果未知。对应数值“2”。
+      // //BMAP_STATUS_UNKNOWN_ROUTE	导航结果未知。对应数值“3”。
+      // //BMAP_STATUS_INVALID_KEY	非法密钥。对应数值“4”。
+      // //BMAP_STATUS_INVALID_REQUEST	非法请求。对应数值“5”。
+      // //BMAP_STATUS_PERMISSION_DENIED	没有权限。对应数值“6”。(自 1.1 新增)
+      // //BMAP_STATUS_SERVICE_UNAVAILABLE	服务不可用。对应数值“7”。(自 1.1 新增)
+      // //BMAP_STATUS_TIMEOUT	超时。对应数值“8”。(自 1.1 新增)
 
       // 添加定位控件
      

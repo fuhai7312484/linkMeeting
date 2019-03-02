@@ -357,11 +357,12 @@ export default {
     },
     //获取离线消息
     getConvers() {
+      console.log(111111111)
       let _that = this;
       JIM.onSyncConversation(function(Pdata) {
         //离线消息同步监听
         // _that.getConversation();
-
+        console.log(Pdata,"---------")
         let arr = [];
         Pdata.forEach(e => {
           arr.push({

@@ -132,6 +132,9 @@ export function getPositioning() {
       if (this.getStatus() == BMAP_STATUS_SUCCESS) {
         obj.lng = r.point.lng;
         obj.lat = r.point.lat;
+        obj.province = r.address.province
+        obj.city = r.address.city
+        // console.log(r)
       } else {
         // return this.getStatus()
         alert("failed" + this.getStatus());
@@ -195,6 +198,22 @@ export function JIMlogin(callback){
 
   })
 
+}
+
+
+export function sendSysMsg(obj){
+  // let sysObj={
+  //   userid:'',
+  //   type:'5',
+  //   eid:'',
+  //   content:'恭喜您成功注册<链会议>！',
+  // }
+  console.log(obj)
+   checkToken().then(Pdata => {
+      getDataInfo("post", "jpush/im/smsg", obj).then(res => {
+        console.log(res)
+      })
+   })
 }
 
 

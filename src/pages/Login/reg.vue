@@ -124,7 +124,7 @@
   </div>
 </template>
 <script>
-import { getDataInfo,setCookie,setStorage,JIMinitchange } from "../../assets/lib/myStorage.js";
+import { getDataInfo,setCookie,setStorage,JIMinitchange,sendSysMsg} from "../../assets/lib/myStorage.js";
 import { Group, XInput, XButton, Toast } from "vux";
 export default {
   components: {
@@ -249,6 +249,9 @@ export default {
                 mobile: _that.maskValue,
                  password:_that.passW,
              }
+
+               
+
               getDataInfo('post',"user/login", loginObj).then(resd=>{
                   if(resd.data.code==200){
                          _that.showPositionValue = true;
@@ -262,15 +265,24 @@ export default {
                     }
                       setCookie('accessToken',tokenInfo.access_token)
                      setStorage('userToken',userInfo)
+              
+
+
                      setTimeout(function(){
+                        //发送注册成功后的系统消息
+                // let Obj={
+                //   userid:res.data.data.user.id,
+                //   type:'5',
+                //   eid:'',
+                //   content:'恭喜您成功注册<链会议>！',
+                // }
+                // sendSysMsg(Obj)
                           _that.$router.push('/myindex')
                      },1000)
                     
                   }
                 //   console.log(resd)
               })
-
-           JIMinitchange(_that.JIMregister)
 
               }else if(res.data.code==1004){
                    _that.showPositionValue = true;
@@ -286,18 +298,9 @@ export default {
     
       }
     },
-JIMregister(){
-		     JIM.register({
-            'username' :userId ,
-            'password': userId,
-            'nickname' : ''
-        }).onSuccess(function(data) {
-            // console.log('success:' + JSON.stringify(data));
-          }).onFail(function(data) {
-            // console.log('error:' + JSON.stringify(data))
-        });
+ 
+    
 
-	},
     getOrderHight() {
       var orderHight =
         document.documentElement.clientHeight || document.body.clientHeight;

@@ -1,11 +1,11 @@
 <template>
   <div class="box">
-    <!-- {{PositObj}} -->
+{{PositObj}}
     <div v-if="!IsShowMap">
       <div class="siteHeaderBox">
         <h3 class="fl siteHeaderTitle">搜场地</h3>
         <router-link tag="div" class="fl siteCity" to="/city">
-          {{city}}
+          {{city.name?city.name:PositObj.city}}
           <i class="el-icon-caret-bottom"></i>
         </router-link>
         <!-- <div class="fl siteCity">
@@ -279,6 +279,7 @@ export default {
   },
   data() {
     return {
+      positionCity:{},
       show9: false,
       show1: false,
       IsShowMap: false,
@@ -531,9 +532,10 @@ export default {
       this.show1 = false;
     },
     //获取用户当前定位信息
-//     geting(){
-//  this.PositObj = getPositioning()
-//     },
+    geting(){
+ this.PositObj = getPositioning()
+
+    },
     //地图和列表显示互相切换
     gotoMapChange() {
       this.IsShowMap = !this.IsShowMap;
@@ -706,6 +708,7 @@ export default {
           lat:this.PositObj.lat,
         }
       };
+      
         checkToken().then(Pdata => {
         getDataInfo("get", "place", placeObj).then(res => {
           // if(res.data.code==200){
@@ -719,9 +722,10 @@ export default {
     }
   },
   mounted() {
-    //  this.geting()
+     this.geting()
     this.getOrderHight();
     this.getPlaceData();
+    
   }
 };
 </script>

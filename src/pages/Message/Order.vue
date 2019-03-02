@@ -21,9 +21,10 @@
             :key="index"
             @click="sysMsgChange(sysMsg.msg_body.extras.type,sysMsg.msg_body.extras.eid)"
           >
+      
             <div class="msgOrderTitleBox padlr">
               <h4 class="msgOrderTitle fl">{{sysMsg.msg_body.text?sysMsg.msg_body.text:'订单消息'}}</h4>
-              <div class="msgOrderMark fr">已读</div>
+              <div class="msgOrderMark fr"> {{sysMsg.msg_body.extras.eid}}已读</div>
             </div>
             <div class="msgOrderInt padlr" v-html="sysMsg.msg_body.extras.content">
               <!-- {{sysMsg.msg_body.extras.content}} -->
@@ -76,6 +77,7 @@ export default {
   methods: {
     //点击消息链接
     sysMsgChange(type,id) {
+      console.log(id)
       switch(type){
         case '1':
         return console.log('订单')
