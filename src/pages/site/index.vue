@@ -1,6 +1,10 @@
 <template>
   <div class="box">
-{{PositObj}}
+    <!-- {{PositObj.city}} -->
+    <div v-transfer-dom>
+      <loading :show="show2" text="数据加载中..."></loading>
+    </div>
+
     <div v-if="!IsShowMap">
       <div class="siteHeaderBox">
         <h3 class="fl siteHeaderTitle">搜场地</h3>
@@ -158,43 +162,60 @@
       </div>
 
       <footer-nav></footer-nav>
-<!-- {{TaPosted}} -->
-      <div class="siteIndex-listBox">
-        <ul class="my-tab-swiper vux-center" ref="pubUiHF">
-          <li v-for="(taPos,index) in TaPosted" :key="index">
+      <div class="siteIndex-listBox" v-if="!show2">
+
+        <div class="noData-default"  v-if="TaPosted.length==0">
+          <p>
+            <img :src="require('../../assets/images/noData.png')">
+          </p>
+          <p> 没有找到符合条件的场地</p>
+        </div>
+        <ul v-else class="my-tab-swiper vux-center" ref="pubUiHF">
+          <li v-for="(taPos,index) in TaPosted" :key="index" @click="gotoDetail(taPos.id)">
             <!-- {{taPos.name}} -->
             <!-- <flexbox v-if="taPos.type=='pub'"> -->
-              <flexbox>
-              <flexbox-item :span="1/4">
+            <flexbox>
+              <flexbox-item :span="1.3/4">
                 <div class="my-tab-swiperListImg">
                   <!-- <img :src="taPos.img"> -->
-                  <img src="https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg"/>
+                  <span
+                    class="my-tab-imgTag"
+                    v-if="taPos.ptype!=null"
+                  >{{taPos.ptype==1?'政采':taPos.ptype==2?'央采':''}}</span>
+             
+                   <!-- <img :src="require('../../assets/images/noData.png')"> -->
+                  <img :src="taPos.homepagePic?taPos.homepagePic:require('../../assets/images/noimg.png')">
+                  <!-- <img src="https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg"> -->
                 </div>
               </flexbox-item>
-              <flexbox-item :span="3/4">
+              <flexbox-item :span="2.7/4">
                 <div class="my-tab-listContent">
-                  <h3>{{ taPos.city.name}}{{ taPos.name }}</h3>
+                  <h3>{{ taPos.name }}</h3>
                 </div>
 
-                <div class="my-tab-listContent mylistInfo">距离:{{ taPos.distance }} {{ taPos.area }}</div>
+                <div
+                  class="my-tab-listContent mylistInfo"
+                >距离你:{{ taPos.distance==null?'暂无距离':taPos.distance+'米'}}&nbsp;&nbsp;&nbsp;  {{ taPos.zone.name }}</div>
 
                 <div
                   class="my-tab-listContent mylistInfo"
-                >面积:{{ taPos.proportion }} 容纳:{{ taPos.hold }}</div>
+                >面积:{{ taPos.area==null?'暂无面积':taPos.area+'㎡' }}&nbsp;&nbsp;&nbsp; 容纳:{{ taPos.falleryful==null?'暂无人数':taPos.falleryful+'人'}}</div>
 
                 <div
                   class="my-tab-listContent mylistInfo"
-                >会议室:{{ taPos.meetingRoom.length}}间 客房:{{ taPos.guestRoom }}</div>
+                >会议室:{{ taPos.count}}间&nbsp;&nbsp;&nbsp; 内高:{{ taPos.high==null?'暂无内高':taPos.high+'m'}}</div>
                 <flexbox :gutter="0">
-                  <flexbox-item :span="1/2" class="listContent-tagbox">
+                  <flexbox-item :span="2/3" class="listContent-tagbox">
                     <span
-                      v-for="(tag,index) in taPos.tag"
+                      v-for="(tag,index) in taPos.features"
                       :key="index"
                       class="listContent-tags"
-                    >{{ tag }}</span>
+                    >{{ tag.name }}</span>
                   </flexbox-item>
-                  <flexbox-item :span="1/2">
-                    <h4>¥{{ taPos.price }}</h4>
+                  <flexbox-item :span="1/3">
+                    <h4
+                      style="text-align:right;"
+                    >{{ taPos.priceHalfday==null?'':'¥'+taPos.priceHalfday+'起'}}</h4>
                   </flexbox-item>
                 </flexbox>
               </flexbox-item>
@@ -216,6 +237,8 @@
             </flexbox>
           </li>
         </ul>
+
+        <div class="der"></div>
       </div>
     </div>
 
@@ -239,8 +262,7 @@
         <b-map :OrderHight="OrderHight-40" :data_info="TaPosted"></b-map>
       </div>
     </div>
-
-   
+    
   </div>
 </template>
 <script>
@@ -248,23 +270,27 @@ import { mapState } from "vuex";
 import FooterNav from "@/components/footerNav";
 import BMap from "@/components/BMap";
 import City from "@/components/City";
-import { getDataInfo,getPositioning,checkToken } from "../../assets/lib/myStorage.js";
+import {
+  getDataInfo,
+  getPositioning,
+  checkToken,getStorage
+} from "../../assets/lib/myStorage.js";
 import {
   Flexbox,
   FlexboxItem,
   Checker,
   CheckerItem,
   Popup,
-  TransferDom,
+  TransferDomDirective as TransferDom,
+  Loading,
   Sticky,
   Group
 } from "vux";
 export default {
+  name: "SiteIndex",
   directives: {
     TransferDom
   },
-  name: "SiteIndex",
-
   components: {
     Flexbox,
     FlexboxItem,
@@ -275,90 +301,92 @@ export default {
     BMap,
     Sticky,
     Group,
-    City
+    City,
+    Loading
   },
   data() {
     return {
-      positionCity:{},
+      show2: true,
+      positionCity: {},
       show9: false,
       show1: false,
       IsShowMap: false,
       filterData: [],
       FeatureData: [],
-      PositObj:{},
+      PositObj: {},
       TaPosted: [
-        {
-          id: "001",
-          type: "pub",
-          img:
-            "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
-          city: "北京",
-          area: "朝阳地区",
-          title: "昆泰国家大酒店昆泰国家大酒店",
-          distance: "130米",
-          proportion: "320㎡",
-          hold: "30人",
-          meetingRoom: "50间",
-          guestRoom: "10间",
-          tag: ["机场", "餐厅", "无柱"],
-          price: "5000半天起",
-          lng: 116.417854,
-          lat: 39.921988
-        },
-        {
-          id: "002",
-          type: "pub",
-          img:
-            "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
-          city: "北京",
-          area: "朝阳地区",
-          title: "2昆泰国家大酒店",
-          distance: "130米",
-          proportion: "320㎡",
-          hold: "30人",
-          meetingRoom: "50间",
-          guestRoom: "10间",
-          tag: ["机场", "餐厅", "无柱"],
-          price: "5000半天起",
-          lng: 116.406605,
-          lat: 39.921585
-        },
-        {
-          id: "003",
-          type: "pub",
-          img:
-            "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
-          city: "北京",
-          area: "朝阳地区",
-          title: "3昆泰国家大酒店",
-          distance: "130米",
-          proportion: "320㎡",
-          hold: "30人",
-          meetingRoom: "50间",
-          guestRoom: "10间",
-          tag: ["机场", "餐厅", "无柱"],
-          price: "5000半天起",
-          lng: 116.412222,
-          lat: 39.912345
-        },
-        {
-          id: "004",
-          type: "pub",
-          img:
-            "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
-          city: "北京",
-          area: "朝阳地区",
-          title: "昆泰国家大酒店",
-          distance: "130米",
-          proportion: "320㎡",
-          hold: "30人",
-          meetingRoom: "50间",
-          guestRoom: "10间",
-          tag: ["机场", "餐厅", "无柱"],
-          price: "5000半天起",
-          lng: 116.447854,
-          lat: 39.921988
-        }
+        // {
+        //   id: "001",
+        //   type: "pub",
+        //   img:
+        //     "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
+        //   city: "北京",
+        //   area: "朝阳地区",
+        //   title: "昆泰国家大酒店昆泰国家大酒店",
+        //   distance: "130米",
+        //   proportion: "320㎡",
+        //   hold: "30人",
+        //   meetingRoom: "50间",
+        //   guestRoom: "10间",
+        //   tag: ["机场", "餐厅", "无柱"],
+        //   price: "5000半天起",
+        //   lng: 116.417854,
+        //   lat: 39.921988
+        // },
+        // {
+        //   id: "002",
+        //   type: "pub",
+        //   img:
+        //     "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
+        //   city: "北京",
+        //   area: "朝阳地区",
+        //   title: "2昆泰国家大酒店",
+        //   distance: "130米",
+        //   proportion: "320㎡",
+        //   hold: "30人",
+        //   meetingRoom: "50间",
+        //   guestRoom: "10间",
+        //   tag: ["机场", "餐厅", "无柱"],
+        //   price: "5000半天起",
+        //   lng: 116.406605,
+        //   lat: 39.921585
+        // },
+        // {
+        //   id: "003",
+        //   type: "pub",
+        //   img:
+        //     "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
+        //   city: "北京",
+        //   area: "朝阳地区",
+        //   title: "3昆泰国家大酒店",
+        //   distance: "130米",
+        //   proportion: "320㎡",
+        //   hold: "30人",
+        //   meetingRoom: "50间",
+        //   guestRoom: "10间",
+        //   tag: ["机场", "餐厅", "无柱"],
+        //   price: "5000半天起",
+        //   lng: 116.412222,
+        //   lat: 39.912345
+        // },
+        // {
+        //   id: "004",
+        //   type: "pub",
+        //   img:
+        //     "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
+        //   city: "北京",
+        //   area: "朝阳地区",
+        //   title: "昆泰国家大酒店",
+        //   distance: "130米",
+        //   proportion: "320㎡",
+        //   hold: "30人",
+        //   meetingRoom: "50间",
+        //   guestRoom: "10间",
+        //   tag: ["机场", "餐厅", "无柱"],
+        //   price: "5000半天起",
+        //   lng: 116.447854,
+        //   lat: 39.921988
+        // }
       ],
       Features: [
         {
@@ -528,13 +556,12 @@ export default {
     ...mapState(["city"])
   },
   methods: {
+    gotoDetail(id){
+      this.$router.push({path:'/sitedetail/'+id,query: {detailId:id}})
+      console.log(id)
+    },
     handChange() {
       this.show1 = false;
-    },
-    //获取用户当前定位信息
-    geting(){
- this.PositObj = getPositioning()
-
     },
     //地图和列表显示互相切换
     gotoMapChange() {
@@ -702,30 +729,44 @@ export default {
     },
 
     getPlaceData() {
-        let placeObj = {
-        params: {
-          lng:this.PositObj.lng,
-          lat:this.PositObj.lat,
-        }
-      };
-      
-        checkToken().then(Pdata => {
-        getDataInfo("get", "place", placeObj).then(res => {
-          // if(res.data.code==200){
-          //   this.TaPosted = res.data.data.data
-          //   console.log(this.TaPosted)
-          //   //  console.log(res)
+      //获取当前城市Code
+      getPositioning().then(red => {
+        this.PositObj = red;
+       let stor = getStorage('city')
+        let codeObj = {
+          params: {
+            province:red.province,
+            city:red.city,
+          }
+          // params: {
+          //   province: "北京市",
+          //   city: "北京市"
           // }
-         
-        })
-        })
+        };
+   
+        getDataInfo("get", "region/code", codeObj).then(res => {
+          if (res.data.code == 200) {
+            let placeObj = {
+              params: {
+                // lng:this.PositObj.lng,
+                // lat:this.PositObj.lat,
+                cityCode:stor?stor.regionCode:res.data.data[0].regionCode
+              }
+            };
+            getDataInfo("get", "place", placeObj).then(resd => {
+              if (resd.data.code == 200) {
+                this.TaPosted = resd.data.data.data;
+                this.show2 = false;
+              }
+            });
+          }
+        });
+      });
     }
   },
   mounted() {
-     this.geting()
     this.getOrderHight();
     this.getPlaceData();
-    
   }
 };
 </script>

@@ -97,7 +97,7 @@ export default new Router({
       component: TaDetail
     },
     {
-      path: "/sitedetail",
+      path: "/sitedetail/:id",
       name: "SiteDetail",
       component: SiteDetail
     },

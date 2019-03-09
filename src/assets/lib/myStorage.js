@@ -4,7 +4,7 @@ import axios from "axios";
 export function getDataInfo(mode, url, obj) {
   let token = getCookie("accessToken");
   axios.defaults.headers["APP-User-Token"] = token;
- 
+
   //测试环境
   let ipUrl = "http://192.168.1.179/lhy/v0.1/api/";
   // let ipUrl = "http://192.168.1.170:8080/v0.1/api/";
@@ -21,6 +21,9 @@ export function getDataInfo(mode, url, obj) {
       break;
     case "patch":
       return axios.patch(ipUrl + url, qs.stringify(obj));
+      break;
+    case "delete":
+      return axios.delete(ipUrl + url, obj);
       break;
     case "get":
       return axios.get(ipUrl + url, obj);
@@ -120,44 +123,96 @@ export function removeCookie(key) {
   setCookie(key, "", -1); //把cookie设置为过期
 }
 //定位当前用户位置
+// export function getPositioning() {
+//   let self = this;
+//   let obj = {
+//     lng: "",
+//     lat: "",
+//     province:'',
+//     city:'',
+//   };
+//   var geolocation = new BMap.Geolocation();
+//   geolocation.getCurrentPosition(
+//     function(r) {
+//       if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+
+//         obj.lng = r.point.lng;
+//         obj.lat = r.point.lat;
+//         obj.province = r.address.province
+//         obj.city = r.address.city
+//         // console.log(r)
+//         // console.log(obj)
+//         // return obj;
+//       } else {
+//         // return this.getStatus()
+//         alert("failed" + this.getStatus());
+//       }
+//     },
+//     { enableHighAccuracy: true }
+//   );
+
+//   //关于状态码
+//   //BMAP_STATUS_SUCCESS	检索成功。对应数值“0”。
+//   //BMAP_STATUS_CITY_LIST	城市列表。对应数值“1”。
+//   //BMAP_STATUS_UNKNOWN_LOCATION	位置结果未知。对应数值“2”。
+//   //BMAP_STATUS_UNKNOWN_ROUTE	导航结果未知。对应数值“3”。
+//   //BMAP_STATUS_INVALID_KEY	非法密钥。对应数值“4”。
+//   //BMAP_STATUS_INVALID_REQUEST	非法请求。对应数值“5”。
+//   //BMAP_STATUS_PERMISSION_DENIED	没有权限。对应数值“6”。(自 1.1 新增)
+//   //BMAP_STATUS_SERVICE_UNAVAILABLE	服务不可用。对应数值“7”。(自 1.1 新增)
+//   //BMAP_STATUS_TIMEOUT	超时。对应数值“8”。(自 1.1 新增)
+
+//   return obj;
+// }
+
 export function getPositioning() {
-  let self = this;
-  let obj = {
-    lng: "",
-    lat: ""
-  };
-  var geolocation = new BMap.Geolocation();
-  geolocation.getCurrentPosition(
-    function(r) {
-      if (this.getStatus() == BMAP_STATUS_SUCCESS) {
-        obj.lng = r.point.lng;
-        obj.lat = r.point.lat;
-        obj.province = r.address.province
-        obj.city = r.address.city
-        // console.log(r)
-      } else {
-        // return this.getStatus()
-        alert("failed" + this.getStatus());
-      }
-    },
-    { enableHighAccuracy: true }
-  );
+  let read = new Promise(function(resolve, reject) {
+    let self = this;
+    let obj = {
+      lng: "",
+      lat: "",
+      province: "",
+      city: ""
+    };
+    var geolocation = new BMap.Geolocation();
+    geolocation.getCurrentPosition(
+      function(r) {
+        if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+          obj.lng = r.point.lng;
+          obj.lat = r.point.lat;
+          obj.province = r.address.province;
+          obj.city = r.address.city;
 
-  //关于状态码
-  //BMAP_STATUS_SUCCESS	检索成功。对应数值“0”。
-  //BMAP_STATUS_CITY_LIST	城市列表。对应数值“1”。
-  //BMAP_STATUS_UNKNOWN_LOCATION	位置结果未知。对应数值“2”。
-  //BMAP_STATUS_UNKNOWN_ROUTE	导航结果未知。对应数值“3”。
-  //BMAP_STATUS_INVALID_KEY	非法密钥。对应数值“4”。
-  //BMAP_STATUS_INVALID_REQUEST	非法请求。对应数值“5”。
-  //BMAP_STATUS_PERMISSION_DENIED	没有权限。对应数值“6”。(自 1.1 新增)
-  //BMAP_STATUS_SERVICE_UNAVAILABLE	服务不可用。对应数值“7”。(自 1.1 新增)
-  //BMAP_STATUS_TIMEOUT	超时。对应数值“8”。(自 1.1 新增)
-  // console.log(obj)
-  return obj;
+          // console.log(r)
+          // console.log(obj)
+          resolve(obj);
+          // return obj;
+        } else {
+          // return this.getStatus()
+          alert("failed" + this.getStatus());
+        }
+      },
+      { enableHighAccuracy: true }
+    );
+
+    //关于状态码
+    //BMAP_STATUS_SUCCESS	检索成功。对应数值“0”。
+    //BMAP_STATUS_CITY_LIST	城市列表。对应数值“1”。
+    //BMAP_STATUS_UNKNOWN_LOCATION	位置结果未知。对应数值“2”。
+    //BMAP_STATUS_UNKNOWN_ROUTE	导航结果未知。对应数值“3”。
+    //BMAP_STATUS_INVALID_KEY	非法密钥。对应数值“4”。
+    //BMAP_STATUS_INVALID_REQUEST	非法请求。对应数值“5”。
+    //BMAP_STATUS_PERMISSION_DENIED	没有权限。对应数值“6”。(自 1.1 新增)
+    //BMAP_STATUS_SERVICE_UNAVAILABLE	服务不可用。对应数值“7”。(自 1.1 新增)
+    //BMAP_STATUS_TIMEOUT	超时。对应数值“8”。(自 1.1 新增)
+
+    // return obj;
+  });
+
+  return read;
 }
-//初始化IM
 
+//初始化IM
 export function JIMinitchange(callback) {
   window.JIM = new JMessage({
     debug: true
@@ -169,7 +224,7 @@ function JIMinit(callback) {
   checkToken().then(Pdata => {
     // console.log(Pdata)
     getDataInfo("get", "jpush/im/auth", Obj).then(res => {
-      console.log(res)
+      console.log(res);
       if (res.data.code == 200) {
         let stringObj = res.data.data;
         stringObj.flag = 1;
@@ -187,35 +242,31 @@ function JIMinit(callback) {
   });
 }
 //登录IM
-export function JIMlogin(callback){
+export function JIMlogin(callback) {
   let _that = this;
   let userId = getStorage("userToken").userId;
   JIM.login({
     username: userId,
     password: userId
   }).onSuccess(function(data) {
-    callback()
-
-  })
-
+    callback();
+  });
 }
 
-
-export function sendSysMsg(obj){
+export function sendSysMsg(obj) {
   // let sysObj={
   //   userid:'',
   //   type:'5',
   //   eid:'',
   //   content:'恭喜您成功注册<链会议>！',
   // }
-  console.log(obj)
-   checkToken().then(Pdata => {
-      getDataInfo("post", "jpush/im/smsg", obj).then(res => {
-        console.log(res)
-      })
-   })
+  console.log(obj);
+  checkToken().then(Pdata => {
+    getDataInfo("post", "jpush/im/smsg", obj).then(res => {
+      console.log(res);
+    });
+  });
 }
-
 
 //时间戳转时间
 export function getToTime(timeStamp, str) {
@@ -236,13 +287,20 @@ export function getToTime(timeStamp, str) {
   return Y + M + D + h + m + s;
 }
 
-
 // 时间统一函数
 export function transDate(time) {
   // var $time =document.getElementById("share-time");
 
   var date = time;
-  var weekday=["星期日","星期一","星期二","星期三","星期四","星期五","星期六"];
+  var weekday = [
+    "星期日",
+    "星期一",
+    "星期二",
+    "星期三",
+    "星期四",
+    "星期五",
+    "星期六"
+  ];
   var tt = new Date(parseInt(date));
   var days = parseInt((new Date().getTime() - date) / 86400000);
   var today = new Date().getDate();
@@ -252,7 +310,7 @@ export function transDate(time) {
   var time = tt.getHours() < 10 ? "0" + tt.getHours() : tt.getHours();
   var min = tt.getMinutes() < 10 ? "0" + tt.getMinutes() : tt.getMinutes();
   var day = tt.getDate();
-  var week = tt.getDay()
+  var week = tt.getDay();
   var result, offset;
   offset = Math.abs(today - day);
   if (days < 2 && offset < 2) {
@@ -260,8 +318,8 @@ export function transDate(time) {
       result = "今天" + time + ":" + min;
     } else if (offset === 1) {
       result = "昨天" + time + ":" + min;
-    }else if (offset > 2&& offset <= 6){
-      result = weekday[week] ;
+    } else if (offset > 2 && offset <= 6) {
+      result = weekday[week];
     }
   } else {
     result = year + "-" + mouth + "-" + day;
@@ -269,24 +327,22 @@ export function transDate(time) {
   return result;
 }
 
-export function getGetAxios(){
+export function getGetAxios() {
   // console.log(1111)
-  axios.get('https://api.im.jpush.cn/v1/resource',  {
-    // headers: {
-    //     'Authorization':'YXBwS2V5JTNBNmRiMTc4M2M0YjdhMDJhNjcwMTJlMGNl',
-    // },
-    params: {
-      mediaId: 'qiniu/image/j/CC24BF3978905DACCBABB2B6FFF29ABE.png',
-     
-    },
- 
-})
+  axios
+    .get("https://api.im.jpush.cn/v1/resource", {
+      // headers: {
+      //     'Authorization':'YXBwS2V5JTNBNmRiMTc4M2M0YjdhMDJhNjcwMTJlMGNl',
+      // },
+      params: {
+        mediaId: "qiniu/image/j/CC24BF3978905DACCBABB2B6FFF29ABE.png"
+      }
+    })
 
-  .then(function (response) {
-   console.log(response);
-  })
-  .catch(function (error) {
-   console.log(error);
-  });
-
+    .then(function(response) {
+      console.log(response);
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
 }
