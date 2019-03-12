@@ -288,10 +288,19 @@ export function getToTime(timeStamp, str) {
 }
 
 // 时间统一函数
-export function transDate(time) {
+export function transDate(time,type) {
   // var $time =document.getElementById("share-time");
-
+  
+if(type=='C'){
   var date = time;
+}else if(type=='T'){
+  var date = Date.parse(time) ;
+}
+
+function toDou(n) {
+  return n < 10 ? "0" + n : "" + n;
+}
+
   var weekday = [
     "星期日",
     "星期一",
@@ -313,17 +322,29 @@ export function transDate(time) {
   var week = tt.getDay();
   var result, offset;
   offset = Math.abs(today - day);
-  if (days < 2 && offset < 2) {
-    if (offset === 0) {
-      result = "今天" + time + ":" + min;
-    } else if (offset === 1) {
-      result = "昨天" + time + ":" + min;
-    } else if (offset > 2 && offset <= 6) {
-      result = weekday[week];
-    }
-  } else {
-    result = year + "-" + mouth + "-" + day;
+  if (offset === 0) {
+    result = "今天" + time + ":" + min;
+  }else if(offset === 1){
+    result = "昨天" + time + ":" + min;
+  }else if(offset >= 2 && offset <= 6){
+    result = weekday[week] + time + ':' + min;
+  }else{
+    result = year + "-" + toDou(mouth) + "-" + toDou(day);
   }
+
+
+
+  // if (days < 2 && offset < 6) {
+  //   if (offset === 0) {
+  //     result = "今天" + time + ":" + min;
+  //   } else if (offset === 1) {
+  //     result = "昨天" + time + ":" + min;
+  //   } else if (offset > 2 && offset <= 4) {
+  //     result = weekday[week] + time + ':' + min;
+  //   }
+  // } else {
+  //   result = year + "-" + toDou(mouth) + "-" + toDou(day);
+  // }
   return result;
 }
 

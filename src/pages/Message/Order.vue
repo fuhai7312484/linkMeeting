@@ -1,5 +1,6 @@
 <template>
   <div class="box">
+ 
     <div v-transfer-dom>
       <loading :show="show2" text="数据加载中..."></loading>
     </div>
@@ -138,7 +139,7 @@ export default {
       let _that = this;
       JIM.onSyncConversation(function(Pdata) {
         //离线消息同步监听
-
+        // console.log(Pdata)
         let arr = [],
           newArr = [];
         arr = Pdata.filter(e => {

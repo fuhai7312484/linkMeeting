@@ -3,7 +3,7 @@
     <div class="siteHeaderBox">
       <h3 class="fl siteHeaderTitle">找会议</h3>
       <router-link tag="div" class="fl siteCity" to="/city">
-        {{city}}
+        <!-- {{city}} -->
         <i class="el-icon-caret-bottom"></i>
       </router-link>
 
@@ -17,15 +17,14 @@
         </div>
       </div>
 
-
-<div v-transfer-dom>
-      <popup v-model="show2" height="100%">
-        <div class="IntereClosed" @click="show2 = false">
-  <x-icon type="ios-close-empty" size="30"></x-icon>
-
-        </div>
-    <div class="InterestedInBox">
+      <div v-transfer-dom>
+        <popup v-model="show2" height="100%">
+          <div class="IntereClosed" @click="show2 = false">
+            <x-icon type="ios-close-empty" size="30"></x-icon>
+          </div>
+          <div class="InterestedInBox">
             <h4>选择你感兴趣的行业</h4>
+            <h5>获取更多精彩推荐</h5>
             <!-- {{IndType}} -->
             <div class="IntCheckbox">
               <checker
@@ -50,18 +49,8 @@
               <div class="checkBoxSubmit" v-else>选好了</div>
             </div>
           </div>
-
-
-
-      </popup>
-    </div>
-
-
-
-
-
-
-
+        </popup>
+      </div>
     </div>
     <!-- 
 <sticky scroll-box="vux_view_box_body" :check-sticky-support="false" :offset="46">
@@ -107,7 +96,7 @@
         </div>
       </sticky>
 
-      <div v-transfer-dom>
+      <!-- <div v-transfer-dom>
         <x-dialog
           v-model="showToast"
           class="dialog-demo"
@@ -115,7 +104,7 @@
         >
           <div class="InterestedInBox">
             <h4>选择你感兴趣的行业</h4>
-            <!-- {{IndType}} -->
+   
             <div class="IntCheckbox">
               <checker
                 v-model="IndType"
@@ -139,50 +128,66 @@
               <div class="checkBoxSubmit" v-else>选好了</div>
             </div>
           </div>
-          <!-- <div @click="showToast=false">
-          <span class="vux-close"></span>
-          </div>-->
+        
         </x-dialog>
-      </div>
-
+      </div>-->
       <div v-for="(item, index) in tabMunes" :key="index" v-if="tabsIndex==index">
         <ul class="tabMeetingListUl padlr">
+          <li v-if="!isLogin && tabsIndex==0" class="ListNoContent">
+            {{isLogin}}
+            <p>您还没有登录</p>
+            <p>这里有很多值得您关注的会议</p>
+            <span class="ListNoContentBtn">去登录</span>
+          </li>
 
+          <li v-else-if="listData.length==0 && tabsIndex==0" class="ListNoContent">
+            <p>您还没有关注任何内容</p>
+            <p>推荐里面有很多精彩会议哦~</p>
+            <span class="ListNoContentBtn" @click="tabsIndex = 1">去看看</span>
+          </li>
 
-          <li v-if="listData.length==0 && tabsIndex==0" class="ListNoContent">
-           <p> 您还没有关注任何内容</p>
-           <p>推荐里面有很多精彩会议哦~</p>
-           <span class="ListNoContentBtn" @click="tabsIndex = 1">
-             去看看
-           </span>
-            </li>
+          <li v-else-if="listData.length==0 && tabsIndex!=0" class="ListNoContent">
+            <p>您还没有关注任何内容</p>
+          </li>
 
-             <li v-if="listData.length==0 && tabsIndex!=0" class="ListNoContent">
-           <p> 您还没有关注任何内容</p>
-         
-            </li>
-
-
-
-          <li class="tabMeetingList" v-for="(DataItem,index) in listData" :key="index" @click="gotoDetil(DataItem.id)" >
+          <li
+            v-else
+            class="tabMeetingList"
+            v-for="(DataItem,index) in listData"
+            :key="index"
+            @click="gotoDetil(DataItem.id)"
+          >
             <!-- {{DataItem}} -->
             <div class="tabMeetingTopBox" v-if="tabsIndex==0">
               <div class="orgLogo fl">
-                <img :src="DataItem.orgLogo">
+                <img
+                  :src="DataItem.mainPic==null?require('../../assets/images/myFans-Mask.png'):DataItem.mainPic"
+                >
               </div>
-              <div class="orgname fl">{{DataItem.orgname}}</div>
-              <div class="orgUptime fr">{{DataItem.upTime}}</div>
+              <div class="orgname fl">{{DataItem.userName}}</div>
+              <div class="orgUptime fr">{{ProTime(DataItem.createTime,'T')}}</div>
             </div>
             <div>
               <div class="tabMeetingImg fl">
-                <img :src="DataItem.img">
+                <!-- {{DataItem.meetingFileList}} -->
+                <span
+                  v-for="(img,index) in DataItem.meetingFileList"
+                  :key="index"
+                  v-if="img.belong==1"
+                >
+                  <img
+                    :src="img.fileUrl==null?require('../../assets/images/myFans-Mask.png'):img.fileUrl"
+                  >
+                </span>
+
+                <!-- <img :src="DataItem.meetingPic==null?require('../../assets/images/noimg.png'):DataItem.meetingPic"> -->
                 <!-- {{DataItem.img}} -->
               </div>
 
               <div class="tabMeetingTextBox fl">
-                <h4 class="tabMeetingTextTitle">{{item}}{{index}}{{DataItem.title}}</h4>
+                <h4 class="tabMeetingTextTitle">{{DataItem.theme}}</h4>
                 <div class="tabMeetingTime">
-                  <span>{{DataItem.time}}</span>
+                  <span>{{DataItem.beginTime}}</span>
                   <span>{{DataItem.region}}</span>
                 </div>
                 <div class="tabMeetingTagBox">
@@ -192,9 +197,10 @@
                     <span v-else-if="DataItem.status==2" class="processing">进行中</span>
                     <span v-else-if="DataItem.status==3" class="notStarted">未开始</span>
                   </div>
-                  <div
-                    class="tabMeetingNum fr"
-                  >{{DataItem.status==0?'查看附件':DataItem.status==2?'报名将截止':DataItem.status==3?'马上抢票':DataItem.pepople+'人已报名'}}</div>
+                  <div class="tabMeetingNum fr">
+                    {{DataItem.msg}}
+                    <!-- {{DataItem.status==0?'查看附件':DataItem.status==2?'报名将截止':DataItem.status==3?'马上抢票':DataItem.pepople+'人已报名'}} -->
+                  </div>
                 </div>
               </div>
             </div>
@@ -261,8 +267,6 @@
     <div v-transfer-dom>
       <popup v-model="show1" height="100%">
         <div class="FilterListBox padlr">
-
-         
           <div class="FilterTags">
             <div class="filterInfoTags">
               <span v-for="(FItem,index) in FeatureData" :key="index">{{FItem.name}}</span>
@@ -271,60 +275,55 @@
               <x-icon type="ios-close-empty" size="30"></x-icon>
             </div>
           </div>
-       
-
-
 
           <ul class="tabMeetingListUl FMeetingList">
-        <li class="tabMeetingList" v-for="(DataItem,index) in listData" :key="index">
-          <div>
-            <div class="tabMeetingImg fl">
-              <img :src="DataItem.img">
-              <!-- {{DataItem.img}} -->
-            </div>
-
-            <div class="tabMeetingTextBox fl">
-              <h4 class="tabMeetingTextTitle">{{DataItem.title}}</h4>
-              <div class="tabMeetingTime">
-                <span>{{DataItem.time}}</span>
-                <span>{{DataItem.region}}</span>
-              </div>
-              <div class="tabMeetingTagBox">
-                <div class="tabMeetingPrice fl">
-                 ¥{{DataItem.price}} 
-
+            <li class="tabMeetingList" v-for="(DataItem,index) in listData" :key="index">
+              <div>
+                <div class="tabMeetingImg fl">
+                  <img :src="DataItem.img">
+                  <!-- {{DataItem.img}} -->
                 </div>
-                <!-- <div class="tabMeetingTag fl">
+
+                <div class="tabMeetingTextBox fl">
+                  <h4 class="tabMeetingTextTitle">{{DataItem.title}}</h4>
+                  <div class="tabMeetingTime">
+                    <span>{{DataItem.time}}</span>
+                    <span>{{DataItem.region}}</span>
+                  </div>
+                  <div class="tabMeetingTagBox">
+                    <div class="tabMeetingPrice fl">¥{{DataItem.price}}</div>
+                    <!-- <div class="tabMeetingTag fl">
                   <span v-if="DataItem.status==0" class="IsOver">已结束</span>
                   <span v-else-if="DataItem.status==1" class="LiveIn">直播中</span>
                   <span v-else-if="DataItem.status==2" class="processing">进行中</span>
                   <span v-else-if="DataItem.status==3" class="notStarted">未开始</span>
-                </div> -->
-                <div
-                  class="tabMeetingNum fr"
-                >
-
-                {{DataItem.status==0?'查看附件':DataItem.status==2?'报名将截止':DataItem.status==3?'马上抢票':DataItem.pepople+'人已报名'}}
+                    </div>-->
+                    <div
+                      class="tabMeetingNum fr"
+                    >{{DataItem.status==0?'查看附件':DataItem.status==2?'报名将截止':DataItem.status==3?'马上抢票':DataItem.pepople+'人已报名'}}</div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </li>
-      </ul>
-
-
-
-
-
-
+            </li>
+          </ul>
         </div>
       </popup>
     </div>
+
+     <load-more v-if="showMore" :tip="'正在加载中'" background-color="#fbf9fe"></load-more>
+
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import {
+  getStorage,
+  checkToken,
+  getDataInfo,
+  isLogin,
+  transDate
+} from "../../assets/lib/myStorage.js";
 import MMap from "@/components/MMap";
 import {
   Tab,
@@ -336,7 +335,7 @@ import {
   CheckerItem,
   Popup,
   Flexbox,
-  FlexboxItem
+  FlexboxItem,LoadMore 
 } from "vux";
 import FooterNav from "@/components/footerNav";
 export default {
@@ -356,10 +355,12 @@ export default {
     MMap,
     Popup,
     Flexbox,
-    FlexboxItem
+    FlexboxItem,LoadMore 
   },
   data() {
     return {
+      showMore:false,
+      isLogin: isLogin(),
       MapH: "90px",
       OrderHight: 0,
       listData: [],
@@ -367,11 +368,11 @@ export default {
       tabTitle: "推荐",
       filterData: [],
       tabsIndex: 1,
-      showToast: true,
+      // showToast: true,
       IsShowMap: false,
       show9: false,
       show1: false,
-      show2:false,
+      show2: false,
       IndTypeData: [
         {
           key: "1",
@@ -622,19 +623,24 @@ export default {
 
           showData: ["直播中", "进行中", "未开始", "已结束"]
         }
-      ]
+      ],
+      page:1,
     };
   },
   computed: {
     ...mapState(["city"])
   },
   methods: {
-    gotoDetil(id){
-      console.log(id)
+    //处理时间格式
+    ProTime(time, type) {
+      return transDate(time, type);
+    },
+    gotoDetil(id) {
+      console.log(id);
       this.$router.push({
-        path: "/meetDetail/"+id,
+        path: "/meetDetail/" + id,
         query: { meetingId: id }
-      })
+      });
     },
     tabClick(index) {
       // this.infoTab = !this.infoTab
@@ -658,16 +664,16 @@ export default {
     checkBoxSubmit() {
       //这里请求选择行业的数据接口
 
-      console.log(this.IndType,this.tabMunes);
-     let arr = ["关注", "推荐"]
-    //  this.tabMunes = this.IndType
+      console.log(this.IndType, this.tabMunes);
+      let arr = ["关注", "推荐"];
+      //  this.tabMunes = this.IndType
       this.IndType.forEach(e => {
         arr.push(e.value);
       });
-      this.tabMunes = [...arr]
-      this.showToast = false;
+      this.tabMunes = [...arr];
+      // this.showToast = false;
       this.listData = this.data1[0]["1"];
-      this.show2 = false
+      this.show2 = false;
       console.log("请求推荐接口");
     },
     //切换地图
@@ -770,8 +776,11 @@ export default {
         }
       }
       // console.log(this.FeatureData,this.filterData)
-    }
+    },
+
   },
+  
+ 
   mounted() {
     this.getOrderHight();
     this.IndType = [...this.IndTypeData];
@@ -779,7 +788,46 @@ export default {
   },
   watch: {
     tabsIndex(n, o) {
-      console.log("请求一下接口");
+      console.log("请求一下接口", n);
+      if (n == 0) {
+        if (this.isLogin) {
+          let dataObj = {
+            params: {
+              flag: "1",
+              userId: getStorage("userToken").userId,
+              currentPage: "1",
+              pageSize: "5"
+            }
+          };
+          checkToken().then(Pdata => {
+            getDataInfo(
+              "get",
+              "meetingdetails/meetingdetailsList",
+              dataObj
+            ).then(res => {
+              if (res.data.code == 200) {
+                this.listData = res.data.data;
+              }
+            });
+          });
+        }
+      } else {
+        //         let dataObj={
+        //         params:{
+        //         type:'1',
+        //         user:getStorage('userToken').userId,
+        //         currentPage:'1',
+        //         pageSize:'5',
+        //         }
+        //       }
+        //  checkToken().then(Pdata => {
+        //               getDataInfo("get", "refollow/follow", dataObj).then(
+        //                 res => {
+        //                   console.log(res)
+        //                 }
+        //               );
+        //             });
+      }
 
       this.listData = this.data1[0][n];
       this.filterData = [this.tabMunes[n]];
@@ -808,15 +856,22 @@ export default {
   font-size: 0.8rem;
   text-align: center;
   margin: 0.5rem 0.3rem;
-  background: #f5f5f6;
+  background: ;
   border-radius: 5px;
   padding: 0.6rem 0.2rem;
   // padding: 5px 15px;
   color: #505050;
+  font-weight: bold;
+  background: #f5f5f6 url("../../assets/images/check-item.png") no-repeat;
+  background-size: 20px 20px;
+  background-position: top right;
 }
 .check-item-selected {
-  background: #f8696e;
-  color: #fff;
+  background: #ffe8e8 url("../../assets/images/check-item-selected.png")
+    no-repeat;
+  color: #fe666b;
+  background-size: 20px 20px;
+  background-position: top right;
   // border: 1px solid green;
 }
 .allIndBtn {
@@ -825,13 +880,20 @@ export default {
   display: inline-block;
   font-size: 0.8rem;
   text-align: center;
-  background: #f5f5f6;
+
+  background: #f5f5f6 url("../../assets/images/check-item.png") no-repeat;
+  background-size: 20px 20px;
+  background-position: top right;
   border-radius: 5px;
   padding: 0.6rem 0.2rem;
+  font-weight: bold;
 }
 .allSelected {
-  background: #f8696e;
-  color: #fff;
+  background: #ffe8e8 url("../../assets/images/check-item-selected.png")
+    no-repeat;
+  color: #fe666b;
+  background-size: 20px 20px;
+  background-position: top right;
 }
 .checkBoxSubmit {
   width: 100%;

@@ -1,5 +1,9 @@
 <template>
   <div class="box">
+
+  
+
+
     <div v-transfer-dom>
       <loading :show="show2" text="数据加载中..."></loading>
     </div>
@@ -48,7 +52,7 @@
               <div class="msgListBox fl">
                 <div class="msgListTopBox">
                   <h4 class="msgListTitle fl">{{getAdminName(msgList.msg.msg_body.extras.type)}}</h4>
-                  <div class="msgListTime fr">{{getToTimeschange(msgList.msg.create_time)}}</div>
+                  <div class="msgListTime fr">{{getToTimeschange(msgList.msg.create_time,'C')}}</div>
                 </div>
                 <div
                   class="msgListInfo"
@@ -100,7 +104,7 @@
               <div class="msgListBox fl">
                 <div class="msgListTopBox">
                   <h4 class="msgListTitle fl">{{userInfo.nickName}}</h4>
-                  <div class="msgListTime fr">{{getToTimeschange(userInfo.msg.create_time)}}</div>
+                  <div class="msgListTime fr">{{getToTimeschange(userInfo.msg.create_time,'C')}}</div>
                 </div>
                 <div
                   class="msgListInfo"
@@ -267,11 +271,11 @@ export default {
       }
     },
     //时间戳转换时间格式
-    getToTimeschange(timeStamp) {
+    getToTimeschange(timeStamp,type) {
       if ((timeStamp + "").length == 10) {
-        return transDate(timeStamp * 1000);
+        return transDate(timeStamp * 1000,type);
       } else if ((timeStamp + "").length == 13) {
-        return transDate(timeStamp);
+        return transDate(timeStamp,type);
       }
     },
     //系统消息

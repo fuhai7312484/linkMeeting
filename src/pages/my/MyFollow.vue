@@ -222,8 +222,10 @@ export default {
       let _that = this;
       let followObj = {
         params: {
-          // type:'2',
-          user: getStorage("userToken").userId
+          // type:'0',
+          user: getStorage("userToken").userId,
+          currentPage:'1',
+          pageSize:'5',
         }
       };
       checkToken().then(Pdata => {
