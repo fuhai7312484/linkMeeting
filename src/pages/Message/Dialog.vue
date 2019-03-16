@@ -1,6 +1,8 @@
 <template>
   <div class="box" :style="{overflow:'hidden'}">
     <!-- {{msgData}} -->
+    <!-- {{msgData}} -->
+    <!-- {{getResource("qiniu/voice/i/307FBFB5D1B89601F201CD078C54F897")}} -->
     <div v-transfer-dom>
       <loading :show="show2" text="数据加载中..."></loading>
     </div>
@@ -23,7 +25,7 @@
       <div
         v-for="(msg,index) in msgData"
         :key="index"
-        :class="msg.from_id==dialogId?'x-message-right':'x-message-left'"
+        :class="msg.from_id==dialogId?'x-message-left':'x-message-right'"
       >
         <div class="x-message-imgBox x-message-left-img">
           <!-- {{msg.content.msg_body.extras}} -->
@@ -37,7 +39,17 @@
             height="50px;"
           >-->
         </div>
-        <div class="x-message-TextBox x-message-self">{{msg.msg_body.text}}</div>
+        <div class="x-message-TextBox x-message-self">
+        <span v-if="msg.msg_type=='text'"> {{msg.msg_body.text}}</span>
+        <p v-if="msg.msg_type=='voice'" :style="{width:msg.msg_body.duration*10+'px',height:'25px'}" >
+          <!-- {{msg.msg_body.url}} {{msg.msg_body.fsize}} -->
+          >>
+          </p>
+          </div>
+          <div v-if="msg.msg_type=='voice'" class="x-message-voice fl">
+ {{msg.msg_body.duration+'"'}}
+          </div>
+         
       </div>
     </div>
     <div class="x-messageFormBox potF">
@@ -91,6 +103,7 @@ export default {
       value: "",
       dialogId: "",
       MyuserAvatar: "",
+      targetAvatar:"",
       fromUserAvatar: "",
       user_info: {},
       Myinfo: {},
@@ -109,12 +122,20 @@ export default {
     };
   },
   methods: {
+   
     //获取本地服务器用户信息
     getMyInfochange() {
       let _that = this;
       let userObj = {
         params: {
           id: getStorage("userToken").userId
+        }
+      };
+
+      //获取对方头像
+        let targetObj = {
+        params: {
+          id:this.$route.query.dialogId
         }
       };
 
@@ -132,7 +153,26 @@ export default {
             }, 500);
           }
         });
+
+
+          getDataInfo("get", "user/userById", targetObj).then(res => {
+      
+          if (res.data.code == 200) {
+            this.targetAvatar = res.data.data.mainPic;
+          } else if (res.data.code == 400 || res.data.code == 100101) {
+            setTimeout(function() {
+              _that.$router.push("/login");
+            }, 500);
+          }
+        });
+
+
+
       });
+      
+
+
+
     },
     //登录IM
     JIMlogin() {
@@ -157,6 +197,8 @@ export default {
     //获取离线消息
     getConvers() {
       let _that = this;
+  
+      // console.log(this.getResource("qiniu/voice/i/307FBFB5D1B89601F201CD078C54F897"))
       JIM.onSyncConversation(function(Pdata) {
         //离线消息同步监听
         let arr = [],
@@ -167,9 +209,42 @@ export default {
         arr.forEach(el => {
           newArr.push(el.content);
         });
-        // console.log(newArr)
+        newArr.forEach(e=>{
+          if(e.msg_type=='voice'){
+                // e.msg_body.url = _that.getResource(e.msg_body.media_id)
+
+
+                 JIM.getResource({'media_id' : e.msg_body.media_id})
+	            .onSuccess(function(data){
+                // console.log(data.url)
+               e.msg_body.url = data.url
+              _that.msgData = newArr;
+               _that.show2 = false;
+                // console.log(data.url)
+                // return data.url
+				 }).onFail(function(data){
+           console.log(data)
+				      //  console.log('error:' + JSON.stringify(data));
+			          //  appendToDashboard('error: ' +JSON.stringify(data));
+         });
+
+
+           
+            // console.log(e)
+          }
+        })
+
+        console.log(newArr)
+
+        //  setTimeout(function(){
+        //      console.log(newArr)
+         
+        // },1000)
+       
+        
         // _that.fromUserAvatar = newArr[newArr.length-1].msg_body.extras.userAvatar
-        _that.msgData = newArr;
+        
+        
         // console.log(_that.msgData)
 
         JIM.resetUnreadCount({
@@ -185,8 +260,9 @@ export default {
         appkey: "21c14066bd7b213c7822caa9"
       })
         .onSuccess(function(data) {
+          // console.log(data)
           _that.user_info = data.user_info;
-          _that.show2 = false;
+          // _that.show2 = false;
         })
         .onFail(function(data) {
           //data.code 返回码
@@ -204,13 +280,15 @@ export default {
           content: _that.value,
           extras: {
             msgType: 1,
-            userAvatar: _that.MyuserAvatar == "" ? "no" : _that.MyuserAvatar
+            userAvatar: _that.MyuserAvatar == "" ? "no" : _that.MyuserAvatar,
+            targetAvatar:_that.targetAvatar== "" ? "no" :_that.targetAvatar,
           },
           no_offline: false,
           no_notification: false,
           need_receipt: true
         })
           .onSuccess(function(data, msg) {
+          // console.log(data,msg)
             _that.msgData.push(msg.content);
             _that.value = "";
           })

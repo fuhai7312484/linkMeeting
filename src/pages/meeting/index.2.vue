@@ -1,5 +1,12 @@
 <template>
   <div class="box">
+
+<!-- {{FeatureData}} -->
+   
+
+
+
+
     <div class="siteHeaderBox">
       <h3 class="fl siteHeaderTitle">找会议</h3>
       <router-link tag="div" class="fl siteCity" to="/city">
@@ -131,82 +138,22 @@
         
         </x-dialog>
       </div>-->
-      <div
-        v-for="(item, index) in tabMunes"
-        :key="index"
-        style=" position: relative; height:61vh; padding-bottom:1rem;"
-        v-if="tabsIndex==index"
-      >
-        <pull-tod :on-refresh="onRefresh" :on-infinite="onInfinite" :IsCompleted="IsCompleted">
-          <ul class="tabMeetingListUl padlr" style="height:100%;">
-            <li v-if="!isLogin && tabsIndex==0" class="ListNoContent">
-              {{isLogin}}
-              <p>您还没有登录</p>
-              <p>这里有很多值得您关注的会议</p>
-              <span class="ListNoContentBtn">去登录</span>
-            </li>
 
-            <li v-else-if="listData.length==0 && tabsIndex==0" class="ListNoContent">
-              <p>您还没有关注任何内容</p>
-              <p>推荐里面有很多精彩会议哦~</p>
-              <span class="ListNoContentBtn" @click="tabsIndex = 1">去看看</span>
-            </li>
+        <!-- <div>
+    <pull-to @infinite-scroll="getMoreList">
+      <ul v-for="item in listData">
+        <li>{{ item }}</li>
+      </ul>
+    </pull-to>
+  </div>  -->
 
-            <li v-else-if="listData.length==0 && tabsIndex!=0" class="ListNoContent">
-              <p>您还没有关注任何内容</p>
-            </li>
 
-            <li
-              v-else
-              class="tabMeetingList"
-              v-for="(DataItem,index) in listData"
-              :key="index"
-              @click="gotoDetil(DataItem.id)"
-            >
-              <div class="tabMeetingTopBox" v-if="tabsIndex==0">
-                <div class="orgLogo fl">
-                  <img
-                    :src="DataItem.mainPic==null?require('../../assets/images/myFans-Mask.png'):DataItem.mainPic"
-                  >
-                </div>
-                <div class="orgname fl">{{DataItem.userName}}</div>
-                <div class="orgUptime fr">{{ProTime(DataItem.createTime,'T')}}</div>
-              </div>
-              <div>
-                <div class="tabMeetingImg fl">
-                  <span
-                    v-for="(img,index) in DataItem.meetingFileList"
-                    :key="index"
-                    v-if="img.belong==1"
-                  >
-                    <img
-                      :src="img.fileUrl==null?require('../../assets/images/myFans-Mask.png'):img.fileUrl"
-                    >
-                  </span>
-                </div>
 
-                <div class="tabMeetingTextBox fl">
-                  <h4 class="tabMeetingTextTitle">{{DataItem.theme}}</h4>
-                  <div class="tabMeetingTime">
-                    <span>{{DataItem.beginTime}}</span>
-                    <span>{{DataItem.region}}</span>
-                  </div>
-                  <div class="tabMeetingTagBox">
-                    <div class="tabMeetingTag fl">
-                      <span v-if="DataItem.status==0" class="IsOver">已结束</span>
-                      <span v-else-if="DataItem.status==1" class="LiveIn">直播中</span>
-                      <span v-else-if="DataItem.status==2" class="processing">进行中</span>
-                      <span v-else-if="DataItem.status==3" class="notStarted">未开始</span>
-                    </div>
-                    <div class="tabMeetingNum fr">{{DataItem.msg}}</div>
-                  </div>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </pull-tod>
+  <pull-to :bottom-load-method="getMoreList">
+      <div v-for="(item, index) in tabMunes" :key="index" v-if="tabsIndex==index">
 
-        <!-- <ul class="tabMeetingListUl padlr">
+        
+        <ul class="tabMeetingListUl padlr">
           <li v-if="!isLogin && tabsIndex==0" class="ListNoContent">
             {{isLogin}}
             <p>您还没有登录</p>
@@ -231,7 +178,7 @@
             :key="index"
             @click="gotoDetil(DataItem.id)"
           >
-           
+            <!-- {{DataItem}} -->
             <div class="tabMeetingTopBox" v-if="tabsIndex==0">
               <div class="orgLogo fl">
                 <img
@@ -243,7 +190,7 @@
             </div>
             <div>
               <div class="tabMeetingImg fl">
-         
+                <!-- {{DataItem.meetingFileList}} -->
                 <span
                   v-for="(img,index) in DataItem.meetingFileList"
                   :key="index"
@@ -254,6 +201,8 @@
                   >
                 </span>
 
+                <!-- <img :src="DataItem.meetingPic==null?require('../../assets/images/noimg.png'):DataItem.meetingPic"> -->
+                <!-- {{DataItem.img}} -->
               </div>
 
               <div class="tabMeetingTextBox fl">
@@ -271,16 +220,17 @@
                   </div>
                   <div class="tabMeetingNum fr">
                     {{DataItem.msg}}
-                  
+                    <!-- {{DataItem.status==0?'查看附件':DataItem.status==2?'报名将截止':DataItem.status==3?'马上抢票':DataItem.pepople+'人已报名'}} -->
                   </div>
                 </div>
               </div>
             </div>
           </li>
-        </ul>-->
+        </ul>
+
         <div class="der"></div>
       </div>
-
+ </pull-to>
       <footer-nav></footer-nav>
     </div>
 
@@ -381,13 +331,17 @@
       </popup>
     </div>
 
-    <load-more v-if="showMore" :tip="'正在加载中'" background-color="#fbf9fe"></load-more>
+
+ 
+
+     <load-more v-if="showMore" :tip="'正在加载中'" background-color="#fbf9fe"></load-more>
+
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
-import PullTod from "@/components/PullTo";
+import PullTo from 'vue-pull-to'
 import {
   getStorage,
   checkToken,
@@ -406,8 +360,7 @@ import {
   CheckerItem,
   Popup,
   Flexbox,
-  FlexboxItem,
-  LoadMore
+  FlexboxItem,LoadMore 
 } from "vux";
 import FooterNav from "@/components/footerNav";
 export default {
@@ -427,13 +380,11 @@ export default {
     MMap,
     Popup,
     Flexbox,
-    FlexboxItem,
-    LoadMore,
-    PullTod
+    FlexboxItem,LoadMore,PullTo
   },
   data() {
     return {
-      showMore: false,
+      showMore:false,
       isLogin: isLogin(),
       MapH: "90px",
       OrderHight: 0,
@@ -698,13 +649,7 @@ export default {
           showData: ["直播中", "进行中", "未开始", "已结束"]
         }
       ],
-      page: 1,
-
-      counter: 1, //默认已经显示出5条数据 count等于一是让从6条开始加载
-      num: 5, // 一次显示多少条
-      pageStart: 0, // 开始页数
-      pageEnd: 0, // 结束页数
-      IsCompleted: false
+      page:1,
     };
   },
   computed: {
@@ -839,8 +784,8 @@ export default {
 
       console.log(val, item);
     },
-    getMoreList(loaded) {
-      console.log(loaded);
+    getMoreList(loaded){
+      console.log(loaded)
     },
 
     determineFilter() {
@@ -860,79 +805,24 @@ export default {
       }
       // console.log(this.FeatureData,this.filterData)
     },
-    //请求我的关注数据
-    getDataList(obj) {
-      let dataObj = {
-        params: {
-          flag: "1",
-          userId: getStorage("userToken").userId,
-          currentPage: obj.counter,
-          pageSize: this.num
-        }
-      };
-      checkToken().then(Pdata => {
-        getDataInfo("get", "meetingdetails/meetingdetailsList", dataObj).then(
-          res => {
-            if (res.data.code == 200) {
-              if (res.data.data.length == 0) {
-                this.IsCompleted = true;
-                // console.log("数据加载完毕！！");
-              } else {
-                this.listData = [...this.listData, ...res.data.data];
-                if (obj.fun) {
-                  obj.fun();
-                }
-              }
-            }
-          }
-        );
-      });
-    },
-    //请求推荐内容
-    getGoodMeeting(obj) {
-      let goodObj = {
-        params: {
-          currentPage: obj.counter,
-          pageSize: this.num
-        }
-      };
-      // console.log(obj.counter)
-      getDataInfo(
-        "get",
-        "meetingdetails/meetingdetailsListByGoodMeeting",
-        goodObj
-      ).then(res => {
-        console.log(res);
-        if (res.data.code == 200) {
-          if (res.data.data.meetingShowList.length == 0) {
-            this.IsCompleted = true;
-            console.log("数据加载完毕！！");
-          } else {
-            this.listData = [
-              ...this.listData,
-              ...res.data.data.meetingShowList
-            ];
-            if (obj.fun) {
-              obj.fun();
-            }
-          }
-        }
-      });
-    },
 
-    //请求数据并且下拉刷新页面
-    getAllData(type) {
-      this.counter = 1;
-      let dataObj = {
-        params: {
-          currentPage: this.counter,
-          pageSize: this.num
-        }
-      };
-      if (type == 0) {
-        dataObj.params.flag = "1";
-        dataObj.params.userId = getStorage("userToken").userId;
-        if (this.isLogin) {
+  },
+  
+ 
+  mounted() {
+    this.getOrderHight();
+    this.IndType = [...this.IndTypeData];
+    this.filterData = [this.tabTitle];
+
+
+     let dataObj = {
+            params: {
+              flag: "1",
+              userId: getStorage("userToken").userId,
+              currentPage: "1",
+              pageSize: "5"
+            }
+          };
           checkToken().then(Pdata => {
             getDataInfo(
               "get",
@@ -940,77 +830,60 @@ export default {
               dataObj
             ).then(res => {
               if (res.data.code == 200) {
+               
+                this.listData = res.data.data;
+              }
+            });
+          });
+
+
+          
+  },
+  watch: {
+    tabsIndex(n, o) {
+      console.log("请求一下接口", n);
+      if (n == 0) {
+        if (this.isLogin) {
+          let dataObj = {
+            params: {
+              flag: "1",
+              userId: getStorage("userToken").userId,
+              currentPage: "1",
+              pageSize: "5"
+            }
+          };
+          checkToken().then(Pdata => {
+            getDataInfo(
+              "get",
+              "meetingdetails/meetingdetailsList",
+              dataObj
+            ).then(res => {
+              if (res.data.code == 200) {
+               
                 this.listData = res.data.data;
               }
             });
           });
         }
-      } else if (type == 1) {
-        getDataInfo(
-          "get",
-          "meetingdetails/meetingdetailsListByGoodMeeting",
-          dataObj
-        ).then(res => {
-          if (res.data.code == 200) {
-            this.listData = res.data.data.meetingShowList;
-          }
-        });
+      } else {
+        //         let dataObj={
+        //         params:{
+        //         type:'1',
+        //         user:getStorage('userToken').userId,
+        //         currentPage:'1',
+        //         pageSize:'5',
+        //         }
+        //       }
+        //  checkToken().then(Pdata => {
+        //               getDataInfo("get", "refollow/follow", dataObj).then(
+        //                 res => {
+        //                   console.log(res)
+        //                 }
+        //               );
+        //             });
       }
-    },
-    //上滑更新页面
 
-    //下拉刷新
-    getList() {
-      let vm = this;
-      vm.listData = [];
-      this.counter = 0;
-      this.IsCompleted = false;
-      this.getAllData(this.tabsIndex);
-    },
-    onRefresh(done) {
-      this.getList();
-      done(); // call done
-    },
-    //上滑无限加载
-    onInfinite(done) {
-      let vm = this;
-     
-      vm.counter++;
-      vm.pageEnd = vm.num * vm.counter;
-      vm.pageStart = vm.pageEnd - vm.num;
-      if (this.tabsIndex == 0) {
-        this.getDataList({ counter: vm.counter, fun: done });
-      } else if (this.tabsIndex == 1) {
-        this.getGoodMeeting({ counter: vm.counter, fun: done });
-      }
-    }
-  },
-
-  mounted() {
-    this.getOrderHight();
-    this.IndType = [...this.IndTypeData];
-    this.filterData = [this.tabTitle];
-    this.getAllData(this.tabsIndex);
-
-    // console.log(this.tabsIndex);
-    // this.getGoodMeeting({ counter: this.counter });
-  },
-  watch: {
-    tabsIndex(n, o) {
-      console.log("请求一下接口", n);
-      this.getAllData(n);
-
-      // if (n == 0) {
-      //   if (this.isLogin) {
-      //     this.getDataList({counter:this.counter})
-      //   }
-      // } else if(n==1) {
-
-      //  this.getGoodMeeting({counter:this.counter})
-
-      // }
-
-      // this.listData = this.data1[0][n];
+      this.listData = this.data1[0][n];
       this.filterData = [this.tabMunes[n]];
       this.tabTitle = this.tabMunes[n];
     }
@@ -1037,7 +910,7 @@ export default {
   font-size: 0.8rem;
   text-align: center;
   margin: 0.5rem 0.3rem;
-
+  background: ;
   border-radius: 5px;
   padding: 0.6rem 0.2rem;
   // padding: 5px 15px;

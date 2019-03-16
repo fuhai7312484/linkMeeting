@@ -42,6 +42,7 @@ import Cpage from "@/pages/my/myInfo";
 import MyInfo from "@/pages/my/myInfo";
 import gallery from "@/components/gallery";
 import city from "@/components/City";
+// import PullTod from "@/components/PullTo";
 Vue.use(Router);
 
 export default new Router({
@@ -313,6 +314,7 @@ export default new Router({
       //   index: 2,
       // },
       component: city
-    }
+    },
+   
   ]
 });

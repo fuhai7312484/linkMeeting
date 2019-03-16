@@ -1,7 +1,7 @@
 <template>
   <div class="box">
 
-  
+  {{myId}}
 
 
     <div v-transfer-dom>
@@ -94,7 +94,9 @@
 
                 <div class="msgAvatarImg">
                   <!-- <img :src="userInfo.msg.msg_body.extras.userAvatar==' '?require('../../assets/images/myFans-Mask.png'):userInfo.msg.msg_body.extras.userAvatar"> -->
-                  <img :src="require('../../assets/images/myFans-Mask.png')">
+                  <!-- <img :src="require('../../assets/images/myFans-Mask.png')"> -->
+                  <!-- {{userInfo.msg.from_id==myId?userInfo.msg.msg_body.extras.targetAvatar:userInfo.msg.msg_body.extras.userAvatar}} -->
+                    <img :src="userInfo.msg.from_id==myId?userInfo.msg.msg_body.extras.targetAvatar:userInfo.msg.msg_body.extras.userAvatar">
                   <!-- {{userInfo.avatar}} -->
                   <!-- <img
                     :src="userInfo.avatar==''?require('../../assets/images/myFans-Mask.png'):userInfo.avatar"
@@ -108,8 +110,14 @@
                 </div>
                 <div
                   class="msgListInfo"
-                  :style="{color:userInfo.type=='voice'?'#F76369':'#A0A0A0'}"
-                >{{userInfo.msg.msg_body.text}}</div>
+                  :style="{color:userInfo.msg.msg_type=='voice'?'#F76369':'#A0A0A0'}"
+                >
+                <span v-if="userInfo.msg.msg_type=='text'">{{userInfo.msg.msg_body.text}}</span>
+                 <span v-else-if="userInfo.msg.msg_type=='voice'">[语音]</span>
+                
+                <!-- {{userInfo.msg.msg_type userInfo.msg.msg_body.text}} -->
+                
+                </div>
               </div>
             </div>
           </swipeout-item>
@@ -162,6 +170,7 @@ export default {
         showPositionValue: false,
         toastType: "success"
       },
+      myId:getStorage('userToken').userId,
       show2: true,
       sysData: [
         // {
@@ -305,7 +314,7 @@ export default {
         //监听聊天变化
         JIM.onMsgReceive(function(res) {
           // console.log(res)
-          // console.log(res);
+          console.log(res);
           if (res.messages[0].content.from_type == "admin") {
             // 如果数组里面本身不存在这个对象则把这个加进去
         
@@ -361,7 +370,7 @@ export default {
     },
     //获取离线消息
     getConvers() {
-      console.log(111111111)
+      // console.log(111111111)
       let _that = this;
       JIM.onSyncConversation(function(Pdata) {
         //离线消息同步监听
@@ -376,7 +385,7 @@ export default {
         });
         JIM.getConversation()
           .onSuccess(function(data) {
-            // console.log(data)
+            console.log(data)
             if (data.code == 0) {
               let newArr = [],
                 userArr = [],

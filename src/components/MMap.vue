@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <!-- {{data_info}} -->
     <div class="filterResult">
       <div class="filterInfoTags">
   <span v-for="(tab,index) in  tabTitle" :key="index">{{tab}}</span>
@@ -14,23 +15,34 @@
       <popup v-model="showData" position="bottom" :show-mask="false">
         <div class="position-vertical-demo">
   <ul class="tabMeetingListUl padlr">
-        <li class="tabMeetingList" v-for="(DataItem,index) in evData" :key="index">
+        <li class="tabMeetingList" v-for="(DataItem,index) in evData" :key="index" @click="goToDetail(DataItem.id)">
           <div>
             <div class="tabMeetingImg fl">
-              <img :src="DataItem.img">
+
+              <span
+                    v-for="(img,index) in DataItem.meetingFileList"
+                    :key="index"
+                    v-if="img.belong==1"
+                  >
+                    <img
+                      :src="img.fileUrl==null?require('../assets/images/myFans-Mask.png'):img.fileUrl"
+                    >
+                  </span>
+
+
+              <!-- <img :src="DataItem.img"> -->
               <!-- {{DataItem.img}} -->
             </div>
 
             <div class="tabMeetingTextBox fl">
-              <h4 class="tabMeetingTextTitle">{{DataItem.title}}</h4>
+              <h4 class="tabMeetingTextTitle">{{DataItem.theme}}</h4>
               <div class="tabMeetingTime">
-                <span>{{DataItem.time}}</span>
-                <span>{{DataItem.region}}</span>
+                <span>{{DataItem.beginTime}}</span>
+                <!-- <span>{{DataItem.address}}</span> -->
               </div>
               <div class="tabMeetingTagBox">
                 <div class="tabMeetingPrice fl">
-                 ¥{{DataItem.price}} 
-
+                 ¥{{DataItem.price}}起
                 </div>
                 <!-- <div class="tabMeetingTag fl">
                   <span v-if="DataItem.status==0" class="IsOver">已结束</span>
@@ -41,8 +53,8 @@
                 <div
                   class="tabMeetingNum fr"
                 >
-
-                {{DataItem.status==0?'查看附件':DataItem.status==2?'报名将截止':DataItem.status==3?'马上抢票':DataItem.pepople+'人已报名'}}
+                {{DataItem.msg}}
+                <!-- {{DataItem.status==0?'查看附件':DataItem.status==2?'报名将截止':DataItem.status==3?'马上抢票':DataItem.pepople+'人已报名'}} -->
                 </div>
               </div>
             </div>
@@ -76,6 +88,14 @@ export default {
     FlexboxItem
       },
   methods: {
+    //点击查看详情
+    goToDetail(id){
+      console.log(id)
+       this.$router.push({
+        path: "/meetDetail/" + id,
+        query: { meetingId: id }
+      });
+    },
     change(){
      let H = this.showData?'190px':'90px'
       this.$emit("GotoMapHeight",H)
@@ -99,7 +119,7 @@ export default {
           if (this.getStatus() == BMAP_STATUS_SUCCESS) {
             // console.log(r)
 
-            alert('您当前定位为：'+r.address.city);
+            // alert('您当前定位为：'+r.address.city);
 
               function setCity(city){
                   if(city.charAt(city.length-1)=='市'){
@@ -116,7 +136,7 @@ export default {
             map.panTo(r.point);
             // alert('您的位置：'+r.point.lng+','+r.point.lat);
           } else {
-            alert("failed" + this.getStatus());
+            // alert("failed" + this.getStatus());
           }
         },
         { enableHighAccuracy: true }
@@ -154,7 +174,7 @@ export default {
         address += e.addressComponent.district;
         address += e.addressComponent.street;
         address += e.addressComponent.streetNumber;
-        alert("当前定位地址为：" + address + lng + "--" + lat);
+        // alert("当前定位地址为：" + address + lng + "--" + lat);
       });
       geolocationControl.addEventListener("locationError", function(e) {
         // 定位失败事件
@@ -166,12 +186,12 @@ export default {
       for (var i = 0; i < this.data_info.length; i++) {
 
            var htm =
-          "<div class='Bmap-infoBox' data-id='"+ this.data_info[i].id +"'><h4 class='fl'><span class='Mmap-span'>"+ this.data_info[i].title +"</span></h4><i class='bg-arrow-off'></i></div>";
+          "<div class='Bmap-infoBox' data-id='"+ this.data_info[i].id +"'><h4 class='fl'><span class='Mmap-span'>"+ this.data_info[i].theme +"</span></h4><i class='bg-arrow-off'></i></div>";
 
 
         var point = new BMap.Point(
-          this.data_info[i].lng,
-          this.data_info[i].lat
+          this.data_info[i].longitude,
+          this.data_info[i].latitude
         );
         var myRichMarkerObject = new BMapLib.RichMarker(htm, point, {
           anchor: new BMap.Size(-72, -84),
