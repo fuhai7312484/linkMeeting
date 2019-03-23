@@ -6,7 +6,7 @@ export function getDataInfo(mode, url, obj) {
   axios.defaults.headers["APP-User-Token"] = token;
 
   //测试环境
-  let ipUrl = "http://192.168.1.179/lhy/v0.1/api/";
+  let ipUrl = "http://192.168.1.177/lhy/v0.1/api/";
   // let ipUrl = "http://192.168.1.170:8080/v0.1/api/";
   // let ipUrl = "http://192.168.1.125:8080/v0.1/api/";
   var qs = require("qs");
@@ -55,7 +55,7 @@ export function checkToken() {
           setStorage("userToken", TokenInfo);
           resolve();
         } else if (res.data.code == 400) {
-          // console.log(res)
+          console.log(res)
           resolve(400);
 
           // _that.$router.push('/login')

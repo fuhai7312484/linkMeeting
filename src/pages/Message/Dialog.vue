@@ -1,7 +1,5 @@
 <template>
   <div class="box" :style="{overflow:'hidden'}">
-    <!-- {{msgData}} -->
-    <!-- {{msgData}} -->
     <!-- {{getResource("qiniu/voice/i/307FBFB5D1B89601F201CD078C54F897")}} -->
     <div v-transfer-dom>
       <loading :show="show2" text="数据加载中..."></loading>
@@ -27,11 +25,16 @@
         :key="index"
         :class="msg.from_id==dialogId?'x-message-left':'x-message-right'"
       >
+
+         
+        <!-- {{msg}} -->
         <div class="x-message-imgBox x-message-left-img">
           <!-- {{msg.content.msg_body.extras}} -->
           <!-- {{MyuserAvatar}} -->
+          <!-- {{msg.msg_body}} -->
+      
           <img
-            :src="msg.from_id==dialogId?msg.msg_body.extras==undefined?require('../../assets/images/myFans-Mask.png'):msg.msg_body.extras.userAvatar==undefined?require('../../assets/images/myFans-Mask.png'):msg.msg_body.extras.userAvatar:MyuserAvatar"
+            :src="msg.from_id==dialogId?msg.msg_body.extras==undefined?require('../../assets/images/myFans-Mask.png'):msg.msg_body.extras.userAvatar=='no'?require('../../assets/images/myFans-Mask.png'):msg.msg_body.extras.userAvatar:MyuserAvatar"
             height="50px;"
           >
           <!-- <img
@@ -40,16 +43,55 @@
           >-->
         </div>
         <div class="x-message-TextBox x-message-self">
-        <span v-if="msg.msg_type=='text'"> {{msg.msg_body.text}}</span>
-        <p v-if="msg.msg_type=='voice'" :style="{width:msg.msg_body.duration*10+'px',height:'25px'}" >
-          <!-- {{msg.msg_body.url}} {{msg.msg_body.fsize}} -->
-          >>
-          </p>
+          <!-- <span v-if="msg.msg_body.url">1111111{{msg.msg_body.url}}</span> -->
+          <span v-if="msg.msg_type=='text'">{{msg.msg_body.text}}</span>
+          <!-- @click="typeVoicePlay(msg.msg_body.media_id,index,msg.msg_body.hash)" -->
+          <!-- @touchstart.stop.prevent='typeVoicePlay(msg.msg_body.media_id,index,msg.msg_body.hash)' -->
+          <div
+            v-if="msg.msg_type=='voice'"
+            @click="typeVoicePlay(msg.msg_body.url,index,msg.msg_body.hash)"
+          >
+            <!-- {{VoiceUrl}} -->
+            <p
+              class="weixinAudio fl"
+              :id="'media'+''+index"
+              :ref="'media'+''+index"
+              data-play="false"
+              :style="{width:msg.msg_body.duration<=10?'20px':msg.msg_body.duration+'px',height:'25px'}"
+            >
+              <audio
+                :data="index"
+                @canplay="playing(index)"
+                @ended="ended(index)"
+                width="1"
+                height="1"
+                type="audio/mpeg"
+                class="mx-audio"
+                preload
+              >
+                <!-- <source :src="VoUrl" type="audio/mpeg"> -->
+              </audio>
+
+              <!-- {{VoUrl}} -->
+              <span id="audio_area" class="db audio_area">
+                <span class="audio_wrp db">
+                  <span class="audio_play_area">
+                    <i class="icon_audio_default"></i>
+                    <i class="icon_audio_playing"></i>
+                  </span>
+                  <!-- <span id="audio_length" class="audio_length tips_global">{{item.messageBody.duration}}"</span> -->
+                </span>
+              </span>
+            </p>
+            <div
+              v-if="msg.msg_type=='voice'"
+              class="x-message-voice fl"
+            >{{msg.msg_body.duration+'"'}}</div>
           </div>
-          <div v-if="msg.msg_type=='voice'" class="x-message-voice fl">
+        </div>
+        <!-- <div v-if="msg.msg_type=='voice'" class="x-message-voice fl">
  {{msg.msg_body.duration+'"'}}
-          </div>
-         
+        </div>-->
       </div>
     </div>
     <div class="x-messageFormBox potF">
@@ -103,7 +145,7 @@ export default {
       value: "",
       dialogId: "",
       MyuserAvatar: "",
-      targetAvatar:"",
+      targetAvatar: "",
       fromUserAvatar: "",
       user_info: {},
       Myinfo: {},
@@ -122,7 +164,22 @@ export default {
     };
   },
   methods: {
-   
+    //语音部分
+
+    playing(id) {
+      // console.log('开始');
+      // console.log(id)
+    },
+    ended(index) {
+      var Pdom = this.$refs["media" + "" + index][0];
+      var audio = Pdom.querySelector(".mx-audio");
+      var defaultIcon = Pdom.querySelector(".icon_audio_default");
+      var playingIcon = Pdom.querySelector(".icon_audio_playing");
+      Pdom.dataset.play = false;
+      defaultIcon.style.display = "inline-block";
+      playingIcon.style.display = "none";
+    },
+
     //获取本地服务器用户信息
     getMyInfochange() {
       let _that = this;
@@ -133,16 +190,15 @@ export default {
       };
 
       //获取对方头像
-        let targetObj = {
+      let targetObj = {
         params: {
-          id:this.$route.query.dialogId
+          id: this.$route.query.dialogId
         }
       };
 
       checkToken().then(Pdata => {
-        // console.log(Pdata)
         getDataInfo("get", "user/userById", userObj).then(res => {
-          // console.log(res )
+          console.log(111111111, res);
           if (res.data.code == 200) {
             this.Myinfo = res.data.data;
             this.MyuserAvatar = res.data.data.mainPic;
@@ -154,9 +210,8 @@ export default {
           }
         });
 
-
-          getDataInfo("get", "user/userById", targetObj).then(res => {
-      
+        getDataInfo("get", "user/userById", targetObj).then(res => {
+          console.log(2222222, res);
           if (res.data.code == 200) {
             this.targetAvatar = res.data.data.mainPic;
           } else if (res.data.code == 400 || res.data.code == 100101) {
@@ -165,14 +220,7 @@ export default {
             }, 500);
           }
         });
-
-
-
       });
-      
-
-
-
     },
     //登录IM
     JIMlogin() {
@@ -185,10 +233,18 @@ export default {
         password: userId
       }).onSuccess(function(data) {
         JIM.onMsgReceive(function(OnData) {
-          // console.log(OnData);
           _that.fromUserAvatar =
             OnData.messages[0].content.msg_body.extras.userAvatar;
-          _that.msgData.push(OnData.messages[0].content);
+          if (OnData.messages[0].content.msg_type == "voice") {
+            JIM.getResource({
+              media_id: OnData.messages[0].content.msg_body.media_id
+            }).onSuccess(function(data) {
+              OnData.messages[0].content.msg_body.url = data.url;
+              _that.msgData.push(OnData.messages[0].content);
+            });
+          } else {
+            _that.msgData.push(OnData.messages[0].content);
+          }
         });
         _that.getConvers();
         _that.getUserInfo();
@@ -197,60 +253,85 @@ export default {
     //获取离线消息
     getConvers() {
       let _that = this;
-  
-      // console.log(this.getResource("qiniu/voice/i/307FBFB5D1B89601F201CD078C54F897"))
       JIM.onSyncConversation(function(Pdata) {
         //离线消息同步监听
         let arr = [],
           newArr = [];
+        console.log(Pdata);
+
         arr = Pdata.filter(e => {
           return e.from_username == _that.$route.query.dialogId;
-        })[0].msgs;
+        });
+        console.log(arr);
+        if (arr.length != 0) {
+          arr = Pdata.filter(e => {
+            return e.from_username == _that.$route.query.dialogId;
+          })[0].msgs;
+        }
+
         arr.forEach(el => {
           newArr.push(el.content);
         });
-        newArr.forEach(e=>{
-          if(e.msg_type=='voice'){
-                // e.msg_body.url = _that.getResource(e.msg_body.media_id)
 
-
-                 JIM.getResource({'media_id' : e.msg_body.media_id})
-	            .onSuccess(function(data){
-                // console.log(data.url)
-               e.msg_body.url = data.url
-              _that.msgData = newArr;
-               _that.show2 = false;
-                // console.log(data.url)
-                // return data.url
-				 }).onFail(function(data){
-           console.log(data)
-				      //  console.log('error:' + JSON.stringify(data));
-			          //  appendToDashboard('error: ' +JSON.stringify(data));
-         });
-
-
-           
-            // console.log(e)
+        newArr.forEach((e, index) => {
+          if (e.msg_type == "voice") {
+            JIM.getResource({ media_id: e.msg_body.media_id })
+              .onSuccess(function(data) {
+                e.msg_body.url = data.url;
+                _that.msgData = newArr;
+              })
+              .onFail(function(data) {
+                console.log(data);
+              });
           }
-        })
+        });
 
-        console.log(newArr)
-
-        //  setTimeout(function(){
-        //      console.log(newArr)
-         
-        // },1000)
-       
-        
-        // _that.fromUserAvatar = newArr[newArr.length-1].msg_body.extras.userAvatar
-        
-        
-        // console.log(_that.msgData)
+        _that.show2 = false;
 
         JIM.resetUnreadCount({
           username: _that.$route.query.dialogId
         });
       });
+    },
+
+    //语音消息播放
+    typeVoicePlay(url, index, hash) {
+      let _that = this;
+      Object.keys(_that.$refs).forEach(function(key) {
+        if (_that.$refs[key][0]) {
+          _that.$refs[key][0].dataset.play = false;
+          _that.$refs[key][0].querySelector(".mx-audio").pause();
+          _that.$refs[key][0].querySelector(
+            ".icon_audio_playing"
+          ).style.display = "none";
+          _that.$refs[key][0].querySelector(
+            ".icon_audio_default"
+          ).style.display = "inline-block";
+        }
+      });
+
+      var Pdom = this.$refs["media" + "" + index][0];
+
+      var audio = Pdom.querySelector(".mx-audio");
+
+      //  audio.play();
+
+      var defaultIcon = Pdom.querySelector(".icon_audio_default");
+      var playingIcon = Pdom.querySelector(".icon_audio_playing");
+      audio.currentTime = 0;
+      audio.src = url;
+
+      if (Pdom.dataset.play == "false") {
+        audio.play();
+        defaultIcon.style.display = "none";
+        playingIcon.style.display = "inline-block";
+        Pdom.dataset.play = true;
+      } else {
+        audio.pause();
+        defaultIcon.style.display = "inline-block";
+        playingIcon.style.display = "none";
+        Pdom.dataset.play = false;
+      }
     },
     //获取会话人信息
     getUserInfo() {
@@ -281,14 +362,14 @@ export default {
           extras: {
             msgType: 1,
             userAvatar: _that.MyuserAvatar == "" ? "no" : _that.MyuserAvatar,
-            targetAvatar:_that.targetAvatar== "" ? "no" :_that.targetAvatar,
+            targetAvatar: _that.targetAvatar == "" ? "no" : _that.targetAvatar
           },
           no_offline: false,
           no_notification: false,
           need_receipt: true
         })
           .onSuccess(function(data, msg) {
-          // console.log(data,msg)
+            // console.log(data,msg)
             _that.msgData.push(msg.content);
             _that.value = "";
           })
@@ -306,9 +387,14 @@ export default {
       });
     }
   },
+  created() {
+    this.$nextTick(function() {
+      this.getMyInfochange();
+    });
+  },
   mounted() {
     this.dialogId = this.$route.query.dialogId;
-    this.getMyInfochange();
+
     // this.JIMlogin();
   },
   watch: {

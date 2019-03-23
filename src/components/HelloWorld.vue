@@ -19,6 +19,7 @@
         <div>--------------会议-----------------------</div>
       <router-link tag="li" to="/meeting">会议首页</router-link>
       <router-link tag="li" to="/meetDetail">会议详情</router-link>
+      <router-link tag="li" to="/meetingSearch">会议搜索</router-link>
       <router-link tag="li" to="/downannex">下载附件</router-link>
       <router-link tag="li" to="/navmap">会议导航</router-link>
       <router-link tag="li" to="/ticket">报名参会</router-link>
@@ -29,7 +30,7 @@
       <router-link tag="li" to="/ordermsg">订单消息</router-link>
       <div>--------------我的----------------</div>
       <router-link tag="li" to="/myindex">我的</router-link>
-      <router-link tag="li" to="/detailsList">TA的发布</router-link>
+      <router-link tag="li" to="/tadetail/123">TA的发布</router-link>
       <router-link tag="li" to="/myInfo">基本资料</router-link>
        <router-link tag="li" to="/detailsList">我的主页</router-link>
       <router-link tag="li" to="/mycolle">我的收藏</router-link>

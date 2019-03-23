@@ -13,6 +13,7 @@ import SiteSearch from "@/pages/site/siteSearch";
 import SiteDetail from "@/pages/site/siteDetail";
 import roomDetail from "@/pages/site/RoomDetail";
 import MeetingIndex from "@/pages/meeting/index";
+import meetingSearch from "@/pages/meeting/meetingSearch";
 import MeetDetail from "@/pages/meeting/meetDetail";
 import NavMap from "@/components/NavMap";
 import Ticket from "@/pages/meeting/Ticket";
@@ -122,6 +123,11 @@ export default new Router({
       //   index: 1,
       // },
       component: MeetingIndex
+    },
+    {
+      path: "/meetingSearch",
+      name: "meetingSearch",
+      component: meetingSearch
     },
     {
       path: "/meetDetail/:id",

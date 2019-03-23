@@ -32,7 +32,7 @@
       </x-dialog>
     </div>
 
-    <div v-transfer-dom>
+    <!-- <div v-transfer-dom>
       <x-dialog
         v-model="showDialogStyle"
         hide-on-blur
@@ -48,7 +48,7 @@
           </div>
         </div>
       </x-dialog>
-    </div>
+    </div> -->
 
     <actionsheet
       v-model="showAdvisory"
@@ -146,9 +146,11 @@
 
       <flexbox :gutter="0" class="linH padlr">
         <flexbox-item :span="3.5/5" class="listContent-tagbox">
-          <span class="listContent-Ttags">五星酒店</span>
-          <span class="listContent-tags">餐饮</span>
-          <span class="listContent-tags">游泳</span>
+        <div v-for="(TypeList,index) in meetingData.draftsVo.meetingTypeList" :key="index">
+          <span class="listContent-Ttags">{{TypeList.name}}</span>
+          <span class="listContent-tags">{{TypeList.industry}}</span>
+          </div>
+         
         </flexbox-item>
         <flexbox-item :span="1.5/5">
           <div :class="idensChange(0,meetingData.idens)?'meeting-flex-v':'meeting-flex-nov'">
@@ -166,8 +168,8 @@
         </flexbox-item>
         <flexbox-item :span="3.9/5">
           <div class="meetingdetailInfo">
-            <!-- {{meetingData.draftsVo.meetingDetails.beginTime}}至{{meetingData.draftsVo.meetingDetails.endTime}} -->
-            11-24 09:00至21:00
+            {{meetingData.draftsVo.meetingDetails.beginTime}}至{{meetingData.draftsVo.meetingDetails.endTime}}
+            <!-- 11-24 09:00至21:00 -->
           </div>
         </flexbox-item>
       </flexbox>
@@ -237,7 +239,7 @@
       </flexbox>
 
       <div class="attentionOrganizerBox" v-if="meetingData.userMeetingInfo!=undefined">
-        <div class="OrganizerLogo fl">
+        <div class="OrganizerLogo fl" @click="goToTaDetail(meetingData.draftsVo.meetingDetails.createPerson)">
           <img
             :src="meetingData.userMeetingInfo.mainPic!=null?meetingData.userMeetingInfo.mainPic:require('../../assets/images/myFans-Mask.png')"
           >
@@ -577,6 +579,12 @@ export default {
     };
   },
   methods: {
+    //跳转他的详情页面
+    goToTaDetail(id){
+      this.$router.push('/tadetail/'+id)
+      // console.log(id)
+    },
+
     //过滤封面图片和视频、附件
     processImgType(type,arr){
       console.log(arr)
@@ -608,7 +616,9 @@ export default {
             }
           };
           checkToken().then(Pdata => {
+            console.log(Pdata)
             getDataInfo("delete", "refollow/follow", followObj).then(res => {
+              console.log(res)
               if (res.data.code == 200) {
                 this.toastInfo = {
                   showMsg: res.data.msg,
@@ -682,7 +692,7 @@ export default {
       //获取详情数据
       this.show2 = true;
 
-      console.log(this.$route.query.meetingId);
+      // console.log(this.$route.query.meetingId);
       // console.log(getStorage("userToken").userId);
       let detailObj = {
         params: {
@@ -694,11 +704,11 @@ export default {
         detailObj.params.userId = getStorage("userToken").userId;
       getDataInfo("get", "meetingdetails/meetingDetailsById", detailObj).then(
         res => {
-          // console.log(res);
+          console.log(res);
 
           if (res.data.code == 200) {
             this.meetingData = res.data.data;
-            console.log(res.data.data.draftsVo.meetingDetails.meetingFileList)
+            // console.log(res.data.data.draftsVo.meetingDetails.meetingFileList)
             let imgArr = [],videoArr = [] 
             res.data.data.draftsVo.meetingDetails.meetingFileList.forEach(e => {
               if(e.fileType==0){
@@ -728,7 +738,7 @@ export default {
               }
              
             });
-            console.log(imgArr)
+            // console.log(imgArr)
             this.SImgList = imgArr
             this.SVideoList = 
             this.show2 = false;
@@ -821,12 +831,20 @@ export default {
         this.callPhone();
       } else if (key == "Online") {
         // alert('在线咨询')
-        this.showDialogStyle = true;
+        // this.showDialogStyle = true;
+        // console.log(this.meetingData.draftsVo.meetingDetails.createPerson)
+        if(isLogin()){
+ this.$router.push({path: '/dialog/'+this.meetingData.draftsVo.meetingDetails.createPerson, query:{dialogId: this.meetingData.draftsVo.meetingDetails.createPerson}})
+        }else{
+          alert('请先登录')
+        }
+       
+
       }
     }
   },
   mounted() {
-    console.log(this.meetingData);
+   
     this.getMeetingData();
     this.showAdBullet();
   }

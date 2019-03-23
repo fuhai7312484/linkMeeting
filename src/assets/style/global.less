@@ -57,13 +57,37 @@
       height: 100px;
       color: #fff;
       .my-top-userName {
-        font-size: 1.5rem;
+        font-size: 1.2rem;
         font-weight: bold;
-        img {
-          width: 1.3rem;
-          vertical-align: middle;
-        }
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        // width: 85%;
+      
+        
       }
+
+      .my-top-userjobTitle{
+        font-size: .8rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .my-top-userIdens{
+        span{
+
+          font-size: 0.6rem;
+          // color: #ffa546;
+          font-weight: 600;
+          margin-right: 0.6rem;
+          img{height: 17px; vertical-align: middle; margin-right:.2rem;  }
+        }
+      
+    .spang{
+      // color: #96e24a !important;
+    }
+      }
+     
     }
     .my-top-SubBtnsBox {
       margin-top: 1rem;
@@ -125,11 +149,22 @@
     // background: #000;
     // width: 2rem;
     height: 4.5rem;
+
     img {
       width: 100%;
-      // height: 100%;
+      height: 100%;
+      border-radius:3px; 
     }
   }
+  .listContentPar{
+    h3{font-weight: 500;
+    font-size: 1rem;}
+  }
+  .mylistInfoPar{
+    font-size: .8rem;
+    color: #E6E6E6;
+  }
+  
 }
 
 .listContent-tagbox {
@@ -146,6 +181,11 @@
   .listContent-tags {
     color: #505050;
     border: 1px solid #505050;
+   
+  }
+  .sang{
+      color: #B68C48;
+      border:1px solid #B68C48;
   }
 }
 
@@ -1140,8 +1180,10 @@ h4.site-room-title {
   height: 100%;
   position: relative;
   .FeaturesConten {
+    box-sizing: border-box;
     width: 100%;
-    height: 93%;
+    height: 90%;
+    padding: 1rem 0;
     overflow-y: auto;
   }
   .footer-nav-FieldPlace {
@@ -1480,16 +1522,22 @@ h4.site-room-title {
 }
 .siteSearchBox {
   position: relative;
+  overflow: hidden;
+  
 }
 .search-content {
-  position: absolute;
-  height: 100%;
+  // position: relative;
+  // height: 100%;
+
+  height:100vh;
+
   background: #fff;
-  // width: 100%;
-  top: 40px;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  overflow: hidden;
+  width: 100%;
+  // top: 40px;
+  // left: 0;
+  // right: 0;
+  // bottom: 0;
   padding: 0.8rem;
   box-sizing: border-box;
 }
@@ -1843,7 +1891,7 @@ h4.site-room-title {
     color: #fe666b;
   }
   .meetingdetailInfo {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-weight: bold;
     color: #323232;
     overflow: hidden;
@@ -2303,6 +2351,8 @@ padding: .8rem 0;
     .msgListInfo {
       // width: 85%;
       overflow: hidden;
+      height: 25px;
+      line-height: 25px;
       font-size: 0.9rem;
       color: #a0a0a0;
       font-weight: bold;
@@ -2479,15 +2529,20 @@ padding: .8rem 0;
     border: 1px solid #F0F0F0;
     border-radius: 0 1rem 1rem 1rem; 
     color: #000;
+   
+   
+ 
+
+   
     
   }
   .x-message-voice{
-    height: 30px;
-    padding: .8rem;
+    // height: 30px;
+    padding: 0 .8rem;
     font-size: 1rem;
     font-weight: bold;
     color: #ccc;
-    line-height: 50px;
+    // line-height: 50px;
   }
 
 
@@ -2523,6 +2578,151 @@ padding: .8rem 0;
     
   }
 }
+
+
+.db {
+  display: block;
+}
+
+.weixinAudio {
+ 
+  line-height: 1.5;
+  cursor: pointer;
+  // max-width:400px;
+  // min-width: 60px;
+}
+
+.audio_area {
+  display: inline-block;
+  width: 100%;
+  vertical-align: top;
+  margin: 0px 1px 0px 0;
+  font-size: 0;
+  position: relative;
+  font-weight: 400;
+  text-decoration: none;
+  -ms-text-size-adjust: none;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+}
+
+.audio_wrp {
+  /* border: 1px solid #ebebeb; */
+  /* background-color: #fcfcfc; */
+  overflow: hidden;
+  /* padding: 12px 20px 12px 12px; */
+}
+
+.audio_play_area {
+  float: left;
+  /* margin: 9px 22px 10px 5px; */
+  font-size: 0;
+  width: 18px;
+  height: 25px;
+}
+
+.playing .audio_play_area .icon_audio_default {
+  display: block;
+}
+
+.audio_play_area .icon_audio_default {
+  background: transparent url(../images/iconloop.png) no-repeat 0 0;
+  width: 18px;
+  height: 25px;
+  vertical-align: middle;
+  display: inline-block;
+  -webkit-background-size: 54px 25px;
+  background-size: 54px 25px;
+  background-position: -36px center;
+}
+
+.audio_play_area .icon_audio_playing {
+  background: transparent url(../images/iconloop.png) no-repeat 0 0;
+  width: 18px;
+  height: 25px;
+  vertical-align: middle;
+  display: inline-block;
+  -webkit-background-size: 54px 25px;
+  background-size: 54px 25px;
+  -webkit-animation: audio_playing 1s infinite;
+  background-position: 0px center;
+  display: none;
+}
+
+.audio_area .pic_audio_default {
+  display: none;
+  width: 18px;
+}
+
+
+.tips_global {
+  color: #8c8c8c;
+}
+
+.audio_area .audio_length {
+  float: right;
+  font-size: 14px;
+  margin-top: 3px;
+  margin-left: 1em;
+}
+
+.audio_info_area {
+  overflow: hidden;
+}
+
+.audio_area .audio_title {
+  font-weight: 400;
+  font-size: 17px;
+  margin-top: -2px;
+  margin-bottom: -3px;
+  width: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
+
+.audio_area .audio_source {
+  font-size: 14px;
+}
+
+.audio_area .progress_bar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  background-color: #0cbb08;
+  height: 2px;
+}
+
+.playing .audio_play_area .icon_audio_default {
+  display: none;
+}
+
+.playing .audio_play_area .icon_audio_playing {
+  display: inline-block;
+}
+
+@-webkit-keyframes audio_playing {
+  30% {
+      background-position: 0px center;
+  }
+  31% {
+      background-position: -18px center;
+  }
+  61% {
+      background-position: -18px center;
+  }
+  61.5% {
+      background-position: -36px center;
+  }
+  100% {
+      background-position: -36px center;
+  }
+}
+
+
+
+
 
 //百度导航样式
 
@@ -2784,6 +2984,12 @@ h5{
   height: 87vh !important;
 }
 .tabMeetingListUl {
+  .tabMeetingNoData{
+    border: none;
+    font-size: .8rem;
+    color: #969696;
+    text-align: center;
+  }
   .tabMeetingTopBox {
     overflow: hidden;
     margin: 0.5rem 0;
@@ -2906,6 +3112,34 @@ h5{
         font-weight: bold;
       }
     }
+  }
+}
+
+.tabMeetingTag {
+  font-size: 0.5rem;
+
+  span {
+    border: 1px;
+    border-style: solid;
+    border-radius: 3px;
+    display: inline-block;
+    padding: 0 0.1rem;
+  }
+  .LiveIn {
+    border-color: #fd8d91;
+    color: #fd8d91;
+  }
+  .processing {
+    border-color: #a1e45d;
+    color: #a1e45d;
+  }
+  .notStarted {
+    border-color: #89d0f5;
+    color: #89d0f5;
+  }
+  .IsOver {
+    border-color: #c8c8c8;
+    color: #c8c8c8;
   }
 }
 

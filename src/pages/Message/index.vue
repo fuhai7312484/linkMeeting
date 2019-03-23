@@ -1,8 +1,6 @@
 <template>
   <div class="box">
 
-  {{myId}}
-
 
     <div v-transfer-dom>
       <loading :show="show2" text="数据加载中..."></loading>
@@ -474,6 +472,6 @@ export default {
 @import "~vux/src/styles/reset.less";
 .demo-content {
   overflow: hidden;
-  margin: 0 1rem;
+  // margin: 0 1rem;
 }
 </style>

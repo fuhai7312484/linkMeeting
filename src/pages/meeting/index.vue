@@ -4,11 +4,12 @@
       <h3 class="fl siteHeaderTitle">找会议</h3>
       <router-link tag="div" class="fl siteCity" to="/city">
         <!-- {{city}} -->
+        {{city.name?city.name:PositObj.city}}
         <i class="el-icon-caret-bottom"></i>
       </router-link>
 
       <div class="siteListIcosBox fr">
-        <router-link tag="div" to="siteSearch" class="fl HeaderSearch">
+        <router-link tag="div" to="/meetingSearch" class="fl HeaderSearch">
           <img src="../../assets/images/HeaderSearch.png">
         </router-link>
         <!-- @click="gotoMapChange" -->
@@ -19,7 +20,7 @@
 
       <div v-transfer-dom>
         <popup v-model="show2" height="100%">
-          <div class="IntereClosed" @click="show2 = false">
+          <div class="IntereClosed" @click="show2Cancel">
             <x-icon type="ios-close-empty" size="30"></x-icon>
           </div>
           <div class="InterestedInBox">
@@ -79,7 +80,7 @@
               default-color="#a0a0a0"
               custom-bar-width="33%"
               v-model="tabsIndex"
-              :line-width="2"
+              :line-width="0"
             >
               <tab-item
                 v-for="(tabs,index) in tabMunes"
@@ -90,7 +91,7 @@
             </tab>
           </div>
 
-          <div class="meetingfilterIcon fl" @click="show2=true">
+          <div class="meetingfilterIcon fr" @click="show2Change">
             <img src="../../assets/images/meetAdd.png">
           </div>
         </div>
@@ -131,6 +132,10 @@
         
         </x-dialog>
       </div>-->
+      <div v-transfer-dom>
+        <loading :show="show3" text="数据加载中..."></loading>
+      </div>
+
       <div
         v-for="(item, index) in tabMunes"
         :key="index"
@@ -138,9 +143,8 @@
         v-if="tabsIndex==index"
       >
         <pull-tod :on-refresh="onRefresh" :on-infinite="onInfinite" :IsCompleted="IsCompleted">
-          <ul class="tabMeetingListUl padlr" style="height:100%;">
+          <ul class="tabMeetingListUl padlr" style="height:100%;" v-if="!show3">
             <li v-if="!isLogin && tabsIndex==0" class="ListNoContent">
-              {{isLogin}}
               <p>您还没有登录</p>
               <p>这里有很多值得您关注的会议</p>
               <span class="ListNoContentBtn">去登录</span>
@@ -348,34 +352,64 @@
           </div>
 
           <ul class="tabMeetingListUl FMeetingList">
-            <li class="tabMeetingList" v-for="(DataItem,index) in listData" :key="index">
+
+
+           <li class="tabMeetingList"
+              v-for="(DataItem,index) in filterList"
+              :key="index"
+              @click="gotoDetil(DataItem.id)"
+            >
+              <div class="tabMeetingTopBox" v-if="tabsIndex==0">
+                <div class="orgLogo fl">
+                  <img
+                    :src="DataItem.mainPic==null?require('../../assets/images/myFans-Mask.png'):DataItem.mainPic"
+                  >
+                </div>
+                <div class="orgname fl">{{DataItem.userName}}</div>
+                <div class="orgUptime fr">{{ProTime(DataItem.createTime,'T')}}</div>
+              </div>
               <div>
                 <div class="tabMeetingImg fl">
-                  <img :src="DataItem.img">
-                  <!-- {{DataItem.img}} -->
+                  <span
+                    v-for="(img,index) in DataItem.meetingFileList"
+                    :key="index"
+                    v-if="img.belong==1"
+                  >
+                    <img
+                      :src="img.fileUrl==null?require('../../assets/images/myFans-Mask.png'):img.fileUrl"
+                    >
+                  </span>
                 </div>
 
                 <div class="tabMeetingTextBox fl">
-                  <h4 class="tabMeetingTextTitle">{{DataItem.title}}</h4>
+                  <h4 class="tabMeetingTextTitle">{{DataItem.theme}}</h4>
                   <div class="tabMeetingTime">
-                    <span>{{DataItem.time}}</span>
+                    <span>{{DataItem.beginTime}}</span>
                     <span>{{DataItem.region}}</span>
                   </div>
                   <div class="tabMeetingTagBox">
-                    <div class="tabMeetingPrice fl">¥{{DataItem.price}}</div>
-                    <!-- <div class="tabMeetingTag fl">
-                  <span v-if="DataItem.status==0" class="IsOver">已结束</span>
-                  <span v-else-if="DataItem.status==1" class="LiveIn">直播中</span>
-                  <span v-else-if="DataItem.status==2" class="processing">进行中</span>
-                  <span v-else-if="DataItem.status==3" class="notStarted">未开始</span>
-                    </div>-->
-                    <div
-                      class="tabMeetingNum fr"
-                    >{{DataItem.status==0?'查看附件':DataItem.status==2?'报名将截止':DataItem.status==3?'马上抢票':DataItem.pepople+'人已报名'}}</div>
+                    <div class="tabMeetingTag fl">
+                      <span v-if="DataItem.status==0" class="IsOver">已结束</span>
+                      <span v-else-if="DataItem.status==1" class="LiveIn">直播中</span>
+                      <span v-else-if="DataItem.status==2" class="processing">进行中</span>
+                      <span v-else-if="DataItem.status==3" class="notStarted">未开始</span>
+                    </div>
+                    <div class="tabMeetingNum fr">{{DataItem.msg}}</div>
                   </div>
                 </div>
               </div>
             </li>
+
+            
+
+
+
+
+
+
+
+
+
           </ul>
         </div>
       </popup>
@@ -393,7 +427,9 @@ import {
   checkToken,
   getDataInfo,
   isLogin,
-  transDate
+  transDate,
+  getPositioning,
+  setStorage
 } from "../../assets/lib/myStorage.js";
 import MMap from "@/components/MMap";
 import {
@@ -407,7 +443,8 @@ import {
   Popup,
   Flexbox,
   FlexboxItem,
-  LoadMore
+  LoadMore,
+  Loading
 } from "vux";
 import FooterNav from "@/components/footerNav";
 export default {
@@ -429,15 +466,19 @@ export default {
     Flexbox,
     FlexboxItem,
     LoadMore,
-    PullTod
+    PullTod,
+    Loading
   },
   data() {
     return {
+      show3: false,
+      PositObj: {},
       showMore: false,
       isLogin: isLogin(),
       MapH: "90px",
       OrderHight: 0,
       listData: [],
+      filterList: [],
       tabMunes: ["关注", "推荐"],
       tabTitle: "推荐",
       filterData: [],
@@ -515,187 +556,89 @@ export default {
       ],
       IndType: [],
       allInd: true,
-      data1: [
-        {
-          "0": [
-            // {
-            //   id: "001",
-            //   orgname: "网络问好传媒协会",
-            //   upTime: "刚刚",
-            //   orgLogo:
-            //     "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
-            //   title: "【关注】2018第二届金融衍生品&风险管理论坛",
-            //   img:
-            //     "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
-            //   time: "2018.10.09",
-            //   region: "北京朝阳",
-            //   status: 0,
-            //   pepople: 560,
-            //   price: 500,
-            //   lng: 116.417854,
-            //   lat: 39.921988
-            // }
-          ],
-          "1": [
-            {
-              id: "001",
-              title: "【推荐】2018第二届金融衍生品&风险管理论坛",
-              img:
-                "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
-              time: "2018.10.09",
-              region: "北京朝阳",
-              status: 0,
-              price: 300,
-              pepople: 560,
-              lng: 116.406605,
-              lat: 39.921585
-            },
-            {
-              id: "002",
-              title: "【推荐】2018第二届金融衍生品&风险管理论坛",
-              img:
-                "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
-              time: "2018.10.09",
-              region: "北京朝阳",
-              status: 1,
-              pepople: 560,
-              price: 200,
-              lng: 116.412222,
-              lat: 39.912345
-            },
-            {
-              id: "003",
-              title: "【推荐】2018第二届金融衍生品&风险管理论坛",
-              img:
-                "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
-              time: "2018.10.09",
-              region: "北京朝阳",
-              status: 2,
-              pepople: 560,
-              price: 320,
-              lng: 116.447854,
-              lat: 39.922488
-            },
-            {
-              id: "004",
-              title: "【推荐】2018第二届金融衍生品&风险管理论坛",
-              img:
-                "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
-              time: "2018.10.09",
-              region: "北京朝阳",
-              status: 3,
-              pepople: 560,
-              price: 150,
-              lng: 116.447854,
-              lat: 39.951588
-            },
-            {
-              id: "005",
-              title: "【推荐】2018第二届金融衍生品&风险管理论坛",
-              img:
-                "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
-              time: "2018.10.09",
-              region: "北京朝阳",
-              status: 0,
-              pepople: 560,
-              price: 170,
-              lng: 116.447854,
-              lat: 39.961788
-            },
-            {
-              id: "006",
-              title: "【推荐】2018第二届金融衍生品&风险管理论坛",
-              img:
-                "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
-              time: "2018.10.09",
-              region: "北京朝阳",
-              status: 1,
-              price: 190,
-              pepople: 560
-            },
-            {
-              id: "007",
-              title: "【推荐】2018第二届金融衍生品&风险管理论坛",
-              img:
-                "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
-              time: "2018.10.09",
-              region: "北京朝阳",
-              status: 2,
-              pepople: 560,
-              price: 500
-            },
-            {
-              id: "008",
-              title: "【推荐】2018第二届金融衍生品&风险管理论坛",
-              img:
-                "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
-              time: "2018.10.09",
-              region: "北京朝阳",
-              status: 3,
-              pepople: 560,
-              price: 170
-            }
-          ],
-          "2": [],
-          "3": []
-        }
-      ],
+
       FeatureData: [],
       Features: [
         {
           title: "会议行业",
           show: false,
-          type: "features",
+          type: "industry",
           value: "0",
           name: "",
           showData: [
             "IT互联网",
-            "创业",
+            "数据中心",
             "科技",
-            "金融",
-            "教育",
-            "文娱",
+            "电子计算机",
+            "工业",
             "电商",
             "营销",
-            "设计",
+            "文娱",
             "地产",
             "医疗",
+            "设计",
+            "创业",
+            "教育",
             "服务业",
-            "游戏",
-            "工业",
-            "数据中心",
-            "电子计算机",
-            "其他"
+            "金融",
+            "游戏"
           ]
         },
         {
           id: "005",
           title: "会议类型",
           show: false,
-          type: "price",
+          type: "meetingType",
           value: "0",
           name: "",
-
           showData: [
-            "发布会",
-            "商务会议",
-            "交流研讨",
-            "招商推介",
-            "颁奖答谢",
-            "晚会年会",
+            "会展",
+            "行业大会",
             "培训讲座",
-            "课程"
+            "招商推介",
+            "交流研讨",
+            "商务会议",
+            "发布会",
+            "课程",
+            "颁奖答谢",
+            "晚会年会"
           ]
         },
         {
           id: "006",
           title: "会议状态",
           show: false,
-          type: "meetStatus",
+          type: "status",
           value: "0",
           name: "",
-
-          showData: ["直播中", "进行中", "未开始", "已结束"]
+          showData: ["进行中", "未开始", "已结束"]
+        },
+        {
+          id: "007",
+          title: "排序",
+          show: false,
+          type: "sort",
+          value: "0",
+          name: "",
+          showData: ["最新发布", "热门点击", "最多参会", "离我最近"]
+        },
+        {
+          id: "008",
+          title: "费用",
+          show: false,
+          type: "money",
+          value: "0",
+          name: "",
+          showData: ["免费", "收费"]
+        },
+        {
+          id: "009",
+          title: "时段",
+          show: false,
+          type: "time",
+          value: "0",
+          name: "",
+          showData: ["今天", "明天", "周末", "近一周", "近一月"]
         }
       ],
       page: 1,
@@ -716,7 +659,7 @@ export default {
       return transDate(time, type);
     },
     gotoDetil(id) {
-      console.log(id);
+      // console.log(id);
       this.$router.push({
         path: "/meetDetail/" + id,
         query: { meetingId: id }
@@ -741,25 +684,221 @@ export default {
       this.allInd = val.toString() === this.IndTypeData.toString();
       //  console.log(val.toString()===this.IndTypeData.toString())
     },
+    show2Change() {
+      this.show2 = true;
+      let sotr = getStorage("industry");
+      if (isLogin()) {
+        let userId = getStorage("userToken").userId;
+        let intObj = {
+          params: {
+            userId: userId
+          }
+        };
+        checkToken().then(Pdata => {
+          getDataInfo(
+            "get",
+            "meetingdetails/meetingdetails/interested",
+            intObj
+          ).then(res => {
+            if (res.data.code == 200) {
+              if (res.data.data != null) {
+                let newArr = [];
+                this.IndTypeData.forEach((e, index) => {
+                  res.data.data.forEach(el => {
+                    if (el == e.value) {
+                      newArr.push(e);
+                    }
+                  });
+                });
+                this.IndType = [...newArr];
+              } else {
+                if (sotr) {
+                  sotr = sotr.splice(0, 2);
+
+                  let newArr = [];
+                  this.IndTypeData.forEach((e, index) => {
+                    sotr.forEach(el => {
+                      if (el == e.value) {
+                        newArr.push(e);
+                      }
+                    });
+                  });
+
+                  this.IndType = [...sotr];
+                } else {
+                  this.IndType = [...this.IndTypeData];
+                }
+              }
+            }
+          });
+        });
+      } else {
+        if (sotr) {
+          sotr.splice(0, 2);
+          let newArr = [];
+          this.IndTypeData.forEach((e, index) => {
+            sotr.forEach(el => {
+              if (el == e.value) {
+                newArr.push(e);
+              }
+            });
+          });
+          this.IndType = [...newArr];
+        } else {
+          this.IndType = [...this.IndTypeData];
+        }
+      }
+    },
+    show2Cancel() {
+      this.show2 = false;
+
+      let sotr = getStorage("industry");
+      if (isLogin()) {
+        let userId = getStorage("userToken").userId;
+
+        let intObj = {
+          params: {
+            userId: userId
+          }
+        };
+        checkToken().then(Pdata => {
+          getDataInfo(
+            "get",
+            "meetingdetails/meetingdetails/interested",
+            intObj
+          ).then(res => {
+            if (res.data.code == 200) {
+              if (res.data.data == null) {
+                let arr = ["关注", "推荐"],
+                  serverArr = [];
+                this.IndTypeData.forEach(e => {
+                  serverArr.push(e.value);
+                });
+                let intObj = {
+                  content: serverArr.join()
+                };
+
+                checkToken().then(Pdata => {
+                  getDataInfo(
+                    "post",
+                    "meetingdetails/meetingdetails/interested",
+                    intObj
+                  ).then(res => {
+                    if (res.data.code == 200) {
+                      this.tabMunes = [...arr, ...serverArr];
+                    }
+                  });
+                });
+              }
+            }
+          });
+        });
+      } else {
+        if (sotr) {
+          this.tabMunes = sotr;
+        } else {
+          let arr = ["关注", "推荐"],
+            serverArr = [];
+          this.IndTypeData.forEach(e => {
+            serverArr.push(e.value);
+          });
+          this.tabMunes = [...arr, ...serverArr];
+          setStorage("industry", [...arr, ...serverArr]);
+          this.show2 = false;
+        }
+      }
+    },
+    //获取导航栏菜单
+    getTabMunes() {
+      let sotr = getStorage("industry");
+      if (isLogin()) {
+        let userId = getStorage("userToken").userId;
+        let intObj = {
+          params: {
+            userId: userId
+          }
+        };
+        checkToken().then(Pdata => {
+          getDataInfo(
+            "get",
+            "meetingdetails/meetingdetails/interested",
+            intObj
+          ).then(res => {
+            if (res.data.code == 200) {
+              if (res.data.data != null) {
+                this.tabMunes = [...["关注", "推荐"], ...res.data.data];
+                setStorage("industry", [...["关注", "推荐"], ...res.data.data]);
+              } else {
+                if (sotr) {
+                  sotr.splice(0, 2);
+                  let intObj = {
+                    content: sotr.join()
+                  };
+
+                  checkToken().then(Pdata => {
+                    getDataInfo(
+                      "post",
+                      "meetingdetails/meetingdetails/interested",
+                      intObj
+                    ).then(res => {
+                      if (res.data.code == 200) {
+                        this.tabMunes = [...["关注", "推荐"], ...sotr];
+                      }
+                    });
+                  });
+                } else {
+                  this.show2 = true;
+                }
+              }
+            }
+          });
+        });
+      } else {
+        if (sotr) {
+          this.tabMunes = sotr;
+        } else {
+          this.show2Change();
+          this.show2 = true;
+        }
+      }
+    },
     checkBoxSubmit() {
       //这里请求选择行业的数据接口
-
-      console.log(this.IndType, this.tabMunes);
-      let arr = ["关注", "推荐"];
-      //  this.tabMunes = this.IndType
+      let arr = ["关注", "推荐"],
+        serverArr = [];
       this.IndType.forEach(e => {
-        arr.push(e.value);
+        serverArr.push(e.value);
       });
-      this.tabMunes = [...arr];
+      if (isLogin()) {
+        let intObj = {
+          content: serverArr.join()
+        };
+        checkToken().then(Pdata => {
+          getDataInfo(
+            "post",
+            "meetingdetails/meetingdetails/interested",
+            intObj
+          ).then(res => {
+            if (res.data.code == 200) {
+              this.show2 = false;
+              this.tabMunes = [...arr, ...serverArr];
+              setStorage("industry", [...arr, ...serverArr]);
+              this.tabsIndex = 1;
+            }
+          });
+        });
+      } else {
+        setStorage("industry", [...arr, ...serverArr]);
+        this.tabMunes = [...arr, ...serverArr];
+        this.show2 = false;
+        this.tabsIndex = 1;
+      }
+
       // this.showToast = false;
-      this.listData = this.data1[0]["1"];
-      this.show2 = false;
-      console.log("请求推荐接口");
     },
     //切换地图
     gotoMapChange() {
       this.IsShowMap = !this.IsShowMap;
-      console.log(this.listData);
     },
     //设置地图高度
     getOrderHight() {
@@ -807,8 +946,6 @@ export default {
         name: item.showData[val - 1]
       };
 
-      //  this.filterData.push(obj)
-
       if (this.FeatureData.length != 0) {
         let index = 0,
           isType = false;
@@ -837,7 +974,7 @@ export default {
         }
       }
 
-      console.log(val, item);
+      // console.log(val, item);
     },
     getMoreList(loaded) {
       console.log(loaded);
@@ -845,7 +982,6 @@ export default {
 
     determineFilter() {
       this.show9 = false;
-
       if (this.FeatureData.length != 0) {
         if (this.IsShowMap) {
           let arr = [];
@@ -855,7 +991,103 @@ export default {
           this.filterData = arr;
           console.log("这里请求接口", this.FeatureData);
         } else {
-          this.show1 = true;
+          console.log("这里请求接口", this.FeatureData);
+          let filterObj = {
+            params: {
+              //  currentPage:this.counter,
+              // pageSize:this.num,
+
+              currentPage:1,
+              pageSize:99999,
+            }
+          };
+
+          this.FeatureData.forEach(e => {
+            switch (e.type) {
+              case "sort":
+                filterObj.params[e.type] =
+                  e.name == "最新发布"
+                    ? "createTime"
+                    : e.name == "热门点击"
+                    ? "click"
+                    : e.name == "最多参会"
+                    ? "partake"
+                    :null;filterObj.params.longitudeNow ='111';filterObj.params.latitudeNow ='3333';
+                break;
+              case "time":
+                filterObj.params[e.type] =
+                  e.name == "今天"
+                    ? "today"
+                    : e.name == "明天"
+                    ? "tomorrow"
+                    : e.name == "周末"
+                    ? "sunday"
+                    : e.name == "近一周"
+                    ? "week"
+                    : "month";
+                break;
+              case "money":
+                filterObj.params[e.type] = e.name == "免费" ? 0 : 1;
+                break;
+              case "status":
+                filterObj.params[e.type] =
+                  e.name == "未开始"
+                    ? 0
+                    : e.name == "进行中"
+                    ? 1
+                    : e.name == "已结束"
+                    ? 2
+                    : 3;
+                break;
+              default:
+                filterObj.params[e.type] = e.name;
+            }
+            // filterObj.params[e.type] = e.name
+          });
+
+          console.log(filterObj);
+this.show1 = true;
+          
+        getDataInfo("get", "meetingdetails/meetingByConditions", filterObj).then(
+          res => {
+            if(res.data.code==200){
+               this.filterList = res.data.data.meetingShowList;
+            }
+            console.log(res)
+//  this.filterList = [{}];
+          
+            // if (res.data.code == 200) {
+            //   if (res.data.data.length == 0) {
+            //     this.IsCompleted = true;
+            //     // console.log("数据加载完毕！！");
+            //   } else {
+            //     this.listData = [...this.listData, ...res.data.data];
+            //     if (obj.fun) {
+            //       obj.fun();
+            //     }
+            //   }
+            // }
+          }
+        );
+   
+
+          //   let filterObj={
+          //     industry:'',//行业
+          //     meetingType:'',//会议类型
+          //     sort:'',//排序方式
+          //     money:'',//收费与否
+          //     time:'',//发布时段
+          //     longitudeNow:'',//离我最近的填写经度
+          //     latitudeNow:'',//离我最近的填写纬度
+          //     status:'',//会议进行的状态
+          //     city:'',//当前的城市
+          //     currentPage:this.counter,
+          //     pageSize:this.num,
+          //   }
+
+          //  console.log(filterObj)
+
+         
         }
       }
       // console.log(this.FeatureData,this.filterData)
@@ -902,7 +1134,6 @@ export default {
         "meetingdetails/meetingdetailsListByGoodMeeting",
         goodObj
       ).then(res => {
-        console.log(res);
         if (res.data.code == 200) {
           if (res.data.data.meetingShowList.length == 0) {
             this.IsCompleted = true;
@@ -922,6 +1153,7 @@ export default {
 
     //请求数据并且下拉刷新页面
     getAllData(type) {
+      this.show3 = true;
       this.counter = 1;
       let dataObj = {
         params: {
@@ -930,20 +1162,25 @@ export default {
         }
       };
       if (type == 0) {
-        dataObj.params.flag = "1";
-        dataObj.params.userId = getStorage("userToken").userId;
-        if (this.isLogin) {
-          checkToken().then(Pdata => {
-            getDataInfo(
-              "get",
-              "meetingdetails/meetingdetailsList",
-              dataObj
-            ).then(res => {
-              if (res.data.code == 200) {
-                this.listData = res.data.data;
-              }
+        if (getStorage("userToken")) {
+          dataObj.params.flag = "1";
+          dataObj.params.userId = getStorage("userToken").userId;
+          if (this.isLogin) {
+            checkToken().then(Pdata => {
+              getDataInfo(
+                "get",
+                "meetingdetails/meetingdetailsList",
+                dataObj
+              ).then(res => {
+                if (res.data.code == 200) {
+                  this.listData = res.data.data;
+                  this.show3 = false;
+                }
+              });
             });
-          });
+          }
+        } else {
+          this.show3 = false;
         }
       } else if (type == 1) {
         getDataInfo(
@@ -952,9 +1189,24 @@ export default {
           dataObj
         ).then(res => {
           if (res.data.code == 200) {
+            this.show3 = false;
             this.listData = res.data.data.meetingShowList;
           }
         });
+      } else {
+        dataObj.params.city = this.city.name
+          ? this.city.name
+          : this.PositObj.city;
+        dataObj.params.industry = this.tabMunes[type];
+
+        getDataInfo("get", "meetingdetails/meetingByConditions", dataObj).then(
+          res => {
+            if (res.data.code == 200) {
+              this.show3 = false;
+              this.listData = res.data.data.meetingShowList;
+            }
+          }
+        );
       }
     },
     //上滑更新页面
@@ -974,7 +1226,6 @@ export default {
     //上滑无限加载
     onInfinite(done) {
       let vm = this;
-     
       vm.counter++;
       vm.pageEnd = vm.num * vm.counter;
       vm.pageStart = vm.pageEnd - vm.num;
@@ -983,21 +1234,60 @@ export default {
       } else if (this.tabsIndex == 1) {
         this.getGoodMeeting({ counter: vm.counter, fun: done });
       }
+    },
+
+    getPlaceData() {
+      //获取当前城市Code
+      getPositioning().then(red => {
+        this.PositObj = red;
+
+        let stor = getStorage("city");
+        let codeObj = {
+          params: {
+            province: red.province,
+            city: red.city
+          }
+          // params: {
+          //   province: "北京市",
+          //   city: "北京市"
+          // }
+        };
+
+        getDataInfo("get", "region/code", codeObj).then(res => {
+          if (res.data.code == 200) {
+            let placeObj = {
+              params: {
+                // lng:this.PositObj.lng,
+                // lat:this.PositObj.lat,
+                cityCode: stor ? stor.regionCode : res.data.data[0].regionCode
+              }
+            };
+            getDataInfo("get", "place", placeObj).then(resd => {
+              if (resd.data.code == 200) {
+                this.TaPosted = resd.data.data.data;
+                // this.show2 = false;
+              }
+            });
+          }
+        });
+      });
     }
   },
 
   mounted() {
     this.getOrderHight();
-    this.IndType = [...this.IndTypeData];
+    // this.IndType = [...this.IndTypeData];
     this.filterData = [this.tabTitle];
     this.getAllData(this.tabsIndex);
+    this.getPlaceData();
+    this.getTabMunes();
 
     // console.log(this.tabsIndex);
     // this.getGoodMeeting({ counter: this.counter });
   },
   watch: {
     tabsIndex(n, o) {
-      console.log("请求一下接口", n);
+      // console.log("请求一下接口", n);
       this.getAllData(n);
 
       // if (n == 0) {
@@ -1104,7 +1394,7 @@ export default {
   background-color: #fff;
   // text-align: center;
   color: #fff;
-  padding: 10px 20px;
+  padding: 10px 10px;
   box-sizing: border-box;
   position: relative;
   // margin-right: 20px;
