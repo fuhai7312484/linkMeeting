@@ -21,7 +21,7 @@
         <flexbox>
           <flexbox-item :span="1/3">
             <div class="my-top-Avatar">
-              <img :src="TaData.mainPic">
+              <img :src="TaData.mainPic?TaData.mainPic:require('../../assets/images/myFans-Mask.png')">
             </div>
           </flexbox-item>
           <flexbox-item :span="2/3">
@@ -136,15 +136,15 @@
                   class="my-tab-listContent mylistInfo"
                 >会议室:{{ taPos.count}}间 &nbsp;&nbsp;&nbsp; 内高: {{ taPos.high!=null?taPos.high+'米':''}}</div>
                 <flexbox :gutter="0">
-                  <flexbox-item :span="1/2" class="listContent-tagbox">
+                  <flexbox-item :span="2/3" class="listContent-tagbox">
                     <span v-if="taPos.type!=null" class="listContent-tags sang">{{taPos.type}}</span>
                     <span
-                      v-for="(tag,index) in taPos.features"
+                      v-for="(tag,index) in taPos.features" v-if="index<1"
                       :key="index"
                       class="listContent-tags"
                     >{{ tag.name }}</span>
                   </flexbox-item>
-                  <flexbox-item :span="1/2">
+                  <flexbox-item :span="1/3">
                     <h4
                       style="text-align: right;"
                     >¥{{ taPos.priceHalfday!=null?taPos.priceHalfday:'0.0' }}起</h4>
@@ -211,15 +211,15 @@
                   class="my-tab-listContent mylistInfo"
                 >会议室:{{ taPos.count}}间 &nbsp;&nbsp;&nbsp; 内高: {{ taPos.high!=null?taPos.high+'米':''}}</div>
                 <flexbox :gutter="0">
-                  <flexbox-item :span="1/2" class="listContent-tagbox">
+                  <flexbox-item :span="2/3" class="listContent-tagbox">
                     <span v-if="taPos.type!=null" class="listContent-tags sang">{{taPos.type}}</span>
                     <span
-                      v-for="(tag,index) in taPos.features"
-                      :key="index"
+                      v-for="(tag,index) in taPos.features" v-if="index<1"
+                      :key="index" 
                       class="listContent-tags"
                     >{{ tag.name }}</span>
                   </flexbox-item>
-                  <flexbox-item :span="1/2">
+                  <flexbox-item :span="1/3">
                     <h4
                       style="text-align: right;"
                     >¥{{ taPos.priceHalfday!=null?taPos.priceHalfday:'0.0' }}起</h4>
@@ -466,16 +466,17 @@ export default {
     //获取他的主页的数据
     getTaDetailData() {
       let _that = this;
-      if (isLogin()) {
+   
         // console.log(this.$route.params.id);
         let TaObj = {
           params: {
             userId: this.$route.params.id,
-            meId: getStorage("userToken").userId
+            
           }
         };
-
-        checkToken().then(Pdata => {
+        if(isLogin()){
+          TaObj.params.meId = getStorage("userToken").userId
+        }
           getDataInfo("get", "myMeeting/myMeeting/me", TaObj).then(res => {
             console.log(res);
             if (res.data.code == 200) {
@@ -511,10 +512,8 @@ export default {
               }, 500);
             }
           });
-        });
-      } else {
-        this.$router.push("/login");
-      }
+      
+     
     },
     //检查是否认证
     idensChange(typeNum, arr) {

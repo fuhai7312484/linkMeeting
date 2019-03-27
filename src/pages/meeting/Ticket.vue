@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <div>
+    <div class="ticket-Box">
       <div style="height:44px;">
         <sticky ref="sticky" :check-sticky-support="false" :disabled="disabled">
           <div class="map-headerBox borBottm">
@@ -16,25 +16,30 @@
           v-model="ticketValue"
           default-item-class="ticket-item"
           selected-item-class="ticket-item-selected"
+        
         >
           <checker-item
             v-for="(Titem,index) in ticketData"
             :key="index"
             :value="Titem"
+            @on-item-click="ticketChange"
           >
-            <div class="ticketTitleBox">
-              <div class="ticketTitle fl">{{ Titem.title }}</div>
+            <div :class="Titem.isOrder==2||Titem.isOrder==null || Titem.leftnum==0?'ticketTitleBox':'ticket-disabled-TitleBox'">
+              <div class="ticketTitle fl">{{ Titem.name }} <span class="ticketTitleAnnex" v-if="Titem.authority==0">附件</span> <span class="ticketTitleIsOrder" v-if="Titem.isOrder==1">已购票</span></div>
               <div class="ticketPrice fr">
                 {{ Titem.price == 0 ? "免费" : "¥" + Titem.price + "/人" }}
               </div>
             </div>
-            <div class="ticketInfo">{{ Titem.ticketInfo }}</div>
+            <div class="ticketInfo">{{ Titem.remarks }}</div>
+            <div class="ticketInfoTimeType" v-if="Titem.timeType==2">
+              该票种将于12月20日09:30正式开售
+            </div>
           </checker-item>
         </checker>
       </div>
       <div class="der"></div>
     </div>
-    <div class="footer">
+    <!-- <div class="footer">
       <flexbox :gutter="0" class="footer-nav-box">
         <flexbox-item :span="3/5" :order="1">
           <div
@@ -47,7 +52,7 @@
         </flexbox-item>
 
         <flexbox-item :span="2/5" :order="2">
-          <!-- <router-link tag="div" class="footer-nav-destineBtn" to="/ticket">下一步</router-link> -->
+       
           <div
             v-if="ticketValue!=''"
             class="footer-nav-destineBtn"
@@ -60,10 +65,17 @@
           </div>
         </flexbox-item>
       </flexbox>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
+import {
+  stoRemove,
+  removeCookie,
+  getStorage,
+  checkToken,
+  getDataInfo
+} from "../../assets/lib/myStorage.js";
   import { Flexbox, FlexboxItem, Sticky, Checker, CheckerItem } from "vux";
   export default {
     name: "Ticket",
@@ -81,38 +93,38 @@
           /iphone/i.test(navigator.userAgent) &&
           /ucbrowser/i.test(navigator.userAgent),
         ticketData: [
-          {
-            id: "0001",
-            title: "免费票",
-            price: 0,
-            ticketInfo: "活动两天通票+活动会刊资料+午餐+茶歇"
-          },
-          {
-            id: "0002",
-            title: "普通门票",
-            price: 300,
-            ticketInfo: "活动两天通票+活动会刊资料+午餐+茶歇"
-          },
-          {
-            id: "0003",
-            title: "超值非常商务贵宾套商务贵宾套票",
-            price: 10000,
-            ticketInfo: "活动两天通票+活动会刊资料+午餐+茶歇；不含交 通、住宿"
-          },
-          {
-            id: "0004",
-            title:
-              "超值非常商务贵宾套商务贵宾套票超值非常商务贵宾套商务贵宾套票",
-            price: 20000,
-            ticketInfo: "活动两天通票+活动会刊资料+午餐+茶歇；不含交 通、住宿"
-          },
-          {
-            id: "0005",
-            title:
-              "超值非常商务贵宾套商务贵宾套票超值非常商务贵宾套商务贵宾套票",
-            price: 30000,
-            ticketInfo: "活动两天通票+活动会刊资料+午餐+茶歇；不含交 通、住宿"
-          }
+          // {
+          //   id: "0001",
+          //   title: "免费票",
+          //   price: 0,
+          //   ticketInfo: "活动两天通票+活动会刊资料+午餐+茶歇"
+          // },
+          // {
+          //   id: "0002",
+          //   title: "普通门票",
+          //   price: 300,
+          //   ticketInfo: "活动两天通票+活动会刊资料+午餐+茶歇"
+          // },
+          // {
+          //   id: "0003",
+          //   title: "超值非常商务贵宾套商务贵宾套票",
+          //   price: 10000,
+          //   ticketInfo: "活动两天通票+活动会刊资料+午餐+茶歇；不含交 通、住宿"
+          // },
+          // {
+          //   id: "0004",
+          //   title:
+          //     "超值非常商务贵宾套商务贵宾套票超值非常商务贵宾套商务贵宾套票",
+          //   price: 20000,
+          //   ticketInfo: "活动两天通票+活动会刊资料+午餐+茶歇；不含交 通、住宿"
+          // },
+          // {
+          //   id: "0005",
+          //   title:
+          //     "超值非常商务贵宾套商务贵宾套票超值非常商务贵宾套商务贵宾套票",
+          //   price: 30000,
+          //   ticketInfo: "活动两天通票+活动会刊资料+午餐+茶歇；不含交 通、住宿"
+          // }
         ],
         ticketValue:  {
             id: "0001",
@@ -123,28 +135,74 @@
       };
     },
     methods: {
-      next() {
-        // console.log(this.ticketValue)
-        console.log(this.ticketValue.price);
+      ticketChange(val,itemDisabled){
+        if(val.isOrder ==2 || val.isOrder==null){
+          // console.log(val.price)
+          this.next(val)
+        }else if(val.isOrder ==1 || Titem.leftnum==0){
+           console.log('不能购买！')
+        }
+        
+      },
+      //获取当前会议的票价信息
+      gotoTheFare(){
+        let TicketObj ={
+            params: {
+          mobile:'',
+          mdId: this.$route.query.meeting_id,
+        }
+        }
+          checkToken().then(Pdata => {
+        getDataInfo("get", "ordermeeting/ordermeeting/ticket", TicketObj).then(res => {
+          console.log(res)
+          if (res.data.code == 200) {
+            this.ticketData = res.data.data
+            // this.userData = res.data.data;
+            // setTimeout(function() {
+            //   _that.show2 = false;
+            // }, 500);
+          } else if (res.data.code == 400 || res.data.code == 100101) {
+            setTimeout(function() {
+              _that.$router.push("/login");
+            }, 500);
+          }
+        });
+      });
+        // console.log(this.$route.query.meeting_id)
 
-        this.$router.push({
+      },
+      //选择票价后的下一步
+      next(val) {
+        // console.log(val)
+
+
+          this.$router.push({
           path: "/signinfo",
           query: {
             meeting_id: this.$route.query.meeting_id,
-            ticket_id: this.ticketValue.id,
-            ticket_name: this.ticketValue.title,
-            ticket_price: this.ticketValue.price
+            tickId:val.id,
           }
         });
+
+
+       
+      
         // alert("会议ID:"+this.$route.query.meeting_id + ',当前的价格是：'+this.ticketValue.price)
       }
-    }
+    },
+    mounted() {
+      this.gotoTheFare()
+    },
   };
 </script>
 <style lang="less">
   @import "../../assets/style/tools.less";
   @import "../../assets/style/global.less";
   @import "~vux/src/styles/reset.less";
+ .ticket-Box{
+   background: rgba(245,245,245,1);
+   height: 100vh;
+ }
   .router-link-active {
     color: #fff;
   }
@@ -162,10 +220,10 @@
     margin: 0.8rem 0;
     // margin: 6px 6px 6px 0;
   }
-  .ticket-item-selected {
-    background: #ffffff url(../../assets/images/Filters-item-selected.png)
-      no-repeat right bottom;
-    background-size: 35px;
-    border-color: #fe666b;
-  }
+  // .ticket-item-selected {
+  //   background: #ffffff url(../../assets/images/Filters-item-selected.png)
+  //     no-repeat right bottom;
+  //   background-size: 35px;
+  //   border-color: #fe666b;
+  // }
 </style>

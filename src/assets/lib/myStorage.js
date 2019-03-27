@@ -7,6 +7,8 @@ export function getDataInfo(mode, url, obj) {
 
   //测试环境
   let ipUrl = "http://192.168.1.177/lhy/v0.1/api/";
+  //服务器正式环境
+  // let ipUrl = "http://47.92.227.226:8080/lhy/v0.1/api/";
   // let ipUrl = "http://192.168.1.170:8080/v0.1/api/";
   // let ipUrl = "http://192.168.1.125:8080/v0.1/api/";
   var qs = require("qs");

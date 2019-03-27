@@ -177,7 +177,10 @@
                 <div class="orgUptime fr">{{ProTime(DataItem.createTime,'T')}}</div>
               </div>
               <div>
+
+                <!-- {{DataItem.meetingFileList}} -->
                 <div class="tabMeetingImg fl">
+                  
                   <span
                     v-for="(img,index) in DataItem.meetingFileList"
                     :key="index"
@@ -829,26 +832,28 @@ export default {
                 this.tabMunes = [...["关注", "推荐"], ...res.data.data];
                 setStorage("industry", [...["关注", "推荐"], ...res.data.data]);
               } else {
-                if (sotr) {
-                  sotr.splice(0, 2);
-                  let intObj = {
-                    content: sotr.join()
-                  };
+                this.show2 = true;
 
-                  checkToken().then(Pdata => {
-                    getDataInfo(
-                      "post",
-                      "meetingdetails/meetingdetails/interested",
-                      intObj
-                    ).then(res => {
-                      if (res.data.code == 200) {
-                        this.tabMunes = [...["关注", "推荐"], ...sotr];
-                      }
-                    });
-                  });
-                } else {
-                  this.show2 = true;
-                }
+                // if (sotr) {
+                //   sotr.splice(0, 2);
+                //   let intObj = {
+                //     content: sotr.join()
+                //   };
+
+                //   checkToken().then(Pdata => {
+                //     getDataInfo(
+                //       "post",
+                //       "meetingdetails/meetingdetails/interested",
+                //       intObj
+                //     ).then(res => {
+                //       if (res.data.code == 200) {
+                //         this.tabMunes = [...["关注", "推荐"], ...sotr];
+                //       }
+                //     });
+                //   });
+                // } else {
+                //   this.show2 = true;
+                // }
               }
             }
           });
@@ -857,7 +862,8 @@ export default {
         if (sotr) {
           this.tabMunes = sotr;
         } else {
-          this.show2Change();
+          // this.show2Change();
+          console.log(111111)
           this.show2 = true;
         }
       }
@@ -1137,8 +1143,9 @@ this.show1 = true;
         if (res.data.code == 200) {
           if (res.data.data.meetingShowList.length == 0) {
             this.IsCompleted = true;
-            console.log("数据加载完毕！！");
+            // console.log("数据加载完毕！！");
           } else {
+            console.log(res.data.data.meetingShowList)
             this.listData = [
               ...this.listData,
               ...res.data.data.meetingShowList
@@ -1264,6 +1271,7 @@ this.show1 = true;
             };
             getDataInfo("get", "place", placeObj).then(resd => {
               if (resd.data.code == 200) {
+                console.log( resd.data.data.data)
                 this.TaPosted = resd.data.data.data;
                 // this.show2 = false;
               }

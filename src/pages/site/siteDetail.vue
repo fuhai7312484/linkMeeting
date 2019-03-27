@@ -952,7 +952,7 @@ export default {
     //获取数据和查询是否收藏
     getSitedetailData() {
       let detailId = this.$route.query.detailId
-      let UserId = getStorage('userToken').userId
+
       //获取当前场地数据
       let dataObj = {
         params: {
@@ -970,6 +970,7 @@ export default {
       });
       //判断当前登录状态来获取收藏状态
       if (isLogin()) {
+         let UserId = getStorage('userToken').userId
         let Obj = {
           params: {
             target:detailId,
@@ -990,9 +991,10 @@ export default {
     //点击收藏或者取消收藏
     Collection() {
         let detailId = this.$route.query.detailId
-      let UserId = getStorage('userToken').userId
+     
 
       if (isLogin()) {
+         let UserId = getStorage('userToken').userId
         if (this.IsColl == 2) {
           let reColleObj = {
             type: "1",

@@ -2778,6 +2778,12 @@ padding: .8rem 0;
 //票种选择
 .ticket-contentBox {
   margin-top: 20px;
+  .ticket-item{
+    border: 1px solid #D7DBDF;
+    box-shadow: 0px 3px 3px #D7DBDF;
+  }
+ 
+   
   .ticketTitleBox {
     width: 100%;
     border-bottom: 1px solid #e6e6e6;
@@ -2790,6 +2796,19 @@ padding: .8rem 0;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
+      .ticketTitleAnnex{
+        background: #FCACAF;
+      }
+      .ticketTitleIsOrder{
+        background: #D9D9D9;
+      }
+      span{
+       
+        border-radius:3px;
+        font-size: .6rem;
+        color: #fff; 
+        padding: 0 .2rem;
+      }
     }
     .ticketPrice {
       width: 25%;
@@ -2799,11 +2818,54 @@ padding: .8rem 0;
       font-weight: bold;
     }
   }
+  .ticket-disabled-TitleBox{
+    
+    width: 100%;
+    border-bottom: 1px solid #e6e6e6;
+    overflow: hidden;
+    padding: 0.5rem 0;
+    .ticketTitle {
+      width: 75%;
+      font-size: 0.9rem;
+      font-weight: bold;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      color: #A0A0A0;
+      .ticketTitleAnnex{
+        background: #FCACAF;
+      }
+      .ticketTitleIsOrder{
+        background: #D9D9D9;
+      }
+      span{
+       
+        border-radius:3px;
+        font-size: .6rem;
+        color: #fff; 
+        padding: 0 .2rem;
+      }
+    }
+    .ticketPrice {
+      width: 25%;
+      font-size: 0.8rem;
+      text-align: right;
+      color: #A0A0A0;
+      font-weight: bold;
+    }
+
+
+  }
   .ticketInfo {
     padding: 0.8rem 0;
     color: #969696;
     font-size: 0.8rem;
     line-height: 1.4rem;
+    overflow: hidden;
+  }
+  .ticketInfoTimeType{
+    font-size: .8rem;
+    color: #FE666B;
   }
 }
 
@@ -2817,9 +2879,12 @@ padding: .8rem 0;
   margin-bottom: 0.8rem;
   .signUpInfoImg {
     width: 30%;
+    height: 70px;
+    overflow: hidden;
     margin-right: 2%;
     img {
       width: 100%;
+      height: 100%;
       vertical-align: middle;
     }
   }
@@ -2892,6 +2957,29 @@ padding: .8rem 0;
       width: 75%;
     }
   }
+}
+.signUpMobilleBox{
+  width: 100%;
+  li{
+    width: 100%;
+    height: 75px;
+    background: #fff;
+    margin:.5rem 0; 
+    padding: .8rem .8rem;
+    box-sizing: border-box;
+    h5{
+      span{
+        font-size: 1rem;
+        margin-right:.8rem;
+      }
+    }
+    .signUpCompany{
+      font-size: .8rem;
+      color: #A0A0A0;
+    }
+  }
+
+
 }
 
 //附件下载

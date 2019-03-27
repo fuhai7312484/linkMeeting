@@ -48,7 +48,7 @@
           </div>
         </div>
       </x-dialog>
-    </div> -->
+    </div>-->
 
     <actionsheet
       v-model="showAdvisory"
@@ -74,12 +74,21 @@
     <div class="footer">
       <flexbox :gutter="0" class="footer-nav-box">
         <flexbox-item :span="1/6" :order="2">
-          <div class="footer-nav-icons">
+          <div class="footer-nav-icons" @click="Collection">
+            <span>
+              <img
+                :src="IsColl==2?require('../../assets/images/meeting-like.png'):require('../../assets/images/meeting-like-s.png')"
+              >
+            </span>
+            {{IsColl==2?'收藏':'已收藏'}}
+          </div>
+
+          <!-- <div class="footer-nav-icons">
             <span>
               <img src="../../assets/images/meeting-like.png">
             </span>
             收藏
-          </div>
+          </div>-->
         </flexbox-item>
         <flexbox-item :span="1/6" :order="3">
           <div class="footer-nav-icons" @click="showAdvisory = !showAdvisory">
@@ -90,20 +99,24 @@
           </div>
         </flexbox-item>
         <flexbox-item :span="4/6" :order="4">
-          <router-link
+        <div class="footer-nav-destineBtn" @click="gotoTiaket">
+报名参会
+
+        </div>
+          <!-- <router-link
             tag="div"
             class="footer-nav-destineBtn"
-            :to=" {path:'/ticket', query:{meeting_id:'123654'}}"
-          >报名参会</router-link>
+            :to=" {path:'/ticket', query:{meeting_id:this.$route.query.meetingId}}"
+          >报名参会</router-link> -->
           <!-- <div class="footer-nav-destineBtn">报名参会</div> -->
         </flexbox-item>
       </flexbox>
     </div>
-<!-- {{meetingData.draftsVo.meetingDetails.meetingFileList}} -->
+    <!-- {{meetingData.draftsVo.meetingDetails.meetingFileList}} -->
     <div class="site-img-showBox" v-if="meetingData.draftsVo!=undefined">
       <!-- :list="swiperType=='img'?SImgList:SVideoList" -->
       <swiper
-        :list="SImgList"
+        :list="swiperType=='img'?SImgList:SVideoList"
         height="240px"
         :show-desc-mask="false"
         v-model="demo01_index"
@@ -118,10 +131,12 @@
         <!-- <div class="meetingAnnex">附件下载 ></div> -->
         <div class="site-img-markBox">
           <span
+            v-if="SImgList.length!=0"
             @click="swiperType='img'"
             :class="swiperType=='img'?'site-img-type':'site-img-length'"
           >照片({{ SImgList.length }})</span>
           <span
+            v-if="SVideoList.length!=0"
             @click="swiperType='video'"
             :class="swiperType=='video'?'site-img-type':'site-img-length'"
           >视频({{ SVideoList.length }})</span>
@@ -146,11 +161,10 @@
 
       <flexbox :gutter="0" class="linH padlr">
         <flexbox-item :span="3.5/5" class="listContent-tagbox">
-        <div v-for="(TypeList,index) in meetingData.draftsVo.meetingTypeList" :key="index">
-          <span class="listContent-Ttags">{{TypeList.name}}</span>
-          <span class="listContent-tags">{{TypeList.industry}}</span>
+          <div v-for="(TypeList,index) in meetingData.draftsVo.meetingTypeList" :key="index">
+            <span class="listContent-Ttags">{{TypeList.name}}</span>
+            <span class="listContent-tags">{{TypeList.industry}}</span>
           </div>
-         
         </flexbox-item>
         <flexbox-item :span="1.5/5">
           <div :class="idensChange(0,meetingData.idens)?'meeting-flex-v':'meeting-flex-nov'">
@@ -239,7 +253,10 @@
       </flexbox>
 
       <div class="attentionOrganizerBox" v-if="meetingData.userMeetingInfo!=undefined">
-        <div class="OrganizerLogo fl" @click="goToTaDetail(meetingData.draftsVo.meetingDetails.createPerson)">
+        <div
+          class="OrganizerLogo fl"
+          @click="goToTaDetail(meetingData.draftsVo.meetingDetails.createPerson)"
+        >
           <img
             :src="meetingData.userMeetingInfo.mainPic!=null?meetingData.userMeetingInfo.mainPic:require('../../assets/images/myFans-Mask.png')"
           >
@@ -348,10 +365,8 @@
         </div>
 
         <ul class="RegListUl">
-          <li class="orderPeople-nodata" v-if="orderPersonNum==0">
-            暂无人报名
-          </li>
-          <li  v-for="(orderP,index) in orderPeople" :key="index">
+          <li class="orderPeople-nodata" v-if="orderPersonNum==0">暂无人报名</li>
+          <li v-for="(orderP,index) in orderPeople" :key="index">
             <img :src="require('../../assets/images/myFans-Mask.png')">
             <p>{{orderP.name}}</p>
           </li>
@@ -369,9 +384,7 @@
           </div>
         </div>
         <ul>
-          <li class="orderPeople-nodata" v-if="CommentVo.meetingCommentVoList.length==0">
-            暂无评论
-          </li>
+          <li class="orderPeople-nodata" v-if="CommentVo.meetingCommentVoList.length==0">暂无评论</li>
           <li v-for="(comment,index) in CommentVo.meetingCommentVoList" :key="index">
             <div class="meetingAssessListbox">
               <div class="meetingAssess fl">
@@ -384,52 +397,55 @@
                 </div>
                 <rater v-model="comment.meetingComment.score" disabled></rater>
                 <p>{{comment.meetingComment.content}}</p>
-              
               </div>
             </div>
-         
           </li>
         </ul>
-      
       </div>
 
-
-
-      
       <div class="meetingAssessBox padlr">
         <div class="meetingRegListTitle">
           <h4 class="RegListTitle fl">为您推荐</h4>
           <div class="RegListPeopleNumBox fr">
-           
+            <ul class="tabMeetingListUl">
+              <li v-for="(comment,index) in goodData" :key="index" class="tabMeetingList">
+                <!-- {{comment}} -->
+
+                <div>
+                  <div class="tabMeetingImg fl">
+                    <span
+                      v-for="(img,index) in comment.meetingFileList"
+                      :key="index"
+                      v-if="img.belong==1"
+                    >
+                      <img
+                        :src="img.fileUrl==null?require('../../assets/images/myFans-Mask.png'):img.fileUrl"
+                      >
+                    </span>
+                  </div>
+
+                  <div class="tabMeetingTextBox fl">
+                    <h4 class="tabMeetingTextTitle">{{comment.theme}}</h4>
+                    <div class="tabMeetingTime">
+                      <span>{{comment.beginTime}}</span>
+                      <span>{{comment.region}}</span>
+                    </div>
+                    <div class="tabMeetingTagBox">
+                      <div class="tabMeetingTag fl">
+                        <span v-if="comment.status==0" class="IsOver">已结束</span>
+                        <span v-else-if="comment.status==1" class="LiveIn">直播中</span>
+                        <span v-else-if="comment.status==2" class="processing">进行中</span>
+                        <span v-else-if="comment.status==3" class="notStarted">未开始</span>
+                      </div>
+                      <div class="tabMeetingNum fr">{{comment.msg}}</div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
           </div>
         </div>
-
-
-
-        <!-- <ul>
-          <li v-for="(comment,index) in CommentVo.meetingCommentVoList" :key="index">
-            <div class="meetingAssessListbox">
-              <div class="meetingAssess fl">
-                <img :src="comment.meetingComment.userPic">
-              </div>
-              <div class="meetingAssessCenten fl">
-                <div class="meetingAssessnameBox">
-                  <h4 class="meetingAssessname fl">{{comment.meetingComment.userName}}</h4>
-                  <time class="meetingAssessTime fr">{{comment.meetingComment.createTime}}</time>
-                </div>
-                <rater v-model="comment.meetingComment.score" disabled></rater>
-                <p>{{comment.meetingComment.content}}</p>
-              
-              </div>
-            </div>
-         
-          </li>
-        </ul> -->
-      
       </div>
-
-
-
     </div>
 
     <toast
@@ -490,6 +506,8 @@ export default {
   name: "meetDetail",
   data() {
     return {
+      goodData: [],
+      IsColl: 2,
       show2: false,
       toastInfo: {
         showMsg: "",
@@ -579,15 +597,81 @@ export default {
     };
   },
   methods: {
+    //跳转报名参会页面
+    gotoTiaket(){
+      if(isLogin()){
+        this.$router.push({path:'/ticket', query:{meeting_id:this.$route.query.meetingId}})
+      }else{
+        this.$router.push('/login')
+        console.log('去登录')
+      }
+    },
+    //点击收藏或者取消收藏
+    Collection() {
+      if (isLogin()) {
+        let detailId = this.$route.query.meetingId;
+        let UserId = getStorage("userToken").userId;
+        if (this.IsColl == 2) {
+          let reColleObj = {
+            type: "1",
+            user: UserId,
+            target: detailId,
+            flag: "0"
+          };
+          checkToken().then(Pdata => {
+            getDataInfo("post", "reCollection/reCollection", reColleObj).then(
+              res => {
+                if (res.data.code == 200) {
+                  this.toastInfo = {
+                    showMsg: res.data.msg,
+                    showPositionValue: true,
+                    toastType: "text"
+                  };
+                  this.IsColl = 1;
+                } else if (res.data.code == 400 || res.data.code == 100101) {
+                  console.log("登录");
+                }
+              }
+            );
+          });
+        } else if (this.IsColl == 1) {
+          let reColleObj = {
+            params: {
+              userId: UserId,
+              target: detailId
+            }
+          };
+          checkToken().then(Pdata => {
+            getDataInfo("delete", "reCollection/reCollection", reColleObj).then(
+              res => {
+                if (res.data.code == 200) {
+                  this.toastInfo = {
+                    showMsg: res.data.msg,
+                    showPositionValue: true,
+                    toastType: "text"
+                  };
+                  this.IsColl = 2;
+                } else if (res.data.code == 400 || res.data.code == 100101) {
+                  console.log("登录");
+                }
+              }
+            );
+          });
+        }
+      } else {
+        console.log("登录");
+      }
+    },
+
     //跳转他的详情页面
-    goToTaDetail(id){
-      this.$router.push('/tadetail/'+id)
+    goToTaDetail(id) {
+      this.$router.push("/tadetail/" + id);
       // console.log(id)
     },
 
     //过滤封面图片和视频、附件
-    processImgType(type,arr){
-      console.log(arr)
+    processImgType(type, arr) {
+      console.log(arr);
       // switch(type){
       //   case 0:
       //   return arr.filter(e=>{
@@ -595,7 +679,6 @@ export default {
       //   })
       //   break;
       // }
-
     },
     //检查是否认证
     idensChange(typeNum, arr) {
@@ -616,9 +699,9 @@ export default {
             }
           };
           checkToken().then(Pdata => {
-            console.log(Pdata)
+          
             getDataInfo("delete", "refollow/follow", followObj).then(res => {
-              console.log(res)
+            
               if (res.data.code == 200) {
                 this.toastInfo = {
                   showMsg: res.data.msg,
@@ -641,7 +724,7 @@ export default {
           };
           checkToken().then(Pdata => {
             getDataInfo("post", "refollow/follow", followObj).then(res => {
-              // console.log(res);
+           
 
               if (res.data.code == 200) {
                 this.toastInfo = {
@@ -694,6 +777,27 @@ export default {
 
       // console.log(this.$route.query.meetingId);
       // console.log(getStorage("userToken").userId);
+
+      //判断当前登录状态来获取收藏状态
+      if (isLogin()) {
+        let Obj = {
+          params: {
+            target: this.$route.query.meetingId,
+            userId: getStorage("userToken").userId
+          }
+        };
+        checkToken().then(Pdata => {
+          getDataInfo("get", "reCollection/isCollection", Obj).then(res => {
+            // console.log(res)
+            if (res.data.code == 200) {
+              this.IsColl = res.data.data;
+            } else if (res.data.code == 400 || res.data.code == 100101) {
+              console.log("登录");
+            }
+          });
+        });
+      }
+
       let detailObj = {
         params: {
           id: this.$route.query.meetingId
@@ -704,43 +808,39 @@ export default {
         detailObj.params.userId = getStorage("userToken").userId;
       getDataInfo("get", "meetingdetails/meetingDetailsById", detailObj).then(
         res => {
-          console.log(res);
-
           if (res.data.code == 200) {
             this.meetingData = res.data.data;
-            // console.log(res.data.data.draftsVo.meetingDetails.meetingFileList)
-            let imgArr = [],videoArr = [] 
+
+            let imgArr = [],
+              videoArr = [];
             res.data.data.draftsVo.meetingDetails.meetingFileList.forEach(e => {
-              if(e.fileType==0){
- imgArr.push( {
-          url: "javascript:",
-          fileType:e.fileType,
-          img:e.fileUrl,
-          fileId:e.fileId,
-          belong: e.belong,
-          createUser:e.createUser,
-          mdId:e.mdId,
-          title: e.bucketName,
-        },)
-              }else if(e.fileType==1){
-
-                videoArr.push( {
-          url: "javascript:",
-          fileType:e.fileType,
-          img:e.fileUrl,
-          fileId:e.fileId,
-          belong: e.belong,
-          createUser:e.createUser,
-          mdId:e.mdId,
-          title: e.bucketName,
-        },)
-
+              if (e.fileType == 0) {
+                imgArr.push({
+                  url: "javascript:",
+                  fileType: e.fileType,
+                  img: e.fileUrl,
+                  fileId: e.fileId,
+                  belong: e.belong,
+                  createUser: e.createUser,
+                  mdId: e.mdId,
+                  title: e.bucketName
+                });
+              } else if (e.fileType == 1) {
+                videoArr.push({
+                  url: "javascript:",
+                  fileType: e.fileType,
+                  img: e.fileUrl,
+                  fileId: e.fileId,
+                  belong: e.belong,
+                  createUser: e.createUser,
+                  mdId: e.mdId,
+                  title: e.bucketName
+                });
               }
-             
             });
-            // console.log(imgArr)
-            this.SImgList = imgArr
-            this.SVideoList = 
+            // console.log(videoArr)
+            this.SImgList = imgArr;
+            this.SVideoList = videoArr;
             this.show2 = false;
           }
         }
@@ -799,10 +899,27 @@ export default {
           // console.log(res);
           if (res.data.code == 200) {
             this.CommentVo = res.data.data;
-        
           }
         }
       );
+      //获取为您推荐
+
+      let goodObj = {
+        params: {
+          currentPage: 1,
+          pageSize: 99999
+        }
+      };
+      // console.log(obj.counter)
+      getDataInfo(
+        "get",
+        "meetingdetails/meetingdetailsListByGoodMeeting",
+        goodObj
+      ).then(res => {
+        if (res.data.code == 200) {
+          this.goodData = res.data.data.meetingShowList;
+        }
+      });
     },
     spaceChange() {
       this.showSpace = !this.showSpace;
@@ -815,7 +932,7 @@ export default {
       console.log(index);
     },
     showAdBullet() {
-      this.showHideOnBlur = true;
+      this.showHideOnBlur = false;
       let _that = this;
       setTimeout(function() {
         _that.showHideOnBlur = false;
@@ -833,18 +950,22 @@ export default {
         // alert('在线咨询')
         // this.showDialogStyle = true;
         // console.log(this.meetingData.draftsVo.meetingDetails.createPerson)
-        if(isLogin()){
- this.$router.push({path: '/dialog/'+this.meetingData.draftsVo.meetingDetails.createPerson, query:{dialogId: this.meetingData.draftsVo.meetingDetails.createPerson}})
-        }else{
-          alert('请先登录')
+        if (isLogin()) {
+          this.$router.push({
+            path:
+              "/dialog/" +
+              this.meetingData.draftsVo.meetingDetails.createPerson,
+            query: {
+              dialogId: this.meetingData.draftsVo.meetingDetails.createPerson
+            }
+          });
+        } else {
+          alert("请先登录");
         }
-       
-
       }
     }
   },
   mounted() {
-   
     this.getMeetingData();
     this.showAdBullet();
   }

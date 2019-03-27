@@ -257,12 +257,12 @@ export default {
         //离线消息同步监听
         let arr = [],
           newArr = [];
-        console.log(Pdata);
+        // console.log(Pdata);
 
         arr = Pdata.filter(e => {
           return e.from_username == _that.$route.query.dialogId;
         });
-        console.log(arr);
+        // console.log(arr);
         if (arr.length != 0) {
           arr = Pdata.filter(e => {
             return e.from_username == _that.$route.query.dialogId;

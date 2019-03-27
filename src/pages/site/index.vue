@@ -163,76 +163,61 @@
 
       <footer-nav></footer-nav>
       <div class="siteIndex-listBox" v-if="!show2">
-
-        <div class="noData-default"  v-if="TaPosted.length==0">
+        <div class="noData-default" v-if="TaPosted.length==0">
           <p>
             <img :src="require('../../assets/images/noData.png')">
           </p>
-          <p> 没有找到符合条件的场地</p>
+          <p>没有找到符合条件的场地</p>
         </div>
+
+        <!-- {{TaPosted}} -->
         <ul v-else class="my-tab-swiper vux-center" ref="pubUiHF">
           <li v-for="(taPos,index) in TaPosted" :key="index" @click="gotoDetail(taPos.id)">
-            <!-- {{taPos.name}} -->
-            <!-- <flexbox v-if="taPos.type=='pub'"> -->
             <flexbox>
-              <flexbox-item :span="1.3/4">
+              <flexbox-item :span="1/4">
                 <div class="my-tab-swiperListImg">
-                  <!-- <img :src="taPos.img"> -->
                   <span
                     class="my-tab-imgTag"
                     v-if="taPos.ptype!=null"
                   >{{taPos.ptype==1?'政采':taPos.ptype==2?'央采':''}}</span>
-             
-                   <!-- <img :src="require('../../assets/images/noData.png')"> -->
-                  <img :src="taPos.homepagePic?taPos.homepagePic:require('../../assets/images/noimg.png')">
-                  <!-- <img src="https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg"> -->
+
+                  <img
+                    :src="taPos.homepagePic?taPos.homepagePic:require('../../assets/images/noimg.png')"
+                  >
                 </div>
               </flexbox-item>
-              <flexbox-item :span="2.7/4">
+              <flexbox-item :span="3/4">
                 <div class="my-tab-listContent">
                   <h3>{{ taPos.name }}</h3>
                 </div>
 
                 <div
                   class="my-tab-listContent mylistInfo"
-                >距离你:{{ taPos.distance==null?'暂无距离':taPos.distance+'米'}}&nbsp;&nbsp;&nbsp;  {{ taPos.zone.name }}</div>
+                >距离:{{ taPos.distance!=null?taPos.distance+'米':'暂无距离' }} &nbsp;&nbsp;&nbsp;{{ taPos.zone?taPos.zone.name:'' }}</div>
 
                 <div
                   class="my-tab-listContent mylistInfo"
-                >面积:{{ taPos.area==null?'暂无面积':taPos.area+'㎡' }}&nbsp;&nbsp;&nbsp; 容纳:{{ taPos.falleryful==null?'暂无人数':taPos.falleryful+'人'}}</div>
+                >面积:{{ taPos.area!=null?taPos.area+'㎡':'暂无面积' }} &nbsp;&nbsp;&nbsp; 容纳:{{ taPos.falleryful!=null?taPos.falleryful+'人':'暂无人数' }}</div>
 
                 <div
                   class="my-tab-listContent mylistInfo"
-                >会议室:{{ taPos.count}}间&nbsp;&nbsp;&nbsp; 内高:{{ taPos.high==null?'暂无内高':taPos.high+'m'}}</div>
+                >会议室:{{ taPos.count}}间 &nbsp;&nbsp;&nbsp; 内高: {{ taPos.high!=null?taPos.high+'米':''}}</div>
                 <flexbox :gutter="0">
                   <flexbox-item :span="2/3" class="listContent-tagbox">
+                    <span v-if="taPos.type!=null" class="listContent-tags sang">{{taPos.type}}</span>
                     <span
                       v-for="(tag,index) in taPos.features"
+                      v-if="index<1"
                       :key="index"
                       class="listContent-tags"
                     >{{ tag.name }}</span>
                   </flexbox-item>
                   <flexbox-item :span="1/3">
                     <h4
-                      style="text-align:right;"
-                    >{{ taPos.priceHalfday==null?'':'¥'+taPos.priceHalfday+'起'}}</h4>
+                      style="text-align: right;"
+                    >¥{{ taPos.priceHalfday!=null?taPos.priceHalfday:'0.0' }}起</h4>
                   </flexbox-item>
                 </flexbox>
-              </flexbox-item>
-            </flexbox>
-
-            <flexbox v-if="taPos.type=='par'">
-              <flexbox-item :span="2/3">
-                <div class="listContentPar">
-                  <h3>{{ taPos.title }}</h3>
-                </div>
-                <div class="mylistInfo">{{taPos.time}}</div>
-                <h4>¥{{ taPos.price }}</h4>
-              </flexbox-item>
-              <flexbox-item :span="1/3">
-                <div class="my-tab-parListImg">
-                  <img :src="taPos.img">
-                </div>
               </flexbox-item>
             </flexbox>
           </li>
@@ -262,7 +247,6 @@
         <b-map :OrderHight="OrderHight-40" :data_info="TaPosted"></b-map>
       </div>
     </div>
-    
   </div>
 </template>
 <script>
@@ -273,7 +257,8 @@ import City from "@/components/City";
 import {
   getDataInfo,
   getPositioning,
-  checkToken,getStorage
+  checkToken,
+  getStorage
 } from "../../assets/lib/myStorage.js";
 import {
   Flexbox,
@@ -556,9 +541,9 @@ export default {
     ...mapState(["city"])
   },
   methods: {
-    gotoDetail(id){
-      this.$router.push({path:'/sitedetail/'+id,query: {detailId:id}})
-      console.log(id)
+    gotoDetail(id) {
+      this.$router.push({ path: "/sitedetail/" + id, query: { detailId: id } });
+      // console.log(id);
     },
     handChange() {
       this.show1 = false;
@@ -700,7 +685,7 @@ export default {
         _that.filterMenu[index].show = !_that.filterMenu[index].show;
       }, 200);
     },
-    //清楚所有显示的筛选
+    //清除所有显示的筛选
     ClearMenuChange() {
       this.filterMenu.forEach(e => {
         e.show = false;
@@ -732,28 +717,29 @@ export default {
       //获取当前城市Code
       getPositioning().then(red => {
         this.PositObj = red;
-       let stor = getStorage('city')
+        let stor = getStorage("city");
         let codeObj = {
           params: {
-            province:red.province,
-            city:red.city,
+            province: red.province,
+            city: red.city
           }
           // params: {
           //   province: "北京市",
           //   city: "北京市"
           // }
         };
-   
+
         getDataInfo("get", "region/code", codeObj).then(res => {
           if (res.data.code == 200) {
             let placeObj = {
               params: {
                 // lng:this.PositObj.lng,
                 // lat:this.PositObj.lat,
-                cityCode:stor?stor.regionCode:res.data.data[0].regionCode
+                cityCode: stor ? stor.regionCode : res.data.data[0].regionCode
               }
             };
             getDataInfo("get", "place", placeObj).then(resd => {
+              console.log(resd);
               if (resd.data.code == 200) {
                 this.TaPosted = resd.data.data.data;
                 this.show2 = false;
