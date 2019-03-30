@@ -146,6 +146,7 @@ import {
       },
       //获取当前会议的票价信息
       gotoTheFare(){
+        let _that =this
         let TicketObj ={
             params: {
           mobile:'',
@@ -154,7 +155,7 @@ import {
         }
           checkToken().then(Pdata => {
         getDataInfo("get", "ordermeeting/ordermeeting/ticket", TicketObj).then(res => {
-          console.log(res)
+     console.log(res)
           if (res.data.code == 200) {
             this.ticketData = res.data.data
             // this.userData = res.data.data;

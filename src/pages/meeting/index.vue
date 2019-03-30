@@ -177,10 +177,8 @@
                 <div class="orgUptime fr">{{ProTime(DataItem.createTime,'T')}}</div>
               </div>
               <div>
-
                 <!-- {{DataItem.meetingFileList}} -->
                 <div class="tabMeetingImg fl">
-                  
                   <span
                     v-for="(img,index) in DataItem.meetingFileList"
                     :key="index"
@@ -355,9 +353,8 @@
           </div>
 
           <ul class="tabMeetingListUl FMeetingList">
-
-
-           <li class="tabMeetingList"
+            <li
+              class="tabMeetingList"
               v-for="(DataItem,index) in filterList"
               :key="index"
               @click="gotoDetil(DataItem.id)"
@@ -402,17 +399,6 @@
                 </div>
               </div>
             </li>
-
-            
-
-
-
-
-
-
-
-
-
           </ul>
         </div>
       </popup>
@@ -863,7 +849,7 @@ export default {
           this.tabMunes = sotr;
         } else {
           // this.show2Change();
-          console.log(111111)
+          console.log(111111);
           this.show2 = true;
         }
       }
@@ -1003,8 +989,8 @@ export default {
               //  currentPage:this.counter,
               // pageSize:this.num,
 
-              currentPage:1,
-              pageSize:99999,
+              currentPage: 1,
+              pageSize: 99999
             }
           };
 
@@ -1018,7 +1004,9 @@ export default {
                     ? "click"
                     : e.name == "最多参会"
                     ? "partake"
-                    :null;filterObj.params.longitudeNow ='111';filterObj.params.latitudeNow ='3333';
+                    : null;
+                filterObj.params.longitudeNow = "111";
+                filterObj.params.latitudeNow = "3333";
                 break;
               case "time":
                 filterObj.params[e.type] =
@@ -1052,16 +1040,19 @@ export default {
           });
 
           console.log(filterObj);
-this.show1 = true;
-          
-        getDataInfo("get", "meetingdetails/meetingByConditions", filterObj).then(
-          res => {
-            if(res.data.code==200){
-               this.filterList = res.data.data.meetingShowList;
+          this.show1 = true;
+
+          getDataInfo(
+            "get",
+            "meetingdetails/meetingByConditions",
+            filterObj
+          ).then(res => {
+            if (res.data.code == 200) {
+              this.filterList = res.data.data.meetingShowList;
             }
-            console.log(res)
-//  this.filterList = [{}];
-          
+            console.log(res);
+            //  this.filterList = [{}];
+
             // if (res.data.code == 200) {
             //   if (res.data.data.length == 0) {
             //     this.IsCompleted = true;
@@ -1073,9 +1064,7 @@ this.show1 = true;
             //     }
             //   }
             // }
-          }
-        );
-   
+          });
 
           //   let filterObj={
           //     industry:'',//行业
@@ -1092,8 +1081,6 @@ this.show1 = true;
           //   }
 
           //  console.log(filterObj)
-
-         
         }
       }
       // console.log(this.FeatureData,this.filterData)
@@ -1145,7 +1132,7 @@ this.show1 = true;
             this.IsCompleted = true;
             // console.log("数据加载完毕！！");
           } else {
-            console.log(res.data.data.meetingShowList)
+        
             this.listData = [
               ...this.listData,
               ...res.data.data.meetingShowList
@@ -1169,7 +1156,8 @@ this.show1 = true;
         }
       };
       if (type == 0) {
-        if (getStorage("userToken")) {
+     
+        if (isLogin()) {
           dataObj.params.flag = "1";
           dataObj.params.userId = getStorage("userToken").userId;
           if (this.isLogin) {
@@ -1179,6 +1167,7 @@ this.show1 = true;
                 "meetingdetails/meetingdetailsList",
                 dataObj
               ).then(res => {
+               
                 if (res.data.code == 200) {
                   this.listData = res.data.data;
                   this.show3 = false;
@@ -1187,6 +1176,7 @@ this.show1 = true;
             });
           }
         } else {
+          
           this.show3 = false;
         }
       } else if (type == 1) {
@@ -1271,7 +1261,7 @@ this.show1 = true;
             };
             getDataInfo("get", "place", placeObj).then(resd => {
               if (resd.data.code == 200) {
-                console.log( resd.data.data.data)
+                // console.log(resd.data.data.data);
                 this.TaPosted = resd.data.data.data;
                 // this.show2 = false;
               }

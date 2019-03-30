@@ -4,6 +4,7 @@ import axios from "axios";
 export function getDataInfo(mode, url, obj) {
   let token = getCookie("accessToken");
   axios.defaults.headers["APP-User-Token"] = token;
+  // axios.defaults.headers.common["Content-Type"] = 'application/json;charset=UTF-8';
 
   //测试环境
   let ipUrl = "http://192.168.1.177/lhy/v0.1/api/";
@@ -20,6 +21,16 @@ export function getDataInfo(mode, url, obj) {
       break;
     case "post":
       return axios.post(ipUrl + url, qs.stringify(obj));
+      // return axios.post(ipUrl + url, obj);
+      break;
+      case "post2":
+      return  axios({
+        method: 'post',
+        url:ipUrl + url,
+         headers: {"Content-Type":"application/json;charset=UTF-8"},
+        data: JSON.stringify(obj.Obj),
+        })
+      // return axios.post(ipUrl + url, obj);
       break;
     case "patch":
       return axios.patch(ipUrl + url, qs.stringify(obj));
