@@ -21,7 +21,7 @@
         </group>
 
 <group class="myfan-fanlistBox">
-        <cell title="关于链会议" is-link></cell>
+        <cell title="关于链会议" is-link link="/about"></cell>
 
     </group>
         <div class="sign-out" @click="signOut">退出登录</div>
@@ -31,7 +31,7 @@
     <div v-transfer-dom>
       <popup v-model="showInput" height="100%">
         <div class="my-inputsBox">
-          <!-- <div @click="show11=false">关闭1111111111111111</div> -->
+       
           <div class="map-headerBox borBottm">
             <div class="map-go-back" @click="showInput=false"></div>
             <h3 class="map-headerTitle">{{userData.pwdStatus?'修改密码':'设置密码'}}</h3>

@@ -63,31 +63,31 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         // width: 85%;
-      
-        
       }
 
-      .my-top-userjobTitle{
-        font-size: .8rem;
+      .my-top-userjobTitle {
+        font-size: 0.8rem;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
-      .my-top-userIdens{
-        span{
-
+      .my-top-userIdens {
+        span {
           font-size: 0.6rem;
           // color: #ffa546;
           font-weight: 600;
           margin-right: 0.6rem;
-          img{height: 17px; vertical-align: middle; margin-right:.2rem;  }
+          img {
+            height: 17px;
+            vertical-align: middle;
+            margin-right: 0.2rem;
+          }
         }
-      
-    .spang{
-      // color: #96e24a !important;
-    }
+
+        .spang {
+          // color: #96e24a !important;
+        }
       }
-     
     }
     .my-top-SubBtnsBox {
       margin-top: 1rem;
@@ -105,6 +105,17 @@
         text-align: center;
         line-height: 2rem;
       }
+      .my-top-attention-my {
+        color: #fff;
+        font-size: .9rem;
+        height: 2.2rem;
+        width: 5rem;
+        border-radius: 2.2rem;
+        // background: #FF576B;
+        text-align: center;
+        line-height: 2rem;
+        border: 1px solid #fff;
+      }
     }
   }
 }
@@ -120,18 +131,17 @@
     overflow: hidden;
     border-radius: 0.15rem;
     position: relative;
-    .my-tab-imgTag{
+    .my-tab-imgTag {
       position: absolute;
       bottom: 0;
       left: 0;
-      padding: .1rem .4rem;
+      padding: 0.1rem 0.4rem;
       // width: 3rem;
       // height: 1rem;
       color: #fff;
-      font-size: .8rem;
-      background: #B68C48;
-      border-radius: 0px  4px  0px  4px  ;
-
+      font-size: 0.8rem;
+      background: #b68c48;
+      border-radius: 0px 4px 0px 4px;
     }
     img {
       width: 100%;
@@ -153,18 +163,19 @@
     img {
       width: 100%;
       height: 100%;
-      border-radius:3px; 
+      border-radius: 3px;
     }
   }
-  .listContentPar{
-    h3{font-weight: 500;
-    font-size: 1rem;}
+  .listContentPar {
+    h3 {
+      font-weight: 500;
+      font-size: 1rem;
+    }
   }
-  .mylistInfoPar{
-    font-size: .8rem;
-    color: #E6E6E6;
+  .mylistInfoPar {
+    font-size: 0.8rem;
+    color: #e6e6e6;
   }
-  
 }
 
 .listContent-tagbox {
@@ -181,11 +192,10 @@
   .listContent-tags {
     color: #505050;
     border: 1px solid #505050;
-   
   }
-  .sang{
-      color: #B68C48;
-      border:1px solid #B68C48;
+  .sang {
+    color: #b68c48;
+    border: 1px solid #b68c48;
   }
 }
 
@@ -256,14 +266,38 @@
     text-align: center;
     font-size: 0.9rem;
     color: #787878;
+    // position: relative;
   }
-  span {
+  img {
     height: 35px;
-    display: block;
-    img {
-      height: 35px;
-      width: 35px;
+    width: 35px;
+  }
+  // span {
+  //   height: 35px;
+  //   display: block;
+
+  // }
+}
+.myfan-fanlistBox{
+  .vux-cell-primary{
+    width: 90%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  p{
+    
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    .vux-label{
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
+  }
+  .vux-label-desc{
+    color: #969696;
   }
 }
 .myfan-FollowNum {
@@ -274,6 +308,41 @@
   color: #a0a0a0;
 }
 
+.myFillowIdens{
+  overflow: hidden;
+  width: 100%;
+  h4{
+    max-width:120px !important;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .myFillowTitle{
+    font-size: 1rem;
+  
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    // line-height: 30px;
+    
+  }
+  span{
+    display: block;
+    font-size: .6rem;
+    color: #B4B4B4;
+    font-weight: bold;
+    line-height: 20px;
+    margin-left:.2rem;
+    img{
+      width: 13px;
+      vertical-align: middle;
+      margin-right:.2rem;
+    }
+  }
+}
+
+
+
 /*------------我的粉丝--------------*/
 
 .my-saveBtn {
@@ -283,39 +352,36 @@
   line-height: 40px;
   width: 20%;
   text-align: center;
-  
-  
 }
 /*---------------我的关注-------------------*/
-.Follow-xian{
+.Follow-xian {
   height: 1px;
   margin: 0 auto;
   width: 93%;
-  background: #E6E6E6;
+  background: #e6e6e6;
 }
-.Follow-listBox{
-  border-bottom:1rem solid #F8F8F8 ;
-.Follow-HotelList{
-  .Follow-HotelInfo{
-    h4{
-      margin-bottom:.3rem;
+.Follow-listBox {
+  border-bottom: 1rem solid #f8f8f8;
+  .Follow-HotelList {
+    .Follow-HotelInfo {
+      h4 {
+        margin-bottom: 0.3rem;
+      }
+    }
+    .Ticket-inline-desc {
+      color: #969696;
     }
   }
-  .Ticket-inline-desc{
-    color: #969696;
-  }
- 
-}
-.Follow-position{
-    font-size: .8rem;
+  .Follow-position {
+    font-size: 0.8rem;
     font-weight: bold;
-    padding-top:.6rem;
-    padding-bottom:1rem; 
- 
-    .Follow-posis{
+    padding-top: 0.6rem;
+    padding-bottom: 1rem;
+
+    .Follow-posis {
       text-align: center;
     }
-}
+  }
 }
 /*--------------设置--------------------*/
 .sign-out {
@@ -329,9 +395,9 @@
 }
 /*------------会议票券--------------------*/
 .Ticket-listBox {
-  border-bottom: 1px solid #e6e6e6;
-  background: #F8F8F8;
-  margin-bottom:.4rem; 
+  border-bottom: 10px solid #F8F8F8;
+  background: #f8f8f8;
+  margin-bottom: 0.4rem;
   .Ticket-companyBox {
     // margin: 0.4rem 0;
     img {
@@ -351,18 +417,40 @@
     }
   }
 
-  .Ticket-meetingInfoBox{
+  .Ticket-meetingInfoBox {
+    background: #FAFAFA;
+    box-sizing: border-box;
+    .vux-cell-primary{
+      width: 50%;
+    }
+  .Ticket-meetingIconBox{
+    width:  90px;
+    margin-right:.5rem; 
+    overflow: hidden;
+    height: 60px;
+    text-align: center;
+    vertical-align: middle;
+    border-radius:5px; 
+   
     img{
-      margin-right:.6rem; 
+      width:100%;
+      height: 100%;
+      object-fit:cover;
     }
-    h4{
-      font-size: .8rem;
+    // margin-right:.8rem; 
+  }
+    img {
+      margin-right: 0.6rem;
     }
-    .Ticket-inline-desc{
-      font-size: .6rem;
-      color:#A0A0A0;
-      p{
-        width: 95%;
+    h4 {
+      font-size: 1rem;
+    }
+    .Ticket-inline-desc {
+      font-size: 0.6rem;
+      color: #a0a0a0;
+   
+      p {
+        width: 90%;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -370,41 +458,43 @@
     }
   }
 
-  .Ticket-piaoInfoBox{
+  .Ticket-piaoInfoBox {
     height: 50px;
-    border-bottom:1px solid #E6E6E6;
+    border-bottom: 1px solid #e6e6e6;
     // background: #000;
-    .Ticket-piaoInfoSpan{
-      font-size: 1rem;
+    .Ticket-piaoInfoSpan {
+      font-size: .8rem;
       font-weight: bold;
-      .piaoInfoNun{
-        color: #A0A0A0;
+      span{
+        margin: 0 .5rem;
       }
-      .piaoInfoPrice{
+      .piaoInfoNun {
+        color: #a0a0a0;
+      }
+      .piaoInfoPrice {
         color: #323232;
       }
     }
   }
-.Ticket-btns{
-  text-align: right;
-  padding-top: .4rem;
-  padding-bottom: 1.2rem;
-  span{
-    display: inline-block;
-    padding: .4rem 1rem;
-    border-radius:2rem; 
-    margin-left:.6rem; 
-    font-weight:bold; 
-    font-size: .8rem;
-    border: 1px solid #DCDCDC;
+  .Ticket-btns {
+    text-align: right;
+    background: #fff;
+    padding-top: 0.4rem;
+    padding-bottom: 1rem;
+    span {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      border-radius: 2rem;
+      margin-left: 0.6rem;
+      font-weight: bold;
+      font-size: 0.8rem;
+      border: 1px solid #dcdcdc;
+    }
+    .Ticket-PayBtn {
+      color: #fe666b !important;
+      border: 1px solid #fe666b !important;
+    }
   }
-  .Ticket-PayBtn{
-    color: #FE666B !important;
-    border: 1px solid #FE666B !important;
-  }
-}
-
-
 }
 
 /*--------绑定手机号------------*/
@@ -473,6 +563,27 @@
     }
   }
 }
+.AlertShow-weui-dialog{
+  .weui-dialog{
+  border-radius: 20px; 
+  }
+  .weui-dialog__title{
+    color: #000;
+    font-weight: bold;
+  }
+  .weui-dialog__bd{
+    font-size: .9rem;
+    color: #000;
+    line-height: 1.2rem;
+    font-weight: bold;
+  }
+  .weui-dialog__btn_primary{
+    color: #007AFF;
+    font-size: .9rem;
+    font-weight: bold;
+
+  }
+}
 /*----------酒店详情------------*/
 
 .site-content-box {
@@ -532,7 +643,7 @@
   }
 }
 .meeting-flex-nov {
-  color: #B4B4B4;
+  color: #b4b4b4;
   font-size: 0.9rem;
   font-weight: bold;
   text-align: right;
@@ -543,7 +654,7 @@
   }
 }
 .meeting-flex-v {
-  color: #96E24A;
+  color: #96e24a;
   font-size: 0.9rem;
   font-weight: bold;
   text-align: right;
@@ -1254,6 +1365,38 @@ h4.site-room-title {
   //   }
 
   // }
+
+  .footNavBialogBox {
+    position: relative;
+    .TermsCloseBox {
+      position: absolute;
+      top: -1rem;
+      right: .5rem;
+    }
+    .siteDevelopBox {
+      .siteDevelopImg {
+        text-align: center;
+        padding: 1rem 0;
+        margin-top:1rem; 
+        img {
+          height: 170px;
+        }
+      }
+      .siteDevelopTitle {
+        text-align: center;
+        padding: 0.5rem 0;
+      }
+      .siteDevelopBtn {
+        color: #fff;
+        text-align: center;
+        width: 80%;
+        background: #fc6d6d;
+        margin: 2rem auto;
+        border-radius: 20px 20px;
+        padding: 0.5rem 0;
+      }
+    }
+  }
 }
 .footerNav {
   text-align: center;
@@ -1458,7 +1601,7 @@ h4.site-room-title {
   position: fixed;
   bottom: 90px;
   right: 10px;
-  z-index: 501;
+  z-index: 9;
   img {
     width: 100%;
   }
@@ -1473,6 +1616,10 @@ h4.site-room-title {
 .siteSearchInput {
   font-size: 0.8rem;
   color: #c8c8c8;
+  .weui-input{
+    color: #000 !important;
+  }
+
 }
 .siteSearchCancel {
   text-align: right;
@@ -1523,13 +1670,12 @@ h4.site-room-title {
 .siteSearchBox {
   position: relative;
   overflow: hidden;
-  
 }
 .search-content {
   // position: relative;
   // height: 100%;
 
-  height:100vh;
+  height: 100vh;
 
   background: #fff;
   overflow: hidden;
@@ -1762,6 +1908,36 @@ h4.site-room-title {
     border: 0 !important;
   }
 }
+.weixinBtns {
+  .weui-dialog {
+    border-radius: 10px;
+  }
+}
+
+.TermsBox {
+  width: 100%;
+  height: 72vh;
+
+  overflow: hidden;
+  .TermsTitle {
+    height: 30px;
+    padding: 0.8rem 0;
+    color: #323232;
+    position: relative;
+    h3{text-align: center;}
+    .TermsClose {
+      position: absolute;
+      top: 0.6rem;
+      right: 0.1rem;
+    }
+  }
+
+  .TermsContent {
+    height: 58vh;
+    overflow-y: auto;
+  }
+}
+
 .forgetPass {
   // height: 40px;
   // line-height: 40px;
@@ -1844,11 +2020,17 @@ h4.site-room-title {
   .downLogo {
     height: 40px;
     width: 40px;
+    overflow: hidden;
+    img{
+      height: 40px;
+      width: 40px;
+      text-align: center;
+    }
     // width: 10%;
     margin: 0.2rem 0.2rem;
     background: #d8d8d8;
     border-radius: 50%;
-    border: 1px solid #979797;
+    // border: 1px solid #979797;
     line-height: 40px;
     color: #fff;
     font-weight: bold;
@@ -1940,9 +2122,9 @@ h4.site-room-title {
   .attentionOrganizerBox {
     // background: #000;
     box-sizing: border-box;
-    padding:.4rem .8rem;
-    border-top:5px solid rgb(245, 245, 245); 
-    border-bottom:5px solid rgb(245, 245, 245); 
+    padding: 0.4rem 0.8rem;
+    border-top: 5px solid rgb(245, 245, 245);
+    border-bottom: 5px solid rgb(245, 245, 245);
     margin: 1.2rem 0;
     width: 100%;
     // height: 70px;
@@ -1982,17 +2164,16 @@ h4.site-room-title {
     .is-attent {
       border: 1px solid #fe666b;
       color: #fe666b;
-     
     }
-    .no-attent{
-      border: 1px solid #B4B4B4;
-      color: #B4B4B4;
+    .no-attent {
+      border: 1px solid #b4b4b4;
+      color: #b4b4b4;
     }
     .attentionBtn {
       max-width: 15%;
       text-align: center;
       font-size: 0.9rem;
-     
+
       padding: 0.3rem 1.2rem;
       font-weight: bold;
       border-radius: 5px;
@@ -2000,49 +2181,56 @@ h4.site-room-title {
     }
   }
 
-
   //会议嘉宾
-  .guest-boxList{
+  .guest-boxList {
     overflow: hidden;
-    li{
-      img{width: 50px;height: 50px; border-radius:50%; }
+    li {
+      img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+      }
       width: 33%;
       float: left;
       height: 140px;
       text-align: center;
-      padding: .4rem 0;
-      h4{
+      padding: 0.4rem 0;
+      h4 {
         color: #505050;
         height: 30px;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
       }
-      p{
-        font-size: .8rem;
+      p {
+        font-size: 0.8rem;
         color: #969696;
       }
     }
   }
 
-  .meCompany-boxList{
+  .meCompany-boxList {
     overflow: hidden;
-    li{
-      img{width: 50px;height: 50px; border-radius:50%; }
+    li {
+      img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+      }
       width: 33%;
       float: left;
       height: 90px;
       text-align: center;
-      padding: .4rem 0;
-      h4{
+      padding: 0.4rem 0;
+      h4 {
         color: #505050;
         height: 30px;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
       }
-      p{
-        font-size: .8rem;
+      p {
+        font-size: 0.8rem;
         color: #969696;
       }
     }
@@ -2053,7 +2241,7 @@ h4.site-room-title {
     margin: 0.8rem 0;
     height: 120px;
     overflow: hidden;
-    border-bottom:1px solid #E6E6E6; 
+    border-bottom: 1px solid #e6e6e6;
     // height: 70px;
     // background: #000;
     .meetingRegListTitle {
@@ -2079,7 +2267,7 @@ h4.site-room-title {
       // height: 50px;
       // margin:.5rem 0;
       padding: 0.8rem 0;
-      .orderPeople-nodata{
+      .orderPeople-nodata {
         width: 100%;
         text-align: center;
         color: #ccc;
@@ -2095,11 +2283,14 @@ h4.site-room-title {
         text-align: center;
         display: inline-block;
         // line-height: 45px;
-       p{
-         text-align: center;
-         display: block;
+        p {
+          text-align: center;
+          display: block;
           color: #000;
-          font-size: .8rem;
+          font-size: 0.8rem;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
         img {
           width: 100%;
@@ -2108,22 +2299,20 @@ h4.site-room-title {
     }
   }
 
-
-
   .meetingAssessBox {
     width: 100%;
     margin: 0.8rem 0;
     // height: 120px;
     overflow: hidden;
-    border-bottom:1px solid #E6E6E6; 
+    border-bottom: 1px solid #e6e6e6;
     // height: 70px;
     // background: #000;
-    .orderPeople-nodata{
+    .orderPeople-nodata {
       width: 100%;
       text-align: center;
       color: #ccc;
       font-size: 1rem;
-      padding: .8rem 0;
+      padding: 0.8rem 0;
     }
     .meetingRegListTitle {
       overflow: hidden;
@@ -2142,51 +2331,43 @@ h4.site-room-title {
       }
     }
 
-    .meetingAssessListbox{
-overflow: hidden;
-padding: .8rem 0;
-.meetingAssess{
-  width: 45px;
-  margin-right:1rem;
-  img{
-    width: 45px;
-    height: 45px;
-    border-radius:50%; 
-  }
-}
-.meetingAssessCenten{
-  width: 80%;
-  overflow: hidden;
-  .meetingAssessnameBox{
-    overflow: hidden;
-    .meetingAssessTime{
-      font-size: .8rem;
-      color: #A0A0A0;
+    .meetingAssessListbox {
+      overflow: hidden;
+      padding: 0.8rem 0;
+      .meetingAssess {
+        width: 45px;
+        margin-right: 1rem;
+        img {
+          width: 45px;
+          height: 45px;
+          border-radius: 50%;
+        }
+      }
+      .meetingAssessCenten {
+        width: 80%;
+        overflow: hidden;
+        .meetingAssessnameBox {
+          overflow: hidden;
+          .meetingAssessTime {
+            font-size: 0.8rem;
+            color: #a0a0a0;
+          }
+        }
+        p {
+          font-size: 0.9rem;
+          color: #787878;
+          font-weight: bold;
+        }
+      }
     }
   }
-  p{
-    font-size: .9rem;
-    color:#787878;
-    font-weight: bold;
-  }
-
-
-}
-
-
-    }
-   
-  }
-
-
 }
 
 .showMeetingContent {
-
   padding: 0.8rem 0 6rem 0;
   overflow: hidden;
   position: relative;
-  img{
+  img {
     max-width: 331px;
   }
 
@@ -2375,7 +2556,7 @@ padding: .8rem 0;
       // height: 170px;
       margin: 1rem 0;
       background: #fff;
-      padding: 0.6rem 0 .3rem 0;
+      padding: 0.6rem 0 0.3rem 0;
       box-sizing: border-box;
       border-radius: 0.5rem;
       .msgOrderTitleBox {
@@ -2394,7 +2575,7 @@ padding: .8rem 0;
         span {
           color: #4a90e2;
         }
-        b{
+        b {
           font-size: 1.2rem;
         }
         // white-space: nowrap;
@@ -2452,7 +2633,7 @@ padding: .8rem 0;
   // position: absolute;
   overflow-x: hidden;
   overflow-y: auto;
-   margin-top:30px;
+  margin-top: 30px;
   margin-bottom: 20px;
   padding-top: 40px;
   padding-bottom: 40px;
@@ -2501,11 +2682,9 @@ padding: .8rem 0;
   }
 }
 
-
-
 .x-message-left {
   overflow: hidden;
-  margin:.4rem 0;
+  margin: 0.4rem 0;
   .x-message-imgBox {
     width: 50px;
     height: 50px;
@@ -2516,76 +2695,64 @@ padding: .8rem 0;
     overflow: hidden;
     border-radius: 50%;
   }
-  .x-message-TextBox{
+  .x-message-TextBox {
     max-width: 60%;
-    padding: .8rem;
+    padding: 0.8rem;
     font-size: 1rem;
-    font-weight: bold ;
-    margin-top:1rem; 
+    font-weight: bold;
+    margin-top: 1rem;
     float: left;
   }
-  .x-message-self{
+  .x-message-self {
     background: #fff;
-    border: 1px solid #F0F0F0;
-    border-radius: 0 1rem 1rem 1rem; 
+    border: 1px solid #f0f0f0;
+    border-radius: 0 1rem 1rem 1rem;
     color: #000;
-   
-   
- 
-
-   
-    
   }
-  .x-message-voice{
+  .x-message-voice {
     // height: 30px;
-    padding: 0 .8rem;
+    padding: 0 0.8rem;
     font-size: 1rem;
     font-weight: bold;
     color: #ccc;
     // line-height: 50px;
   }
-
-
-
 }
 
 .x-message-right {
   overflow: hidden;
-  margin:.4rem 0;
+  margin: 0.4rem 0;
   .x-message-imgBox {
     width: 50px;
     height: 50px;
-    margin: 0  0 0 10px;
+    margin: 0 0 0 10px;
     text-align: center;
     float: right;
     // background: #ccc;
     overflow: hidden;
     border-radius: 50%;
   }
-  .x-message-TextBox{
+  .x-message-TextBox {
     max-width: 60%;
-    padding: .8rem;
+    padding: 0.8rem;
     font-size: 1rem;
-    font-weight: bold ;
-    margin-top:1rem; 
+    font-weight: bold;
+    margin-top: 1rem;
     float: right;
   }
-  .x-message-self{
-    background: #7DC7F6;
-    border: 1px solid #7DC7F6;
-    border-radius: 1rem 0 1rem 1rem; 
+  .x-message-self {
+    background: #7dc7f6;
+    border: 1px solid #7dc7f6;
+    border-radius: 1rem 0 1rem 1rem;
     color: #fff;
-    
   }
 }
-
 
 .db {
   display: block;
 }
 
 .weixinAudio {
- 
   line-height: 1.5;
   cursor: pointer;
   // max-width:400px;
@@ -2654,7 +2821,6 @@ padding: .8rem 0;
   width: 18px;
 }
 
-
 .tips_global {
   color: #8c8c8c;
 }
@@ -2704,25 +2870,21 @@ padding: .8rem 0;
 
 @-webkit-keyframes audio_playing {
   30% {
-      background-position: 0px center;
+    background-position: 0px center;
   }
   31% {
-      background-position: -18px center;
+    background-position: -18px center;
   }
   61% {
-      background-position: -18px center;
+    background-position: -18px center;
   }
   61.5% {
-      background-position: -36px center;
+    background-position: -36px center;
   }
   100% {
-      background-position: -36px center;
+    background-position: -36px center;
   }
 }
-
-
-
-
 
 //百度导航样式
 
@@ -2777,13 +2939,13 @@ padding: .8rem 0;
 
 //票种选择
 .ticket-contentBox {
-  margin-top: 20px;
-  .ticket-item{
-    border: 1px solid #D7DBDF;
-    box-shadow: 0px 3px 3px #D7DBDF;
+  margin-top: 5px;
+  background: #fff;
+  .ticket-item {
+    border: 1px solid #d7dbdf;
+    box-shadow: 0px 3px 3px #d7dbdf;
   }
- 
-   
+
   .ticketTitleBox {
     width: 100%;
     border-bottom: 1px solid #e6e6e6;
@@ -2796,18 +2958,17 @@ padding: .8rem 0;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
-      .ticketTitleAnnex{
-        background: #FCACAF;
+      .ticketTitleAnnex {
+        background: #fcacaf;
       }
-      .ticketTitleIsOrder{
-        background: #D9D9D9;
+      .ticketTitleIsOrder {
+        background: #d9d9d9;
       }
-      span{
-       
-        border-radius:3px;
-        font-size: .6rem;
-        color: #fff; 
-        padding: 0 .2rem;
+      span {
+        border-radius: 3px;
+        font-size: 0.6rem;
+        color: #fff;
+        padding: 0 0.2rem;
       }
     }
     .ticketPrice {
@@ -2818,8 +2979,7 @@ padding: .8rem 0;
       font-weight: bold;
     }
   }
-  .ticket-disabled-TitleBox{
-    
+  .ticket-disabled-TitleBox {
     width: 100%;
     border-bottom: 1px solid #e6e6e6;
     overflow: hidden;
@@ -2831,30 +2991,27 @@ padding: .8rem 0;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
-      color: #A0A0A0;
-      .ticketTitleAnnex{
-        background: #FCACAF;
+      color: #a0a0a0;
+      .ticketTitleAnnex {
+        background: #fcacaf;
       }
-      .ticketTitleIsOrder{
-        background: #D9D9D9;
+      .ticketTitleIsOrder {
+        background: #d9d9d9;
       }
-      span{
-       
-        border-radius:3px;
-        font-size: .6rem;
-        color: #fff; 
-        padding: 0 .2rem;
+      span {
+        border-radius: 3px;
+        font-size: 0.6rem;
+        color: #fff;
+        padding: 0 0.2rem;
       }
     }
     .ticketPrice {
       width: 25%;
       font-size: 0.8rem;
       text-align: right;
-      color: #A0A0A0;
+      color: #a0a0a0;
       font-weight: bold;
     }
-
-
   }
   .ticketInfo {
     padding: 0.8rem 0;
@@ -2863,12 +3020,30 @@ padding: .8rem 0;
     line-height: 1.4rem;
     overflow: hidden;
   }
-  .ticketInfoTimeType{
-    font-size: .8rem;
-    color: #FE666B;
+  .ticketInfoTimeType {
+    font-size: 0.8rem;
+    color: #fe666b;
   }
 }
-
+//关于链会议
+.aboutLogoBox {
+  text-align: center;
+  padding: 2rem 0;
+  img {
+    width: 160px;
+  }
+  .versionNum {
+    font-size: 0.8rem;
+    color: #a0a0a0;
+    margin: 0.6rem 0;
+  }
+  .versionInfo {
+    text-align: center;
+    color: #787878;
+    font-size: 0.8rem;
+    margin: 2rem 0;
+  }
+}
 //报名信息
 .signUpInfoBox {
   overflow: hidden;
@@ -2902,26 +3077,25 @@ padding: .8rem 0;
 }
 
 .signUpTicket {
-.signUpTicketTop{
-  border-bottom:1px solid #E6E6E6;
-  overflow: hidden;
-  padding: .5rem 0;
-  line-height: 30px;
- 
-}
-.signUpTicketBottom{
-padding: .3rem 0;
-.signUpTicketInfoLeft{
-  width: 85%;
-  overflow: hidden;
-  font-size: .8rem;
-  color: #a0a0a0;
-  line-height: 25px;
-  // white-space: nowrap;
-  // text-overflow: ellipsis;
-}
-}
-  
+  .signUpTicketTop {
+    border-bottom: 1px solid #e6e6e6;
+    overflow: hidden;
+    padding: 0.5rem 0;
+    line-height: 30px;
+  }
+  .signUpTicketBottom {
+    padding: 0.3rem 0;
+    .signUpTicketInfoLeft {
+      width: 85%;
+      overflow: hidden;
+      font-size: 0.8rem;
+      color: #a0a0a0;
+      line-height: 25px;
+      // white-space: nowrap;
+      // text-overflow: ellipsis;
+    }
+  }
+
   .signUpTicketTitle {
     width: 75%;
     h4 {
@@ -2965,95 +3139,149 @@ padding: .3rem 0;
 
     .signUpLabel {
       width: 25%;
-      font-size: .8rem;
+      font-size: 0.8rem;
       color: #787878;
       font-weight: bold;
       position: relative;
-      span{
+      span {
         color: red;
         position: absolute;
-        top: .2rem;
-        left: -.6rem;
+        top: 0.2rem;
+        left: -0.6rem;
       }
-      
     }
     .signUpInput {
       .weui-cell {
         padding: 0 !important;
-        font-size: .8rem;
+        font-size: 0.8rem;
         color: #b4b4b4 !important;
       }
       width: 75%;
     }
   }
 }
-.signUpInputBtn{
+.signUpInputBtn {
   width: 90%;
   height: 40px;
-  background: #DCDCDC;
+  background: #dcdcdc;
   margin: 0 auto;
-  border-radius:3px; 
+  border-radius: 3px;
   text-align: center;
   line-height: 40px;
   color: #fff;
 }
-.signUpSe{
-  background: #FF576B;
-  
+.signUpSe {
+  background: #ff576b;
 }
-.signUpMobilleBox{
+.signUpMobilleBox {
   width: 100%;
   background: #fff;
-  margin-top:.6rem; 
-  li{
-    border-bottom:1px solid #E6E6E6; 
+  margin-top: 0.6rem;
+  li {
+    border-bottom: 1px solid #e6e6e6;
     width: 100%;
     height: 75px;
     background: #fff;
-    // margin:.5rem 0; 
-    padding: .8rem .8rem;
+    // margin:.5rem 0;
+    padding: 0.8rem 0.8rem;
     box-sizing: border-box;
     // line-height: 75px;
-    h5{
+    h5 {
       overflow: hidden;
-      span{
+      span {
         font-size: 1rem;
-        margin-right:.8rem;
+        margin-right: 0.8rem;
         display: block;
         float: left;
         width: 27%;
         white-space: nowrap;
         text-overflow: ellipsis;
-        
       }
     }
-    .signUpMobilleTitleBox{
-
+    .signUpMobilleTitleBox {
     }
-    .signUpCompany{
-      font-size: .8rem;
-      color: #A0A0A0;
+    .signUpCompany {
+      font-size: 0.8rem;
+      color: #a0a0a0;
     }
   }
-  
-
 }
 
-.signUpaddContact{
-  margin-top:1rem; 
+.signUpaddContact {
+  margin-top: 1rem;
   background: #fff;
   text-align: center;
-  color: #FE666B;
-  font-size: .8rem;
-  padding: .6rem 0;
+  color: #fe666b;
+  font-size: 0.8rem;
+  padding: 0.6rem 0;
   font-weight: bold;
-  border-top:1px solid #E6E6E6;
-  border-bottom:1px solid #E6E6E6;
+  border-top: 1px solid #e6e6e6;
+  border-bottom: 1px solid #e6e6e6;
 }
-.getContactListBox{
-  
+.getContactListBox {
 }
 
+//报名成功
+.meetSuccessTop {
+  width: 100%;
+  // height: 120px;
+  padding: 2rem 0;
+  background: #ff576b;
+  text-align: center;
+  color: #fff;
+  line-height: 2rem;
+  h3 {
+    img {
+      vertical-align: middle;
+      width: 20px;
+      margin: 0 0.4rem;
+    }
+  }
+  p {
+    font-size: 0.8rem;
+    span {
+      font-weight: bold;
+      text-decoration: underline;
+    }
+  }
+}
+.meetSuccessContentBox {
+  background: #fff;
+  padding: 0.8rem 0;
+  margin-top: 0.4rem;
+  .meetSuccessContent {
+    overflow: hidden;
+    padding: 0.4rem 0;
+    font-size: 0.8rem;
+    .meetSuccessInfoOne {
+      width: 30%;
+      text-align: right;
+      padding-right: 0.8rem;
+      box-sizing: border-box;
+      color: #787878;
+    }
+    .meetSuccessInfoTwo {
+      width: 70%;
+      font-weight: bold;
+    }
+    .meTicket {
+      color: #4a90e2 !important;
+      text-decoration: underline;
+    }
+  }
+}
+.meetSuccessGoHomeBox {
+  height: 50px;
+  background: #fff;
+  border-top: 1px solid #e6e6e6;
+  span {
+    display: block;
+    text-align: center;
+    font-weight: bold;
+    float: left;
+    width: 50%;
+  }
+}
 
 //附件下载
 
@@ -3134,10 +3362,10 @@ padding: .3rem 0;
     text-align: left;
     padding: 0.5rem 0;
   }
-h5{
-  color: #B4B4B4;
-  margin-bottom:1rem; 
-}
+  h5 {
+    color: #b4b4b4;
+    margin-bottom: 1rem;
+  }
 }
 .FMeetingList {
   overflow-y: auto !important;
@@ -3145,9 +3373,9 @@ h5{
   height: 87vh !important;
 }
 .tabMeetingListUl {
-  .tabMeetingNoData{
+  .tabMeetingNoData {
     border: none;
-    font-size: .8rem;
+    font-size: 0.8rem;
     color: #969696;
     text-align: center;
   }
@@ -3162,8 +3390,6 @@ h5{
       margin-right: 0.8rem;
       vertical-align: middle;
       position: relative;
-     
-     
 
       img {
         width: 100%;
@@ -3386,77 +3612,81 @@ h5{
   }
 }
 
-
-
 /*-----参会提醒-----*/
-.reminder-contentBox{
+.reminder-contentBox {
   height: 100%;
   position: relative;
   top: 0;
   box-sizing: border-box;
   overflow: hidden;
 
-  // margin-top:44px; 
-  // padding-top:44px; 
-  h2{
+  // margin-top:44px;
+  // padding-top:44px;
+  h2 {
     text-align: center;
     margin: 4rem 0 2rem 0;
   }
-  .reminder-dlBox{
+  .reminder-dlBox {
     overflow: hidden;
-    font-size: .9rem;
-   
-    dl{
+    font-size: 0.9rem;
+
+    dl {
       // margin: 1rem 0;
       overflow: hidden;
       padding: 0.4rem 0;
     }
-    dt{
+    dt {
       width: 30%;
       text-align: right;
-      padding-right:.6rem; 
+      padding-right: 0.6rem;
       color: #969696;
       box-sizing: border-box;
-      vertical-align: bottom ;
+      vertical-align: bottom;
     }
-    dd{
+    dd {
       width: 70%;
       color: #323232;
       font-weight: bold;
-      b{
+      b {
         display: inline-block;
         font-size: 1.5rem;
-        margin-top:-1.5rem; 
+        margin-top: -1.5rem;
         // font-size: 1.5rem;
-        vertical-align: bottom ;
+        vertical-align: bottom;
       }
     }
   }
-  .reminder-checkerBox{
+  .reminder-checkerBox {
     margin: 1rem 0;
   }
-  .reminder-meetingDetails{
-    font-size: .8rem;
+  .reminder-meetingDetails {
+    font-size: 0.8rem;
     color: #969696;
     text-align: center;
   }
 
-  
-  .reminder-btn{
-position: fixed;
-background: #DCDCDC;
-height: 50px;
-width: 100%;
-bottom: 0;
-left: 0;
-color: #fff;
-font-weight: bold;
-font-size: 1rem;
-text-align: center;
-line-height: 50px;
-
+  .reminder-btn {
+    position: fixed;
+    background: #dcdcdc;
+    height: 50px;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1rem;
+    text-align: center;
+    line-height: 50px;
   }
 }
 
+.reminder-confirm{
+  .weui-dialog{
+    border-radius:15px; 
+    .weui-dialog__btn{
+      color: #007AFF;
+    }
+  }
+}
 
 //

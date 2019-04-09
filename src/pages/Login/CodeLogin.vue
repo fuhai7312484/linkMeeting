@@ -82,11 +82,17 @@
               :disabled="!Resend"
               @click.native="ReacquireCode"
             >{{time}}s</x-button>
+
+            <!-- <div class="custom-primary">
+              {{time}}s
+            </div>
+            <div v-if="Resend" class="custom-primary-red" @click="ReacquireCode">
+重新获取
+            </div> -->
             <x-button
               v-if="Resend"
               action-type="submit"
               class="custom-primary-red"
-              :disabled="Resend"
               @click.native="ReacquireCode"
             >重新获取</x-button>
           </div>
@@ -94,23 +100,48 @@
       </div>
     </div>
 
-    <div class="loginFooter">注册即表示同意链会议 服务条款 和 隐私条款</div>
+    <div class="loginFooter">
+      
+       <x-dialog v-model="showHideOnBlur" class="dialog-demo" hide-on-blur>
+          <div class="TermsBox">
+            <div class="TermsTitle">
+              <div @click="showHideOnBlur=false">
+                <span class="TermsClose">
+                 <x-icon type="ios-close-empty" size="30"></x-icon>
+                </span>
+              </div>
+
+              <h3>{{TermsTitle}}</h3>
+            </div>
+            <div class="TermsContent padlr">
+
+  <terms :termsType="termsType"></terms>
+
+            </div>
+          
+          </div>
+        </x-dialog>
+
+      
+      注册即表示同意链会议 <span @click="gotoTerms('FW')">服务条款</span> 和
+      <span @click="gotoTerms('YS')">隐私条款</span></div>
   </div>
 </template>
 <script>
+import Terms from "@/components/Terms";
 import {
   getDataInfo,
   setCookie,
   setStorage
 } from "../../assets/lib/myStorage.js";
-import { Group, XInput, XButton, Toast } from "vux";
+import { Group, XInput, XButton, Toast,XDialog } from "vux";
 import axios from "axios";
 export default {
   components: {
     Group,
     XInput,
     XButton,
-    Toast
+    Toast,XDialog,Terms
   },
   name: "reg",
   data() {
@@ -118,6 +149,9 @@ export default {
       OrderHight: 0,
       maskValue: "",
       disabled: true,
+       TermsTitle:'',
+       showHideOnBlur: false,
+       termsType: "",
       showPositionValue: false,
       showMsg: "",
       showNext: "1",
@@ -153,12 +187,27 @@ export default {
   },
 
   methods: {
+     //服务条款
+    gotoTerms(type) {
+      this.showHideOnBlur = true;
+      switch(type){
+        case "FW":
+      this.TermsTitle = '注册协议及服务条款';
+      break;
+       case "YS":
+      this.TermsTitle = '链会议隐私条款';
+      break;
+      }
+      this.termsType = type;
+      // console.log(type)
+    },
     //重新获取验证码
     ReacquireCode() {
+      // console.log(1111,this.maskValue)
       let _that = this;
-      //   this.Resend = false;
+        // this.Resend = false;
       //这里单独请求获取验证码接口
-      //   this.Reacquire();
+        // this.Reacquire();
 
       let SmsObj = {
         type: "login",
@@ -169,7 +218,7 @@ export default {
         let data = res.data;
         if (data.code === 200) {
           alert(data.data)
-          console.log(data.data);
+          // console.log(data.data);
           _that.VerCode = data.data;
           _that.Resend = false;
           _that.Reacquire();
@@ -248,7 +297,7 @@ export default {
           mobile: this.maskValue
         };
         getDataInfo("post", "user/user", codeObj).then(res => {
-          console.log(res)
+          // console.log(res)
           if (res.data.code == 200) {
             this.showPositionValue = true;
             this.showMsg = res.data.msg;

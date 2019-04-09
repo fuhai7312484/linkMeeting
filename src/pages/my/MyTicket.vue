@@ -6,6 +6,10 @@
       </tab>
     </sticky>
     <div v-for="(i,index) in 40" :key="index">{{i}}</div>-->
+     <div v-transfer-dom>
+      <loading :show="show2" text="数据加载中..."></loading>
+    </div>
+
     <div style="height:84px;">
       <div class="map-headerBox borBottm">
         <div class="map-go-back" @click="$router.go(-1)"></div>
@@ -33,105 +37,75 @@
       :loop="true"
       :min-moving-distance="120"
     >
-      <swiper-item>
+      <swiper-item v-for="(lis,i) in list2" :key="i">
         <!-- {{swiperH}} -->
-        <div ref="pubUiHF">
-          <div class="Ticket-listBox"  v-for="(taPos,index) in TaPosted" :key="index">
-            <group>
-            <!-- <div class="padlr">
-              公司标题
-              </div> -->
-               <cell class="Ticket-companyBox">
-                 <img slot="icon" :src="require('../../assets/images/bind-mobile-failure.png')" width="25" />
-                 <div slot="title" class="Ticket-company">盈东科技</div>
-                 <span slot class="Ticket-company-status T-s1">待付款</span>
-               </cell>
-            <cell class="Ticket-meetingInfoBox" link="/">
-              <img slot="icon" :src="taPos.img" width="100">
-              <h4 slot="title">第四届中国制造强国论坛暨2018中国制造年底盛典</h4>
-              <div slot="inline-desc" class="Ticket-inline-desc">
-               <p>时间：11-24 09:00至21:00</p> 
-               <p>地点：朝阳区工体北路88号 三里屯广场</p> 
-                </div>
-            </cell>
-            <div class="Ticket-piaoInfoBox padlr">
-              <h4 class="fl">普通票</h4>
-              <div class="Ticket-piaoInfoSpan fr">
-                <span class="piaoInfoNun">共2张</span>
-                <span class="piaoInfoPrice">合计：¥300</span>
-              </div>
-              
-              </div>
-           
-          </group>
-        <div class="Ticket-btns padlr">
-         
-          <span>取消订单</span>
-           <span class="Ticket-PayBtn">马上支付</span>
-          </div>
-          </div>
-
-<div class="der"></div>
-
-         
-        </div>
-      
-      </swiper-item>
-
-      <swiper-item>
-    
-         <div ref="pubUiHF">
-          <div class="Ticket-listBox"  v-for="(taPos,index) in TaPosted" :key="index">
-            <group>
-            <!-- <div class="padlr">
-              公司标题
-              </div> -->
-               <cell class="Ticket-companyBox">
-                 <img slot="icon" :src="require('../../assets/images/bind-mobile-failure.png')" width="25" />
-                 <div slot="title" class="Ticket-company">盈东科技</div>
-                 <span slot class="Ticket-company-status T-s3">待付款</span>
-               </cell>
-            <cell class="Ticket-meetingInfoBox" link="/">
-              <img slot="icon" :src="taPos.img" width="100">
-              <h4 slot="title">第四届中国制造强国论坛暨2018中国制造年底盛典</h4>
-              <div slot="inline-desc" class="Ticket-inline-desc">
-               <p>时间：11-24 09:00至21:00</p> 
-               <p>地点：朝阳区工体北路88号 三里屯广场</p> 
-                </div>
-            </cell>
-            <div class="Ticket-piaoInfoBox padlr">
-              <h4 class="fl">普通票</h4>
-              <div class="Ticket-piaoInfoSpan fr">
-                <span class="piaoInfoNun">共2张</span>
-                <span class="piaoInfoPrice">合计：¥300</span>
-              </div>
-              
-              </div>
-           
-          </group>
-        <div class="Ticket-btns padlr">
-         
-          <span>取消订单</span>
-           <span class="Ticket-PayBtn">马上支付</span>
-          </div>
-          </div>
-
-<div class="der"></div>
-
-         
+        <div :ref="'pubUiHF'+i">
+           <div class="noData-default" v-if="TaPosted.length==0">
+          <p>
+            <img :src="require('../../assets/images/noData.png')">
+          </p>
+          <p>暂无数据</p>
         </div>
 
+        
+          <div class="Ticket-listBox" v-for="(taPos,index) in TaPosted" :key="index" v-if="!show2">
+            <group>
+              <!-- <div class="padlr">
+              公司标题
+              </div>-->
+              <cell class="Ticket-companyBox">
+                <img
+                  slot="icon"
+                  :src="taPos.userMainPic?taPos.userMainPic:require('../../assets/images/myFans-Mask.png')"
+                  width="25"
+                  height="25"
+                >
+                <div slot="title" class="Ticket-company">{{taPos.userName}}</div>
+                <span
+                  slot
+                  class="Ticket-company-status"
+                  :class="taPos.status==0?'T-s1':taPos.status==2&&taPos.joinType==0?'T-s2':''"
+                >{{taPos.status==0?'待付款':taPos.status==2&&taPos.joinType==0?'待参会':''}}</span>
+              </cell>
+              <cell class="Ticket-meetingInfoBox" link="/">
+                <div slot="icon" class="Ticket-meetingIconBox">
+                  <img :src="taPos.cover" width="100">
+                </div>
 
+                <h4 slot="title">{{taPos.meetingName}}</h4>
+                <div slot="inline-desc" class="Ticket-inline-desc">
+                  <p>时间：{{getTimeLimit(taPos.beginTime,taPos.endTime)}}</p>
+                  <p>地点：{{taPos.address}}</p>
+                </div>
+              </cell>
+              <div class="Ticket-piaoInfoBox padlr">
+                <h4 class="fl">{{taPos.ticketName}}</h4>
+                <div class="Ticket-piaoInfoSpan fr">
+                  <span class="piaoInfoNun">共{{taPos.ticketNum}}张</span>
+
+                  <span class="piaoInfoPrice">合计：{{taPos.price==0?'免费':taPos.price}}</span>
+                </div>
+              </div>
+            </group>
+            <div class="Ticket-btns padlr">
+              <span>取消订单</span>
+              <span class="Ticket-PayBtn">马上支付</span>
+            </div>
+          </div>
+
+          <!-- <div class="der"></div> -->
+        </div>
       </swiper-item>
-      <swiper-item>待参会</swiper-item>
-
-      <swiper-item>退款</swiper-item>
-
-      <swiper-item>已完成</swiper-item>
     </swiper>
   </div>
 </template>
 <script>
+import {
+  getStorage,
+  checkToken,
+  getDataInfo,
+  timeLimit
+} from "../../assets/lib/myStorage.js";
 import {
   Group,
   Cell,
@@ -144,11 +118,14 @@ import {
   Flexbox,
   FlexboxItem,
   Sticky,
-  Toast
+  Toast, Loading,  TransferDomDirective as TransferDom
 } from "vux";
 
 export default {
   name: "MyTicket",
+    directives: {
+    TransferDom
+  },
   components: {
     Group,
     Cell,
@@ -161,7 +138,7 @@ export default {
     Flexbox,
     FlexboxItem,
     Sticky,
-    Toast
+    Toast, Loading
   },
   data() {
     return {
@@ -171,66 +148,12 @@ export default {
       attention: false,
       swiperH: "",
       list2: ["全部", "待付款", "待参会", "退款", "已完成"],
-      TaPosted: [
-        {
-          type: "pub",
-          img:
-            "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
-          city: "北京",
-          area: "朝阳地区",
-          title: "昆泰国家大酒店",
-          distance: "130米",
-          proportion: "320㎡",
-          hold: "30人",
-          meetingRoom: "50间",
-          guestRoom: "10间",
-          tag: ["机场", "餐厅", "无柱"],
-          price: "5000半天起"
-        },
-        {
-          type: "pub",
-          img:
-            "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
-          city: "北京",
-          area: "朝阳地区",
-          title: "昆泰国家大酒店",
-          distance: "130米",
-          proportion: "320㎡",
-          hold: "30人",
-          meetingRoom: "50间",
-          guestRoom: "10间",
-          tag: ["机场", "餐厅", "无柱"],
-          price: "5000半天起"
-        },
-        {
-          type: "pub",
-          img:
-            "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
-          city: "北京",
-          area: "朝阳地区",
-          title: "昆泰国家大酒店",
-          distance: "130米",
-          proportion: "320㎡",
-          hold: "30人",
-          meetingRoom: "50间",
-          guestRoom: "10间",
-          tag: ["机场", "餐厅", "无柱"],
-          price: "5000半天起"
-        },
-        {
-          type: "par",
-          title: "2018第二届金融衍生品&风险管理论坛",
-          city: "北京",
-          img:
-            "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
-          time: "2018.10.09",
-          price: "1800"
-        }
-      ],
+      TaPosted: [],
       position: "default",
       showPositionValue: false,
       textInfo: "",
-      InfoType: "success"
+      InfoType: "success",
+      show2: true
     };
   },
 
@@ -239,21 +162,43 @@ export default {
       // console.log("11111111");
     },
     handler(index) {
-      console.log(index);
+      // console.log(index,this.index)
     },
-    attChange() {
-      if (this.attention) {
-        this.attention = false;
-        this.InfoType = "success";
-        this.textInfo = "关注成功！";
-
-        this.showPosition("middle");
-      } else {
-        this.attention = true;
-        this.InfoType = "cancel";
-        this.textInfo = "已取消关注";
-        this.showPosition("middle");
+  
+    //处理时间范围
+    getTimeLimit(beginTime, endTime) {
+      if (beginTime || endTime) {
+        return timeLimit(beginTime, endTime);
       }
+    },
+    //获取订单数据
+    getTicketData(status) {
+       this.show2 = true;
+      let _that = this;
+      let TicketObj = {
+        params: {
+          // type:'0',
+          userId: getStorage("userToken").userId
+        }
+      };
+      if(status != undefined){
+        TicketObj.params.status = status
+      }
+      checkToken().then(Pdata => {
+        getDataInfo("get", "myMeeting/myMeeting/myCoupon", TicketObj).then(
+          res => {
+            console.log(res)
+            if (res.data.code == 200) {
+              this.TaPosted = res.data.data;
+             
+                this.show2 = false;
+         
+            } else if (res.data.code == 100101) {
+              _that.$router.push("/login");
+            }
+          }
+        );
+      });
     },
 
     showPosition(position) {
@@ -261,19 +206,50 @@ export default {
       this.showPositionValue = true;
     }
   },
+  updated () {
+     this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height =
+      this.$refs.pubUiHF0[0].offsetHeight + "px";
+  },
   mounted() {
-    this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height =
-      this.$refs.pubUiHF.offsetHeight + "px";
+    this.getTicketData();
+   this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height =
+      this.$refs.pubUiHF0[0].offsetHeight + "px";
+  
+    
   },
   watch: {
     index(n, o) {
-      if (n == 0) {
-        this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height =
-          this.$refs.pubUiHF.offsetHeight + "px";
-      } else if (n == 1) {
-        this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height =
-          this.$refs.parUiHF.offsetHeight + "px";
+      console.log(n)
+    switch(n){
+        case 0:
+        this.getTicketData()
+        break;
+         case 1:
+        this.getTicketData(n-1)
+        break;
+          case 2:
+        this.getTicketData(2)
+        break;
+          case 3:
+        this.getTicketData(5)
+        break;
+         case 4:
+        this.getTicketData(4)
+        break;
       }
+
+
+       this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height =
+      this.$refs['pubUiHF'+n][0].offsetHeight + "px";
+
+
+      // if (n == 0) {
+      //   this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height =
+      //     this.$refs.pubUiHF.offsetHeight + "px";
+      // } else if (n == 1) {
+      //   this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height =
+      //     this.$refs.parUiHF.offsetHeight + "px";
+      // }
     }
   }
 };
@@ -307,11 +283,11 @@ export default {
   height: 50px;
 }
 
-.Ticket-listBox{
-  .weui-cells::before{
+.Ticket-listBox {
+  .weui-cells::before {
     border: none;
   }
-  .weui-cell::before{
+  .weui-cell::before {
     border: none;
   }
 }

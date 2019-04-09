@@ -2,15 +2,16 @@
   <div class="box" :style="{height:OrderHight+'px'}">
     <!-- <div class="map-headerBox">
       <div class="map-go-back" @click="$router.go(-1)"></div>
-    </div> -->
+    </div>-->
     <div class="login-contentBox">
       <h1 class="login-contentTitle">您好</h1>
-      <p class="login-subtitle">欢迎来到链会议,立即
+      <p class="login-subtitle">
+        欢迎来到链会议,立即
         <router-link tag="span" to="/reg">注册</router-link>
       </p>
-     
+
       <!-- {{userData.tokenMap}}<br/>
-     {{userData.user}} -->
+      {{userData.user}}-->
 
       <div class="login-formBox">
         <group class="login-account">
@@ -18,7 +19,6 @@
             placeholder="请输入手机号"
             mask="99999999999"
             v-model="maskValue"
-          
             :max="11"
             is-type="china-mobile"
             :should-toast-error="false"
@@ -55,14 +55,42 @@
       </div>
     </div>
     <div class="loginFooter">
+
+       <x-dialog v-model="showHideOnBlur" class="dialog-demo" hide-on-blur>
+          <div class="TermsBox">
+            <div class="TermsTitle">
+              <div @click="showHideOnBlur=false">
+                <span class="TermsClose">
+                 <x-icon type="ios-close-empty" size="30"></x-icon>
+                </span>
+              </div>
+
+              <h3>{{TermsTitle}}</h3>
+            </div>
+            <div class="TermsContent padlr">
+
+  <terms :termsType="termsType"></terms>
+
+            </div>
+          
+          </div>
+        </x-dialog>
+
+        
       <div class="weixinBtns">
         <!-- <span>
           <img src="../../assets/images/QQLogin.png">
         </span>
         <span>
           <img src="../../assets/images/weixin.png">
-        </span> -->
-      </div>登录即表示同意链会议 服务条款 和 隐私条款
+        </span>-->
+
+       
+
+        <!-- {{termsType}} -->
+      </div>登录即表示同意链会议
+      <span @click="gotoTerms('FW')">服务条款</span> 和
+      <span @click="gotoTerms('YS')">隐私条款</span>
     </div>
     <toast
       v-model="showPositionValue"
@@ -75,21 +103,45 @@
   </div>
 </template>
 <script>
-import { getDataInfo,setCookie,setStorage,getCookie,removeCookie,checkToken} from "../../assets/lib/myStorage.js";
-import { Group, XInput, XButton, Toast } from "vux";
+import Terms from "@/components/Terms";
+import {
+  getDataInfo,
+  setCookie,
+  setStorage,
+  getCookie,
+  removeCookie,
+  checkToken
+} from "../../assets/lib/myStorage.js";
+import {
+  Group,
+  XInput,
+  XButton,
+  Toast,
+  XDialog,
+  TransferDomDirective as TransferDom
+} from "vux";
 import axios from "axios";
-import router from "../../router"
+import router from "../../router";
 export default {
+  directives: {
+    TransferDom
+  },
   components: {
     Group,
     XInput,
     XButton,
-    Toast
+    Toast,
+    Terms,
+    XDialog
   },
   name: "login",
+
   data() {
     return {
-      userData:{},
+      TermsTitle:'',
+      showHideOnBlur: false,
+      termsType: "",
+      userData: {},
       maskValue: "",
       OrderHight: 0,
       passW: "",
@@ -110,8 +162,23 @@ export default {
       }
     };
   },
-  
+
   methods: {
+    //服务条款
+    gotoTerms(type) {
+      this.showHideOnBlur = true;
+      switch(type){
+        case "FW":
+      this.TermsTitle = '注册协议及服务条款';
+      break;
+       case "YS":
+      this.TermsTitle = '链会议隐私条款';
+      break;
+      }
+      this.termsType = type;
+      // console.log(type)
+    },
+
     getOrderHight() {
       var orderHight =
         document.documentElement.clientHeight || document.body.clientHeight;
@@ -144,21 +211,20 @@ export default {
         mobile: this.maskValue,
         password: this.passW
       };
-    
 
       getDataInfo("post", "user/login", loginObj).then(res => {
         if (res.data.code == 200) {
           this.showPositionValue = true;
           this.showMsg = res.data.msg;
           this.userData = res.data.data;
-          let tokenInfo = res.data.data.tokenMap
-          let userInfo={
-            userId:res.data.data.user.id,
-            access_token:tokenInfo.access_token,
-            refresh_token:tokenInfo.refresh_token,
-          }
-          setCookie('accessToken',tokenInfo.access_token)
-          setStorage('userToken',userInfo)
+          let tokenInfo = res.data.data.tokenMap;
+          let userInfo = {
+            userId: res.data.data.user.id,
+            access_token: tokenInfo.access_token,
+            refresh_token: tokenInfo.refresh_token
+          };
+          setCookie("accessToken", tokenInfo.access_token);
+          setStorage("userToken", userInfo);
 
           // this.JIMinitchange();
 
@@ -167,7 +233,7 @@ export default {
           // }else{
           //   _that.$router.go(-1)
           // }
-         
+
           setTimeout(function() {
             _that.$router.push("/myindex");
           }, 1000);
@@ -177,8 +243,8 @@ export default {
         }
       });
     },
-//初始化IM消息
-   JIMinitchange() {
+    //初始化IM消息
+    JIMinitchange() {
       window.JIM = new JMessage({
         debug: true
       });
@@ -190,7 +256,7 @@ export default {
         "appkey=21c14066bd7b213c7822caa9&timestamp=" +
         strTime +
         "&random_str=404&key=6db1783c4b7a02a67012e0ce";
-      console.log(string);
+
       let stringObj = {
         params: {
           str: string
@@ -216,18 +282,12 @@ export default {
         });
       });
     }
-
   },
   created() {
     this.getOrderHight();
   },
- 
-  mounted() {
 
-  },
-  
-
-
+  mounted() {}
 };
 </script>
 <style lang="less">
@@ -242,15 +302,18 @@ export default {
   text-align: center;
   color: #a0a0a0;
   font-size: 0.8rem;
+   .weui-dialog{
+    background: #F8F8F8 !important;
+  }
 }
 
-.login-account{
-.weui-cells{
-border-bottom:1px solid #E6E6E6; 
-.weui-input{
-  height: 2rem;
-}
-}
+.login-account {
+  .weui-cells {
+    border-bottom: 1px solid #e6e6e6;
+    .weui-input {
+      height: 2rem;
+    }
+  }
 }
 
 </style>

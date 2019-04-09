@@ -526,13 +526,24 @@ export default {
                       priceObj
                     ).then(resq => {
                       if (resq.data.code == 200) {
-                        
+                        //          this.toastInfo = {
+                        //   showMsg: resq.data.msg,
+                        //   showPositionValue: true,
+                        //   toastType: "text"
+                        // };
+                        this.$router.push({
+                          path: "/MeetingSuccess",
+                          query: {
+                            meeting_id: this.$route.query.meeting_id,
+                            orderId: res.data.data
+                          }
+                        });
                         console.log(resq);
                       }
                     });
                   });
-                }else{
-                  console.log('收费票创建订单成功下面走支付')
+                } else {
+                  console.log("收费票创建订单成功下面走支付");
                 }
               } else if (res.data.code == 1002) {
                 this.toastInfo = {

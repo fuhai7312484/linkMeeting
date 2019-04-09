@@ -10,6 +10,8 @@
       <router-link tag="li" to="/login">登录</router-link>
       <router-link tag="li" to="/reg">注册</router-link>
       <router-link tag="li" to="/retpass">找回密码</router-link>
+            <router-link tag="li" to="/Terms">服务条款</router-link>
+             <router-link tag="li" to="/about">关于链会议</router-link>
         <div>--------------场地-----------------------</div>
       <router-link tag="li" to="/siteindex">场地首页</router-link>
       <router-link tag="li" to="/siteSearch">场地搜索</router-link>
@@ -28,6 +30,9 @@
       <router-link tag="li" to="/msgindex">消息</router-link>
       <router-link tag="li" to="/dialog">消息对话框</router-link>
       <router-link tag="li" to="/ordermsg">订单消息</router-link>
+       <router-link tag="li" to="/Reminder">参会提醒</router-link>
+        <router-link tag="li" to="/Success/123">参会提醒</router-link>
+       <!-- Success -->
       <div>--------------我的----------------</div>
       <router-link tag="li" to="/myindex">我的</router-link>
       <router-link tag="li" to="/tadetail/123">TA的发布</router-link>

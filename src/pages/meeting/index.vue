@@ -193,14 +193,17 @@
                 <div class="tabMeetingTextBox fl">
                   <h4 class="tabMeetingTextTitle">{{DataItem.theme}}</h4>
                   <div class="tabMeetingTime">
-                    <span>{{DataItem.beginTime}}</span>
-                    <span>{{DataItem.region}}</span>
+                    <span>
+                      {{DataItem.beginTime}}
+                   &nbsp;&nbsp; {{addressSplit(DataItem.address)}}
+                    </span>
+                    <!-- <span>{{DataItem.region}}</span> -->
                   </div>
                   <div class="tabMeetingTagBox">
                     <div class="tabMeetingTag fl">
                       <span v-if="DataItem.status==0" class="IsOver">已结束</span>
-                      <span v-else-if="DataItem.status==1" class="LiveIn">直播中</span>
-                      <span v-else-if="DataItem.status==2" class="processing">进行中</span>
+                      <!-- <span v-else-if="DataItem.status==1" class="LiveIn">直播中</span> -->
+                      <span v-else-if="DataItem.status==2 || DataItem.status==1" class="processing">进行中</span>
                       <span v-else-if="DataItem.status==3" class="notStarted">未开始</span>
                     </div>
                     <div class="tabMeetingNum fr">{{DataItem.msg}}</div>
@@ -386,6 +389,7 @@
                   <div class="tabMeetingTime">
                     <span>{{DataItem.beginTime}}</span>
                     <span>{{DataItem.region}}</span>
+                    
                   </div>
                   <div class="tabMeetingTagBox">
                     <div class="tabMeetingTag fl">
@@ -418,7 +422,7 @@ import {
   isLogin,
   transDate,
   getPositioning,
-  setStorage
+  setStorage,timeLimit
 } from "../../assets/lib/myStorage.js";
 import MMap from "@/components/MMap";
 import {
@@ -643,6 +647,27 @@ export default {
     ...mapState(["city"])
   },
   methods: {
+    addressSplit(add){
+      var reg = /.+?(省|市|自治区|自治州|县|区)/g;
+      let addArr = add.match(reg)
+      let str = ''
+      addArr.forEach(e => {
+  
+       if(e.indexOf('市')!= -1){
+         str = e.replace('市','')
+       } 
+        if(e.indexOf('区')!= -1&&e.length<5){
+         str += ' '+ e.replace('区','')
+       } 
+      });
+      return str 
+    },
+     //处理时间范围
+    getTimeLimit(beginTime,endTime){
+      if(beginTime||endTime){
+      return timeLimit(beginTime,endTime)
+      }
+    },
     //处理时间格式
     ProTime(time, type) {
       return transDate(time, type);
@@ -848,8 +873,8 @@ export default {
         if (sotr) {
           this.tabMunes = sotr;
         } else {
-          // this.show2Change();
-          console.log(111111);
+          this.show2Change();
+          // console.log(111111);
           this.show2 = true;
         }
       }

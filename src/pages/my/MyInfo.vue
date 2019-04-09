@@ -24,7 +24,7 @@
           <!-- <cell :title="$t('Money')" @click.native="sexSelect" :is-loading="!money" :value="money"></cell> -->
           <cell
             title="名字"
-            :value="myData.name==null?'未填写':myData.name"
+            :value="myData.name==null || myData.name==''?'未填写':myData.name"
             @click.native="myInputChange('name')"
             is-link
           ></cell>
@@ -39,13 +39,13 @@
         <group class="my-myInfoBox">
           <cell
             title="职位"
-            :value="myData.technical==null?'未填写':myData.technical"
+            :value="myData.technical==null||myData.technical==''?'未填写':myData.technical"
             is-link
             @click.native="myInputChange('technical')"
           ></cell>
           <cell
             title="公司"
-            :value="myData.company==null?'未填写':myData.company"
+            :value="myData.company==null || myData.company=='' ?'未填写':myData.company"
             @click.native="myInputChange('company')"
             is-link
           ></cell>
@@ -72,18 +72,21 @@
           </div>
 
           <div v-if="inputType=='name'">
-            <x-input :placeholder="myData.name==null?'请填写名字':myData.name" v-model="inputValue"></x-input>
+            <x-input
+              :placeholder="myData.name==null || myData.name=='' ?'请填写名字':myData.name"
+              v-model="myData.name"
+            ></x-input>
           </div>
           <div v-if="inputType=='technical'">
             <x-input
-              :placeholder="myData.technical==null?'请填写职位':myData.technical"
-              v-model="inputValue"
+              :placeholder="myData.technical==null || myData.technical=='' ?'请填写职位':myData.technical"
+              v-model="myData.technical"
             ></x-input>
           </div>
           <div v-if="inputType=='company'">
             <x-input
-              :placeholder="myData.company==null?'请填写公司名称':myData.company"
-              v-model="inputValue"
+              :placeholder="myData.company==null || myData.company==''?'请填写公司名称':myData.company"
+              v-model="myData.company"
             ></x-input>
           </div>
         </div>
@@ -91,12 +94,13 @@
     </div>
 
     <toast
-      v-model="showPositionValue"
+      v-model="toastInfo.showPositionValue"
       width="10em"
+      :type="toastInfo.toastType"
       position="middle"
       :time="1500"
       is-show-mask
-    >{{showMsg}}</toast>
+    >{{toastInfo.showMsg}}</toast>
   </div>
 </template>
 <script>
@@ -139,8 +143,12 @@ export default {
         man: "男",
         woman: "女"
       },
-      showMsg: "",
-      showPositionValue: false,
+      toastInfo: {
+        showMsg: "",
+        showPositionValue: false,
+        toastType: "success"
+      },
+
       showInput: false,
       inputType: "",
       inputValue: ""
@@ -160,6 +168,14 @@ export default {
     XInput
   },
   methods: {
+    //null
+    getNull(val) {
+      if (val == null) {
+        return "";
+      } else {
+        return val;
+      }
+    },
     getMyData() {
       let _that = this;
       let token = getCookie("accessToken");
@@ -171,6 +187,15 @@ export default {
       checkToken().then(Pdata => {
         getDataInfo("get", "user/userById", userObj).then(res => {
           if (res.data.code == 200) {
+            res.data.data.company == null
+              ? (res.data.data.company = "")
+              : res.data.data.company;
+            res.data.data.name == null
+              ? (res.data.data.name = "")
+              : res.data.data.name;
+            res.data.data.technical == null
+              ? (res.data.data.technical = "")
+              : res.data.data.technical;
             this.myData = res.data.data;
             setTimeout(function() {
               _that.show2 = false;
@@ -197,8 +222,11 @@ export default {
           getDataInfo("patch", "user/userByCondition", sexObj).then(res => {
             if (res.data.code == 200) {
               this.myData.sex = sex == "man" ? "1" : "0";
-              this.showPositionValue = true;
-              this.showMsg = res.data.msg;
+              this.toastInfo = {
+                showMsg: res.data.msg,
+                showPositionValue: true,
+                toastType: "success"
+              };
             }
           });
         });
@@ -238,12 +266,15 @@ export default {
       }).onSuccess(function(data) {
         JIM.updateSelfInfo(Obj)
           .onSuccess(function(data) {
-            console.log(data);
+            // console.log(data);
             if (data.code == 0) {
-              _that.showPositionValue = true;
-              _that.showMsg = "名称更新成功！";
+              _that.toastInfo = {
+                showMsg: "名称更新成功！",
+                showPositionValue: true,
+                toastType: "success"
+              };
               _that.inputValue = _that.inputType = "";
-                _that.showInput = false;
+              _that.showInput = false;
               //data.code 返回码
               //data.message 描述
             }
@@ -256,32 +287,49 @@ export default {
 
     //提交要修改的Input内容
     submitInputForm() {
-  
-      if (this.inputValue != "") {
+      // console.log(this.inputType,this.myData.name)
+
+      let val =
+        this.inputType == "name"
+          ? this.myData.name
+          : this.inputType == "technical"
+          ? this.myData.technical
+          : this.inputType == "company"
+          ? this.myData.company
+          : "";
+      // console.log(val)
+      if (val != "") {
         let inputObj = {
           id: getStorage("userToken").userId
         };
-        inputObj[this.inputType] = this.inputValue;
-  
+        inputObj[this.inputType] = val;
+
         checkToken().then(Pdata => {
           getDataInfo("patch", "user/userByCondition", inputObj).then(res => {
             if (res.data.code == 200) {
-         
-              this.myData[this.inputType] = this.inputValue;
+              this.myData[this.inputType] = val;
               if (this.inputType == "name") {
                 JIMinitchange(this.updateSelfInfo);
               } else {
-                this.showPositionValue = true;
-                this.showMsg = res.data.msg;
+                this.toastInfo = {
+                  showMsg: res.data.msg,
+                  showPositionValue: true,
+                  toastType: "success"
+                };
+
                 this.inputValue = this.inputType = "";
                 this.showInput = false;
-                
               }
             }
           });
         });
+      } else {
+        this.toastInfo = {
+          showMsg: "请填写内容",
+          showPositionValue: true,
+          toastType: "text"
+        };
       }
-      
     }
   },
 

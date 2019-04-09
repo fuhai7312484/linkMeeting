@@ -6,12 +6,12 @@
       </tab>
     </sticky>
     <div v-for="(i,index) in 40" :key="index">{{i}}</div>-->
-    <div style="height:93px;">
+    <div>
       <div class="map-headerBox borBottm">
         <div class="map-go-back" @click="$router.go(-1)"></div>
         <h3 class="map-headerTitle">我关注的</h3>
       </div>
-      <sticky :check-sticky-support="false" :offset="0">
+      <!-- <sticky :check-sticky-support="false" :offset="0">
         <tab active-color="#fe666b" default-color="#a0a0a0" custom-bar-width="43%" v-model="index">
           <tab-item
             @on-item-click="handler"
@@ -20,7 +20,7 @@
             :key="index"
           >{{ item }}</tab-item>
         </tab>
-      </sticky>
+      </sticky>-->
     </div>
     <!-- {{siteData}} -->
     <!-- {{index}} -->
@@ -28,7 +28,7 @@
       <loading :show="show2" text="数据加载中..."></loading>
     </div>
 
-    <swiper
+    <!-- <swiper
       ref="swiperHeight"
       v-model="index"
       :show-dots="false"
@@ -39,7 +39,7 @@
       :min-moving-distance="120"
     >
       <swiper-item>
-        <!-- {{swiperH}} -->
+      
         <div ref="siteer">
           <div v-if="!show2">
             <div class="myfan-FollowNum padlr">已关注{{siteData.length}}个场地方</div>
@@ -80,10 +80,11 @@
             <div class="der"></div>
           </div>
         </div>
-      </swiper-item>
-      <swiper-item>
-        <!-- {{swiperH}} -->
-        <div ref="Organizer">
+    </swiper-item>-->
+    <!-- <swiper-item> -->
+    <!-- {{swiperH}} -->
+
+    <!-- <div ref="Organizer">
           <div class="myfan-FollowNum padlr">已关注{{Organiz.length}}个承办方</div>
           <div class="Follow-listBox" v-for="(Org,index) in Organiz" :key="index">
             <group>
@@ -117,36 +118,52 @@
           </div>
 
           <div class="der"></div>
-        </div>
-      </swiper-item>
-      <swiper-item>
-        <!-- {{swiperH}} -->
-        <div ref="Membership">
-          <div class="myfan-FollowNum padlr">已关注{{myfanData.length}}个会友</div>
-          <div class="Follow-listBox" v-for="(fan,index) in myfanData" :key="index">
-            <group class="myfan-fanlistBox">
-              <cell
-                :key="index"
-                is-link
-                :link="{path:'/myfan/myfanDetail/'+fan.id,query: {fansId:fan.id}}"
-              >
-                <h4
-                  slot="title"
-                >{{fan.details==null?'真懒！什么都没写':fan.details.name==null?'真懒！什么都没写':fan.details.name}}</h4>
-                <img
-                  slot="icon"
-                  width="45"
-                  style="display:block;margin-right:.8rem;border-radius:50%;"
-                  :src="fan.details.mainPic==null?require('../../assets/images/myFans-Mask.png'):fan.details.mainPic"
-                >
-              </cell>
-            </group>
-            <div class="Follow-xian"></div>
-          </div>
-          <div class="der"></div>
-        </div>
-      </swiper-item>
-    </swiper>
+    </div>-->
+
+    <!-- </swiper-item> -->
+    <!-- <swiper-item>-->
+
+    <div ref="Membership">
+      <div class="myfan-FollowNum padlr">已关注{{Organiz.length}}个会友</div>
+      <div class="Follow-listBox" v-for="(fan,index) in Organiz" :key="index">
+        <!-- {{fan}} -->
+        <group class="myfan-fanlistBox">
+          <cell
+            :key="index"
+            is-link
+            :link="{path:'/tadetail/'+fan.id}"
+            :inline-desc="fan.fensCount+'位粉丝'"
+          >
+            <div slot="title" class="myFillowIdens">
+              <h4 class="myFillowTitle fl">
+                {{fan==null?'真懒！什么都没写':fan.name==null?'真懒！什么都没写':fan.name}}
+                <!-- {{fan.idens}} -->
+                  </h4>
+                <span class="fl" v-if="idensChange(1,fan.idens)">
+                  <img :src="require('../../assets/images/v.png')">
+                  认证场地方
+                </span>
+                <span class="fl" v-if="idensChange(0,fan.idens)">
+                  <img src="../../assets/images/meeting-v.png">认证主办方
+                </span>
+              
+            </div>
+
+            <img
+              slot="icon"
+              width="45"
+              height="45"
+              style="display:block;margin-right:.8rem;border-radius:50%;"
+              :src="fan.mainPic==null?require('../../assets/images/myFans-Mask.png'):fan.mainPic"
+            >
+          </cell>
+        </group>
+        <div class="Follow-xian"></div>
+      </div>
+      <div class="der"></div>
+    </div>
+    <!-- </swiper-item>
+    </swiper>-->
   </div>
 </template>
 <script>
@@ -211,11 +228,24 @@ export default {
     TransferDom
   },
   methods: {
+    //检查是否认证
+    idensChange(typeNum, arr) {
+      if (arr) {
+        //  console.log(typeNum,arr)
+        if (arr.indexOf(typeNum) != -1) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return 0;
+      }
+    },
     handChange() {
       // console.log("11111111");
     },
     handler(index) {
-      console.log(index);
+      // console.log(index);
     },
 
     getFollowData() {
@@ -224,24 +254,25 @@ export default {
         params: {
           // type:'0',
           user: getStorage("userToken").userId,
-          currentPage:'1',
-          pageSize:'5',
+          currentPage: "1",
+          pageSize: "5"
         }
       };
       checkToken().then(Pdata => {
         getDataInfo("get", "refollow/follow", followObj).then(res => {
-          console.log(res);
+          // console.log(res);
           if (res.data.code == 200) {
-            let data = res.data.data;
-            this.siteData = data.filter(e => {
-              return e.type == "0";
-            });
-            this.Organiz = data.filter(e => {
-              return e.type == "1";
-            });
-            this.myfanData = data.filter(e => {
-              return e.type == "2";
-            });
+            let data = res.data.data.myFollowList;
+            this.Organiz = data;
+            // this.siteData = data.filter(e => {
+            //   return e.type == "0";
+            // });
+            // this.Organiz = data.filter(e => {
+            //   return e.type == "1";
+            // });
+            // this.myfanData = data.filter(e => {
+            //   return e.type == "2";
+            // });
 
             setTimeout(function() {
               _that.show2 = false;
@@ -263,30 +294,30 @@ export default {
   },
   mounted() {
     // console.log(_that.$refs.swiperHeight.$el)
-    this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height =
-      this.$refs.siteer.offsetHeight + "px";
-    let _that = this;
-    setTimeout(function() {
-      _that.swiperH = _that.$refs.swiperHeight.$el.children[0].style.height =
-        _that.$refs.siteer.offsetHeight + "px";
-      // console.log(_that.index,_that.$refs,_that.$refs.siteer.offsetHeight,_that.show2)
-    }, 1000);
+    // this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height =
+    //   this.$refs.siteer.offsetHeight + "px";
+    // let _that = this;
+    // setTimeout(function() {
+    //   _that.swiperH = _that.$refs.swiperHeight.$el.children[0].style.height =
+    //     _that.$refs.siteer.offsetHeight + "px";
+    //   // console.log(_that.index,_that.$refs,_that.$refs.siteer.offsetHeight,_that.show2)
+    // }, 1000);
   },
   watch: {
-    index(n, o) {
-      if (n == 0) {
-        this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height =
-          this.$refs.siteer.offsetHeight + "px";
-      } else if (n == 1) {
-        //  console.log(this.$refs.parUiHF.offsetHeight)
-        this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height =
-          this.$refs.Organizer.offsetHeight + "px";
-      } else if (n == 2) {
-        //  console.log(this.$refs.parUiHF.offsetHeight)
-        this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height =
-          this.$refs.Membership.offsetHeight + "px";
-      }
-    }
+    // index(n, o) {
+    //   if (n == 0) {
+    //     this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height =
+    //       this.$refs.siteer.offsetHeight + "px";
+    //   } else if (n == 1) {
+    //     //  console.log(this.$refs.parUiHF.offsetHeight)
+    //     this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height =
+    //       this.$refs.Organizer.offsetHeight + "px";
+    //   } else if (n == 2) {
+    //     //  console.log(this.$refs.parUiHF.offsetHeight)
+    //     this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height =
+    //       this.$refs.Membership.offsetHeight + "px";
+    //   }
+    // }
   }
 };
 </script>

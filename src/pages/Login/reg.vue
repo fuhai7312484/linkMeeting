@@ -120,22 +120,52 @@
       </div>
     </div>
 
-    <div class="loginFooter">注册即表示同意链会议 服务条款 和 隐私条款</div>
+    
+
+
+
+    <div class="loginFooter">
+       <x-dialog v-model="showHideOnBlur" class="dialog-demo" hide-on-blur>
+          <div class="TermsBox">
+            <div class="TermsTitle">
+              <div @click="showHideOnBlur=false">
+                <span class="TermsClose">
+                 <x-icon type="ios-close-empty" size="30"></x-icon>
+                </span>
+              </div>
+
+              <h3>{{TermsTitle}}</h3>
+            </div>
+            <div class="TermsContent padlr">
+
+  <terms :termsType="termsType"></terms>
+
+            </div>
+          
+          </div>
+        </x-dialog>
+      
+      
+      注册即表示同意链会议 <span @click="gotoTerms('FW')">服务条款</span> 和 <span @click="gotoTerms('YS')">隐私条款</span></div>
   </div>
 </template>
 <script>
+import Terms from "@/components/Terms";
 import { getDataInfo,setCookie,setStorage,JIMinitchange,sendSysMsg} from "../../assets/lib/myStorage.js";
-import { Group, XInput, XButton, Toast } from "vux";
+import { Group, XInput, XButton, Toast,  XDialog } from "vux";
 export default {
   components: {
     Group,
     XInput,
     XButton,
-    Toast
+    Toast,Terms,  XDialog
   },
   name: "reg",
   data() {
     return {
+        TermsTitle:'',
+       showHideOnBlur: false,
+      termsType:'',
       OrderHight: 0,
       maskValue: "",
       disabled: true,
@@ -174,6 +204,19 @@ export default {
   },
 
   methods: {
+    //服务条款
+    gotoTerms(type){
+        this.showHideOnBlur = true;
+      switch(type){
+        case "FW":
+      this.TermsTitle = '注册协议及服务条款';
+      break;
+       case "YS":
+      this.TermsTitle = '链会议隐私条款';
+      break;
+      }
+      this.termsType = type;
+    },
     //重新获取验证码
     ReacquireCode() {
         let _that = this;
@@ -356,5 +399,6 @@ export default {
   text-align: center;
   color: #a0a0a0;
   font-size: 0.8rem;
+ 
 }
 </style>

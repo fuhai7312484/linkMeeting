@@ -1,20 +1,17 @@
 <template>
   <div class="box">
-   
- 
-
-<!-- <sticky :check-sticky-support="false" :offset="0">
+    <!-- <sticky :check-sticky-support="false" :offset="0">
       <tab :line-width=1>
         <tab-item :selected="tabTitle === item" v-for="(item, index) in list2" @click="tabTitle = item" :key="index">{{item}}</tab-item>
       </tab>
     </sticky>
-    <div v-for="(i,index) in 40" :key="index">{{i}}</div> -->
-<div style="height:84px;">
-    <div class="map-headerBox borBottm">
-            <div class="map-go-back" @click="$router.go(-1)"></div>
-            <h3 class="map-headerTitle">浏览记录</h3>
-          </div>
-<sticky :check-sticky-support="false" :offset="0">
+    <div v-for="(i,index) in 40" :key="index">{{i}}</div>-->
+    <div>
+      <div class="map-headerBox borBottm">
+        <div class="map-go-back" @click="$router.go(-1)"></div>
+        <h3 class="map-headerTitle">浏览记录</h3>
+      </div>
+      <!-- <sticky :check-sticky-support="false" :offset="0">
   
     <tab
       active-color="#fe666b"
@@ -31,9 +28,9 @@
         {{ item }}
       </tab-item>
     </tab>
-    </sticky>
+      </sticky>-->
     </div>
-    <swiper ref="swiperHeight" v-model="index" 
+    <!-- <swiper ref="swiperHeight" v-model="index" 
     :show-dots="false" 
     :style="{height:swiperH}" 
     :height="swiperH" 
@@ -97,43 +94,104 @@
             </flexbox>
           </li>
         </ul>
-      </swiper-item>
+    </swiper-item>-->
 
-      <swiper-item> 
-        
-         <ul class="my-tab-swiper vux-center" ref="parUiHF">
- <li v-for="(taPos,index) in TaPosted" :key="index" v-if="taPos.type=='par'">
-   <flexbox>
-              <flexbox-item :span="2/3">
-                <div class="listContentPar">
-                <h3> {{ taPos.title }}</h3>
+    <!-- <swiper-item>  -->
+
+    <!-- <ul class="tabMeetingListUl padlr" style="height:100%;">
+ <li  class="tabMeetingList"   v-for="(DataItem,index) in TaPosted"
+              :key="index">
+<div class="tabMeetingTopBox" v-if="tabsIndex==0">
+                <div class="orgLogo fl">
+                  <img
+                    :src="DataItem.mainPic==null?require('../../assets/images/myFans-Mask.png'):DataItem.mainPic"
+                  >
                 </div>
-                <div>{{taPos.time}}</div>
-                <h4>¥{{ taPos.price }}</h4>
-              </flexbox-item>
-              <flexbox-item :span="1/3"> 
-              
-              <div class="my-tab-parListImg">
-             
-                <img :src="taPos.img" />
-                </div>
-              
-              </flexbox-item>
-            </flexbox>
+                <div class="orgname fl">{{DataItem.userName}}</div>
+                <div class="orgUptime fr">{{ProTime(DataItem.createTime,'T')}}</div>
+              </div>
 
  </li>
+    </ul>-->
 
+     <div v-transfer-dom>
+        <loading :show="show2" text="数据加载中..."></loading>
+      </div>
 
-        </ul>
-         </swiper-item>
-     
-    </swiper>
+    <ul class="tabMeetingListUl padlr" ref="parUiHF">
+      <li
+        class="tabMeetingList"
+        v-for="(DataItem,index) in listData"
+        :key="index"
+        @click="gotoDetil(DataItem.id)"
+      >
+       
+        <div>
+          <!-- {{DataItem.meetingFileList}} -->
+          <div class="tabMeetingImg fl">
+            <span v-for="(img,index) in DataItem.meetingFileList" :key="index" v-if="img.belong==1">
+              <img
+                :src="img.fileUrl==null?require('../../assets/images/myFans-Mask.png'):img.fileUrl"
+              >
+            </span>
+          </div>
+
+          <div class="tabMeetingTextBox fl">
+            <h4 class="tabMeetingTextTitle">{{DataItem.theme}}</h4>
+            <div class="tabMeetingTime">
+              <span>{{DataItem.beginTime}}</span>
+              <span>{{DataItem.region}}</span>
+            </div>
+            <div class="tabMeetingTagBox">
+              <div class="tabMeetingTag fl">
+                <span v-if="DataItem.status==0" class="IsOver">已结束</span>
+                <!-- <span v-else-if="DataItem.status==1" class="LiveIn">直播中</span> -->
+                <span v-else-if="DataItem.status==2 || DataItem.status==1" class="processing">进行中</span>
+                <span v-else-if="DataItem.status==3" class="notStarted">未开始</span>
+              </div>
+              <div class="tabMeetingNum fr">{{DataItem.msg}}</div>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <!-- </swiper-item> -->
+
+    <!-- </swiper> -->
   </div>
 </template>
 <script>
-  import {
+import {
+  getStorage,
+  checkToken,
+  getDataInfo,
+  isLogin,
+  transDate
+} from "../../assets/lib/myStorage.js";
+import {
+  Group,
+  Cell,
+  XButton,
+  Tab,
+  TabItem, Loading,
+  Swiper,
+  SwiperItem,
+  XHeader,
+  Flexbox,
+  FlexboxItem,
+  Sticky,
+  Toast,TransferDomDirective as TransferDom,
+} from "vux";
+
+export default {
+  
+  name: "MyColle",
+    directives: {
+    TransferDom
+  },
+  components: {
     Group,
-    Cell,
+    Cell, Loading,
     XButton,
     Tab,
     TabItem,
@@ -144,166 +202,182 @@
     FlexboxItem,
     Sticky,
     Toast
-  } from "vux";
-
-  export default {
-    name: "MyColle",
-    components: {
-      Group,
-      Cell,
-      XButton,
-      Tab,
-      TabItem,
-      Swiper,
-      SwiperItem,
-      XHeader,
-      Flexbox,
-      FlexboxItem,
-      Sticky,
-      Toast
-    },
-    data() {
-      return {
-        img: require("../../assets/images/a.jpeg"),
-        tabTitle: "Ta发布的",
-        index: 0,
-        attention:false,
-        swiperH:'',
-        list2: ["场地", "会议"],
-        TaPosted: [
-          {
-            type: "pub",
-            img:
-              "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
-            city: "北京",
-            area: "朝阳地区",
-            title: "昆泰国家大酒店",
-            distance: "130米",
-            proportion: "320㎡",
-            hold: "30人",
-            meetingRoom: "50间",
-            guestRoom: "10间",
-            tag: ["机场", "餐厅", "无柱"],
-            price: "5000半天起"
-          },
-          {
-            type: "pub",
-            img:
-              "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
-            city: "北京",
-            area: "朝阳地区",
-            title: "昆泰国家大酒店",
-            distance: "130米",
-            proportion: "320㎡",
-            hold: "30人",
-            meetingRoom: "50间",
-            guestRoom: "10间",
-            tag: ["机场", "餐厅", "无柱"],
-            price: "5000半天起"
-          },
-           {
-            type: "pub",
-            img:
-              "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
-            city: "北京",
-            area: "朝阳地区",
-            title: "昆泰国家大酒店",
-            distance: "130米",
-            proportion: "320㎡",
-            hold: "30人",
-            meetingRoom: "50间",
-            guestRoom: "10间",
-            tag: ["机场", "餐厅", "无柱"],
-            price: "5000半天起"
-          },
-          {
-            type: "par",
-            title:'2018第二届金融衍生品&风险管理论坛',
-             city: "北京",
-            img:
-              "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
-              time:'2018.10.09',
-              price: "1800"
-          }
-        ],
-         position: 'default',
+  },
+  data() {
+    return {
+      show2:true,
+      img: require("../../assets/images/a.jpeg"),
+      tabTitle: "Ta发布的",
+      index: 0,
+      attention: false,
+      swiperH: "",
+      list2: ["场地", "会议"],
+      listData: [],
+      TaPosted: [
+        {
+          type: "pub",
+          img:
+            "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
+          city: "北京",
+          area: "朝阳地区",
+          title: "昆泰国家大酒店",
+          distance: "130米",
+          proportion: "320㎡",
+          hold: "30人",
+          meetingRoom: "50间",
+          guestRoom: "10间",
+          tag: ["机场", "餐厅", "无柱"],
+          price: "5000半天起"
+        },
+        {
+          type: "pub",
+          img:
+            "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
+          city: "北京",
+          area: "朝阳地区",
+          title: "昆泰国家大酒店",
+          distance: "130米",
+          proportion: "320㎡",
+          hold: "30人",
+          meetingRoom: "50间",
+          guestRoom: "10间",
+          tag: ["机场", "餐厅", "无柱"],
+          price: "5000半天起"
+        },
+        {
+          type: "pub",
+          img:
+            "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
+          city: "北京",
+          area: "朝阳地区",
+          title: "昆泰国家大酒店",
+          distance: "130米",
+          proportion: "320㎡",
+          hold: "30人",
+          meetingRoom: "50间",
+          guestRoom: "10间",
+          tag: ["机场", "餐厅", "无柱"],
+          price: "5000半天起"
+        },
+        {
+          type: "par",
+          title: "2018第二届金融衍生品&风险管理论坛",
+          city: "北京",
+          img:
+            "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
+          time: "2018.10.09",
+          price: "1800"
+        }
+      ],
+      position: "default",
       showPositionValue: false,
-      textInfo:'',
-      InfoType:'success',
-      };
-    },
+      textInfo: "",
+      InfoType: "success"
+    };
+  },
 
-    methods: {
-      handChange() {
-        // console.log("11111111");
-      },
-      handler(index) {
-        // console.log(index);
-      },
-      attChange(){
-        if(this.attention){
-              this.attention = false;
-              this.InfoType = 'success'
-               this.textInfo = '关注成功！'
-              
-              this.showPosition('middle')
-              
-
-        }else{
-           this.attention = true;
-            this.InfoType = 'cancel'
-          this.textInfo = '已取消关注'
-            this.showPosition('middle')
-        }
-
-      },
-
-       showPosition (position) {
-      this.position = position
-      this.showPositionValue = true
+  methods: {
+    ProTime(time, type) {
+      return transDate(time, type);
     },
+    gotoDetil(id) {
+      // console.log(id);
+      this.$router.push({
+        path: "/meetDetail/" + id,
+        query: { meetingId: id }
+      });
     },
-    mounted () {
-     this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height = this.$refs.pubUiHF.offsetHeight +'px'
+    handChange() {
+      // console.log("11111111");
     },
-    watch: {
-      index(n,o){
-        if(n==0){
-this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height = this.$refs.pubUiHF.offsetHeight +'px'
-        }else if(n==1){
- this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height =  this.$refs.parUiHF.offsetHeight +'px'
- 
-        }
+    handler(index) {
+      // console.log(index);
+    },
+    attChange() {
+      if (this.attention) {
+        this.attention = false;
+        this.InfoType = "success";
+        this.textInfo = "关注成功！";
+
+        this.showPosition("middle");
+      } else {
+        this.attention = true;
+        this.InfoType = "cancel";
+        this.textInfo = "已取消关注";
+        this.showPosition("middle");
       }
+    },
+    //获取浏览历史
+    getHisData() {
+      let hisObj = {
+        params: {
+          userId: getStorage("userToken").userId,
+          type: 2,
+          currentPage: 1,
+          pageSize: 9999
+        }
+      };
+
+      checkToken().then(Pdata => {
+        getDataInfo("get", "history/history/list", hisObj).then(res => {
+          if (res.data.code == 200) {
+            this.listData = res.data.data.meetingShowList;
+            this.show2 = false
+          } else if (res.data.code == 400 || res.data.code == 100101) {
+            setTimeout(function() {
+              _that.$router.push("/login");
+            }, 500);
+          }
+        });
+      });
+    },
+
+    showPosition(position) {
+      this.position = position;
+      this.showPositionValue = true;
     }
-  };
+  },
+  mounted() {
+    this.getHisData();
+    //  this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height = this.$refs.pubUiHF.offsetHeight +'px'
+  },
+  watch: {
+    //       index(n,o){
+    //         if(n==0){
+    // this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height = this.$refs.pubUiHF.offsetHeight +'px'
+    //         }else if(n==1){
+    //  this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height =  this.$refs.parUiHF.offsetHeight +'px'
+    //         }
+    //       }
+  }
+};
 </script>
 
 <style lang="less">
-  @import "../../assets/style/tools.less";
-  @import "../../assets/style/global.less";
-  @import "~vux/src/styles/reset.less";
+@import "../../assets/style/tools.less";
+@import "../../assets/style/global.less";
+@import "~vux/src/styles/reset.less";
 
 .swiper-container {
-/* Specify Swiper's Size: */
-width: 100%;
-height: 5rem;
+  /* Specify Swiper's Size: */
+  width: 100%;
+  height: 5rem;
 }
 .swiper-slide {
-/* Specify Slides's Size: */
-width: 100%;
-height: 100%;
+  /* Specify Slides's Size: */
+  width: 100%;
+  height: 100%;
 }
-  .vux-demo {
-    text-align: center;
-  }
-  .logo {
-    width: 100px;
-    height: 100px;
-  }
-  .info1 {
-    background: #000;
-    width: 100%;
-    height: 50px;
-  }
+.vux-demo {
+  text-align: center;
+}
+.logo {
+  width: 100px;
+  height: 100px;
+}
+.info1 {
+  background: #000;
+  width: 100%;
+  height: 50px;
+}
 </style>

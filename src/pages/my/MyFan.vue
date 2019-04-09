@@ -25,11 +25,13 @@
             :key="index"
             :title="fan.name"
             is-link
-            :link="{path:'/myfan/myfanDetail/'+fan.id,query: {fansId:fan.id}}"
+            :link="{path:'/tadetail/'+fan.id}"
           >
+         
             <img
               slot="icon"
               width="45"
+              height="45"
               style="display:block;margin-right:.8rem;border-radius:50%;"
               :src="fan.mainPic==null?require('../../assets/images/myFans-Mask.png'):fan.mainPic"
             >

@@ -1,7 +1,11 @@
 import Vue from "vue";
 import Router from "vue-router";
 import HelloWorld from "@/components/HelloWorld";
+import Terms from "@/components/Terms";
+
 import Login from "@/pages/Login/login";
+
+
 import CodeLogin from "@/pages/Login/CodeLogin";
 
 import Reg from "@/pages/Login/reg";
@@ -17,6 +21,8 @@ import meetingSearch from "@/pages/meeting/meetingSearch";
 import MeetDetail from "@/pages/meeting/meetDetail";
 import NavMap from "@/components/NavMap";
 import Ticket from "@/pages/meeting/Ticket";
+import TicketSuccess from "@/pages/meeting/TicketSuccess.vue";
+import Success from "@/components/Success.vue";
 import DownAnnex from "@/pages/meeting/downAnnex";
 
 import SignInfo from "@/pages/meeting/signUpInfo";
@@ -36,6 +42,7 @@ import BindAccount from "@/pages/my/BindAccount";
 import MyBrowse from "@/pages/my/MyBrowse";
 import MyTicket from "@/pages/my/MyTicket";
 import MyFollow from "@/pages/my/MyFollow"
+import Lianhuiyi from "@/pages/my/about";
 
 
 import Cpage from "@/pages/my/myInfo";
@@ -49,13 +56,29 @@ Vue.use(Router);
 export default new Router({
   routes: [
     {
-      path: "/",
-      name: "HelloWorld",
+      path: "/Terms",
+      name: "Terms",
       // meta: {
       //   index: 0,
       // },
-      component: HelloWorld
+      component: Terms
     },
+    {
+      path: "/",
+      // name: "HelloWorld",
+      // meta: {
+      //   index: 0,
+      // },
+      component: MeetingIndex
+    },
+    // {
+    //   path: "/",
+    //   name: "MeetingIndex",
+    //   // meta: {
+    //   //   index: 0,
+    //   // },
+    //   component: MeetingIndex
+    // },
     {
       path: "/login",
       name: "login",
@@ -160,6 +183,18 @@ export default new Router({
       component: Ticket
     },
     {
+      path: "/MeetingSuccess",
+      name: "MeetingSuccess",
+     
+      component: TicketSuccess
+    },
+    {
+      path: "/Success/:id",
+      name: "Success",
+     
+      component: Success
+    },
+    {
       path: "/signinfo",
       name: "SignInfo",
     
@@ -201,6 +236,9 @@ export default new Router({
       // meta: {
       //   requireAuth: true // 添加该字段，表示进入这个路由是需要登录的
       // },
+      meta: {
+        requireAuth: true // 添加该字段，表示进入这个路由是需要登录的
+      },
 
       component: MyIndex
     },
@@ -231,6 +269,12 @@ export default new Router({
       },
 
       component: MyTicket
+    },
+
+    {
+      path: "/about",
+      name: "Lianhuiyi",
+      component: Lianhuiyi
     },
 
     {

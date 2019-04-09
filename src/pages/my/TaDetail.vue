@@ -17,6 +17,12 @@
           style="fill:#fff;position:relative;top:-8px;left:-3px;"
         ></x-icon>
       </x-header>-->
+
+       <div v-transfer-dom>
+        <loading :show="show2" text="数据加载中..."></loading>
+      </div>
+
+
       <div class="my-top-AvatarBox">
         <flexbox>
           <flexbox-item :span="1/3">
@@ -277,12 +283,15 @@ import {
   XHeader,
   Flexbox,
   FlexboxItem,
-  Sticky,
-  Toast
+  Sticky, Loading,
+  Toast,  TransferDomDirective as TransferDom,
 } from "vux";
 
 export default {
   name: "TaDetail",
+  directives: {
+    TransferDom
+  },
   components: {
     Group,
     Cell,
@@ -295,7 +304,7 @@ export default {
     Flexbox,
     FlexboxItem,
     Sticky,
-    Toast
+    Toast, Loading,
   },
   data() {
     return {
@@ -307,6 +316,7 @@ export default {
       list2: ["Ta发布的", "Ta参与的"],
       TaData: {},
       releaseCase: [],
+      show2:true,
       TaPosted: [
         // {
         //   type: "pub",
@@ -444,7 +454,7 @@ export default {
         });
       }
 
-      console.log(this.TaData.isMyFollow);
+      // console.log(this.TaData.isMyFollow);
       // if (this.attention) {
       //   this.attention = false;
       //   this.InfoType = "success";
@@ -465,6 +475,7 @@ export default {
     },
     //获取他的主页的数据
     getTaDetailData() {
+      
       let _that = this;
    
         // console.log(this.$route.params.id);
@@ -478,7 +489,7 @@ export default {
           TaObj.params.meId = getStorage("userToken").userId
         }
           getDataInfo("get", "myMeeting/myMeeting/me", TaObj).then(res => {
-            console.log(res);
+            // console.log(res);
             if (res.data.code == 200) {
               this.TaData = res.data.data;
               res.data.data.release.meetingList.forEach(e => {
@@ -501,6 +512,7 @@ export default {
                 ...res.data.data.releaseCase.meetingList,
                 ...res.data.data.releaseCase.placeListItemList
               ];
+              this.show2 = false
 
               setTimeout(function() {
                 _that.swiperH = _that.$refs.swiperHeight.$el.children[0].style.height =

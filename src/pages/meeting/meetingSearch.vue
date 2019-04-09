@@ -3,7 +3,7 @@
     <flexbox :gutter="0" style="position: fixed; background: #fff; z-index:9999">
       <flexbox-item :span="4/5">
         <x-input
-          placeholder="搜索会议或主办方名称"
+          placeholder="搜索会议"
           @on-change="SearchInputChange"
           @on-blur="onblurChange"
           v-model="keyword"
@@ -451,5 +451,9 @@ export default {
 @import "../../assets/style/tools.less";
 @import "../../assets/style/global.less";
 @import "~vux/src/styles/reset.less";
+.weui-dialog{
+  text-align: center !important;
+}
+
 </style>
 

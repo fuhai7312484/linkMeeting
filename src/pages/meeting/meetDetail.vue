@@ -61,7 +61,10 @@
       <div style="height:50px;position: relative; z-index: 9997;">
         <sticky :check-sticky-support="false">
           <div class="downloadAppBox padlr">
-            <div class="downLogo fl">logo</div>
+            <div class="downLogo fl">
+              <img :src="require('../../assets/images/lianhuiyiLogo.png')"/>
+
+            </div>
             <div class="downAppTitle fl">
               <h4>链会议</h4>
             </div>
@@ -182,7 +185,8 @@
         </flexbox-item>
         <flexbox-item :span="3.9/5">
           <div class="meetingdetailInfo">
-            {{meetingData.draftsVo.meetingDetails.beginTime}}至{{meetingData.draftsVo.meetingDetails.endTime}}
+            {{getTimeLimit(meetingData.draftsVo.meetingDetails.beginTime,meetingData.draftsVo.meetingDetails.endTime)}}
+            <!-- {{meetingData.draftsVo.meetingDetails.beginTime}}至{{meetingData.draftsVo.meetingDetails.endTime}} -->
             <!-- 11-24 09:00至21:00 -->
           </div>
         </flexbox-item>
@@ -366,7 +370,7 @@
 
         <ul class="RegListUl">
           <li class="orderPeople-nodata" v-if="orderPersonNum==0">暂无人报名</li>
-          <li v-for="(orderP,index) in orderPeople" :key="index">
+          <li v-for="(orderP,index) in orderPeople" :key="index" class="orderPeopleList">
             <img :src="require('../../assets/images/myFans-Mask.png')">
             <p>{{orderP.name}}</p>
           </li>
@@ -464,7 +468,7 @@ import {
   checkToken,
   getDataInfo,
   isLogin,
-  transDate
+  transDate,timeLimit
 } from "../../assets/lib/myStorage.js";
 import {
   Sticky,
@@ -597,6 +601,12 @@ export default {
     };
   },
   methods: {
+      //处理时间范围
+    getTimeLimit(beginTime,endTime){
+      if(beginTime||endTime){
+      return timeLimit(beginTime,endTime)
+      }
+    },
     //跳转报名参会页面
     gotoTiaket(){
       if(isLogin()){

@@ -14,13 +14,13 @@
     </sticky>
  <group class="feedbackGroup">
     
-      <x-textarea :max="200" 
+      <x-textarea :max="150" 
       placeholder="您的宝贵建议将是我们为之努力的目标" 
       style="font-size:1rem;color:#C8C8C8;"
       v-model="feedbackData.content"
       @on-focus="onEvent('focus')"
        @on-blur="onEvent('blur')" 
-       :height="200" :rows="8"
+       :height="150" :rows="8"
        ></x-textarea>
 
       

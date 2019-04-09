@@ -15,13 +15,32 @@
           <img :src="isLogin?myData.mainPic==null?require('../../assets/images/myFans-Mask.png'):myData.mainPic:require('../../assets/images/myFans-Mask.png')"> 
         </router-link>
         <div class="my-UserInfoName fl" v-if="isLogin">
-          <router-link tag="h3" to="/myInfo">{{myData.name==null?'Ta还没取名字':myData.name}}</router-link>
-          <span>
+          <router-link tag="h3" to="/myInfo">{{myData.name==null?'昵称':myData.name}}</router-link>
+
+                    <span v-if="idensChange(1,myData.idens)">
+                      <img src="../../assets/images/meeting-v.png">
+                     
+                      认证场地方
+                    </span>
+                    <span v-if="idensChange(0,myData.idens)">
+                    <img :src="require('../../assets/images/v.png')">   认证主办方
+                    </span>
+
+                   <span v-if="idensChange(0,myData.idens)==0" style="color:#ccc;">
+                      <img src="../../assets/images/icon-uncertified.png">未认证
+                    </span>
+
+
+
+          <!-- <span>
             <img src="../../assets/images/v.png">认证场地方
           </span>
            <span class="spang">
             <img src="../../assets/images/meeting-v.png">认证主办方
-          </span>
+          </span> -->
+
+
+
         </div>
          <div class="my-UserInfoName fl" v-if="!isLogin">
           <router-link tag="h3" to="/myInfo">登录/注册</router-link>
@@ -30,31 +49,35 @@
           </span> -->
         </div>
       </div>
+      
       <div class="my-CollectionBox">
         <router-link tag="div" to="/mycolle" class="my-CollectionIcos fl">
-          <span>
+        <!-- <badge></badge> -->
+          <div> 
             <img src="../../assets/images/my-Collection.png">
-          </span>
+          </div>
           我的收藏
         </router-link>
 
         <router-link tag="div" to="/myfollow" class="my-CollectionIcos fl">
-          <span>
+          
+          <div>
+            
             <img src="../../assets/images/my-Attention.png">
-          </span>
+          </div>
            我关注的
         </router-link>
 
         <router-link tag="div" to="/myfan" class="my-CollectionIcos fl">
-          <span>
+          <div>
             <img src="../../assets/images/my-Fan.png">
-          </span>
+          </div>
           我的粉丝
         </router-link>
       </div>
 
       <group class="my-navList">
-        <cell is-link title="场地订单" link="/"></cell>
+        <!-- <cell is-link title="场地订单" link="/"></cell> -->
         <cell is-link title="会议票券" link="/MyTicket"></cell>
         <cell is-link title="浏览记录" link="/mybrowse"></cell>
         <cell is-link title="用户反馈" link="/feedback"></cell>
@@ -75,7 +98,7 @@ import {
   checkToken,
   isLogin
 } from "../../assets/lib/myStorage.js";
-import { Group, Cell, Loading, TransferDomDirective as TransferDom } from "vux";
+import { Group, Cell, Loading, TransferDomDirective as TransferDom,Badge  } from "vux";
 import FooterNav from "@/components/footerNav";
 // import axios from "axios";
 export default {
@@ -96,11 +119,24 @@ export default {
     FooterNav,
     Loading,
     Group,
-    Cell
+    Cell,Badge 
   },
   methods: {
-    //获取当前用户是否在登录状态
-  
+ 
+  //检查是否认证
+    idensChange(typeNum, arr) {
+    
+      if (arr) {
+        //  console.log(typeNum,arr)
+        if (arr.indexOf(typeNum) != -1) {
+          return true;
+        } else {
+          return false;
+        }
+      }else{
+         return 0;
+      }
+    },
 
     //获取当前用户信息
     getMyData() {
@@ -118,6 +154,7 @@ export default {
         getDataInfo("get", "user/userById", userObj).then(res => {
           // console.log(res )
           if (res.data.code == 200) {
+            // console.log(res.data.data)
             this.myData = res.data.data;
 
             setTimeout(function() {

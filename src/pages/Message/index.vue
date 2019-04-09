@@ -309,10 +309,11 @@ export default {
         password: userId
       }).onSuccess(function(data) {
         // console.log("success:" + JSON.stringify(data));
+       
         //监听聊天变化
         JIM.onMsgReceive(function(res) {
           // console.log(res)
-          console.log(res);
+      
           if (res.messages[0].content.from_type == "admin") {
             // 如果数组里面本身不存在这个对象则把这个加进去
         
@@ -368,9 +369,9 @@ export default {
     },
     //获取离线消息
     getConvers() {
-      // console.log(111111111)
       let _that = this;
       JIM.onSyncConversation(function(Pdata) {
+       
         //离线消息同步监听
         // _that.getConversation();
         console.log(Pdata,"---------")
@@ -381,9 +382,10 @@ export default {
             msg: e.msgs[e.msgs.length - 1].content
           });
         });
+        //获取回话
         JIM.getConversation()
           .onSuccess(function(data) {
-            console.log(data)
+            console.log('11111111',data)
             if (data.code == 0) {
               let newArr = [],
                 userArr = [],

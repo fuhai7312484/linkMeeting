@@ -169,6 +169,10 @@
       </popup>
     </div>
 
+     <div v-transfer-dom class="AlertShow-weui-dialog">
+      <alert v-model="AlertShow" :title="'提示'" button-text="我知道了" @on-show="onShow" @on-hide="onHide">该手机号已成为其他链会议账号的登录手机号,请更换其他手机号进行绑定</alert>
+    </div>
+
     <toast
       v-model="toastInfo.showPositionValue"
       width="10em"
@@ -196,6 +200,7 @@ import {
   TransferDomDirective as TransferDom,
   Toast,
   Popup,
+  Alert,
   XInput
 } from "vux";
 
@@ -217,6 +222,7 @@ export default {
         showPositionValue: false,
         toastType: "success"
       },
+      AlertShow:false,
       showInput: false,
       inputType: "",
       inputValue: "",
@@ -254,9 +260,15 @@ export default {
     Actionsheet,
     Toast,
     Popup,
-    XInput
+    XInput,Alert
   },
   methods: {
+     onHide () {
+      console.log('on hide')
+    },
+    onShow () {
+      console.log('on show')
+    },
     goToback() {
       this.showInput = false;
       this.step = 1;
@@ -366,11 +378,16 @@ export default {
                 _that.Resend = false;
                 _that.Reacquire();
               } else if (data.code === 400) {
-                this.toastInfo = {
-                  showMsg: "手机已绑定其他账号",
-                  showPositionValue: true,
-                  toastType: "text"
-                };
+                this.AlertShow = true;
+                // this.toastInfo = {
+                //   showMsg: "手机已绑定其他账号",
+                //   showPositionValue: true,
+                //   toastType: "text"
+                // };
+
+
+
+                
               }
             });
           }

@@ -1,7 +1,7 @@
 <template>
   <div class="box">
     
-    <div class="my-top-boxs" :style="{backgroundImage: 'url(' + TaData.mainPic + ')' }"></div>
+    <div class="my-top-boxs" :style="{backgroundImage: 'url(' + bgChange(TaData.mainPic) + ')' }"></div>
     <div class="my-top-boxsMak"></div>
     <div class="my-top-boxsContent">
       <x-header :right-options="{showMore: true}" @on-click-more="showMenus = true"></x-header>
@@ -58,7 +58,7 @@
           >{{TaData.placeNum}} 场地 | {{TaData.meetingNum}} 会议 | {{TaData.fensNum}} 粉丝</flexbox-item>
           <flexbox-item :span="1/3">
             <div
-              class="my-top-attention"
+              class="my-top-attention-my"
               @click="attChange"
               
             >编辑信息</div>
@@ -107,6 +107,7 @@
       <!-- {{TaPosted}} -->
       <swiper-item>
         <ul class="my-tab-swiper vux-center" ref="pubUiHF">
+          
           <li
             v-for="(taPos,index) in TaPosted"
             :key="index"
@@ -372,6 +373,13 @@ export default {
   },
 
   methods: {
+    bgChange(bg){
+      if(bg){
+        return bg;
+      }else{
+        return require('../../assets/images/myFans-Mask.png')
+      }
+    },
     gotoDetails(type, id) {
       if (type == "par") {
         this.$router.push({
@@ -402,62 +410,7 @@ export default {
     },
     //点击关注或取消关注承办方
     attChange() {
-      if (this.TaData.isMyFollow == 1) {
-        let followObj = {
-          params: {
-            userId: getStorage("userToken").userId,
-            target: this.$route.params.id
-          }
-        };
-        checkToken().then(Pdata => {
-          getDataInfo("delete", "refollow/follow", followObj).then(res => {
-            if (res.data.code == 200) {
-              this.TaData.isMyFollow = 2;
-              this.InfoType = "cancel";
-              this.textInfo = "已取消关注";
-              this.showPosition("middle");
-            } else if (res.data.code == 400 || res.data.code == 100101) {
-              setTimeout(function() {
-                _that.$router.push("/login");
-              }, 500);
-            }
-          });
-        });
-      } else if (this.TaData.isMyFollow == 2) {
-        let followObj = {
-          user: getStorage("userToken").userId,
-          taget: this.$route.params.id,
-          type: "1"
-        };
-        checkToken().then(Pdata => {
-          getDataInfo("post", "refollow/follow", followObj).then(res => {
-            if (res.data.code == 200) {
-              this.TaData.isMyFollow = 1;
-              this.InfoType = "success";
-              this.textInfo = "关注成功！";
-              this.showPosition("middle");
-            } else if (res.data.code == 400 || res.data.code == 100101) {
-              setTimeout(function() {
-                _that.$router.push("/login");
-              }, 500);
-            }
-          });
-        });
-      }
-
-      console.log(this.TaData.isMyFollow);
-      // if (this.attention) {
-      //   this.attention = false;
-      //   this.InfoType = "success";
-      //   this.textInfo = "关注成功！";
-
-      //   this.showPosition("middle");
-      // } else {
-      //   this.attention = true;
-      //   this.InfoType = "cancel";
-      //   this.textInfo = "已取消关注";
-      //   this.showPosition("middle");
-      // }
+     this.$router.push('/myInfo')
     },
 
     showPosition(position) {

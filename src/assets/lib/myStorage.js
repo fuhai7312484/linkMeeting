@@ -52,6 +52,24 @@ export function isLogin() {
     return false;
   }
 }
+//获取当前是否是微信内页打开
+export function isweixin() {
+  const ua = window.navigator.userAgent.toLowerCase();
+  if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+      return true;
+  } else {
+
+      return false;
+  }
+}
+//截取出code字符串
+export function GetQueryString(name){
+  var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+  var r = window.location.search.substr(1).match(reg);
+  if(r!=null)return unescape(r[2]); return null;
+  
+  }
+
 // 请求拦截器
 export function checkToken() {
   let token = getCookie("accessToken");
@@ -273,14 +291,25 @@ export function sendSysMsg(obj) {
   //   eid:'',
   //   content:'恭喜您成功注册<链会议>！',
   // }
-  console.log(obj);
+  // console.log(obj);
   checkToken().then(Pdata => {
     getDataInfo("post", "jpush/im/smsg", obj).then(res => {
-      console.log(res);
+      // console.log(res);
     });
   });
 }
-
+//处理开始时间和结束时间显示方式
+export function timeLimit(beginTime,endTime){
+  let begin = beginTime.split(' ')
+  let end = endTime.split(' ')
+  let beginM = begin[0].split('-')
+  if(begin[0] == end[0]){
+    return beginM[1] +'-'+ beginM[2] +' '+ begin[1]+' 至 '+end[1]
+  }else{
+    let endM = end[0].split('-')
+    return beginM[1] +'-'+ beginM[2] +' '+ begin[1]+' 至 '+ endM[1]+'-'+endM[1]+' '+ end[1]
+  }
+}
 //时间戳转时间
 export function getToTime(timeStamp, str) {
   if (!timeStamp) return;

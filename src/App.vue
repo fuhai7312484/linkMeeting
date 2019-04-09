@@ -9,6 +9,16 @@
 
 <script>
 // import {JIMinitchange} from "./assets/lib/myStorage.js";
+import axios from "axios";
+import {
+  stoRemove,
+  removeCookie,
+  getStorage,
+  checkToken,
+  getDataInfo,
+  isweixin,
+  GetQueryString
+} from "./assets/lib/myStorage.js";
 export default {
   name: "app",
   data() {
@@ -16,8 +26,81 @@ export default {
       transitionName: ""
     };
   },
-   created() {
+  created() {
     // JIMinitchange()
+  },
+  mounted() {
+  //   if (isweixin()) {
+
+  //     // let express = require("express");
+  //     // const https = require('https');
+  //     //   let app = express();
+
+
+  //     let code = GetQueryString("code");
+  //     var callback = "http://lianhuiyi.woneast.com";
+  //     var appId = "wx837aea6e0dd3f50e";
+  //     // var redirect_uri = window.location.origin + window.location.pathname;
+  //     var wx_link ='https://open.weixin.qq.com/connect/oauth2/authorize?appid='+appId+'&redirect_uri='+callback+'&response_type=code&scope=snsapi_userinfo&state=1&connect_redirect=1#wechat_redirect'
+        
+  //        if(code==null){
+  //          console.log(wx_link)
+  //       window.location.href = wx_link;
+  //       code = GetQueryString('code');
+       
+  //       }else{
+  //         // console.log(code)
+  //         let secret = '4718c6d43523afd38d37ade653ec5db8'
+  //         let getaccess = `https://api.weixin.qq.com/sns/oauth2/access_token?appid=` + `${appId}&secret=${secret}&code=${code}&grant_type=authorization_code`
+  //         // https.get(getaccess,(res)=>{
+  //         //   console.log(res)
+  //         // })
+  //         // console.log(getaccess)
+  //         window.location.href = getaccess
+          
+  // // var wx_TokenLink = 'https://api.weixin.qq.com/sns/oauth2/access_token'
+  //       // console.log('wx_TokenLink',wx_TokenLink)
+  //     //   let TokenObj = {
+  //     //     headers: {"Access-Control-Allow-Origin":"*"},
+  //     //   params: {
+  //     //    appId:appId,
+  //     //    secret:secret,
+  //     //    code:code,
+  //     //    grant_type:'authorization_code',
+  //     //   }
+  //     // };
+  //     // console.log(TokenObj)
+  //     // axios.get('https://api.weixin.qq.com/sns/oauth2/access_token', TokenObj).then(res=>{
+  //     //   console.log(res)
+  //     // })
+  //     // getDataInfo(
+  //     //   "get",
+  //     //   "https://api.weixin.qq.com/sns/oauth2/access_token",
+  //     //   TokenObj
+  //     // ).then(res => {
+  //     //   console.log(res)
+  //     //   // if (res.data.code == 200) {
+  //     //   //   this.goodData = res.data.data.meetingShowList;
+  //     //   // }
+  //     // });
+       
+       
+  //     //  axios.get(wx_TokenLink).then(res=>{
+  //     //     console.log(res)
+  //     //   })
+  //         //  window.location.href = wx_TokenLink
+  //         //  var r = window.location.search;
+
+        
+  //         //  console.log('r',r)
+  //       //  let token =  GetQueryString('access_token')
+         
+
+  //       }
+      
+
+  //     // this.$router.push('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx837aea6e0dd3f50e&redirect_uri=http://lianhuiyi.woneast.com/test.html&response_type=code&scope=snsapi_base&state=1&connect_redirect=1#wechat_redirect')
+  //   }
   },
   watch: {
     //路由跳转 添加动画
