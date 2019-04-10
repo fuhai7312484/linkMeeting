@@ -15,9 +15,12 @@
         <loading :show="show2" text="数据加载中..."></loading>
       </div>
       <div v-if="!show2" style="margin-top:1rem;">
+
+       
+
         <group class="my-myInfoBox">
           <cell title="头像" is-link>
-            <img slot width="30" style="border-radius:50%" :src="myData.mainPic">
+            <img slot width="30" height="30" style="border-radius:50%" :src="myData.mainPic">
           </cell>
         </group>
         <group class="my-myInfoBox">
@@ -169,6 +172,10 @@ export default {
   },
   methods: {
     //null
+
+    fileChange(ev){
+      console.log(ev)
+    },
     getNull(val) {
       if (val == null) {
         return "";

@@ -6,7 +6,7 @@
       </tab>
     </sticky>
     <div v-for="(i,index) in 40" :key="index">{{i}}</div>-->
-     <div v-transfer-dom>
+    <div v-transfer-dom>
       <loading :show="show2" text="数据加载中..."></loading>
     </div>
 
@@ -34,20 +34,19 @@
       :style="{height:swiperH}"
       :height="swiperH"
       :autoheight="true"
+      :min-moving-distance="80"
       :loop="true"
-      :min-moving-distance="120"
     >
       <swiper-item v-for="(lis,i) in list2" :key="i">
         <!-- {{swiperH}} -->
         <div :ref="'pubUiHF'+i">
-           <div class="noData-default" v-if="TaPosted.length==0">
-          <p>
-            <img :src="require('../../assets/images/noData.png')">
-          </p>
-          <p>暂无数据</p>
-        </div>
+          <div class="noData-default" v-if="TaPosted.length==0">
+            <p>
+              <img :src="require('../../assets/images/noData.png')">
+            </p>
+            <p>暂无数据</p>
+          </div>
 
-        
           <div class="Ticket-listBox" v-for="(taPos,index) in TaPosted" :key="index" v-if="!show2">
             <group>
               <!-- <div class="padlr">
@@ -64,8 +63,8 @@
                 <span
                   slot
                   class="Ticket-company-status"
-                  :class="taPos.status==0?'T-s1':taPos.status==2&&taPos.joinType==0?'T-s2':''"
-                >{{taPos.status==0?'待付款':taPos.status==2&&taPos.joinType==0?'待参会':''}}</span>
+                  :class="taPos.status==0?'T-s1':taPos.status==2&&taPos.joinType==0?'T-s2':taPos.status==8||taPos.status==4?'T-s4':taPos.status==0?'T-s1':taPos.joinType==0?'T-s3':''"
+                >{{taPos.status==0?'待付款':taPos.status==2&&taPos.joinType==0?'待参会':taPos.status==8?'交易关闭':taPos.status==4?'已完成':taPos.status==0?'待付款':taPos.joinType==0?'退款中':''}}</span>
               </cell>
               <cell class="Ticket-meetingInfoBox" link="/">
                 <div slot="icon" class="Ticket-meetingIconBox">
@@ -79,17 +78,26 @@
                 </div>
               </cell>
               <div class="Ticket-piaoInfoBox padlr">
+                <!-- {{taPos.status}} --- {{taPos.joinType}}  -->
                 <h4 class="fl">{{taPos.ticketName}}</h4>
                 <div class="Ticket-piaoInfoSpan fr">
                   <span class="piaoInfoNun">共{{taPos.ticketNum}}张</span>
 
-                  <span class="piaoInfoPrice">合计：{{taPos.price==0?'免费':taPos.price}}</span>
+                  <span class="piaoInfoPrice">合计：{{taPos.price==0?'免费':'¥ '+taPos.price}}</span>
                 </div>
               </div>
             </group>
             <div class="Ticket-btns padlr">
-              <span>取消订单</span>
-              <span class="Ticket-PayBtn">马上支付</span>
+              <!-- <span>取消订单</span> -->
+              <span
+                class="Ticket-PayBtn"
+                v-if="taPos.status==2&&taPos.joinType==0"
+                @click="getETicket(taPos.orderId)"
+              >查看电子票</span>
+              <span v-if="taPos.status==0" @click="cancelOrder(taPos.orderId)">取消订单</span>
+              <span v-if="taPos.status==4" @click="getETicket(taPos.orderId)">查看电子票</span>
+              <span class="Ticket-PayBtn" v-if="taPos.status==4">评价</span>
+              <span class="Ticket-PayBtn" v-if="taPos.status==0">马上支付</span>
             </div>
           </div>
 
@@ -97,6 +105,21 @@
         </div>
       </swiper-item>
     </swiper>
+
+    <div v-transfer-dom>
+      <confirm v-model="show" @on-cancel="onCancel" @on-confirm="onConfirm(CancelId)">
+        <p style="text-align:center;">是否取消该订单?</p>
+      </confirm>
+    </div>
+
+    <toast
+      v-model="toastInfo.showPositionValue"
+      width="10em"
+      :type="toastInfo.toastType"
+      position="middle"
+      :time="1500"
+      is-show-mask
+    >{{toastInfo.showMsg}}</toast>
   </div>
 </template>
 <script>
@@ -118,12 +141,15 @@ import {
   Flexbox,
   FlexboxItem,
   Sticky,
-  Toast, Loading,  TransferDomDirective as TransferDom
+  Toast,
+  Loading,
+  TransferDomDirective as TransferDom,
+  Confirm
 } from "vux";
 
 export default {
   name: "MyTicket",
-    directives: {
+  directives: {
     TransferDom
   },
   components: {
@@ -138,7 +164,9 @@ export default {
     Flexbox,
     FlexboxItem,
     Sticky,
-    Toast, Loading
+    Toast,
+    Loading,
+    Confirm
   },
   data() {
     return {
@@ -153,18 +181,62 @@ export default {
       showPositionValue: false,
       textInfo: "",
       InfoType: "success",
-      show2: true
+      show2: true,
+      show: false,
+      CancelId: "",
+      toastInfo: {
+        showMsg: "",
+        showPositionValue: false,
+        toastType: "success"
+      }
     };
   },
 
   methods: {
+    //确认是否取消订单
+    onCancel() {
+      this.CancelId = "";
+    },
+    onConfirm(msg) {
+      console.log(msg);
+
+      let CanceObj = {
+        id: msg
+      };
+      checkToken().then(Pdata => {
+        getDataInfo("patch", "ordermeeting/ordermeeting/cancel", CanceObj).then(
+          res => {
+            console.log(res);
+            if (res.data.code == 200) {
+              this.toastInfo = {
+                showMsg: "订单取消成功！",
+                showPositionValue: true,
+                toastType: "success"
+              };
+               this.TaPosted = this.TaPosted.filter(e => {
+                return e.orderId != msg
+              });
+            }
+          }
+        );
+      });
+    },
+    //取消订单
+    cancelOrder(id) {
+      (this.show = true), (this.CancelId = id);
+    },
+    //查看电子票
+    getETicket(Eid) {
+      this.$router.push("/Eticket/" + Eid);
+      // console.log(Eid)
+    },
     handChange() {
       // console.log("11111111");
     },
     handler(index) {
       // console.log(index,this.index)
     },
-  
+
     //处理时间范围
     getTimeLimit(beginTime, endTime) {
       if (beginTime || endTime) {
@@ -173,7 +245,7 @@ export default {
     },
     //获取订单数据
     getTicketData(status) {
-       this.show2 = true;
+      this.show2 = true;
       let _that = this;
       let TicketObj = {
         params: {
@@ -181,18 +253,16 @@ export default {
           userId: getStorage("userToken").userId
         }
       };
-      if(status != undefined){
-        TicketObj.params.status = status
+      if (status != undefined) {
+        TicketObj.params.status = status;
       }
       checkToken().then(Pdata => {
         getDataInfo("get", "myMeeting/myMeeting/myCoupon", TicketObj).then(
           res => {
-            console.log(res)
+            console.log(res);
             if (res.data.code == 200) {
               this.TaPosted = res.data.data;
-             
-                this.show2 = false;
-         
+              this.show2 = false;
             } else if (res.data.code == 100101) {
               _that.$router.push("/login");
             }
@@ -206,42 +276,38 @@ export default {
       this.showPositionValue = true;
     }
   },
-  updated () {
-     this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height =
+  updated() {
+    this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height =
       this.$refs.pubUiHF0[0].offsetHeight + "px";
   },
   mounted() {
     this.getTicketData();
-   this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height =
+    this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height =
       this.$refs.pubUiHF0[0].offsetHeight + "px";
-  
-    
   },
   watch: {
     index(n, o) {
-      console.log(n)
-    switch(n){
+      console.log(n);
+      switch (n) {
         case 0:
-        this.getTicketData()
-        break;
-         case 1:
-        this.getTicketData(n-1)
-        break;
-          case 2:
-        this.getTicketData(2)
-        break;
-          case 3:
-        this.getTicketData(5)
-        break;
-         case 4:
-        this.getTicketData(4)
-        break;
+          this.getTicketData();
+          break;
+        case 1:
+          this.getTicketData(n - 1);
+          break;
+        case 2:
+          this.getTicketData(2);
+          break;
+        case 3:
+          this.getTicketData(5);
+          break;
+        case 4:
+          this.getTicketData(4);
+          break;
       }
 
-
-       this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height =
-      this.$refs['pubUiHF'+n][0].offsetHeight + "px";
-
+      this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height =
+        this.$refs["pubUiHF" + n][0].offsetHeight + "px";
 
       // if (n == 0) {
       //   this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height =

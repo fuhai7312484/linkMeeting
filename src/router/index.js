@@ -44,6 +44,8 @@ import MyTicket from "@/pages/my/MyTicket";
 import MyFollow from "@/pages/my/MyFollow"
 import Lianhuiyi from "@/pages/my/about";
 
+import ETicket from "@/pages/my/ETicket";
+
 
 import Cpage from "@/pages/my/myInfo";
 
@@ -269,6 +271,13 @@ export default new Router({
       },
 
       component: MyTicket
+    },
+
+    {
+      path: "/Eticket/:id",
+      name: "ETicket",
+
+      component: ETicket
     },
 
     {

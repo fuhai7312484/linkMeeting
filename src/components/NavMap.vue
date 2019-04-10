@@ -6,7 +6,14 @@
       @on-click-menu="MapSelectClick"
       show-cancel
     ></actionsheet>
-
+ <div>
+      <div class="map-headerBox borBottm">
+        <div class="map-go-back" @click="$router.go(-1)"></div>
+        <h3
+          class="map-headerTitle"
+        >导航地图</h3>
+      </div>
+    </div>
 
 <div class="navMapBox">
 

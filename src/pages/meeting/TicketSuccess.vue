@@ -211,6 +211,7 @@ import {
           id: this.$route.query.orderId,
         }
       };
+      console.log(orderObj)
       getDataInfo("get", "ordermeeting/ordermeeting", orderObj).then(
         res => {
           // console.log(res)
