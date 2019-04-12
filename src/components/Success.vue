@@ -23,9 +23,8 @@
         </h3>
         <p>谢谢您的回复，更多精彩会议尽在链会议APP</p>
       </div>
-      <div @click="shard">分享给微信好友</div>
-      <div @click="shard">分享到朋友圈</div>
-
+      <!-- <div @click="weixinShareTimeline('这里是标题','这块是简介','http://www.baidu.com','logo.png')">分享给微信好友</div>
+      <div>分享到朋友圈</div> -->
       <div class="der"></div>
     </div>
 
@@ -65,7 +64,9 @@ import {
   removeCookie,
   getStorage,
   checkToken,
-  getDataInfo
+  getDataInfo,
+  wxRegister,
+  ShareTimeline
 } from "../assets/lib/myStorage.js";
 import {
   Sticky,
@@ -129,95 +130,33 @@ export default {
     };
   },
   methods: {
-    shard() {
-      //处理验证失败的信息
-      //   wx.error(function (res) {
-      //     console.log(111111111,res)
-      //     // logUtil.printLog('验证失败返回的信息:',res);
-      //   });
-      // wx.onMenuShareTimeline({
-      //   title: '这里是分享', // 分享标题
-      //   link: 'http://lianhuiyi.woneast.com/', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-      //   imgUrl: './', // 分享图标
-      //  success: function (res) {
-      //         // 用户确认分享后执行的回调函数
-      //         console.log(res)
-      //         // logUtil.printLog("分享到朋友圈成功返回的信息为:",res);
-      //         // _this.showMsg("分享成功!")
-      //       },
-      //       cancel: function (res) {
-      //         // 用户取消分享后执行的回调函数
-      //         console.log(res)
-      //         // logUtil.printLog("取消分享到朋友圈返回的信息为:",res);
-      //       }
-      // })
-
-      wx.ready(() => {
-        wx.onMenuShareAppMessage({
-          title: "您的好友邀请您注册秒单之家", // 分享标题
-          desc: "快来注册秒单之家，一大笔订单等你来拿", // 分享描述
-          link: "http://lianhuiyi.woneast.com/", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-          imgUrl:
-            window.document.location.protocol +
-            "//" +
-            window.document.location.host +
-            "/zhanghuifeng/static/img/logo.png", // 分享图标
-          type: "", // 分享类型,music、video或link，不填默认为link            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-          success: function() {
-            // 用户确认分享后执行的回调函数
-            alert("分享成功！");
-          },
-          cancel: function() {
-            // 用户取消分享后执行的回调函数
-            // alert('cancel')
-            alert("分享失败！");
-            //     _this.wxShare()  //这是用户撤销后重新执行第一步验证签名的方法名 根据自己的命名写
-          }
-        });
-
-        wx.onMenuShareTimeline({
-          title: "您的好友邀请您注册秒单之家", // 分享标题
-          link: "http://lianhuiyi.woneast.com/", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-          imgUrl:
-            window.document.location.protocol +
-            "//" +
-            window.document.location.host +
-            "/zhanghuifeng/static/img/logo.png", // 分享图标
-          success: function() {
-            // 用户确认分享后执行的回调函数
-            alert("成功");
-            //     _this.$router.push({path:'/me',query:{}})
-          },
-          cancel: function() {
-            // 用户取消分享后执行的回调函数
-            console.log("失败");
-            //       _this.wxShare()
-          }
-        });
+    weixinShareTimeline(title, desc, link, imgUrl) {
+      WeixinJSBridge.invoke("shareTimeline", {
+        img_url: imgUrl,
+        //"img_width":"640",
+        //"img_height":"640",
+        link: link,
+        desc: desc,
+        title: title
       });
-
-      wx.error(function(res) {
-        console.log(res);
-        // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
-      });
-
-      // wx.onMenuShareAppMessage({
-      //   title: '分享标题', // 分享标题
-      //   desc: '分享描述', // 分享描述
-      //   link:'#/...', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-      //   imgUrl: './', // 分享图标
-      //   type: 'video', // 分享类型,music、video或link，不填默认为link
-      //   dataUrl: '/s', // 如果type是music或video，则要提供数据链接，默认为空
-      //   success: function () {
-      //     alert('分享给朋友成功')
-      //     // 用户确认分享后执行的回调函数
-      //   },
-      //   cancel: function () {
-      //     // 用户取消分享后执行的回调函数
-      //   }
-      // })
     },
-
+    wxRegCallback() {
+      this.ShareTApp();
+    },
+    ShareTApp() {
+      let option = {
+        title: "限时团购周 挑战最低价", // 分享标题, 请自行替换
+        link: window.location.href.split("#")[0], // 分享链接，根据自身项目决定是否需要split
+        imgUrl: "logo.png", // 分享图标, 请自行替换，需要绝对路径
+        success: () => {
+          alert("分享成功");
+        },
+        error: () => {
+          alert("已取消分享");
+        }
+      };
+      ShareTimeline(option);
+    },
     //我的票券
     gotoMyTicket() {
       this.$router.push("/MyTicket");
@@ -233,6 +172,8 @@ export default {
     getOrderdata() {
       // console.log(this.$route.query.meeting_id,this.$route.query.orderId)
       this.show2 = false;
+
+      // wxRegister(this.wxRegCallback);
       //获取订单信息
       // let orderObj = {
       //   params: {
@@ -263,20 +204,6 @@ export default {
   },
   mounted() {
     this.getOrderdata();
-
-    wx.config({
-      debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-      appId: "wx837aea6e0dd3f50e", // 必填，公众号的唯一标识
-      timestamp: "1554719019", // 必填，生成签名的时间戳
-      nonceStr: "123456", // 必填，生成签名的随机串
-      signature: "1f785f1acefc39d59de802fc08dbbbce959b7511", // 必填，签名，见附录1
-      jsApiList: [
-        "onMenuShareAppMessage",
-        "onMenuShareTimeline",
-        "onMenuShareQQ",
-        "onMenuShareQZone"
-      ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-    });
   }
 };
 </script>

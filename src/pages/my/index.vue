@@ -17,7 +17,7 @@
         <div class="my-UserInfoName fl" v-if="isLogin">
           <router-link tag="h3" to="/myInfo">{{myData.name==null?'昵称':myData.name}}</router-link>
 
-                    <span v-if="idensChange(1,myData.idens)">
+                    <span class="spang"  v-if="idensChange(1,myData.idens)">
                       <img src="../../assets/images/meeting-v.png">
                      
                       认证场地方
@@ -79,8 +79,8 @@
       <group class="my-navList">
         <!-- <cell is-link title="场地订单" link="/"></cell> -->
         <cell is-link title="会议票券" link="/MyTicket"></cell>
-        <cell is-link title="浏览记录" link="/mybrowse"></cell>
-        <cell is-link title="用户反馈" link="/feedback"></cell>
+        <!-- <cell is-link title="浏览记录" link="/mybrowse"></cell>
+        <cell is-link title="用户反馈" link="/feedback"></cell> -->
         <cell is-link title="设置" link="/setting"></cell>
       </group>
       <br>
@@ -96,7 +96,7 @@ import {
   getStorage,
   getCookie,
   checkToken,
-  isLogin
+  isLogin,setStorage,isweixin,WeChatLogin
 } from "../../assets/lib/myStorage.js";
 import { Group, Cell, Loading, TransferDomDirective as TransferDom,Badge  } from "vux";
 import FooterNav from "@/components/footerNav";
@@ -171,8 +171,14 @@ export default {
   },
 
   mounted() {
+      let wx_Url = 'myindex'
+      setStorage('wx_url',wx_Url)
+      
+          if(isweixin()){
+          WeChatLogin()
+            }
+
     if(isLogin()){
-     
       this.isLogin = isLogin()
       this.getMyData()
     }else{

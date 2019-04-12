@@ -10,10 +10,11 @@
        <div v-transfer-dom>
       <popup v-model="show10" position="top" :show-mask="false">
         <div class="position-vertical-demo1" v-if="!dataEnd">
-      {{MapTotal}}场会议，优先展示前{{data_info.length}}场
+          {{MapTotal==0?data_info.length+'场会议，加载完毕':MapTotal+'场会议，优先展示前'+data_info.length+'场'}}
         </div>
          <div class="position-vertical-demo1" v-if="dataEnd">
-        {{data_info.length}}场会议，加载完毕
+            {{MapTotal==0?data_info.length+'场会议，加载完毕':MapTotal+'场会议，优先展示前'+data_info.length+'场'}}
+        <!-- {{data_info.length}}场会议，加载完毕 -->
         </div>
       </popup>
     </div>
@@ -369,7 +370,7 @@ map.centerAndZoom(new BMap.Point(103.388611,35.563611), zoomNum);
       //  console.log(this.OrderHight)
     },
     data_info(){
-      console.log(this.data_info.length)
+      // console.log(this.data_info.length)
        this.map();
       
     },

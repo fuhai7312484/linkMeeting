@@ -2,9 +2,14 @@ import Vue from "vue";
 import Router from "vue-router";
 import HelloWorld from "@/components/HelloWorld";
 import Terms from "@/components/Terms";
+import downApp from "@/components/downApp";
+
+import lot from "@/components/lot";
+
 
 import Login from "@/pages/Login/login";
 
+import wxLogin from "@/components/wxLogin"
 
 import CodeLogin from "@/pages/Login/CodeLogin";
 
@@ -53,6 +58,9 @@ import Cpage from "@/pages/my/myInfo";
 import MyInfo from "@/pages/my/myInfo";
 import gallery from "@/components/gallery";
 import city from "@/components/City";
+
+//抽奖活动
+import Lottery from "@/pages/activity/index"
 // import PullTod from "@/components/PullTo";
 Vue.use(Router);
 
@@ -91,6 +99,14 @@ export default new Router({
       //   index: 2,
       // },
       component: Login
+    },
+    {
+      path: "/wxlogin",
+      name: "wxLogin",
+      // meta: {
+      //   index: 2,
+      // },
+      component: wxLogin
     },
     {
       path: "/reg",
@@ -389,6 +405,32 @@ export default new Router({
       // },
       component: city
     },
-   
+
+    {
+      path: "/downApp",
+      name: "downApp",
+      // meta: {
+      //   index: 2,
+      // },
+      component: downApp
+    },
+    {
+      path: "/lot",
+      name: "lot",
+      // meta: {
+      //   index: 2,
+      // },
+      component: lot
+    },
+
+//抽奖活动
+    {
+      path: "/lottery",
+      name: "lottery",
+      // meta: {
+      //   index: 2,
+      // },
+      component: Lottery
+    },
   ]
 });

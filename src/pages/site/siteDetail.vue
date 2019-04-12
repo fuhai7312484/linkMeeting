@@ -584,7 +584,7 @@ import {
   getStorage,
   isLogin,
   getNavigator,
-  wakeApp
+  wakeApp,ShareTimeline,ShareAppMessage,ShareAppShareQQ,ShareQZone,wxRegister,setStorage
 } from "../../assets/lib/myStorage.js";
 import {
   Actionsheet,
@@ -784,7 +784,8 @@ export default {
       wakeApp();
     },
     godown() {
-      window.location.href = "https://www.pgyer.com/NSM9";
+       this.$router.push('/downApp')
+      // window.location.href = "https://www.pgyer.com/NSM9";
     },
     gotoDetil(id) {
       // console.log(id)
@@ -1165,10 +1166,38 @@ export default {
           this.$router.push("/login");
         }
       }
-    }
+    },
+      // 微信分享回调
+     wxRegCallback() {
+     
+ let LinkUrl = window.location.href.split('/?code=')[0]+'/#/sitedetail/'+this.$route.params.id
+ let option = {
+        title: this.sitData.name, // 分享标题, 请自行替换
+        link: LinkUrl, // 分享链接，根据自身项目决定是否需要split
+        imgUrl: this.sitData.cuser.mainPic, // 分享图标, 请自行替换，需要绝对路径
+        desc: '我在链会议发现一个不错的场地,赶快来看看吧。',
+        success: () => {
+          alert("分享成功！");
+        },
+        error: () => {
+          alert("已取消分享");
+        }
+      };
+      ShareTimeline(option);
+     ShareAppMessage(option);
+      ShareAppShareQQ(option);
+     ShareQZone(option);
+    },
+
+
   },
   mounted() {
     this.getSitedetailData();
+
+       let wx_Url = 'sitedetail/'+this.$route.params.id
+setStorage('wx_url',wx_Url)
+      let shareUrl = window.location.href
+             wxRegister(shareUrl,this.wxRegCallback);
   },
   computed: {
     showdetailList() {

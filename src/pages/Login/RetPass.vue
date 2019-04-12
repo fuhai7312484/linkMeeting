@@ -31,7 +31,7 @@
             :time="1500"
             is-show-mask
           >{{showMsg}}</toast>
-          <div class="loginBtn fr">
+          <div class="loginBtn">
             <x-button
               action-type="submit"
               :class="disabled?'custom-primary':'custom-primary-red'"
@@ -99,7 +99,7 @@
             :time="1500"
             is-show-mask
           >{{showMsg}}</toast>
-          <div class="loginBtn fr">
+          <div class="loginBtn">
             <x-button
               action-type="submit"
               :class="ResBtn?'custom-primary':'custom-primary-red'"

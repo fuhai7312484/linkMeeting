@@ -1,7 +1,5 @@
 <template>
   <div class="box" :style="{ overflow:'hidden',}">
-
-
     <!-- <div @click="wakeApp">唤醒APP</div> -->
     <div v-transfer-dom>
       <popup v-model="Support" position="left" width="100%">
@@ -10,10 +8,38 @@
 
           <ul v-if="meetingData">
             <!-- {{comTypeList('支持单位')}} -->
-            <li v-for="(stand,index) in SupportObj.companyNameList" :key="index">{{stand.companyName}}</li>
+            <li
+              v-for="(stand,index) in SupportObj.companyNameList"
+              :key="index"
+            >{{stand.companyName}}</li>
           </ul>
           <div class="Suppor-close">
             <span class="vux-close" @click="Support = false">
+              <x-icon type="ios-close-empty" size="40"></x-icon>
+            </span>
+          </div>
+        </div>
+      </popup>
+    </div>
+
+
+
+
+     <div v-transfer-dom>
+      <popup v-model="Supportcbf" position="left" width="100%">
+        <div class="SupportListBox">
+          <h3>承办单位</h3>
+
+          <ul v-if="meetingData">
+            <!-- {{comTypeList('支持单位')}} -->
+        
+            <li
+              v-for="(stand,index) in SupportcbfArr"
+              :key="index"
+            >{{stand.companyName}}</li>
+          </ul>
+          <div class="Suppor-close">
+            <span class="vux-close" @click="Supportcbf = false">
               <x-icon type="ios-close-empty" size="40"></x-icon>
             </span>
           </div>
@@ -75,10 +101,6 @@
       </div>
     </div>
 
-    
-   
-
-
     <div class="footer" v-if="meetingData">
       <flexbox :gutter="0" class="footer-nav-box">
         <flexbox-item :span="1/6" :order="2">
@@ -119,13 +141,14 @@
     </div>
     <!-- {{meetingData.draftsVo.meetingDetails.meetingFileList}} -->
 
-
-
-
     <div class="site-img-showBox" v-if="meetingData">
       <!-- :list="swiperType=='img'?SImgList:SVideoList" -->
-      <router-link to="/meeting" class="site-img-showBoxGotoHome" ><img :src="require('../../assets/images/home.png')"/>首页</router-link>
-     
+      <router-link to="/meeting" class="site-img-showBoxGotoHome">
+        <img :src="require('../../assets/images/home.png')">首页
+      </router-link>
+      <!-- <div class="HeaderShareBox">
+    分享
+      </div>-->
       <!-- <div class="site-img-showBoxGotoHome"></div> -->
       <swiper
         :list="swiperType=='img'?SImgList:SVideoList"
@@ -166,24 +189,12 @@
     </div>
 
     <div class="meetingContent" v-if="meetingData">
-
-      
- 
-
-
-
-
-      <h3 class="meeting-title padlr">
-        <!-- {{meetingData.draftsVo==undefined?'':meetingData.draftsVo.meetingDetails.theme}} -->
-        {{meetingData.draftsVo.meetingDetails.theme}}
-      </h3>
-
       <flexbox :gutter="0" class="linH padlr">
         <flexbox-item :span="3.5/5" class="listContent-tagbox">
-          <div v-for="(TypeList,index) in meetingData.draftsVo.meetingTypeList" :key="index">
-            <span class="listContent-Ttags">{{TypeList.name}}</span>
-            <span class="listContent-tags">{{TypeList.industry}}</span>
-          </div>
+          <h3 class="meeting-title">
+            <!-- {{meetingData.draftsVo==undefined?'':meetingData.draftsVo.meetingDetails.theme}} -->
+            {{meetingData.draftsVo.meetingDetails.theme}}
+          </h3>
         </flexbox-item>
         <flexbox-item :span="1.5/5">
           <div :class="idensChange(0,meetingData.idens)?'meeting-flex-v':'meeting-flex-nov'">
@@ -193,6 +204,31 @@
             {{idensChange(0,meetingData.idens)?'已认证':'未认证'}}
           </div>
         </flexbox-item>
+      </flexbox>
+
+      <flexbox :gutter="0" class="linH padlr">
+        <flexbox-item class="listContent-tagbox">
+          <div>
+        
+            <span class="listContent-Ttags" v-if="meetingData.draftsVo.meetingTypeList.length!=0">    {{meetingData.draftsVo.meetingTypeList.length!=0?meetingData.draftsVo.meetingTypeList[0].name:''}}</span>
+
+            <!-- <span  v-for="(TypeList,index) in meetingData.draftsVo.meetingTypeList" :key="index" class="listContent-Ttags">{{TypeList.name}}</span> -->
+            <span
+              v-for="(tag,i) in meetingData.draftsVo.meetingDetails.tags"
+              :key="i"
+              class="listContent-tags"
+            >{{tag}}</span>
+          </div>
+        </flexbox-item>
+
+        <!-- <flexbox-item :span="1.5/5">
+          <div :class="idensChange(0,meetingData.idens)?'meeting-flex-v':'meeting-flex-nov'">
+            <img
+              :src="idensChange(0,meetingData.idens)?require('../../assets/images/meeting-v.png'):require('../../assets/images/icon-uncertified.png')"
+            >
+            {{idensChange(0,meetingData.idens)?'已认证':'未认证'}}
+          </div>
+        </flexbox-item>-->
       </flexbox>
 
       <flexbox :gutter="0" class="magrTB padlr">
@@ -233,7 +269,10 @@
         </flexbox-item>
         <flexbox-item :span="3.9/5">
           <div class="meetingdetailInfo">
-            <span v-for="(org,index) in comTypeList('主办单位')" :key="index">{{org.companyName}};</span>
+            <span
+              v-for="(org,index) in comTypeList('主办单位')"
+              :key="index"
+            >{{index==comTypeList('主办单位').length-1?org.companyName:org.companyName+';'}}</span>
             <!-- {{comTypeList('主办单位')}} -->
           </div>
         </flexbox-item>
@@ -244,26 +283,115 @@
           <span class="meetingdetailTitles">承办单位：</span>
         </flexbox-item>
         <flexbox-item :span="3.9/5">
-          <div class="meetingdetailInfo">
-            <span v-for="(und,index) in comTypeList('承办单位')" :key="index">{{und.companyName}};</span>
+
+
+          <!-- <div class="meetingdetailInfo">
+            <span
+              v-for="(und,index) in comTypeList('承办单位')"
+              :key="index"
+            >{{index==comTypeList('承办单位').length-1?und.companyName:und.companyName+';'}}</span>
+          </div> -->
+<!-- {{comTypeList('承办单位')}} -->
+
+
+           <div
+            class="meetingdetailInfo"
+            @click="SupportChangeArr(comTypeList('承办单位'))"
+            v-if="comTypeList('承办单位').length>=2"
+          >
+            <div class="meetingdetailInfoBox fl">
+              <div class="meetingdetailInfoA fl">
+                <span
+                  v-for="(cbf,index) in comTypeList('承办单位')"
+                  :key="index"
+                >{{cbf.companyName}};</span>
+              </div>
+              <div class="meetingdetailInfoB fl">等{{comTypeList('承办单位').length}}家单位</div>
+            </div>
+            <div class="meetingdetailInfoIcons2 fr">
+              <x-icon type="ios-arrow-right" :style="{color:'#969696'}" size="20"></x-icon>
+            </div>
           </div>
-        </flexbox-item>
-      </flexbox>
 
 
-      <flexbox :gutter="0" class="magrTB padlr" v-if="comTypeList('自定义')" v-for="(en,index) in comTypeList('自定义')" :key="index">
-        <flexbox-item :span="1.1/5">
-          <span class="meetingdetailTitles">{{en.companyType}}：</span>
-        </flexbox-item>
-        <flexbox-item :span="3.9/5">
-          <div class="meetingdetailInfo" @click="SupportChange(en)" v-if="en.companyNameList.length>=2">
+            <div class="meetingdetailInfo" v-if="comTypeList('承办单位').length<2">
+            <div class="meetingdetailInfoBox fl">
+              <div class="meetingdetailInfoA fl">
+                <span
+                  v-for="(cbf,index) in comTypeList('承办单位')"
+                  :key="index"
+                >{{cbf.companyName}};</span>
+              </div>
+              <div class="meetingdetailInfoB fl">等{{comTypeList('承办单位').length}}家单位</div>
+            </div>
+          </div>
+
+
+
+<!-- 
+ <div
+            class="meetingdetailInfo"
+            @click="SupportChange(en)"
+            v-if="und.companyNameList.length>=2"
+          >
             <div class="meetingdetailInfoBox fl">
               <div class="meetingdetailInfoA fl">
                 <span
                   v-for="(enItem,index) in en.companyNameList"
                   :key="index"
                 >{{enItem.companyName}};</span>
-           
+              </div>
+              <div class="meetingdetailInfoB fl">等{{und.companyNameList.length}}家单位</div>
+            </div>
+            <div class="meetingdetailInfoIcons2 fr">
+              <x-icon type="ios-arrow-right" :style="{color:'#969696'}" size="20"></x-icon>
+            </div>
+          </div>
+
+          <div class="meetingdetailInfo" v-if="und.companyNameList.length<2">
+            <div class="meetingdetailInfoBox fl">
+              <div class="meetingdetailInfoA fl">
+                <span
+                  v-for="(enItem,index) in und.companyNameList"
+                  :key="index"
+                >{{enItem.companyName}};</span>
+              </div>
+              <div class="meetingdetailInfoB fl">等{{und.companyNameList.length}}家单位</div>
+            </div>
+          </div> -->
+
+
+
+
+
+        </flexbox-item>
+      </flexbox>
+
+
+
+
+      <flexbox
+        :gutter="0"
+        class="magrTB padlr"
+        v-if="comTypeList('自定义')"
+        v-for="(en,index) in comTypeList('自定义')"
+        :key="index"
+      >
+        <flexbox-item :span="1.1/5">
+          <span class="meetingdetailTitles">{{en.companyType}}：</span>
+        </flexbox-item>
+        <flexbox-item :span="3.9/5">
+          <div
+            class="meetingdetailInfo"
+            @click="SupportChange(en)"
+            v-if="en.companyNameList.length>=2"
+          >
+            <div class="meetingdetailInfoBox fl">
+              <div class="meetingdetailInfoA fl">
+                <span
+                  v-for="(enItem,index) in en.companyNameList"
+                  :key="index"
+                >{{enItem.companyName}};</span>
               </div>
               <div class="meetingdetailInfoB fl">等{{en.companyNameList.length}}家单位</div>
             </div>
@@ -272,7 +400,6 @@
             </div>
           </div>
 
-
           <div class="meetingdetailInfo" v-if="en.companyNameList.length<2">
             <div class="meetingdetailInfoBox fl">
               <div class="meetingdetailInfoA fl">
@@ -280,22 +407,16 @@
                   v-for="(enItem,index) in en.companyNameList"
                   :key="index"
                 >{{enItem.companyName}};</span>
-           
               </div>
               <div class="meetingdetailInfoB fl">等{{en.companyNameList.length}}家单位</div>
             </div>
-           
           </div>
 
 
         </flexbox-item>
       </flexbox>
 
-
-
-
-
-       <!-- <flexbox :gutter="0" class="magrTB padlr" v-if="comTypeList('支持单位').length!=0">
+      <!-- <flexbox :gutter="0" class="magrTB padlr" v-if="comTypeList('支持单位').length!=0">
         <flexbox-item :span="1.1/5">
           <span class="meetingdetailTitles">支持单位：</span>
         </flexbox-item>
@@ -316,11 +437,7 @@
             </div>
           </div>
         </flexbox-item>
-      </flexbox> -->
-
-
-      
-
+      </flexbox>-->
       <div class="attentionOrganizerBox" v-if="meetingData.userMeetingInfo!=undefined">
         <div
           class="OrganizerLogo fl"
@@ -331,10 +448,20 @@
           >
         </div>
         <div class="OrganizerNameBox fl">
-          <h4 class="OrganizerName">{{meetingData.userMeetingInfo.name}}</h4>
+          <h4 class="OrganizerName">
+            <span
+              v-for="(self,index) in meetingData.draftsVo.companyTypeList"
+              :key="index"
+              v-if="index<1"
+            >
+              {{self.companyNameList[0].companyName}}
+              <!-- {{self.companyType&&self.type==3?self.companyNameList[0].companyName:''}} -->
+            </span>
+          </h4>
+          <div class="selfOrganinzer">{{meetingData.userMeetingInfo.name}}</div>
           <div class="OrganizerInfo">
-            <span>{{meetingData.userMeetingInfo.meetingCount}}会议</span>&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;
-            <span>{{meetingData.userMeetingInfo.fensCount}}粉丝</span>
+            <span>{{meetingData.userMeetingInfo.meetingCount?meetingData.userMeetingInfo.meetingCount:0}} 会议</span>&nbsp; | &nbsp;
+            <span>{{meetingData.userMeetingInfo.fensCount?meetingData.userMeetingInfo.fensCount:0}} 粉丝</span>
           </div>
         </div>
         <!-- {{meetingData.userMeetingInfo.isMyFollow}} -->
@@ -374,7 +501,7 @@
             <!-- {{meetingContent}} -->
           </div>
           <div v-if="!showAll" class="bottomMark-floatBtn" @click="showAll = true">
-            <img :src="require('../../assets/images/bottomMark-floatBtn.png')"/>
+            <img :src="require('../../assets/images/bottomMark-floatBtn.png')">
           </div>
           <div class="bottomMarkBox">
             <div class="bottomMark"></div>
@@ -386,30 +513,26 @@
           </div>
         </div>
         <div v-if="tabsIndex==1" class="showMeetingContent">
-
-
-
           <!-- <div class="noData-default" v-if="meetingData.draftsVo.meCompanyList.guestList.length==0">
             <p>
               <img :src="require('../../assets/images/noData.png')">
             </p>
             <p>暂无嘉宾</p>
-          </div> -->
+          </div>-->
 
           <div class="padlr">
             <!-- 这里是会议嘉宾 -->
             <!-- {{meetingData.draftsVo.meCompanyList.guestList}} -->
-           
-            <ul class="meCompany-boxList" v-if="meetingData.draftsVo.meCompanyList.partnerList.length==0">
+
+            <ul
+              class="meCompany-boxList"
+              v-if="meetingData.draftsVo.meCompanyList.partnerList.length==0"
+            >
               <li v-for="(i,index) in 6" :key="index">
-                 <img :src="require('../../assets/images/myFans-Mask.png')"
-                >
-<h4 class="guest-boxList-H4">嘉宾</h4>
+                <img :src="require('../../assets/images/myFans-Mask.png')">
+                <h4 class="guest-boxList-H4">嘉宾</h4>
               </li>
             </ul>
-
-
-
 
             <ul class="guest-boxList">
               <li
@@ -435,17 +558,18 @@
               <img :src="require('../../assets/images/noData.png')">
             </p>
             <p>暂无合作伙伴</p>
-          </div> -->
+          </div>-->
 
           <div class="padlr">
-             <ul class="meCompany-boxList" v-if="meetingData.draftsVo.meCompanyList.partnerList.length==0">
+            <ul
+              class="meCompany-boxList"
+              v-if="meetingData.draftsVo.meCompanyList.partnerList.length==0"
+            >
               <li v-for="(i,index) in 6" :key="index">
-                 <img :src="require('../../assets/images/myFans-Mask1.png')"
-                >
-<h4 class="guest-boxList-H4">合作伙伴</h4>
+                <img :src="require('../../assets/images/myFans-Mask1.png')">
+                <h4 class="guest-boxList-H4">合作伙伴</h4>
               </li>
             </ul>
-
 
             <ul class="meCompany-boxList">
               <li
@@ -480,6 +604,7 @@
         <ul class="RegListUl">
           <li class="orderPeople-nodata" v-if="orderPersonNum==0">暂无人报名</li>
           <li v-for="(orderP,index) in orderPeople" :key="index" class="orderPeopleList">
+            <div class="show8listIconTip" v-if="orderP.peopleCount!='1'">{{'x'+orderP.peopleCount}}</div>
             <img
               :src="orderP.mainPic?orderP.mainPic:require('../../assets/images/myFans-Mask.png')"
             >
@@ -517,8 +642,14 @@
                 </div>
                 <!-- {{comment.meetingComment.score}} -->
                 <!-- <rater v-model="comment.meetingComment.score" disabled></rater> -->
-<span v-for="(itemClass,index) in itemClasses(comment.meetingComment.score)" :key="index" :class="itemClass" class="star-item" track-by="index"></span>
-    <!-- <div class="evaStar">
+                <span
+                  v-for="(itemClass,index) in itemClasses(comment.meetingComment.score)"
+                  :key="index"
+                  :class="itemClass"
+                  class="star-item"
+                  track-by="index"
+                ></span>
+                <!-- <div class="evaStar">
 <ul class="star">
 <li v-for="(itemClass,index) in itemClasses(comment.meetingComment.score)" :class="itemClass" :key="index"
 @click="stars(index)" 
@@ -527,7 +658,7 @@
  </li>
 
 </ul>
-</div> -->
+                </div>-->
                 <p>{{comment.meetingComment.content}}</p>
               </div>
             </div>
@@ -560,22 +691,46 @@
                       >
                     </span>
                   </div>
+
                   <div class="tabMeetingTextBox fl">
                     <h4 class="tabMeetingTextTitle">{{comment.theme}}</h4>
                     <div class="tabMeetingTime">
-                      <span>{{comment.beginTime}}</span>
-                      <span>{{comment.region}}</span>
+                      <span v-if="comment.status==0" class="TimeC0">
+                        <img :src="require('../../assets/images/timeC0.png')">
+
+                        {{CountdownTime(comment.beginTime)}}
+                      </span>
+                      <span v-if="comment.status==3 || comment.status==1" class="TimeC1">
+                        <img :src="require('../../assets/images/timeC1.png')"> 进行中
+                      </span>
+                      <span v-if="comment.status==2" class="TimeC2">
+                        <img :src="require('../../assets/images/timeC2.png')"> 已结束
+                      </span> &nbsp;&nbsp;
+                      <span>
+                        <img :src="require('../../assets/images/timeAdd.png')">
+                      </span>
+
+                      {{addressSplit(comment.address)}}
                     </div>
                     <div class="tabMeetingTagBox">
-                      <div class="tabMeetingTag fl">
-                        <span v-if="comment.status==2" class="IsOver">已结束</span>
+                      <div class="tabMeetingTag">
+                        <!-- {{DataItem.status}} -->
                         <span
-                          v-else-if="comment.status==3 || comment.status==1"
-                          class="processing"
-                        >进行中</span>
-                        <span v-else-if="comment.status==0" class="notStarted">未开始</span>
+                          v-for="(Tag,index) in comment.tags"
+                          :key="index"
+                          v-if="index<4"
+                        >{{Tag}}</span>
+
+                        <!-- <span
+                        v-else-if="DataItem.status==3 || DataItem.status==1"
+                        class="processing"
+                      >进行中</span>
+                        <span v-else-if="DataItem.status==0" class="notStarted">未开始</span>-->
                       </div>
-                      <div class="tabMeetingNum fr">{{comment.msg}}</div>
+                      <div
+                        class="tabMeetingNum"
+                        :class="comment.status==0?'TimeC0':'TimeC2'"
+                      >{{comment.status==0?'火热报名中':comment.status==1 || comment.status==3?'报名即将截止':'报名已结束'}}</div>
                     </div>
                   </div>
                 </div>
@@ -612,37 +767,36 @@
     <div v-transfer-dom class="show8Style">
       <popup v-model="show8" position="left" width="100%">
         <div class="show8Style-demo">
-           <div class="map-headerBox borBottm">
+          <div class="map-headerBox borBottm">
             <div class="map-go-back" @click="show8 = false"></div>
             <h3 class="map-headerTitle">已报名</h3>
           </div>
-          <div class="show8Num">
-            共{{orderPeople.length}}人报名
-          </div>
-          
- <group class="show8listBox" v-if="orderPeople!=0">
-          <cell
-            v-for="(fan,index) in orderPeople"
-            :key="index"
-            :title="fan.name"
-            :value="RegisteredTime(fan.createTime)"
-          >
-         <!-- {{fan.createTime}} -->
-            <img
-              slot="icon"
-              width="45"
-              height="45"
-              style="display:block;margin-right:.8rem;border-radius:50%;"
-              :src="fan.mainPic==null?require('../../assets/images/myFans-Mask.png'):fan.mainPic"
+          <div class="show8Num">共{{orderPeople.length}}人报名</div>
+
+          <group class="show8listBox" v-if="orderPeople!=0">
+            <cell
+              v-for="(fan,index) in orderPeople"
+              :key="index"
+              :title="fan.name"
+              :value="RegisteredTime(fan.createTime)"
             >
-          </cell>
-        </group>
+              <!-- {{fan.createTime}} -->
+              <div slot="icon" class="show8listIcon">
+                <div class="show8listIconTip" v-if="fan.peopleCount!='1'">{{'x'+fan.peopleCount}}</div>
+                <img
+                  width="45"
+                  height="45"
+                  style="display:block;margin-right:.8rem;border-radius:50%;"
+                  :src="fan.mainPic==null?require('../../assets/images/myFans-Mask.png'):fan.mainPic"
+                >
+              </div>
+            </cell>
+          </group>
 
           <!-- <span class="vux-close" >11111</span> -->
         </div>
       </popup>
     </div>
-
 
     <toast
       v-model="toastInfo.showPositionValue"
@@ -652,10 +806,6 @@
       :time="1500"
       is-show-mask
     >{{toastInfo.showMsg}}</toast>
-
-
-   
-
   </div>
 </template>
 <script>
@@ -663,10 +813,21 @@ import {
   getStorage,
   checkToken,
   getDataInfo,
+  setCookie,
+  setStorage,
   isLogin,
   transDate,
-  timeLimit,RegTime
+  wakeApp,
+  timeLimit,
+  RegTime,
+  ShareTimeline,
+  ShareAppMessage,
+  ShareAppShareQQ,
+  ShareQZone,
+  wxRegister,
+  meetingBeTime
 } from "../../assets/lib/myStorage.js";
+import PullTod from "@/components/PullTo";
 import {
   Sticky,
   Flexbox,
@@ -682,7 +843,9 @@ import {
   Toast,
   Loading,
   Divider,
-  Confirm,Group,Cell
+  Confirm,
+  Group,
+  Cell
 } from "vux";
 export default {
   directives: {
@@ -702,17 +865,21 @@ export default {
     Toast,
     Loading,
     Divider,
-    Confirm,Group,Cell
+    Confirm,
+    Group,
+    Cell
   },
   name: "meetDetail",
   data() {
     return {
+      Supportcbf:false,
+      SupportcbfArr:[],
       showConfirm: false,
       pageshow: true,
       goodData: [],
       IsColl: 2,
       show2: false,
-      show8:false,
+      show8: false,
       toastInfo: {
         showMsg: "",
         showPositionValue: false,
@@ -749,25 +916,65 @@ export default {
       tabMunes: ["会议详情", "会议嘉宾", "合作伙伴"],
       tabTitle: "会议详情",
       score: 2,
-      SupportObj:{},
+      SupportObj: {}
     };
   },
 
-  computed: {
-    
-  },
- 
-  methods: {
-    //查看已报名人列表
-    gotoRegistered(){
-      if(this.orderPeople.length>0)this.show8= true;
-      
-// console.log(this.orderPeople)
+  computed: {},
 
+  methods: {
+    CountdownTime(time) {
+      return meetingBeTime(time);
     },
-    SupportChange(obj){
+
+    addressSplit(add) {
+      var reg = /.+?(省|市|自治区|自治州|县|区|镇)/g;
+      let addArr = add.match(reg);
+      let str = "";
+      if (addArr) {
+        let newArr = [];
+
+        if (addArr.length >= 2) {
+          newArr = [addArr[0], addArr[1]];
+        } else if (addArr.length < 2) {
+          newArr = [addArr[0]];
+        }
+        newArr.forEach(e => {
+          if (e.indexOf("省") != -1) {
+            str = e.replace("省", "");
+          }
+          if (e.indexOf("市") != -1) {
+            str += " " + e.replace("市", "");
+          }
+          if (e.indexOf("区") != -1 && e.length < 5) {
+            str += " " + e.replace("区", "");
+          }
+          if (e.indexOf("镇") != -1 && e.length < 5) {
+            str += " " + e.replace("镇", "");
+          }
+          if (e.indexOf("县") != -1 && e.length < 5) {
+            str += " " + e.replace("县", "");
+          }
+        });
+      }
+
+      return str;
+    },
+    //查看已报名人列表
+    gotoRegistered() {
+      if (this.orderPeople.length > 0) this.show8 = true;
+
+      // console.log(this.orderPeople)
+    },
+    SupportChangeArr(arr) {
+      this.Supportcbf = true;
+      // console.log(arr)
+      this.SupportcbfArr = arr;
+    },
+    SupportChange(obj) {
+     
       this.Support = true;
-      this.SupportObj = obj
+      this.SupportObj = obj;
     },
     //计算评论星星属性
     itemClasses(scoreInd) {
@@ -789,7 +996,7 @@ export default {
       }
       return result;
     },
-     stars(index) {
+    stars(index) {
       this.score = index + 1;
     },
 
@@ -822,7 +1029,9 @@ export default {
     },
 
     godown() {
-      window.location.href = "https://www.pgyer.com/NSM9";
+      this.$router.push("/downApp");
+      // wakeApp()
+      // window.location.href = "https://www.pgyer.com/NSM9";
     },
     gotoDetil(id) {
       // console.log(id)
@@ -834,8 +1043,8 @@ export default {
       this.$router.go(0);
     },
     //处理已报名时间
-    RegisteredTime(time){
-    return RegTime(time)
+    RegisteredTime(time) {
+      return RegTime(time);
     },
     //处理时间范围
     getTimeLimit(beginTime, endTime) {
@@ -997,31 +1206,49 @@ export default {
     //筛选承办方主办方
     comTypeList(str) {
       // let arr = [];
-    
-      if(this.meetingData.draftsVo.companyTypeList.length!=0){
-   switch (str) {
-        case "主办单位":
-          return this.meetingData.draftsVo.companyTypeList.filter(e => {
-            return e.companyType == "主办单位";
-          })[0].companyNameList;
-          break;
-        case "承办单位":
-         return this.meetingData.draftsVo.companyTypeList.filter(e => {
-            return e.companyType == "承办单位";
-          })[0].companyNameList;
-          break;
-        default:
-         return this.meetingData.draftsVo.companyTypeList.filter(e => {
-            return e.companyType != "承办单位" && e.companyType != "主办单位";
-          });
-         
-          break;
+
+      if (this.meetingData.draftsVo.companyTypeList.length != 0) {
+        switch (str) {
+          case "主办单位":
+            return this.meetingData.draftsVo.companyTypeList.filter(e => {
+              return e.companyType == "主办单位";
+            })[0].companyNameList;
+            break;
+          case "承办单位":
+            if (
+              this.meetingData.draftsVo.companyTypeList.filter(e => {
+                return e.companyType == "承办单位" && e.type == 3;
+              })[0]
+            ) {
+              return [
+                ...this.meetingData.draftsVo.companyTypeList.filter(e => {
+                  return e.companyType == "承办单位" && e.type == 3;
+                })[0].companyNameList,
+                ...this.meetingData.draftsVo.companyTypeList.filter(e => {
+                  return e.companyType == "承办单位" && e.type != 3;
+                })[0].companyNameList
+              ];
+            } else {
+              return this.meetingData.draftsVo.companyTypeList.filter(e => {
+                return e.companyType == "承办单位" && e.type != 3;
+              })[0].companyNameList;
+            }
+
+            //  return [...this.meetingData.draftsVo.companyTypeList.filter(e => {
+            //     return e.companyType == "承办单位" && e.type==3;
+            //   })[0].companyNameList,...this.meetingData.draftsVo.companyTypeList.filter(e => {
+            //     return e.companyType == "承办单位" && e.type!=3;
+            //   })[0].companyNameList]
+            break;
+          default:
+            return this.meetingData.draftsVo.companyTypeList.filter(e => {
+              return e.companyType != "承办单位" && e.companyType != "主办单位";
+            });
+            break;
+        }
+      } else {
+        return [];
       }
-      }else{
-        return []
-      }
-   
-    
     },
 
     //获取详情数据
@@ -1134,15 +1361,17 @@ export default {
       let personObj = {
         params: {
           mdId: this.$route.query.meetingId,
-          currentPage: 0,
+          currentPage: 1,
           pageSize: 999999
         }
       };
+      //  console.log(personObj)
       getDataInfo(
         "get",
         "ordermeeting/ordermeeting/person/list",
         personObj
       ).then(res => {
+        // console.log(res);
         if (res.data.code == 200) {
           //  this. personData = res.data.data.content
           this.orderPersonNum = res.data.data.orderPersonNum;
@@ -1180,8 +1409,12 @@ export default {
         "meetingdetails/meetingdetailsListByGoodMeeting",
         goodObj
       ).then(res => {
+       
         if (res.data.code == 200) {
-          this.goodData = res.data.data.meetingShowList;
+          let arr = [...res.data.data.meetingShowList]
+          this.goodData =  arr.filter(e=>{
+            return e.id!=this.$route.query.meetingId
+          }) ;
         }
       });
     },
@@ -1228,11 +1461,46 @@ export default {
           // alert("请先登录");
         }
       }
+    },
+    // 微信分享回调
+    wxRegCallback() {
+      let LinkUrl =
+        window.location.href.split("/?code=")[0] +
+        "/#/meetDetail/" +
+        this.$route.query.meetingId +
+        "?meetingId=" +
+        this.$route.query.meetingId;
+      let option = {
+        title: this.meetingData.draftsVo.meetingDetails.theme, // 分享标题, 请自行替换
+        link: LinkUrl, // 分享链接，根据自身项目决定是否需要split
+        imgUrl: this.meetingData.draftsVo.meetingDetails.meetingFileList[0]
+          .fileUrl, // 分享图标, 请自行替换，需要绝对路径
+        desc: "我在链会议发现一个不错的会议，赶快来看看吧。",
+        success: () => {
+          alert("分享成功！");
+        },
+        error: () => {
+          alert("已取消分享");
+        }
+      };
+      ShareTimeline(option);
+      ShareAppMessage(option);
+      ShareAppShareQQ(option);
+      ShareQZone(option);
     }
   },
   mounted() {
     this.getMeetingData();
     this.showAdBullet();
+    let wx_Url =
+      "meetDetail/" +
+      this.$route.query.meetingId +
+      "?meetingId=" +
+      this.$route.query.meetingId;
+
+    setStorage("wx_url", wx_Url);
+    let shareUrl = window.location.href;
+    wxRegister(shareUrl, this.wxRegCallback);
   }
 };
 </script>
@@ -1295,23 +1563,20 @@ export default {
     color: #007aff !important;
   }
 }
-.show8Style{
-  .vux-popup-dialog{
-    background: #F8F8F8 !important;
+.show8Style {
+  .vux-popup-dialog {
+    background: #f8f8f8 !important;
   }
 
-  .vux-label{
-    font-size: .9rem;
+  .vux-label {
+    font-size: 0.9rem;
     font-weight: bold;
     color: #000;
   }
-  .weui-cell__ft{
-    font-size: .8rem;
+  .weui-cell__ft {
+    font-size: 0.8rem;
   }
 }
-
-
-
 </style>
 
 

@@ -95,20 +95,20 @@
       </div>
     </div>
     <div class="x-messageFormBox potF">
-      <div class="x-messageTabBtn fl" @click="showVoice=!showVoice">
-        <img
+      <div class="x-messageTabBtn fl">
+        <!-- <img
           :src="showVoice?require('../../assets/images/x-msg-voice.png'):require('../../assets/images/x-msg-text.png')"
-        >
+        > -->
       </div>
       <div class="x-msg-formBox fl">
-        <div v-if="showVoice" class="x-msg-form">
+        <div class="x-msg-form">
           <x-input v-model="value" placeholder="想对Ta说点什么" show-clear></x-input>
         </div>
-        <div v-else>
+        <!-- <div v-else>
           <div></div>
 
           <x-button type="default" mini :style="{width:'100%'}">按住 说话</x-button>
-        </div>
+        </div> -->
       </div>
 
       <div class="x-msg-sendBtn fr" @click="sendSingleMsg">发送</div>
@@ -232,13 +232,19 @@ export default {
         username: userId,
         password: userId
       }).onSuccess(function(data) {
+        // console.log(data)
+        _that.show2 = false
+        
         JIM.onMsgReceive(function(OnData) {
+          //  console.log(OnData)
           _that.fromUserAvatar =
             OnData.messages[0].content.msg_body.extras.userAvatar;
           if (OnData.messages[0].content.msg_type == "voice") {
             JIM.getResource({
               media_id: OnData.messages[0].content.msg_body.media_id
             }).onSuccess(function(data) {
+              _that.show2 = false
+              // console.log(data)
               OnData.messages[0].content.msg_body.url = data.url;
               _that.msgData.push(OnData.messages[0].content);
             });

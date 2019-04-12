@@ -12,6 +12,10 @@
       <router-link tag="li" to="/retpass">找回密码</router-link>
             <router-link tag="li" to="/Terms">服务条款</router-link>
              <router-link tag="li" to="/about">关于链会议</router-link>
+              <router-link tag="li" to="/downApp">APP下载</router-link>
+                <router-link tag="li" to="/lot">抽奖</router-link>
+                 <router-link tag="li" to="/lottery">微信抽奖</router-link>
+                
         <div>--------------场地-----------------------</div>
       <router-link tag="li" to="/siteindex">场地首页</router-link>
       <router-link tag="li" to="/siteSearch">场地搜索</router-link>

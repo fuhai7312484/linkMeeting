@@ -42,7 +42,7 @@
           <dl  v-if="isRestore.isReceipt=='1'">
             <dt class="fl">当前状态:</dt>
             <dd class="fl">
-              <p>{{isRestore.status==1?'不参会':isRestore.status==2?'待定':'确认参会'}}</p>
+              <p>{{isRestore.status==0?'不参会':isRestore.status==2?'待定':'确认参会'}}</p>
             </dd>
           </dl>
 
@@ -53,13 +53,13 @@
               default-item-class="ReqVal-item"
               selected-item-class="ReqVal-item-selected"
             >
-              <checker-item value="1" @on-item-click="checkerChange">
+              <checker-item value="0" @on-item-click="checkerChange">
                 <span>√</span>不参会
               </checker-item>
               <checker-item value="2" @on-item-click="checkerChange">
                 <span>√</span>待定
               </checker-item>
-              <checker-item value="3" @on-item-click="checkerChange">
+              <checker-item value="1" @on-item-click="checkerChange">
                 <span>√</span>确认参会
               </checker-item>
             </checker>
@@ -84,7 +84,7 @@
       >
         <p
           style="text-align:center;font-weight: bold;"
-        >{{ReqVal==3?'确认参加此次会议?':ReqVal==2?'暂不确定是否参加此次会议?':ReqVal==1?'确定不参加此次会议?':''}}</p>
+        >{{ReqVal==1?'确认参加此次会议?':ReqVal==2?'暂不确定是否参加此次会议?':ReqVal==0?'确定不参加此次会议?':''}}</p>
       </confirm>
     </div>
      <toast
@@ -145,13 +145,13 @@ export default {
       this.ReqVal = val;
       // console.log(val);
       switch (val) {
-        case "3":
+        case "1":
           this.ReqValtext = "确定参会";
           break;
         case "2":
-          this.ReqValtext = "暂不参加";
+          this.ReqValtext = "待定";
           break;
-        case "1":
+        case "0":
           this.ReqValtext = "不参加";
           break;
       }
@@ -168,7 +168,7 @@ let _that = this
         }
       };
       getDataInfo("get", "meetingdetails/meetingDetailsById", Obj).then(res => {
-        // console.log(1111,res)
+       
         if (res.data.code == 200) {
         
           this.meetingData = res.data.data.draftsVo;
@@ -256,9 +256,9 @@ let _that = this
           joinStatus: this.ReqVal
         }
       };
-      // console.log(ReceiptObj);
+     
       getDataInfo("get", "ordermeeting/ticketReceipt", ReceiptObj).then(res => {
-        // console.log(res);
+      
         if (res.data.code == 200) {
           this.$router.push({ path: "/Success/" + this.$route.params.id });
         }

@@ -158,7 +158,9 @@
   .my-tab-parListImg {
     // background: #000;
     // width: 2rem;
-    height: 4.5rem;
+    // height: 4.5rem;
+    // width: 30%;
+    height: 80px;
 
     img {
       width: 100%;
@@ -166,15 +168,16 @@
       border-radius: 3px;
     }
   }
-  .listContentPar {
-    h3 {
-      font-weight: 500;
-      font-size: 1rem;
-    }
-  }
+ 
   .mylistInfoPar {
     font-size: 0.8rem;
     color: #e6e6e6;
+  }
+}
+.listContentPar {
+  h3 {
+    font-weight: 500;
+    font-size: .8rem;
   }
 }
 
@@ -622,6 +625,17 @@
     }
 
   }
+
+  // .HeaderShareBox{
+  //   position: absolute;
+  //    right: 10px;
+  //    top: 10px;
+  //    width: 60px;
+  //    height: 40px;
+  //    background: rgba(0, 0, 0, 0.3);
+  //    z-index: 999;
+  //    color: #fff;
+  // }
   
 }
 .meetingAnnex {
@@ -1539,10 +1553,10 @@ h4.site-room-title {
 }
 
 .Bmap-infoBox {
-  background: rgba(255, 255, 255, 0.65);
+  background:rgba(250, 235, 236, 0.75);
   padding: 0.6rem 0.8rem;
   color: #323232;
-  border: 1px solid #c8c8c8;
+  border: 1px solid #FC7E82;
   border-radius: 1rem;
   // width:160px;
   // overflow: hidden;
@@ -1963,7 +1977,7 @@ width: 95%;
   margin: 1rem 0;
 }
 .loginBtnBox {
-  height: 50px;
+  // height: 50px;
   overflow: hidden;
   margin: 1rem 0;
   .loginCodeBox {
@@ -1990,7 +2004,8 @@ width: 95%;
 
 
 .loginBtn {
-  // width: 100px;
+  width: 85%;
+  margin:1rem auto; 
   // padding: .5rem 1.2rem;
   // height: 40px;
 
@@ -2207,6 +2222,10 @@ width: 95%;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
+    }
+    .selfOrganinzer{
+      font-size: .8rem;
+      color: #787878;
     }
     .OrganizerInfo {
       color: #d8d8d8;
@@ -2796,9 +2815,10 @@ width: 95%;
   overflow: hidden;
   width: 100%;
   .x-messageTabBtn {
-    width: 15%;
+    // width: 15%;
+    width: 20px;
     // background: #000;
-    // height: 40px;
+    height: 40px;
     // line-height: 40px;
     text-align: center;
     img {
@@ -3594,13 +3614,23 @@ width: 95%;
     .tabMeetingTextTitle {
       font-size: 0.9rem;
       line-height: 1rem;
-      height: 30px;
+      // height: 30px;
       overflow: hidden;
     }
     .tabMeetingTime {
       font-size: 0.8rem;
       color: #a0a0a0;
       padding: 0.2rem 0;
+      margin: .1rem 0;
+span{
+  img{
+    vertical-align: middle;
+    width: 15px;
+    margin-right:.2rem;
+  }
+}
+
+
     }
     .tabMeetingTagBox {
       overflow: hidden;
@@ -3614,9 +3644,9 @@ width: 95%;
         span {
           border: 1px;
           border-style: solid;
-          border-radius: 3px;
+          // border-radius: 3px;
           display: inline-block;
-          padding: 0 0.1rem;
+          padding: .1rem 0.2rem;
         }
         .LiveIn {
           border-color: #fd8d91;
@@ -3636,15 +3666,37 @@ width: 95%;
         }
       }
 
-      .tabMeetingNum {
-        font-size: 0.8rem;
-        color: #ff8f93;
-        font-weight: bold;
-      }
+     
     }
   }
 }
 
+.my-tab-List{
+  .tabMeetingTextTitle{
+    font-size: 0.9rem;
+    line-height: 1rem;
+    overflow: hidden;
+  }
+  .tabMeetingTime span img {
+    vertical-align: middle;
+    width: 15px;
+    margin-right: .2rem;
+}
+ .tabMeetingTime {
+  font-size: 0.8rem;
+  color: #a0a0a0;
+  padding: 0.2rem 0;
+  margin: .1rem 0;
+}
+}
+
+
+
+.tabMeetingNum {
+  font-size: 0.8rem;
+  color: #ff8f93;
+  font-weight: bold;
+}
 .show8Num{
   font-size: .8rem;
   height: 30px;
@@ -3652,20 +3704,37 @@ width: 95%;
   color: #A0A0A0;
   padding: .3rem .8rem;
 }
-
+.show8listIconTip{
+  position: absolute;
+  top:-10px;
+  right: -10px;
+  // width: 20px;
+  height: 20px;
+  background: #fff;
+  border: 1px #FE666B solid;
+  padding: 0 .3rem;
+  border-radius:10px 10px 10px 0; 
+  color: #FE666B;
+  line-height: 20px;
+  font-size: .8rem;
+  text-align: center;
+}
 .show8listBox{
-
+  .show8listIcon{
+    position: relative;
+   
+  }
 }
 
 .tabMeetingTag {
   font-size: 0.5rem;
-
+margin: .2rem 0;
   span {
-    border: 1px;
-    border-style: solid;
-    border-radius: 3px;
+    border: 1px solid #A0A0A0;
     display: inline-block;
     padding: 0 0.1rem;
+    color: #A0A0A0;
+    margin-right:.3rem;
   }
   .LiveIn {
     border-color: #fd8d91;
@@ -4188,9 +4257,10 @@ width: 95%;
 }
 
 .orderPeopleList {
+  position: relative;
   img {
     width: 35px;
-    height: 40px;
+    height: 45px;
     border-radius: 50%;
   }
 }
@@ -4223,3 +4293,4 @@ width: 95%;
   background-image: url(../../assets/images/off.png);
   background-size: 100%;
 }
+

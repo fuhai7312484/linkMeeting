@@ -113,9 +113,9 @@
                   <checker-item :value="item">
                     <div class="ContactListItemBox">
                       <div class="ContactListItem-selected fl">
-<!--                        
-                        √ -->
-                        </div>
+                        <!--                        
+                        √-->
+                      </div>
                       <div class="ContactListItem-name fl" :class="item.company==''?'linH35':''">
                         <h4 class="ContactListItemTitleBox">
                           <span>{{item.name}}</span>
@@ -126,7 +126,9 @@
                     </div>
                   </checker-item>
 
-                  <div class="ContactListItem-edit" @click="ContactListEdit(item)"><img :src="require('../../assets/images/edit.png')" />编辑</div>
+                  <div class="ContactListItem-edit" @click="ContactListEdit(item)">
+                    <img :src="require('../../assets/images/edit.png')">编辑
+                  </div>
                 </div>
               </checker>
               <br>
@@ -170,7 +172,9 @@
                 </div>
 
                 <div class="signUpInputs borBm padlr">
-                  <div class="signUpLabel fl"> <span>*</span>邮箱地址</div>
+                  <div class="signUpLabel fl">
+                    <span>*</span>邮箱地址
+                  </div>
                   <div class="signUpInput fr">
                     <x-input
                       name="email"
@@ -232,9 +236,23 @@
         <flexbox-item :span="2/5" :order="2">
           <!-- <router-link tag="div" class="footer-nav-destineBtn" to="/ticket">下一步</router-link> -->
           <div class="footer-nav-destineBtn" @click="next">立即报名</div>
+
           <!-- <div v-if="!signUpBtn" class="footer-nav-destineBtn bgDC">提交订单</div> -->
         </flexbox-item>
       </flexbox>
+    </div>
+
+    <div v-transfer-dom class="TipshowBox">
+      <alert
+        v-model="Tipshow"
+        :title="'提示'"
+        @on-show="onShow"
+        @on-hide="onHide"
+        button-text="知道了"
+      >
+      <div class="TipshowInfo" v-html="TipshowMsg"></div>
+  
+      </alert>
     </div>
 
     <toast
@@ -272,7 +290,8 @@ import {
   Group,
   Popup,
   Checker,
-  CheckerItem
+  CheckerItem,
+  Alert
 } from "vux";
 export default {
   name: "Ticket",
@@ -293,7 +312,8 @@ export default {
     Group,
     Popup,
     Checker,
-    CheckerItem
+    CheckerItem,
+    Alert
   },
   data() {
     return {
@@ -308,7 +328,8 @@ export default {
       meetingData: {},
       TicketData: {},
       ContactData: [],
-
+      Tipshow: false,
+      TipshowMsg: "",
       toastInfo: {
         showMsg: "",
         showPositionValue: false,
@@ -330,6 +351,8 @@ export default {
     };
   },
   methods: {
+    onShow() {},
+    onHide() {},
     closeShowInput() {
       if (this.addNewshow) {
         this.addNewshow = false;
@@ -518,7 +541,7 @@ export default {
         checkToken().then(Pdata => {
           getDataInfo("post2", "ordermeeting/ordermeeting", orderObj).then(
             res => {
-              // console.log(res);
+              console.log(res);
               if (res.data.code == 200) {
                 if (this.TicketData.price == 0) {
                   let priceObj = {
@@ -551,11 +574,15 @@ export default {
                   // console.log("收费票创建订单成功下面走支付");
                 }
               } else if (res.data.code == 1002) {
-                this.toastInfo = {
-                  showMsg: "已购买过此票",
-                  showPositionValue: true,
-                  toastType: "text"
-                };
+                console.log(res)
+                this.Tipshow = true;
+                this.TipshowMsg = res.data.msg;
+
+                // this.toastInfo = {
+                //   showMsg: res.data.msg,
+                //   showPositionValue: true,
+                //   toastType: "text"
+                // };
               }
             }
           );
@@ -591,10 +618,15 @@ export default {
 
     // 姓名和手机号输入框输入事件监听
     InputChange(ev) {
-      if (this.newForm.name.length != 0 && this.newForm.mobile.length != 0 && this.newForm.email.length!=0) {
+      if (
+        this.newForm.name.length != 0 &&
+        this.newForm.mobile.length != 0 &&
+        this.newForm.email.length != 0
+      ) {
         if (
           this.$refs.username.valid == true &&
-          this.$refs.mobile.valid == true &&  this.$refs.email.valid == true
+          this.$refs.mobile.valid == true &&
+          this.$refs.email.valid == true
         ) {
           this.signUpBtn = true;
         }
@@ -697,10 +729,10 @@ export default {
     text-align: center;
     font-size: 0.8rem;
     color: #fe666b;
-    img{
+    img {
       width: 12px;
       //  vertical-align:middle;
-      margin-right:3px; 
+      margin-right: 3px;
     }
     // background: #000;
   }
@@ -756,10 +788,42 @@ export default {
   .demo1-item-selected {
     // border: 1px solid green;
     .ContactListItem-selected {
-      border: 1px solid #FE666B;
+      border: 1px solid #fe666b;
       // background: #ff596b;
-       background: url('../../assets/images/demo1-item-selected.png') no-repeat;
-       background-size: 100%;
+      background: url("../../assets/images/demo1-item-selected.png") no-repeat;
+      background-size: 100%;
+    }
+  }
+}
+.TipshowBox {
+  .TipshowInfo{
+    text-align: left;
+    font-size: .9rem;
+    margin-bottom:.6rem; 
+    
+  }
+  .weui-dialog {
+    .weui-dialog__hd{
+      text-align: center;
+      .weui-dialog__title{
+        font-weight: bold;
+      }
+    }
+   
+    .weui-dialog__ft{
+      text-align: center;
+    }
+    .weui-dialog__title{
+      text-align: center;
+    }
+    border-radius: 10px;
+    .weui-dialog__bd {
+      color: #030303;
+     
+    }
+    .weui-dialog__btn_primary {
+      color: #007aff;
+      font-weight: bold;
     }
   }
 }

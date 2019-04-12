@@ -84,9 +84,10 @@
        
          会议首页
         </div> -->
-        <div class="card-demo-left">
+        
+       <!--  <div class="card-demo-left">
         <img :src="require('../../assets/images/icon-share.png')"/> 分享会议
-        </div>
+        </div> -->
      
       </div>
     </card>
@@ -135,7 +136,8 @@ import {
   removeCookie,
   getStorage,
   checkToken,
-  getDataInfo
+  getDataInfo,wxRegister,
+  ShareTimeline,ShareAppMessage,ShareAppShareQQ,ShareQZone,ShareWeibo
 } from "../../assets/lib/myStorage.js";
   import { Sticky,Card, TransferDomDirective as TransferDom,  Loading, } from "vux";
   export default {
@@ -193,6 +195,39 @@ import {
       };
     },
     methods: {
+
+       weixinShareTimeline(title, desc, link, imgUrl) {
+      WeixinJSBridge.invoke("shareTimeline", {
+        img_url: imgUrl,
+        //"img_width":"640",
+        //"img_height":"640",
+        link: link,
+        desc: desc,
+        title: title
+      });
+    },
+    wxRegCallback() {
+ let LinkUrl = window.location.href.split('#')[0]+'#/meetDetail/'+this.$route.query.meeting_id+'?meetingId='+this.$route.query.meeting_id
+ let option = {
+        title: this.orderInfo.meetingShow.theme, // 分享标题, 请自行替换
+        link: LinkUrl, // 分享链接，根据自身项目决定是否需要split
+        imgUrl: this.orderInfo.meetingShow.meetingFileList[0].fileUrl, // 分享图标, 请自行替换，需要绝对路径
+        desc: this.orderInfo.meetingShow.theme,
+        success: () => {
+          alert("分享成功！");
+        },
+        error: () => {
+          alert("已取消分享");
+        }
+      };
+
+
+      ShareTimeline(option);
+     ShareAppMessage(option);
+      ShareAppShareQQ(option);
+     ShareQZone(option);
+    },
+  
       //我的票券
       gotoMyTicket(){
         this.$router.push('/MyTicket')
@@ -204,7 +239,7 @@ import {
       //获取当前会议的票价信息
       getOrderdata(){
         // console.log(this.$route.query.meeting_id,this.$route.query.orderId)
-
+         
   //获取订单信息
       let orderObj = {
         params: {
@@ -214,11 +249,13 @@ import {
       // console.log(orderObj)
       getDataInfo("get", "ordermeeting/ordermeeting", orderObj).then(
         res => {
-          // console.log(res)
+          console.log(res)
           if (res.data.code == 200) {
             // console.log(res.data.data)
             this.orderInfo = res.data.data
             this.show2 = false;
+            let shareUrl = window.location.href
+             wxRegister(shareUrl,this.wxRegCallback);
           }
         }
       );

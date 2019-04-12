@@ -20,10 +20,9 @@
           
         </group>
 
-<group class="myfan-fanlistBox">
+<!-- <group class="myfan-fanlistBox">
         <cell title="关于链会议" is-link link="/about"></cell>
-
-    </group>
+    </group> -->
         <div class="sign-out" @click="signOut">退出登录</div>
       </div>
     </div>

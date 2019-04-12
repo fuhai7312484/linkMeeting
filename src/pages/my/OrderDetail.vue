@@ -36,7 +36,9 @@
         </group>
         <div
           class="OrderTicketListBox"
+         
           v-for="(item,index) in detailData.orderCouponShowList"
+           v-if="item.status!=8"
           :key="index"
         >
           <div class="OrderTicketList-index fl">{{index+1}}</div>

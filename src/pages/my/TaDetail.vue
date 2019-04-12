@@ -112,7 +112,7 @@
       <!-- {{TaPosted}} -->
       <swiper-item>
         <ul class="my-tab-swiper vux-center" ref="pubUiHF">
-          <li
+          <li class="my-tab-List"
             v-for="(taPos,index) in TaPosted"
             :key="index"
             @click="gotoDetails(taPos.typeCode,taPos.id)"
@@ -160,7 +160,7 @@
             </flexbox>
 
             <flexbox v-if="taPos.typeCode=='par'">
-              <!-- {{taPos}} -->
+        
 
               <flexbox-item :span="1/3">
                 <div class="my-tab-parListImg">
@@ -169,25 +169,79 @@
               </flexbox-item>
 
               <flexbox-item :span="2/3">
-                <div class="listContentPar">
+                <!-- <div class="listContentPar">
                   <h3>{{ taPos.theme }}</h3>
                 </div>
                 <div class="mylistInfoPar">{{taPos.beginTime}}</div>
                 <div class="tabMeetingTag">
-                  <span v-if="taPos.status=='0'" class="IsOver">已结束</span>
-                  <span v-else-if="taPos.status=='1'" class="LiveIn">直播中</span>
-                  <span v-else-if="taPos.status=='2'" class="processing">进行中</span>
-                  <span v-else-if="taPos.status=='3'" class="notStarted">未开始</span>
-                </div>
+                      <span v-if="taPos.status==2" class="IsOver">已结束</span>
+                      <span
+                        v-else-if="taPos.status==3 || taPos.status==1"
+                        class="processing"
+                      >进行中</span>
+                      <span v-else-if="taPos.status==0" class="notStarted">未开始</span>
+                    </div>
+                    <div class="tabMeetingNum">{{taPos.msg}}</div> -->
+
+
+                       <div class="tabMeetingTextBox fl">
+                    <h4 class="tabMeetingTextTitle">{{taPos.theme}}</h4>
+                    <div class="tabMeetingTime">
+                      <span v-if="taPos.status==0" class="TimeC0">
+                        <img :src="require('../../assets/images/timeC0.png')">
+
+                        {{CountdownTime(taPos.beginTime)}}
+                      </span>
+                      <span v-if="taPos.status==3 || taPos.status==1" class="TimeC1">
+                        <img :src="require('../../assets/images/timeC1.png')"> 进行中
+                      </span>
+                      <span v-if="taPos.status==2" class="TimeC2">
+                        <img :src="require('../../assets/images/timeC2.png')"> 已结束
+                      </span> &nbsp;&nbsp;
+                      <span>
+                        <img :src="require('../../assets/images/timeAdd.png')">
+                      </span>
+
+                      {{addressSplit(taPos.address)}}
+                    </div>
+                    <div class="tabMeetingTagBox">
+                      <div class="tabMeetingTag">
+                        <!-- {{DataItem.status}} -->
+                        <span
+                          v-for="(Tag,index) in taPos.tags"
+                          :key="index"
+                          v-if="index<4"
+                        >{{Tag}}</span>
+
+                        <!-- <span
+                        v-else-if="DataItem.status==3 || DataItem.status==1"
+                        class="processing"
+                      >进行中</span>
+                        <span v-else-if="DataItem.status==0" class="notStarted">未开始</span>-->
+                      </div>
+                      <div
+                        class="tabMeetingNum"
+                        :class="taPos.status==0?'TimeC0':'TimeC2'"
+                      >{{taPos.status==0?'火热报名中':taPos.status==1 || taPos.status==3?'报名即将截止':'报名已结束'}}</div>
+                    </div>
+                  </div>
+
+
               </flexbox-item>
+
+              
             </flexbox>
           </li>
+
+
+
+
         </ul>
       </swiper-item>
 
       <swiper-item>
         <ul class="my-tab-swiper vux-center" ref="parUiHF">
-          <li
+          <li class="my-tab-List"
             v-for="(taPos,index) in releaseCase"
             :key="index"
             @click="gotoDetails(taPos.typeCode,taPos.id)"
@@ -244,7 +298,53 @@
               </flexbox-item>
 
               <flexbox-item :span="2/3">
-                <div class="listContentPar">
+
+
+                  <div class="tabMeetingTextBox fl">
+                    <h4 class="tabMeetingTextTitle">{{taPos.theme}}</h4>
+                    <div class="tabMeetingTime">
+                      <span v-if="taPos.status==0" class="TimeC0">
+                        <img :src="require('../../assets/images/timeC0.png')">
+
+                        {{CountdownTime(taPos.beginTime)}}
+                      </span>
+                      <span v-if="taPos.status==3 || taPos.status==1" class="TimeC1">
+                        <img :src="require('../../assets/images/timeC1.png')"> 进行中
+                      </span>
+                      <span v-if="taPos.status==2" class="TimeC2">
+                        <img :src="require('../../assets/images/timeC2.png')"> 已结束
+                      </span> &nbsp;&nbsp;
+                      <span>
+                        <img :src="require('../../assets/images/timeAdd.png')">
+                      </span>
+
+                      {{addressSplit(taPos.address)}}
+                    </div>
+                    <div class="tabMeetingTagBox">
+                      <div class="tabMeetingTag">
+                        <!-- {{DataItem.status}} -->
+                        <span
+                          v-for="(Tag,index) in taPos.tags"
+                          :key="index"
+                          v-if="index<4"
+                        >{{Tag}}</span>
+
+                        <!-- <span
+                        v-else-if="DataItem.status==3 || DataItem.status==1"
+                        class="processing"
+                      >进行中</span>
+                        <span v-else-if="DataItem.status==0" class="notStarted">未开始</span>-->
+                      </div>
+                      <div
+                        class="tabMeetingNum"
+                        :class="taPos.status==0?'TimeC0':'TimeC2'"
+                      >{{taPos.status==0?'火热报名中':taPos.status==1 || taPos.status==3?'报名即将截止':'报名已结束'}}</div>
+                    </div>
+                  </div>
+
+
+
+                <!-- <div class="listContentPar">
                   <h3>{{ taPos.theme }}</h3>
                 </div>
                 <div class="mylistInfoPar">{{taPos.beginTime}}</div>
@@ -253,7 +353,7 @@
                   <span v-else-if="taPos.status=='1'" class="LiveIn">直播中</span>
                   <span v-else-if="taPos.status=='2'" class="processing">进行中</span>
                   <span v-else-if="taPos.status=='3'" class="notStarted">未开始</span>
-                </div>
+                </div> -->
               </flexbox-item>
             </flexbox>
           </li>
@@ -270,7 +370,7 @@ import {
   checkToken,
   getDataInfo,
   isLogin,
-  transDate
+  transDate, ShareTimeline,ShareAppMessage,ShareAppShareQQ,ShareQZone,wxRegister,setStorage,meetingBeTime
 } from "../../assets/lib/myStorage.js";
 import {
   Group,
@@ -381,6 +481,43 @@ export default {
   },
 
   methods: {
+      addressSplit(add) {
+      var reg = /.+?(省|市|自治区|自治州|县|区|镇)/g;
+      let addArr = add.match(reg);
+      let str = "";
+      if (addArr) {
+        let newArr = [];
+
+        if (addArr.length >= 2) {
+          newArr = [addArr[0], addArr[1]];
+        } else if (addArr.length < 2) {
+          newArr = [addArr[0]];
+        }
+        newArr.forEach(e => {
+          if (e.indexOf("省") != -1) {
+            str = e.replace("省", "");
+          }
+          if (e.indexOf("市") != -1) {
+            str += " " + e.replace("市", "");
+          }
+          if (e.indexOf("区") != -1 && e.length < 5) {
+            str += " " + e.replace("区", "");
+          }
+          if (e.indexOf("镇") != -1 && e.length < 5) {
+            str += " " + e.replace("镇", "");
+          }
+          if (e.indexOf("县") != -1 && e.length < 5) {
+            str += " " + e.replace("县", "");
+          }
+        });
+      }
+
+      return str;
+    },
+     CountdownTime(time) {
+      return meetingBeTime(time);
+    },
+
     gotoDetails(type, id) {
       if (type == "par") {
         this.$router.push({
@@ -550,12 +687,40 @@ if (this.TaData.isMyFollow == 1) {
           return false;
         }
       }
-    }
+    },
+       // 微信分享回调
+     wxRegCallback() {
+
+ let LinkUrl = window.location.href.split('/?code=')[0]+'/#/tadetail/'+this.$route.params.id
+
+ let option = {
+        title: '['+this.TaData.name +']的内容都很不错,分享给你看看', // 分享标题, 请自行替换
+        link: LinkUrl, // 分享链接，根据自身项目决定是否需要split
+        imgUrl: this.TaData.mainPic, // 分享图标, 请自行替换，需要绝对路径
+        desc: '喜欢TA就赶快关注吧,不错过任何一个精彩内容！',
+        success: () => {
+          alert("分享成功！");
+        },
+        error: () => {
+          alert("已取消分享");
+        }
+      };
+      ShareTimeline(option);
+     ShareAppMessage(option);
+      ShareAppShareQQ(option);
+     ShareQZone(option);
+    },
+
+
   },
   mounted() {
     this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height =
       this.$refs.pubUiHF.offsetHeight + "px";
     this.getTaDetailData();
+   let wx_Url = 'tadetail/'+this.$route.params.id
+setStorage('wx_url',wx_Url)
+        let shareUrl = window.location.href
+             wxRegister(shareUrl,this.wxRegCallback);
   },
   watch: {
     index(n, o) {

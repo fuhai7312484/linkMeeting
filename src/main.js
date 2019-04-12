@@ -22,7 +22,8 @@ import { getCookie } from "./assets/lib/myStorage";
 // const router = new VueRouter({
 //   routes
 // })
-
+import wx from "weixin-js-sdk";
+Vue.use(wx)
 
 import VideoPlayer from 'vue-video-player'
 import Video from 'video.js'

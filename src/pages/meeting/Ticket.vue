@@ -74,7 +74,7 @@ import {
   removeCookie,
   getStorage,
   checkToken,
-  getDataInfo
+  getDataInfo,setStorage
 } from "../../assets/lib/myStorage.js";
   import { Flexbox, FlexboxItem, Sticky, Checker, CheckerItem } from "vux";
   export default {
@@ -149,21 +149,14 @@ import {
         }
       },
       ticketChange(val,itemDisabled){
-        
-      // console.log(val.isOrder)
+ 
        if( !this.Discontinued(val.timeEnd) && val.isOrder!=1){
           this.next(val)
        }else{
         //  console.log('不能购买！')
        }
      
-        // if(val.isOrder ==2 || val.isOrder==null){
-        //   console.log(val.price)
-        //   this.next(val)
-        // }else if(val.isOrder ==1 || Titem.leftnum==0){
-        //    console.log('不能购买！')
-        // }
-        
+     
       },
       //获取当前会议的票价信息
       gotoTheFare(){
@@ -214,6 +207,8 @@ import {
     },
     mounted() {
       this.gotoTheFare()
+ 
+  
     },
   };
 </script>

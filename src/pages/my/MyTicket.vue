@@ -120,7 +120,7 @@ import {
   getStorage,
   checkToken,
   getDataInfo,
-  timeLimit
+  timeLimit,setStorage,isweixin,WeChatLogin
 } from "../../assets/lib/myStorage.js";
 import {
   Group,
@@ -256,7 +256,7 @@ export default {
       checkToken().then(Pdata => {
         getDataInfo("get", "myMeeting/myMeeting/myCoupon", TicketObj).then(
           res => {
-      // console.log(res)
+      console.log(res)
             if (res.data.code == 200) {
               this.TaPosted = res.data.data.myCoupons;
               this.show2 = false;
@@ -278,7 +278,14 @@ export default {
       this.$refs.pubUiHF0[0].offsetHeight + "px";
   },
   mounted() {
+     let wx_Url = 'MyTicket'
+      setStorage('wx_url',wx_Url)
+          if(isweixin()){
+          WeChatLogin()
+            }
+
     this.getTicketData();
+    
     this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height =
       this.$refs.pubUiHF0[0].offsetHeight + "px";
   },

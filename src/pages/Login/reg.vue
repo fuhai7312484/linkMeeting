@@ -33,7 +33,7 @@
             is-show-mask
           >{{showMsg}}</toast>
 
-          <div class="loginBtn fr">
+          <div class="loginBtn">
             <x-button
               action-type="submit"
               :class="disabled?'custom-primary':'custom-primary-red'"
@@ -107,7 +107,7 @@
             is-show-mask
           >{{showMsg}}</toast>
 
-          <div class="loginBtn fr">
+          <div class="loginBtn">
             <x-button
               action-type="submit"
               :class="ResBtn?'custom-primary':'custom-primary-red'"
@@ -262,7 +262,7 @@ export default {
         getDataInfo('post',"user/sendSms", SmsObj).then(res => {
           let data = res.data;
           if (data.code === 200) {
-            alert(data.data)
+            // alert(data.data)
               // console.log(data.data)
             _that.VerCode = data.data;
             _that.showNext = "2";

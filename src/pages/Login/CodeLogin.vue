@@ -33,7 +33,7 @@
             is-show-mask
           >{{showMsg}}</toast>
 
-          <div class="loginBtn fr">
+          <div class="loginBtn">
             <x-button
               action-type="submit"
               :class="disabled?'custom-primary':'custom-primary-red'"
@@ -74,7 +74,7 @@
             is-show-mask
           >{{showMsg}}</toast>
 
-          <div class="loginBtn fr">
+          <div class="loginBtn">
             <x-button
               v-if="!Resend"
               action-type="submit"
@@ -132,7 +132,7 @@ import Terms from "@/components/Terms";
 import {
   getDataInfo,
   setCookie,
-  setStorage
+  setStorage,isweixin
 } from "../../assets/lib/myStorage.js";
 import { Group, XInput, XButton, Toast,XDialog } from "vux";
 import axios from "axios";
@@ -218,7 +218,7 @@ export default {
       
         let data = res.data;
         if (data.code === 200) {
-          alert(data.data)
+        
           // console.log(data.data);
           _that.VerCode = data.data;
           _that.Resend = false;
@@ -257,9 +257,9 @@ export default {
 
         getDataInfo("post", "user/sendSms", SmsObj).then(res => {
           let data = res.data;
+       
           if (data.code === 200) {
-            alert(data.data)
-            // console.log(data.data);
+          
 
             _that.VerCode = data.data;
             _that.showNext = "2";
@@ -293,11 +293,12 @@ export default {
     //输入验证码并直接登录
     refCodeChange(ev) {
       let _that = this;
-      if (this.$refs.refcode.valid == true) {
+      if (ev!=''&&this.$refs.refcode.valid == true) {
         let codeObj = {
           mobileCode: ev,
           mobile: this.maskValue
         };
+      
         getDataInfo("post", "user/user", codeObj).then(res => {
           // console.log(res)
           if (res.data.code == 200) {
@@ -342,7 +343,38 @@ export default {
   created() {
     this.getOrderHight();
   },
-  mounted() {}
+  mounted() {
+   if(isweixin()){
+ WeChatLogin().then(res=>{
+
+          let code = GetQueryString("code");
+          if (res.data.code == 200) {
+            if (res.data.data.isRegistered == 0) {
+               this.wxshow1 = true;
+               this.wxData = res.data.data.userInfo;
+                    // console.log(res)
+            }else if(res.data.data.isRegistered == 1){
+               let wxBObj = {
+              wxOpenid: res.data.data.userInfo.openid,
+              wxNickname: res.data.data.userInfo.nickname,
+              wxHeadimgurl: res.data.data.userInfo.headimgurl,
+              wxProvince: res.data.data.userInfo.province,
+              wxCity:res.data.data.userInfo.city,
+              wxCountry: res.data.data.userInfo.country,
+              code:code,
+            };
+            // console.log(wxBObj)
+              this.wxlogin(wxBObj,'auto')
+              // console.log(res.data.data.userInfo)
+            }
+          }else if (res.data.code == 401){
+            console.log('code过期')
+          }
+        })
+
+    }
+
+  }
 };
 </script>
 <style lang="less">

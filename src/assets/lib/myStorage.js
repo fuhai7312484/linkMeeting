@@ -1,4 +1,5 @@
 import axios from "axios";
+import wx from 'weixin-js-sdk'
 // let staus = false;
 //post接口请求公共调用
 export function getDataInfo(mode, url, obj) {
@@ -7,7 +8,7 @@ export function getDataInfo(mode, url, obj) {
   // axios.defaults.headers.common["Content-Type"] = 'application/json;charset=UTF-8';
 
   //测试环境
-  // let ipUrl = "http://192.168.1.115/lhy/v0.1/api/";
+  // let ipUrl = "http://192.168.1.165/lhy/v0.1/api/";
   //服务器正式环境
   let ipUrl = "http://lianhuiyi.woneast.com/lhy/v0.1/api/";
   // 外网测试服务器
@@ -15,6 +16,8 @@ export function getDataInfo(mode, url, obj) {
   // let ipUrl = "http://192.168.1.170:8080/v0.1/api/";
   // let ipUrl = "http://192.168.1.125:8080/v0.1/api/";
   // let ipUrl = 'http://192.168.1.152:8080/v0.1/api/'  
+    // let ipUrl = 'http://192.168.1.149:8080/v0.1/api/'  
+  
   var qs = require("qs");
 
   // axios.defaults.headers.common["APP-User-Token"] = token;
@@ -61,10 +64,52 @@ export function isweixin() {
   if(ua.match(/MicroMessenger/i) == 'micromessenger'){
       return true;
   } else {
-
       return false;
   }
 }
+//微信授权
+export function WeChatLogin(){
+    let _that = this;
+    let code = GetQueryString("code");
+    // var callback = "http%3a%2f%2f192.168.1.118%3a8080%2f%23%2fwxlogin";
+   var callback ='http%3a%2f%2flianhuiyi.woneast.com%2f%23%2fwxlogin';
+    // 正式版
+    var appId = "wx837aea6e0dd3f50e";
+    // 开放平台APPID
+    // var appId = "wx74e86a6fcd9d2166";
+    // 测试版
+    // var appId = "wx41dad60740c7be25";
+    // var redirect_url = window.location.origin + window.location.pathname;
+    //获取code值
+
+
+    var wx_link =
+      "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" +
+      appId +
+      "&redirect_uri=" +
+      callback +
+      "&response_type=code&scope=snsapi_userinfo&state=1&connect_redirect=1#wechat_redirect";
+      // var wx_link = " https://open.weixin.qq.com/connect/qrconnect?appid="+appId +"&redirect_uri="+callback +"&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect"
+     
+      // snsapi_base
+      // scope=snsapi_userinfo
+    if (code == null) {
+      // console.log(getStorage("wx_url"))
+      window.location.href = wx_link;
+      code = GetQueryString("code");
+    } else {
+      // return code
+      let CodeObj = {
+        params: {
+          code: code
+        }
+      };
+      return getDataInfo("get", "wechat/webWeChatAuth", CodeObj)
+     
+    }
+}
+//微信直接登录
+
 //截取出code字符串
 export function GetQueryString(name){
   var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
@@ -406,6 +451,36 @@ function toDou(n) {
   // }
   return result;
 }
+//会议开始时间倒计时
+export function meetingBeTime(time) {
+
+  // 指定日期和时间
+  var EndTime = new Date(time);
+  // 当前系统时间
+  var NowTime = new Date();
+  var t = EndTime.getTime() - NowTime.getTime();
+  var d = Math.floor(t / 1000 / 60 / 60 / 24);
+  var h = Math.floor(t / 1000 / 60 / 60 % 24);
+  var m = Math.floor(t / 1000 / 60 % 60);
+  var s = Math.floor(t / 1000 % 60);
+  if(t>0){
+    if(d>=1){
+      return '还剩' + d+'天开始'
+    }else if(d<1){
+      if(h>=1){
+        return '还剩' + h +'小时开始'
+      }else{
+        if(m>=1){
+          return '还剩' + m +'分钟开始'
+        }else{
+          return '即将开始'
+        }
+       
+      }
+    }
+  }
+  }
+
 
 export function getGetAxios() {
   // console.log(1111)
@@ -462,9 +537,130 @@ export function  wakeApp(){
         window.setTimeout(function(){
            window.location.href = "https://www.pgyer.com/NSM9"; /***下载app的地址***/
         },2000)
-      
       }
+}
+//分享初始化配置
+export function wxRegister(url,callback){
+     let wxchatObj = {
+      params:{
+        shareUrl:url,
+      }
+     }
+    
+    getDataInfo("get", "wechat/webShare", wxchatObj).then(
+      res => {
+      // console.log(res)
+        if (res.data.code == 200) {
+          wx.config({
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: res.data.data.appId, // 必填，公众号的唯一标识
+            timestamp: res.data.data.timestamp, // 必填，生成签名的时间戳
+            nonceStr:res.data.data.noncestr, // 必填，生成签名的随机串
+            signature: res.data.data.signature, // 必填，签名，见附录1
+            jsApiList: [
+              "onMenuShareWeibo",
+              "onMenuShareAppMessage",
+              "onMenuShareTimeline",
+              "onMenuShareQQ",
+              "onMenuShareQZone",
+           
+            ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+          });
+          wx.ready((resd) => {
+            // 如果需要定制ready回调方法
+            if (callback) {
+              callback()
+            }
+          })
+          wx.error(function(res){
+            // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+        console.log(res)
+          });
+        }
+      })
+}
+//分享到朋友圈
+export function  ShareTimeline (option) {
+  wx.onMenuShareTimeline({
+    title: option.title, // 分享标题
+    link: option.link, // 分享链接
+    imgUrl: option.imgUrl, // 分享图标
+    success () {
+      // 用户成功分享后执行的回调函数
+      option.success()
+    },
+    cancel () {
+      // 用户取消分享后执行的回调函数
+      option.error()
+    }
+  })
+}
+//分享到微信好友
+export function  ShareAppMessage (option) {
+  wx.onMenuShareAppMessage({
+    title: option.title, // 分享标题
+    link: option.link, // 分享链接
+    desc:option.desc,
+    imgUrl: option.imgUrl, // 分享图标
+    success () {
+      // 用户成功分享后执行的回调函数
+      option.success()
+    },
+    cancel () {
+      // 用户取消分享后执行的回调函数
+      option.error()
+    }
+  })
+}
+//分享到QQ
+export function ShareAppShareQQ(option){
 
-
+  wx.onMenuShareQQ({
+    title: option.title, // 分享标题
+    desc:option.desc,
+    link: option.link, // 分享链接
+    imgUrl: option.imgUrl, // 分享图标
+    success: function () {
+    // 用户确认分享后执行的回调函数
+    },
+    cancel: function () {
+    // 用户取消分享后执行的回调函数
+    }
+    });
 
 }
+
+//分享到QQ空间
+export function ShareQZone(option){
+
+  wx.onMenuShareQZone({
+    title: option.title, // 分享标题
+    desc:option.desc,
+    link: option.link, // 分享链接
+    imgUrl: option.imgUrl, // 分享图标
+    success: function () {
+    // 用户确认分享后执行的回调函数
+    },
+    cancel: function () {
+    // 用户取消分享后执行的回调函数
+    }
+    });
+
+}
+//分享到微博
+
+export function ShareWeibo(option){
+  wx.onMenuShareWeibo({
+    title: option.title, // 分享标题
+    desc:option.desc,
+    link: option.link, // 分享链接
+    imgUrl: option.imgUrl, // 分享图
+    success: function () {
+    // 用户确认分享后执行的回调函数
+    },
+    cancel: function () {
+    // 用户取消分享后执行的回调函数
+    }
+    });
+}
+

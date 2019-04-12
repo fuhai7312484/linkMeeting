@@ -54,35 +54,52 @@
                   </span>
                 </div>
 
-                <div class="tabMeetingTextBox fl">
-                  <h4 class="tabMeetingTextTitle" v-html="DataItem.theme"></h4>
+
+
+
+ <div class="tabMeetingTextBox fl">
+
+     <h4 class="tabMeetingTextTitle" v-html="DataItem.theme"></h4>
+                 
                   <div class="tabMeetingTime">
-                    <span>{{DataItem.beginTime}}</span>
-                    <span>{{DataItem.region}}</span>
+                    <span v-if="DataItem.status==0" class="TimeC0" >
+
+                     <img :src="require('../../assets/images/timeC0.png')">  {{CountdownTime(DataItem.beginTime)}}
+                
+                    </span>
+                    <span v-if="DataItem.status==3 || DataItem.status==1" class="TimeC1">
+                      <img :src="require('../../assets/images/timeC1.png')" /> 进行中
+                    </span>
+                    <span v-if="DataItem.status==2" class="TimeC2">
+                     <img :src="require('../../assets/images/timeC2.png')" /> 已结束
+                    </span> &nbsp;&nbsp;
+                    <span>
+<img :src="require('../../assets/images/timeAdd.png')"/>
+                    </span>
+                     
+                  {{addressSplit(DataItem.address)}}
+
                   </div>
                   <div class="tabMeetingTagBox">
-
-                     <div class="tabMeetingTag fl">
-                      <span v-if="DataItem.status==2" class="IsOver">已结束</span>
-                      <span
+                    <div class="tabMeetingTag">
+                      <!-- {{DataItem.status}} -->
+                       <span v-for="(Tag,index) in DataItem.tags" :key="index" v-if="index<4">{{Tag}}</span>
+                       
+                      <!-- <span
                         v-else-if="DataItem.status==3 || DataItem.status==1"
                         class="processing"
                       >进行中</span>
-                      <span v-else-if="DataItem.status==0" class="notStarted">未开始</span>
+                      <span v-else-if="DataItem.status==0" class="notStarted">未开始</span> -->
                     </div>
+                    <div class="tabMeetingNum" :class="DataItem.status==0?'TimeC0':'TimeC2'">
 
 
-                    <!-- <div class="tabMeetingTag fl">
-                      <span v-if="DataItem.status==0" class="IsOver">已结束</span>
-                      <span v-else-if="DataItem.status==1" class="LiveIn">直播中</span>
-                      <span v-else-if="DataItem.status==2" class="processing">进行中</span>
-                      <span v-else-if="DataItem.status==3" class="notStarted">未开始</span>
-                    </div> -->
-
-
-                    <div class="tabMeetingNum fr">{{DataItem.msg}}</div>
+                      {{DataItem.status==0?'火热报名中':DataItem.status==1 || DataItem.status==3?'报名即将截止':'报名已结束'}}
+                      
+                      </div>
                   </div>
                 </div>
+                
               </div>
             </li>
 
@@ -137,6 +154,16 @@
     <div v-transfer-dom>
       <loading :show="show2" text="数据加载中..."></loading>
     </div>
+
+     <toast
+      v-model="toastInfo.showPositionValue"
+      width="10em"
+      :type="toastInfo.toastType"
+      position="middle"
+      :time="1500"
+      is-show-mask
+    >{{toastInfo.showMsg}}</toast>
+    
   </div>
 </template>
 <script>
@@ -148,7 +175,7 @@ import {
   FlexboxItem,
   Confirm,
   TransferDomDirective as TransferDom,
-  Loading
+  Loading,Toast,
 } from "vux";
 import {
   stoRemove,
@@ -157,7 +184,7 @@ import {
   checkToken,
   getDataInfo,
   setStorage,
-  getPositioning
+  getPositioning,meetingBeTime
 } from "../../assets/lib/myStorage.js";
 export default {
   name: "siteSearch",
@@ -170,10 +197,15 @@ export default {
     FlexboxItem,
     Confirm,
     Loading,
-    PullTod
+    PullTod,Toast,
   },
   data() {
     return {
+       toastInfo: {
+        showMsg: "",
+        showPositionValue: false,
+        toastType: "success"
+      },
       noData: false,
       SearchCity: "",
       show2: false,
@@ -224,6 +256,42 @@ export default {
     ...mapState(["city"])
   },
   methods: {
+     CountdownTime(time){
+      return meetingBeTime(time)
+    },
+       addressSplit(add) {
+      var reg = /.+?(省|市|自治区|自治州|县|区|镇)/g;
+      let addArr = add.match(reg);
+      let str = "";
+      if (addArr) {
+        let newArr = [];
+
+        if (addArr.length >= 2) {
+          newArr = [addArr[0], addArr[1]];
+        } else if (addArr.length < 2) {
+          newArr = [addArr[0]];
+        }
+        newArr.forEach(e => {
+          if (e.indexOf("省") != -1) {
+            str = e.replace("省", "");
+          }
+          if (e.indexOf("市") != -1) {
+            str += " " + e.replace("市", "");
+          }
+          if (e.indexOf("区") != -1 && e.length < 5) {
+            str += " " + e.replace("区", "");
+          }
+          if (e.indexOf("镇") != -1 && e.length < 5) {
+            str += " " + e.replace("镇", "");
+          }
+          if (e.indexOf("县") != -1 && e.length < 5) {
+            str += " " + e.replace("县", "");
+          }
+        });
+      }
+
+      return str;
+    },
     onblurChange() {
       // console.log(this.keyword)
       this.show2 = true;
@@ -243,8 +311,9 @@ export default {
           "meetingdetails/meetingdetailsListByName",
           searchObj
         ).then(res => {
-          // console.log(res);
+      
           if (res.data.code == 200) {
+            this.setSearchHistory();
             if (res.data.data.meetingShowList.length == 0) {
               this.noData = true;
               this.IsCompleted = true;
@@ -269,6 +338,15 @@ export default {
 
 
             }
+          }else if(res.data.code == 400){
+              this.show2 = false;
+               this.noData = true;
+              this.IsCompleted = true;
+              this.toastInfo= {
+                    showMsg: res.data.msg,
+                    showPositionValue: true,
+                    toastType: "text"
+                  }
           }
           // if (res.data.code == 200) {
           //   this.TopKeywords = res.data.data;
@@ -337,7 +415,7 @@ export default {
     },
     onEnter(val) {
       // console.log("click enter!", val);
-      this.setSearchHistory();
+      
       // alert(val)
     },
 

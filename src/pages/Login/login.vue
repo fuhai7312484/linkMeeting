@@ -41,8 +41,8 @@
           <router-link class="forgetPass fr" tag="div" to="/retpass">忘记密码</router-link>
         </group>
         <div class="loginBtnBox">
-          <router-link tag="div" class="loginCodeBox fl" to="/codelogin">验证码登录</router-link>
-          <div class="loginBtn fr">
+          <router-link tag="div" class="loginCodeBox" to="/codelogin">验证码登录</router-link>
+          <div class="loginBtn">
             <x-button
               action-type="submit"
               :class="ResBtn?'custom-primary':'custom-primary-red'"
@@ -92,32 +92,47 @@
       <span @click="gotoTerms('FW')">服务条款</span> 和
       <span @click="gotoTerms('YS')">隐私条款</span>
     </div>
-    <toast
-      v-model="showPositionValue"
-      type="text"
-      width="20em"
+   
+
+     <toast
+      v-model="toastInfo.showPositionValue"
+      width="15em"
+      :type="toastInfo.toastType"
       position="middle"
       :time="1500"
       is-show-mask
-    >{{showMsg}}</toast>
+    >{{toastInfo.showMsg}}</toast>
+
+
+    
+
+
+
+
+
+
+
+
+
   </div>
 </template>
 <script>
 import Terms from "@/components/Terms";
+import { mapState, mapMutations } from "vuex";
 import {
   getDataInfo,
   setCookie,
   setStorage,
   getCookie,
   removeCookie,
-  checkToken,isweixin
+  checkToken,isweixin,WeChatLogin,GetQueryString,getStorage,stoRemove
 } from "../../assets/lib/myStorage.js";
 import {
   Group,
   XInput,
   XButton,
   Toast,
-  XDialog,
+  XDialog,  Popup,
   TransferDomDirective as TransferDom
 } from "vux";
 import axios from "axios";
@@ -132,14 +147,26 @@ export default {
     XButton,
     Toast,
     Terms,
-    XDialog
+    XDialog,Popup
   },
   name: "login",
 
   data() {
     return {
+      toastInfo:{
+          showMsg: "",
+        showPositionValue: false,
+        toastType: "success"
+      },
+        wxNext: 1,
+         wxValue: "",
+      time: 60,
+      BindCodeVal: "",
       TermsTitle:'',
       showHideOnBlur: false,
+       Resend: true,
+      ResBtn: true,
+      ResendTitle: "获取验证码",
       termsType: "",
       userData: {},
       maskValue: "",
@@ -147,10 +174,19 @@ export default {
       passW: "",
       showPass: false,
       showLoading: false,
-      ResBtn: true,
-      showPositionValue: false,
-      showMsg: "",
+      dx_djs: null,
+      ResBtnP: true,
+      wxshow1: false,
+      wxData:null,
       disabled: true,
+       codeValuefun: function(value) {
+        let regExp = /^\d{6}\b/;
+        let r = value.match(regExp);
+        return {
+          valid: r != null,
+          msg: "验证码不正确!"
+        };
+      },
       codePassValue: function(value) {
         let regExp = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,18}$/;
         let r = value.match(regExp);
@@ -162,8 +198,97 @@ export default {
       }
     };
   },
-
+ computed: {
+    ...mapState({
+      codeUrl: state => state.codeUrl
+    })
+  },
   methods: {
+
+    //点击绑定
+    submitDataP() {
+      let _that = this;
+      let wxBObj = {
+        wxOpenid: this.wxData.openid,
+        wxNickname: this.wxData.nickname,
+        mobile: this.wxValue,
+        qrcode: this.BindCodeVal,
+        wxHeadimgurl: this.wxData.headimgurl,
+        wxProvince: this.wxData.province,
+        wxCity: this.wxData.city,
+        wxCountry: this.wxData.country,
+        wxUnionid:this.wxData.unionid
+      };
+    
+      this.wxlogin(wxBObj, "sub");
+    },
+     //验证输入的手机号是否正确来控制btn是否可点 refcode
+    refCodeChangeP(ev) {
+      if (this.wxValue.length == 0 || this.BindCodeVal.length == 0) {
+        this.ResBtnP = true;
+      } else {
+        if (
+          this.$refs.bindmobile.valid == true &&
+          this.$refs.bindCode.valid == true
+        ) {
+          this.ResBtnP = false;
+        } else {
+          this.ResBtnP = true;
+        }
+      }
+    },
+     //验证码倒数
+    Reacquire() {
+      let _that = this;
+      this.dx_djs = setInterval(() => {
+        if (_that.time-- <= 0) {
+          _that.time = 60;
+          _that.Resend = true;
+          _that.ResendTitle = "重新获取验证码";
+          clearInterval(_that.dx_djs);
+        }
+      }, 1000);
+    },
+    //发送验证码
+    BindCode() {
+      clearTimeout(this.dx_djs);
+      let _that = this;
+      //   this.Resend = false;
+      //这里单独请求获取验证码接口
+      //   this.Reacquire();
+      if (this.wxValue != "" && this.$refs.bindmobile.valid) {
+        let SmsObj = {
+          mobile: this.wxValue,
+          type: "thirdLogin"
+        };
+
+        getDataInfo("post", "user/sendSms", SmsObj).then(res => {
+          if (res.data.code == 200) {
+            // console.log(res)
+            _that.Resend = false;
+
+            this.toastInfo = {
+              showMsg: res.data.msg,
+              showPositionValue: true,
+              toastType: "text"
+            };
+            _that.Reacquire();
+          } else if (res.data.code == 400) {
+            this.toastInfo = {
+              showMsg: res.data.msg,
+              showPositionValue: true,
+              toastType: "text"
+            };
+          }
+        });
+      } else {
+        this.toastInfo = {
+          showMsg: "请输入正确的手机号",
+          showPositionValue: true,
+          toastType: "text"
+        };
+      }
+    },
     //服务条款
     gotoTerms(type) {
       this.showHideOnBlur = true;
@@ -186,8 +311,13 @@ export default {
     },
     //手机号填写错误提示信息
     mobileErrorChange(ev) {
-      this.showPositionValue = true;
-      this.showMsg = "填写的手机号格式不正确！";
+      
+       this.toastInfo = {
+              showMsg: '填写的手机号格式不正确',
+              showPositionValue: true,
+              toastType: "text"
+            };
+            
     },
     //验证输入的手机号是否正确来控制btn是否可点 refcode
     refCodeChange(ev) {
@@ -214,8 +344,12 @@ export default {
 
       getDataInfo("post", "user/login", loginObj).then(res => {
         if (res.data.code == 200) {
-          this.showPositionValue = true;
-          this.showMsg = res.data.msg;
+           this.toastInfo = {
+              showMsg: res.data.msg,
+              showPositionValue: true,
+              toastType: "text"
+            };
+        
           this.userData = res.data.data;
           let tokenInfo = res.data.data.tokenMap;
           let userInfo = {
@@ -244,8 +378,12 @@ export default {
             _that.$router.push("/meeting");
           }, 1000);
         } else if (res.data.code == 1003) {
-          this.showPositionValue = true;
-          this.showMsg = res.data.msg;
+           this.toastInfo = {
+              showMsg: res.data.msg,
+              showPositionValue: true,
+              toastType: "text"
+            };
+
         }
       });
     },
@@ -287,13 +425,96 @@ export default {
           }
         });
       });
-    }
+    },
+    //微信直接登录
+    wxlogin(obj, type) {
+      let _that = this;
+  
+        let wxBObj = {
+                wxOpenid: obj.wxOpenid,
+                wxNickname: obj.wxNickname,
+                wxHeadimgurl: obj.wxHeadimgurl,
+                wxProvince: obj.wxProvince,
+                wxCity:obj.wxCity,
+                wxCountry: obj.wxCountry,
+                wxUnionid:obj.wxUnionid,
+                // wxUnionid:obj.Unionid,
+              };
+              
+          if(type == 'sub'){
+            wxBObj.mobile = obj.mobile
+            wxBObj.qrcode = obj.qrcode
+          }
+        
+      getDataInfo("post", "user/wlogin", wxBObj).then(res => {
+        // console.log(res)
+        if (res.data.code == 200) {
+          let tokenInfo = res.data.data.tokenMap;
+          let userInfo = {
+            userId: res.data.data.user.id,
+            access_token: tokenInfo.access_token,
+            refresh_token: tokenInfo.refresh_token
+          };
+          setCookie("accessToken", tokenInfo.access_token);
+          setStorage("userToken", userInfo);
+          if (type == "auto") {
+            this.toastInfo = {
+              showMsg: "登录成功！",
+              showPositionValue: true,
+              toastType: "success"
+            };
+
+             if(getStorage('wx_url')){
+                // stoRemove('wx_url')
+              // console.log(getStorage('wx_url'))
+              if(getStorage('wx_url')!= '/'||getStorage('wx_url')!='/meeting'){
+                // console.log(window.location.href.split('login'))
+                window.location.href = window.location.href.split('login')[0]+getStorage('wx_url')
+                setTimeout(function(){
+                   stoRemove('wx_url')
+                },500)
+               
+              }
+            }else{
+                this.$router.push("/meeting");
+            }
+            
+            // console.log(getCookie('wx_url'))
+            // _that.$router.push("/meeting");
+          } else if (type == "sub") {
+            this.wxNext = 2;
+            setTimeout(() => {
+              _that.wxshow1 = false;
+              _that.$router.push("/meeting");
+            }, 2000);
+          }
+
+          //  this.wxNext = 2
+          //  setTimeout(function(){
+          //   _that.wxshow1 = false
+          //  },2000)
+        }else if(res.data.code == 400){
+           this.toastInfo = {
+              showMsg: res.data.msg,
+              showPositionValue: true,
+              toastType: "text"
+            };
+        }
+      });
+    },
   },
   created() {
     this.getOrderHight();
   },
 
-  mounted() {}
+  mounted() {
+    if(isweixin()){
+ WeChatLogin()
+
+    }
+  
+
+  }
 };
 </script>
 <style lang="less">
@@ -319,6 +540,45 @@ export default {
     .weui-input {
       height: 2rem;
     }
+  }
+}
+
+.WXPopupBox {
+  .vux-popup-dialog {
+    z-index: 503;
+  }
+}
+.WXPopup1 {
+  z-index: 9999;
+  padding: 0.8rem;
+  h4 {
+    font-size: 1.5rem;
+  }
+  .WXbindInfo {
+    font-size: 0.8rem;
+    color: #a0a0a0;
+  }
+}
+
+.wxCodeBindSussBox {
+  margin: 2rem 0;
+  text-align: center;
+  .wxCodeBindSussImg {
+    img {
+      width: 100px;
+    }
+  }
+  .wxCodeBindSussInfo {
+    color: #505050;
+    font-size: 0.8rem;
+    margin: 0.8rem 0;
+    span {
+      color: #4a90e2 !important;
+    }
+  }
+  .Bind-succ-primary-red {
+    background: red;
+    color: #fff;
   }
 }
 

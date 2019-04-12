@@ -25,24 +25,19 @@
       </flexbox-item>
 
       <flexbox-item>
-        <router-link tag="div" to="/msgindex" class="footerNavIcons">
+      
+        <router-link tag="div" to="/msgindex" @click.native="gotoMsg" class="footerNavIcons">
           <span class="menuMsgBg">
-            <!-- <img :src="require('../assets/images/menu-news-gray.png')"/> -->
+         
           </span>
           消息
         </router-link>
-
-        <!-- <div class="footerNavIcons">
-            <span>
-            <img :src="require('../assets/images/menu-news-gray.png')"/>
-          </span>
-          消息
-        </div>-->
       </flexbox-item>
       <flexbox-item>
-        <router-link tag="div" to="/myindex" class="footerNavIcons">
+      
+        <router-link tag="div" to="/myindex"  @click.native="gotoMyIndex" class="footerNavIcons">
           <span class="menuMyBg">
-            <!-- <img :src="require('../assets/images/menu-news-gray.png')"/> -->
+           
           </span>
           我的
         </router-link>
@@ -78,9 +73,10 @@
   </div>
 </template>
 <script>
-import { XDialog, TransferDomDirective as TransferDom } from "vux";
-
-import { Flexbox, FlexboxItem } from "vux";
+import {
+ setStorage
+} from "../assets/lib/myStorage.js";
+import { Flexbox, FlexboxItem,XDialog, TransferDomDirective as TransferDom  } from "vux";
 export default {
   directives: {
     TransferDom
@@ -95,7 +91,20 @@ export default {
     Flexbox,
     FlexboxItem,
     XDialog
-  }
+  },
+   methods: {
+     gotoMyIndex(){
+  
+         let wx_Url = 'myindex'
+      setStorage('wx_url',wx_Url)
+       this.$router.push('/myindex')
+     },
+     gotoMsg(){
+         let wx_Url = 'msgindex'
+      setStorage('wx_url',wx_Url)
+       this.$router.push('/msgindex')
+     }
+   }
 };
 </script>
 <style lang="less">

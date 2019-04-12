@@ -10,11 +10,11 @@
       </router-link>
 
       <div class="siteListIcosBox fr">
-        <router-link tag="div" to="/meetingSearch" class="fl HeaderSearch">
+        <router-link tag="div" to="/meetingSearch" :class="!IsShowMap?'fr HeaderSearch':'fl HeaderSearch'">
           <img src="../../assets/images/HeaderSearch.png">
         </router-link>
         <!-- @click="gotoMapChange" -->
-        <div class="fr HeaderSearch" @click="show9Change">
+        <div class="fr HeaderSearch" v-if="!IsShowMap" @click="show9Change">
           <img src="../../assets/images/button-screen-black.png">
         </div>
       </div>
@@ -53,8 +53,6 @@
           </div>
         </popup>
       </div>
-
-      
     </div>
     <!-- 
 <sticky scroll-box="vux_view_box_body" :check-sticky-support="false" :offset="46">
@@ -182,7 +180,7 @@
                 <div class="orgLogo fl">
                   <img
                     :src="DataItem.mainPic==null?require('../../assets/images/myFans-Mask.png'):DataItem.mainPic"
-                  >
+                  />
                 </div>
                 <div class="orgname fl">{{DataItem.userName}}</div>
                 <div class="orgUptime fr">{{ProTime(DataItem.createTime,'T')}}</div>
@@ -196,35 +194,56 @@
                     :key="index"
                     v-if="filterBelong(DataItem.meetingFileList).length!=0"
                   >
-                    <img :src="img.fileUrl?img.fileUrl:require('../../assets/images/noimg.png')">
+                    <img :src="img.fileUrl?img.fileUrl:require('../../assets/images/noimg.png')" />
                   </span>
                   <span v-if="filterBelong(DataItem.meetingFileList).length==0">
-                    <img :src="require('../../assets/images/noimg.png')">
+                    <img :src="require('../../assets/images/noimg.png')" />
                   </span>
                 </div>
 
                 <div class="tabMeetingTextBox fl">
                   <h4 class="tabMeetingTextTitle">{{DataItem.theme}}</h4>
                   <div class="tabMeetingTime">
-                    <span>
-                      {{DataItem.beginTime}}
-                      &nbsp;&nbsp; {{addressSplit(DataItem.address)}}
+                    <span v-if="DataItem.status==0" class="TimeC0" >
+
+                     <img :src="require('../../assets/images/timeC0.png')">  {{CountdownTime(DataItem.beginTime)}}
+                
                     </span>
+                    <span v-if="DataItem.status==3 || DataItem.status==1" class="TimeC1">
+                      <img :src="require('../../assets/images/timeC1.png')" /> 进行中
+                    </span>
+                    <span v-if="DataItem.status==2" class="TimeC2">
+                     <img :src="require('../../assets/images/timeC2.png')" /> 已结束
+                    </span> &nbsp;&nbsp;
+                    <span>
+<img :src="require('../../assets/images/timeAdd.png')"/>
+                    </span>
+                     
+                  {{addressSplit(DataItem.address)}}
+
                   </div>
                   <div class="tabMeetingTagBox">
-                    <div class="tabMeetingTag fl">
+                    <div class="tabMeetingTag">
                       <!-- {{DataItem.status}} -->
-                      <span v-if="DataItem.status==2" class="IsOver">已结束</span>
-
-                      <span
+                      <span v-for="(Tag,index) in DataItem.tags" :key="index" v-if="index<4">{{Tag}}</span>
+                       
+                      <!-- <span
                         v-else-if="DataItem.status==3 || DataItem.status==1"
                         class="processing"
                       >进行中</span>
-                      <span v-else-if="DataItem.status==0" class="notStarted">未开始</span>
+                      <span v-else-if="DataItem.status==0" class="notStarted">未开始</span> -->
                     </div>
-                    <div class="tabMeetingNum fr">{{DataItem.msg}}</div>
+                    <div class="tabMeetingNum" :class="DataItem.status!=2?'TimeC0':'TimeC2'">
+
+
+                      {{DataItem.status==0?'火热报名中':DataItem.status==1 || DataItem.status==3?'报名即将截止':'报名已结束'}}
+                      
+                      </div>
                   </div>
                 </div>
+
+
+
               </div>
             </li>
           </ul>
@@ -426,7 +445,7 @@
                 <div class="tabMeetingTextBox fl">
                   <h4 class="tabMeetingTextTitle">{{DataItem.theme}}</h4>
                   <div class="tabMeetingTime">
-                    <span>{{DataItem.beginTime}}</span>
+                    <span> {{CountdownTime(DataItem.beginTime)}}</span>
                     <span>{{DataItem.region}}</span>
                   </div>
                   <div class="tabMeetingTagBox">
@@ -441,6 +460,8 @@
                     <div class="tabMeetingNum fr">{{DataItem.msg}}</div>
                   </div>
                 </div>
+
+
               </div>
             </li>
           </ul>
@@ -449,6 +470,14 @@
     </div>
 
     <load-more v-if="showMore" :tip="'正在加载中'" background-color="#fbf9fe"></load-more>
+
+    <div v-transfer-dom class="MapGuideBox">
+      <x-dialog v-model="showMapGuide" class="MapGuideDialog" hide-on-blur>
+        <div class="MapGuideImg" @click="showMapGuide=false">
+          <img :src="require('../../assets/images/mapguide.png')">
+        </div>
+      </x-dialog>
+    </div>
   </div>
 </template>
 
@@ -464,7 +493,7 @@ import {
   getPositioning,
   setStorage,
   timeLimit,
-  JIMinitchange
+  JIMinitchange,meetingBeTime
 } from "../../assets/lib/myStorage.js";
 import MMap from "@/components/MMap";
 import {
@@ -508,6 +537,7 @@ export default {
   },
   data() {
     return {
+      showMapGuide: false,
       hide: false,
       show3: false,
       PositObj: {},
@@ -690,13 +720,16 @@ export default {
       pageStart: 0, // 开始页数
       pageEnd: 0, // 结束页数
       IsCompleted: false,
-MapTotal:0,
+      MapTotal: 0
     };
   },
   computed: {
     ...mapState(["city"])
   },
   methods: {
+    CountdownTime(time){
+      return meetingBeTime(time)
+    },
     filterBelong(arr) {
       return arr.filter(e => {
         return e.belong == 1;
@@ -792,6 +825,7 @@ MapTotal:0,
             "meetingdetails/meetingdetails/interested",
             intObj
           ).then(res => {
+            // console.log(res)
             if (res.data.code == 200) {
               if (res.data.data != null) {
                 let newArr = [];
@@ -806,7 +840,6 @@ MapTotal:0,
               } else {
                 if (sotr) {
                   sotr = sotr.splice(0, 2);
-
                   let newArr = [];
                   this.IndTypeData.forEach((e, index) => {
                     sotr.forEach(el => {
@@ -826,6 +859,7 @@ MapTotal:0,
         });
       } else {
         if (sotr) {
+         
           sotr.splice(0, 2);
           let newArr = [];
           this.IndTypeData.forEach((e, index) => {
@@ -843,7 +877,6 @@ MapTotal:0,
     },
     show2Cancel() {
       this.show2 = false;
-
       let sotr = getStorage("industry");
       if (isLogin()) {
         let userId = getStorage("userToken").userId;
@@ -859,6 +892,7 @@ MapTotal:0,
             "meetingdetails/meetingdetails/interested",
             intObj
           ).then(res => {
+            console.log(res)
             if (res.data.code == 200) {
               if (res.data.data == null) {
                 let arr = ["关注", "推荐"],
@@ -902,10 +936,12 @@ MapTotal:0,
     },
     //获取导航栏菜单
     getTabMunes() {
-      let _that = this
+      let _that = this;
       let sotr = getStorage("industry");
+    
       //  console.log(sotr,JIM.isLogin())
       if (isLogin()) {
+         
         let userId = getStorage("userToken").userId;
         let intObj = {
           params: {
@@ -923,12 +959,15 @@ MapTotal:0,
               if (res.data.data != null) {
                 this.tabMunes = [...["关注", "推荐"], ...res.data.data];
                 setStorage("industry", [...["关注", "推荐"], ...res.data.data]);
-                this.tabsIndex = 0
-                setTimeout(function(){
-                  _that.tabsIndex = 1
-                },300)
+                this.tabsIndex = 0;
+                setTimeout(function() {
+                  _that.tabsIndex = 1;
+                }, 300);
               } else {
                 this.show2 = true;
+                  this.IndType = [...this.IndTypeData];
+              console.log('空')
+
 
                 // if (sotr) {
                 //   sotr.splice(0, 2);
@@ -956,6 +995,7 @@ MapTotal:0,
         });
       } else {
         if (sotr) {
+     
           this.tabMunes = sotr;
         } else {
           this.show2Change();
@@ -982,7 +1022,6 @@ MapTotal:0,
             intObj
           ).then(res => {
             if (res.data.code == 200) {
-              
               this.show2 = false;
               this.tabMunes = [...arr, ...serverArr];
               setStorage("industry", [...arr, ...serverArr]);
@@ -1021,7 +1060,6 @@ MapTotal:0,
     },
     //设置地图显示按钮的高
     GotoMapHeight(value) {
-    
       this.MapH = value;
       // console.log(value);
     },
@@ -1094,91 +1132,82 @@ MapTotal:0,
     determineFilter() {
       this.show9 = false;
       if (this.FeatureData.length != 0) {
+        let filterObj = {
+          params: {
+            //  currentPage:this.counter,
+            // pageSize:this.num,
 
+            currentPage: 1,
+            pageSize: this.IsShowMap ? this.mapNum : 99999
+          }
+        };
 
-  let filterObj = {
-            params: {
-              //  currentPage:this.counter,
-              // pageSize:this.num,
-
-              currentPage: 1,
-              pageSize: this.IsShowMap?this.mapNum:99999
+        this.FeatureData.forEach(e => {
+          switch (e.type) {
+            case "sort":
+              filterObj.params[e.type] =
+                e.name == "最新发布"
+                  ? "createTime"
+                  : e.name == "热门点击"
+                  ? "click"
+                  : e.name == "最多参会"
+                  ? "partake"
+                  : null;
+              filterObj.params.longitudeNow = "111";
+              filterObj.params.latitudeNow = "3333";
+              break;
+            case "time":
+              filterObj.params[e.type] =
+                e.name == "今天"
+                  ? "today"
+                  : e.name == "明天"
+                  ? "tomorrow"
+                  : e.name == "周末"
+                  ? "sunday"
+                  : e.name == "近一周"
+                  ? "week"
+                  : "month";
+              break;
+            case "money":
+              filterObj.params[e.type] = e.name == "免费" ? 0 : 1;
+              break;
+            case "status":
+              filterObj.params[e.type] =
+                e.name == "未开始"
+                  ? 0
+                  : e.name == "进行中"
+                  ? 1
+                  : e.name == "已结束"
+                  ? 2
+                  : 3;
+              break;
+            default:
+              filterObj.params[e.type] = e.name;
+          }
+          // filterObj.params[e.type] = e.name
+        });
+        getDataInfo(
+          "get",
+          "meetingdetails/meetingByConditions",
+          filterObj
+        ).then(res => {
+          if (res.data.code == 200) {
+            if (this.IsShowMap) {
+              let arr = [];
+              this.FeatureData.forEach(e => {
+                arr.push(e.name);
+              });
+              this.filterData = arr;
+             
+              this.mapListData = res.data.data.meetingShowList;
+              this.MapTotal = res.data.data.totalCount;
+            } else {
+              this.show1 = true;
+              this.filterList = res.data.data.meetingShowList;
             }
-          };
-
-      
-
-          this.FeatureData.forEach(e => {
-            switch (e.type) {
-              case "sort":
-                filterObj.params[e.type] =
-                  e.name == "最新发布"
-                    ? "createTime"
-                    : e.name == "热门点击"
-                    ? "click"
-                    : e.name == "最多参会"
-                    ? "partake"
-                    : null;
-                filterObj.params.longitudeNow = "111";
-                filterObj.params.latitudeNow = "3333";
-                break;
-              case "time":
-                filterObj.params[e.type] =
-                  e.name == "今天"
-                    ? "today"
-                    : e.name == "明天"
-                    ? "tomorrow"
-                    : e.name == "周末"
-                    ? "sunday"
-                    : e.name == "近一周"
-                    ? "week"
-                    : "month";
-                break;
-              case "money":
-                filterObj.params[e.type] = e.name == "免费" ? 0 : 1;
-                break;
-              case "status":
-                filterObj.params[e.type] =
-                  e.name == "未开始"
-                    ? 0
-                    : e.name == "进行中"
-                    ? 1
-                    : e.name == "已结束"
-                    ? 2
-                    : 3;
-                break;
-              default:
-                filterObj.params[e.type] = e.name;
-            }
-            // filterObj.params[e.type] = e.name
-          });
-
-          console.log(filterObj)
-
-   getDataInfo(
-            "get",
-            "meetingdetails/meetingByConditions",
-            filterObj
-          ).then(res => {
-            if (res.data.code == 200) {
-        if (this.IsShowMap) {
-          let arr = [];
-          this.FeatureData.forEach(e => {
-            arr.push(e.name);
-          });
-          this.filterData = arr;
-          console.log(this.filterData);
-          this.mapListData = res.data.data.meetingShowList
-          this.MapTotal = res.data.data.totalCount
-        } else {
-      
-         this.show1 = true;
-         this.filterList = res.data.data.meetingShowList;
-        }
-            }
-          });
+          }
+        });
       }
-     
     },
     //请求我的关注数据
     getDataList(obj) {
@@ -1219,6 +1248,9 @@ MapTotal:0,
       goodObj.params.city = this.city.name
         ? this.city.name
         : this.PositObj.city;
+         if(dataObj.params.city=="全国"){
+            dataObj.params.city = ''
+          }
       // console.log(obj.counter)
       getDataInfo(
         "get",
@@ -1255,6 +1287,9 @@ MapTotal:0,
         dataObj.params.city = this.city.name
           ? this.city.name
           : this.PositObj.city;
+           if(dataObj.params.city=="全国"){
+            dataObj.params.city = ''
+          }
         // console.log(dataObj)
         // let city =
         getDataInfo(
@@ -1267,8 +1302,8 @@ MapTotal:0,
             if (res.data.data.meetingShowList.length < this.mapNum) {
               this.NoMapMore = true;
             }
-            console.log(res)
-            this.MapTotal = res.data.data.totalCount
+           
+            this.MapTotal = res.data.data.totalCount;
             this.mapListData = res.data.data.meetingShowList;
             // console.log(this.mapListData)
           }
@@ -1277,6 +1312,9 @@ MapTotal:0,
         dataObj.params.city = this.city.name
           ? this.city.name
           : this.PositObj.city;
+           if(dataObj.params.city=="全国"){
+            dataObj.params.city = ''
+          }
         dataObj.params.industry = this.tabMunes[index];
 
         getDataInfo("get", "meetingdetails/meetingByConditions", dataObj).then(
@@ -1292,7 +1330,7 @@ MapTotal:0,
                   if (resd.data.code == 200) {
                     this.IsShowMap = true;
                     this.NoMapMore = true;
-                  
+
                     let arr = [
                       ...res.data.data.meetingShowList,
                       ...resd.data.data.meetingShowList
@@ -1304,11 +1342,13 @@ MapTotal:0,
                         : (obj[next.id] = true && cur.push(next));
                       return cur;
                     }, []); //设置cur默认类型为数组，并且初始值为空的数组
-              // console.log(newArr)
-                  // console.log(newArr.slice(0,this.mapNum))
+                    // console.log(newArr)
+                    // console.log(newArr.slice(0,this.mapNum))
 
-                    this.mapListData = newArr.length>this.mapNum?newArr.slice(0,this.mapNum):newArr;
-               
+                    this.mapListData =
+                      newArr.length > this.mapNum
+                        ? newArr.slice(0, this.mapNum)
+                        : newArr;
                   }
                 });
               } else {
@@ -1322,7 +1362,6 @@ MapTotal:0,
 
     //请求地图更多数据
     getMapAllDataM(index) {
-
       this.showMapLoding = true;
       let dataObj = {
         params: {
@@ -1330,12 +1369,15 @@ MapTotal:0,
           pageSize: this.mapNum
         }
       };
-      console.log(dataObj)
+ 
 
       if (index == 1) {
         dataObj.params.city = this.city.name
           ? this.city.name
           : this.PositObj.city;
+           if(dataObj.params.city=="全国"){
+            dataObj.params.city = ''
+          }
         // console.log(dataObj)
         // let city =
         getDataInfo(
@@ -1362,6 +1404,9 @@ MapTotal:0,
         dataObj.params.city = this.city.name
           ? this.city.name
           : this.PositObj.city;
+           if(dataObj.params.city=="全国"){
+            dataObj.params.city = ''
+          }
         dataObj.params.industry = this.tabMunes[index];
 
         getDataInfo("get", "meetingdetails/meetingByConditions", dataObj).then(
@@ -1419,13 +1464,17 @@ MapTotal:0,
         dataObj.params.city = this.city.name
           ? this.city.name
           : this.PositObj.city;
-        // console.log(dataObj)
+          if(dataObj.params.city=="全国"){
+            dataObj.params.city = ''
+          }
+     
         // let city =
         getDataInfo(
           "get",
           "meetingdetails/meetingdetailsListByGoodMeeting",
           dataObj
         ).then(res => {
+        
           if (res.data.code == 200) {
             this.show3 = false;
             if (res.data.data) {
@@ -1441,6 +1490,9 @@ MapTotal:0,
         dataObj.params.city = this.city.name
           ? this.city.name
           : this.PositObj.city;
+           if(dataObj.params.city=="全国"){
+            dataObj.params.city = ''
+          }
         dataObj.params.industry = this.tabMunes[type];
 
         getDataInfo("get", "meetingdetails/meetingByConditions", dataObj).then(
@@ -1510,7 +1562,9 @@ MapTotal:0,
                 cityCode: stor ? stor.regionCode : res.data.data[0].regionCode
               }
             };
+           
             getDataInfo("get", "place", placeObj).then(resd => {
+           
               if (resd.data.code == 200) {
                 this.TaPosted = resd.data.data.data;
               }
@@ -1523,10 +1577,14 @@ MapTotal:0,
 
   mounted() {
     this.getOrderHight();
+       let wx_Url = 'meeting'
+      setStorage('wx_url',wx_Url)
     this.filterData = [this.tabTitle];
     this.getAllData(this.tabsIndex);
     this.getPlaceData();
     this.getTabMunes();
+
+
   },
   watch: {
     tabsIndex(n, o) {
@@ -1534,6 +1592,16 @@ MapTotal:0,
 
       this.filterData = [this.tabMunes[n]];
       this.tabTitle = this.tabMunes[n];
+    },
+    IsShowMap(n, o) {
+      if (n) {
+        if(!getStorage('IsFirst')){
+          this.showMapGuide = true;
+           setStorage('IsFirst',true)
+        }
+       
+      }
+      // console.log(n)
     }
     //     IsShowMap(n,o){
     //       if(n){
@@ -1719,21 +1787,50 @@ MapTotal:0,
 }
 
 .meeting-tab {
+//   .vux-tab{
+//  display:block !important; 
+//  overflow: hidden;
+//  .vux-tab-item{
+//   float: left;
+//   padding: 0 .4rem;
+//   width: 0;
+//  }
+// }
   .scrollable .vux-tab-item {
+    // float: left;
+
+  
     -webkit-box-flex: 0;
-    -webkit-flex: 0 0 18%;
-    flex: 0 0 18%;
+    -webkit-flex: 0 0 20%;
+    flex: 0 0 20%;
   }
 }
-.FilterMuneBox{
-  .vux-popup-dialog{
- z-index: 9998;
+.FilterMuneBox {
+  .vux-popup-dialog {
+    z-index: 9998;
   }
- 
 }
-.InterestedBox{
-  .vux-popup-dialog{
-    z-index:501 !important;
+.InterestedBox {
+  .vux-popup-dialog {
+    z-index: 501 !important;
+  }
+}
+
+.MapGuideBox {
+  .weui-dialog {
+    background: none;
+    display: block;
+    margin: 0;
+    position: absolute;
+    width: 100%;
+    max-width: 100%;
+    text-align: right;
+  }
+  .MapGuideImg {
+    text-align: right;
+    img {
+      width: 190px;
+    }
   }
 }
 </style>
