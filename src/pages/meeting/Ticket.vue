@@ -140,7 +140,7 @@ import {
           // console.log(val.price)
           this.next(val)
         }else if(val.isOrder ==1 || Titem.leftnum==0){
-           console.log('不能购买！')
+          //  console.log('不能购买！')
         }
         
       },
@@ -155,7 +155,7 @@ import {
         }
           checkToken().then(Pdata => {
         getDataInfo("get", "ordermeeting/ordermeeting/ticket", TicketObj).then(res => {
-     console.log(res)
+    //  console.log(res)
           if (res.data.code == 200) {
             this.ticketData = res.data.data
             // this.userData = res.data.data;

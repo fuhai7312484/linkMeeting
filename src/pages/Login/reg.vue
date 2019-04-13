@@ -227,8 +227,8 @@ export default {
         getDataInfo('post',"user/sendSms", SmsObj).then(res => {
           let data = res.data;
           if (data.code === 200) {
-            alert(data.data)
-              console.log(data.data)
+            // alert(data.data)
+            //   console.log(data.data)
             _that.VerCode = data.data;
             _that.Resend = false;
             _that.Reacquire();
@@ -284,7 +284,7 @@ export default {
           getDataInfo('post',"user/register", regObj).then(res => {
               
               if(res.data.code ==200){
-                console.log(res.data.data.user.id)
+                // console.log(res.data.data.user.id)
                 let userId = res.data.data.user.id
                  _that.showPositionValue = true;
              _that.showMsg = res.data.msg;

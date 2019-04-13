@@ -432,7 +432,7 @@ export default {
           TaObj.params.meId = getStorage("userToken").userId
         }
           getDataInfo("get", "myMeeting/myMeeting/me", TaObj).then(res => {
-            console.log(res);
+            // console.log(res);
             if (res.data.code == 200) {
               this.TaData = res.data.data;
               res.data.data.release.meetingList.forEach(e => {

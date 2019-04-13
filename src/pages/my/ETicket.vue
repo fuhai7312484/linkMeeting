@@ -202,7 +202,7 @@ export default {
 
       checkToken().then(Pdata => {
         getDataInfo("get", "meetingdetails/meETicket", ETicketObj).then(res => {
-          console.log(res);
+          // console.log(res);
           if (res.data.code == 200) {
             this.ETicketData = res.data.data;
 

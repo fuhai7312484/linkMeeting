@@ -646,7 +646,7 @@ export default {
         }
       }
 
-      console.log(val, item);
+      // console.log(val, item);
     },
     //清除特色选择
     ClearSelection() {
@@ -739,7 +739,7 @@ export default {
               }
             };
             getDataInfo("get", "place", placeObj).then(resd => {
-              console.log(resd);
+              // console.log(resd);
               if (resd.data.code == 200) {
                 this.TaPosted = resd.data.data.data;
                 this.show2 = false;

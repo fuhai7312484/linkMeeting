@@ -288,7 +288,7 @@ import {
       };
       checkToken().then(Pdata => {
         getDataInfo("get", "reCollection/reCollection", collObj).then(res => {
-          console.log(res);
+          // console.log(res);
           if (res.data.code == 200) {
      
             this.myCollData =  res.data.data;

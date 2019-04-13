@@ -44,6 +44,7 @@ import MyTicket from "@/pages/my/MyTicket";
 import MyFollow from "@/pages/my/MyFollow"
 import Lianhuiyi from "@/pages/my/about";
 
+import OrderDetail from "@/pages/my/OrderDetail";
 import ETicket from "@/pages/my/ETicket";
 
 
@@ -278,6 +279,13 @@ export default new Router({
       name: "ETicket",
 
       component: ETicket
+    },
+
+    {
+      path: "/orderdetail/:id",
+      name: "OrderDetail",
+
+      component: OrderDetail
     },
 
     {

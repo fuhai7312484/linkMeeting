@@ -198,7 +198,7 @@ export default {
 
       checkToken().then(Pdata => {
         getDataInfo("get", "user/userById", userObj).then(res => {
-          console.log(111111111, res);
+          // console.log(111111111, res);
           if (res.data.code == 200) {
             this.Myinfo = res.data.data;
             this.MyuserAvatar = res.data.data.mainPic;
@@ -211,7 +211,7 @@ export default {
         });
 
         getDataInfo("get", "user/userById", targetObj).then(res => {
-          console.log(2222222, res);
+          // console.log(2222222, res);
           if (res.data.code == 200) {
             this.targetAvatar = res.data.data.mainPic;
           } else if (res.data.code == 400 || res.data.code == 100101) {
@@ -281,7 +281,7 @@ export default {
                 _that.msgData = newArr;
               })
               .onFail(function(data) {
-                console.log(data);
+                // console.log(data);
               });
           }
         });
@@ -374,7 +374,7 @@ export default {
             _that.value = "";
           })
           .onFail(function(data) {
-            console.log("error:" + JSON.stringify(data));
+            // console.log("error:" + JSON.stringify(data));
           });
       } else {
         // console.log("空的");

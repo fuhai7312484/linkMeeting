@@ -114,10 +114,12 @@
  </li>
     </ul>-->
 
-     <div v-transfer-dom>
-        <loading :show="show2" text="数据加载中..."></loading>
-      </div>
+    <div v-transfer-dom>
+      <loading :show="show2" text="数据加载中..."></loading>
+    </div>
 
+    <div style=" position: relative; height:75vh; padding-bottom:1rem;">
+ <pull-tod :on-refresh="onRefresh" :on-infinite="onInfinite" :IsCompleted="IsCompleted">
     <ul class="tabMeetingListUl padlr" ref="parUiHF">
       <li
         class="tabMeetingList"
@@ -125,7 +127,6 @@
         :key="index"
         @click="gotoDetil(DataItem.id)"
       >
-       
         <div>
           <!-- {{DataItem.meetingFileList}} -->
           <div class="tabMeetingImg fl">
@@ -155,12 +156,17 @@
         </div>
       </li>
     </ul>
+
+       </pull-tod>
+
+       </div>
     <!-- </swiper-item> -->
 
     <!-- </swiper> -->
   </div>
 </template>
 <script>
+import PullTod from "@/components/PullTo";
 import {
   getStorage,
   checkToken,
@@ -173,25 +179,27 @@ import {
   Cell,
   XButton,
   Tab,
-  TabItem, Loading,
+  TabItem,
+  Loading,
   Swiper,
   SwiperItem,
   XHeader,
   Flexbox,
   FlexboxItem,
   Sticky,
-  Toast,TransferDomDirective as TransferDom,
+  Toast,
+  TransferDomDirective as TransferDom
 } from "vux";
 
 export default {
-  
   name: "MyColle",
-    directives: {
+  directives: {
     TransferDom
   },
   components: {
     Group,
-    Cell, Loading,
+    Cell,
+    Loading,
     XButton,
     Tab,
     TabItem,
@@ -201,11 +209,11 @@ export default {
     Flexbox,
     FlexboxItem,
     Sticky,
-    Toast
+    Toast,PullTod
   },
   data() {
     return {
-      show2:true,
+      show2: true,
       img: require("../../assets/images/a.jpeg"),
       tabTitle: "Ta发布的",
       index: 0,
@@ -214,65 +222,17 @@ export default {
       list2: ["场地", "会议"],
       listData: [],
       TaPosted: [
-        {
-          type: "pub",
-          img:
-            "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
-          city: "北京",
-          area: "朝阳地区",
-          title: "昆泰国家大酒店",
-          distance: "130米",
-          proportion: "320㎡",
-          hold: "30人",
-          meetingRoom: "50间",
-          guestRoom: "10间",
-          tag: ["机场", "餐厅", "无柱"],
-          price: "5000半天起"
-        },
-        {
-          type: "pub",
-          img:
-            "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
-          city: "北京",
-          area: "朝阳地区",
-          title: "昆泰国家大酒店",
-          distance: "130米",
-          proportion: "320㎡",
-          hold: "30人",
-          meetingRoom: "50间",
-          guestRoom: "10间",
-          tag: ["机场", "餐厅", "无柱"],
-          price: "5000半天起"
-        },
-        {
-          type: "pub",
-          img:
-            "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
-          city: "北京",
-          area: "朝阳地区",
-          title: "昆泰国家大酒店",
-          distance: "130米",
-          proportion: "320㎡",
-          hold: "30人",
-          meetingRoom: "50间",
-          guestRoom: "10间",
-          tag: ["机场", "餐厅", "无柱"],
-          price: "5000半天起"
-        },
-        {
-          type: "par",
-          title: "2018第二届金融衍生品&风险管理论坛",
-          city: "北京",
-          img:
-            "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
-          time: "2018.10.09",
-          price: "1800"
-        }
+       
       ],
       position: "default",
       showPositionValue: false,
       textInfo: "",
-      InfoType: "success"
+      InfoType: "success",
+      pageStart: 0, // 开始页数
+      pageEnd: 0, // 结束页数
+      counter: 1, //默认已经显示出5条数据 count等于一是让从6条开始加载
+      num: 10, // 一次显示多少条
+          IsCompleted: false,
     };
   },
 
@@ -280,6 +240,32 @@ export default {
     ProTime(time, type) {
       return transDate(time, type);
     },
+    //下拉刷新
+    getList() {
+      let vm = this;
+      vm.listData = [];
+      this.counter = 1;
+      this.IsCompleted = false;
+      this.getHisData();
+    },
+ onRefresh(done) {
+      this.getList();
+      done(); // call done
+    },
+    //上滑无限加载
+    onInfinite(done) {
+
+      let vm = this;
+      vm.counter++;
+   
+      vm.pageEnd = vm.num * vm.counter;
+      vm.pageStart = vm.pageEnd - vm.num;
+     
+        this.getDataList({ counter: vm.counter, fun: done });
+     
+    },
+
+
     gotoDetil(id) {
       // console.log(id);
       this.$router.push({
@@ -309,26 +295,56 @@ export default {
     },
     //获取浏览历史
     getHisData() {
+   
       let hisObj = {
         params: {
           userId: getStorage("userToken").userId,
           type: 2,
-          currentPage: 1,
-          pageSize: 9999
+          currentPage: this.counter,
+          pageSize: this.num
         }
       };
-
       checkToken().then(Pdata => {
         getDataInfo("get", "history/history/list", hisObj).then(res => {
+          // console.log(res);
           if (res.data.code == 200) {
             this.listData = res.data.data.meetingShowList;
-            this.show2 = false
+            this.show2 = false;
           } else if (res.data.code == 400 || res.data.code == 100101) {
             setTimeout(function() {
               _that.$router.push("/login");
             }, 500);
           }
         });
+      });
+    },
+//请求分页浏览历史
+       getDataList(obj) {
+      let dataObj = {
+        params: {
+         userId: getStorage("userToken").userId,
+          type: 2,
+          currentPage: obj.counter,
+          pageSize: this.num
+        }
+      };
+      checkToken().then(Pdata => {
+        getDataInfo("get", "history/history/list", dataObj).then(
+          res => {
+          
+            if (res.data.code == 200) {
+              if (res.data.data.meetingShowList.length == 0) {
+                this.IsCompleted = true;
+                // console.log("数据加载完毕！！");
+              } else {
+                this.listData = [...this.listData, ...res.data.data.meetingShowList];
+                if (obj.fun) {
+                  obj.fun();
+                }
+              }
+            }
+          }
+        );
       });
     },
 

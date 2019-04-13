@@ -215,6 +215,7 @@ export default {
       };
       // console.log(this.showNext, SmsObj);
       getDataInfo("post", "user/sendSms", SmsObj).then(res => {
+      
         let data = res.data;
         if (data.code === 200) {
           alert(data.data)
@@ -242,11 +243,12 @@ export default {
 
     //提交手机号表单
     submitData() {
+     
       let _that = this;
       if (this.showNext == "1") {
         //showNext为1时这里请求发送验证码接口并且把showNext状态改为2
         // console.log("验证码已经发送至：" + this.maskValue);
-
+ 
         let SmsObj = {
           type: "login",
           mobile: this.maskValue
@@ -257,7 +259,7 @@ export default {
           let data = res.data;
           if (data.code === 200) {
             alert(data.data)
-            console.log(data.data);
+            // console.log(data.data);
 
             _that.VerCode = data.data;
             _that.showNext = "2";

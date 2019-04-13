@@ -438,7 +438,17 @@
     img {
       margin-right: 0.6rem;
     }
+    .vux-label{
+      width: 85%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
     h4 {
+     
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
       font-size: 1rem;
     }
     .Ticket-inline-desc {
@@ -456,7 +466,7 @@
 
   .Ticket-piaoInfoBox {
     h4 {
-      width: 60%;
+      width: 50%;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
@@ -3780,6 +3790,9 @@ h4.site-room-title {
   }
   .weui-cells {
     margin-top: 0;
+    padding: 0 !important;
+  }
+  .weui-cell{
     padding: 0;
   }
 
@@ -3823,4 +3836,222 @@ h4.site-room-title {
   line-height: 50px;
   border-top:1px solid  #DCDCDC;
 
+}
+//订单详情
+.OrderDetailBG{
+  background: #fff;
+  // margin: .8rem 0;
+  padding: 0.8rem;
+}
+.OrderDetailbox{
+  width: 100%;
+  .weui-cells{
+    margin-top: 0;
+  }
+  .OrderDetailNum{
+   
+    .weui-cell{
+      font-size: .8rem;
+    
+      
+    }
+  }
+  .OrderDetailMetinfo{
+    .weui-cells::before{
+      border: none;
+    }
+  }
+  .Ticket-meetingInfoBox {
+    // background: #fafafa;
+    box-sizing: border-box;
+    .vux-cell-primary {
+      // width: 50%;
+    }
+    .Ticket-meetingIconBox {
+      width: 90px;
+      margin-right: 0.5rem;
+      overflow: hidden;
+      height: 60px;
+      text-align: center;
+      vertical-align: middle;
+      // border-radius: 5px;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      // margin-right:.8rem;
+    }
+    img {
+      margin-right: 0.6rem;
+    }
+    h4 {
+      font-size: 1rem;
+    }
+    .Ticket-inline-desc {
+      font-size: 0.6rem;
+      color: #a0a0a0;
+
+      p {
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+  .OrderDetailMeetingInfo{
+    
+  }
+  // .weui-cell{
+  //   padding: 0;
+  // }
+  .Ticket-meetingInfoBox{
+    padding: 1rem 0 !important;
+    border-bottom:1px solid #E6E6E6; 
+   
+    .Ticket-meetingIconBox{
+      
+    }
+  }
+ 
+}
+.OrderDetailPrice{
+  overflow: hidden;
+  font-weight: 600;
+  color: #505050;
+  font-size: .9rem;
+  
+  .OrderDetailprice-l {
+    width: 80%;
+    margin: .3rem 0;
+  }
+  .OrderDetailprice-r{
+    width: 15%;
+    text-align: right;
+    margin: .3rem 0;
+    span{
+      color: #FE666B !important;
+    }
+  }
+}
+
+.OrderDetailId{
+  line-height: 2rem;
+  font-size: .9rem;
+  font-weight: 600;
+  color: #969696;
+
+}
+.OrderTicketListBox{
+   
+  width: 100%;
+  height: 120px;
+  overflow: hidden;
+  margin:.6rem 0; 
+  padding: .5rem 0;
+  box-sizing: border-box;
+  background: url("../../assets/images/background-e-ticket.png") no-repeat;
+  background-size:100% 100%; 
+  .OrderTicketList-index{
+    width: 10%;
+    text-align: center;
+    color: #A0A0A0;
+    font-size: .8rem;
+    line-height: 30px;
+    
+  }
+  .OrderTicketList-content{
+    line-height: 30px;
+    width:75%;
+    box-sizing: border-box;
+    padding:0 0.3rem; 
+    font-size: .8rem;
+    font-weight: 600;
+    .TicketList-top{
+      overflow: hidden;
+      .TicketList-top-l{
+        max-width: 70%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+    }
+    .TicketList-btn{
+      border: 1px solid #979797;
+      display:inline-block;
+      border-radius:3px;
+      padding: 0rem .4rem;  
+      background: #fff;
+      margin-top:.5rem; 
+      color: #505050;
+    }
+    
+  }
+  .OrderTicketList-Etickt{
+    height: 100%;
+   
+    width: 10%;
+  }
+}
+.RefundRadioBox{
+  background: #fff;
+.weui-cell{
+  font-size: .8rem;
+  .weui-icon-checked::before{
+    font-size:20px; 
+  }
+
+   .weui-check:checked + .vux-checklist-icon-checked::before{
+    color: #FF576B;
+  }
+}
+
+  h4{
+    text-align: center;
+    font-size: 1rem;
+    padding: .8rem 0;
+  }
+  .RBG{ background: #FF576B !important;
+    color:#fff !important;}
+  .RefundRadioBtn{
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    font-size: 1rem;
+    font-weight: bold;
+    background: #f5f5f6;
+    color:#505050;
+  }
+}
+
+.ApplicantBox{
+  background: #fff;
+  margin: .5rem 0;
+  font-size: .8rem;
+  h4{
+    border-bottom:1px solid #E6E6E6;
+    padding: .4rem .8rem;
+  }
+  div{
+    overflow: hidden;
+    border-bottom:1px solid #E6E6E6;
+  
+    padding: .4rem .8rem;
+    dl{
+      overflow: hidden;
+    }
+    dt{
+      width: 12%;
+      float: left;
+      color: #969696;
+    }
+    dd{
+      width: 88%;
+      float: left;
+      color: #505050;
+    }
+  }
 }

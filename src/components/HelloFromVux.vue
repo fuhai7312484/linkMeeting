@@ -60,10 +60,10 @@ export default {
   },
   methods: {
     handChange() {
-      console.log("11111111");
+      // console.log("11111111");
     },
     handler(index) {
-      console.log(index);
+      // console.log(index);
     }
   }
 };

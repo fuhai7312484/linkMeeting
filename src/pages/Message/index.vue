@@ -9,7 +9,19 @@
     <div class="msgBox padlr" v-if="!show2">
       <h3 class="msgTitle">消息</h3>
 
-      <div class="msgContent">
+      <div class="noData-default"  v-if="sysData.length==0&&userMsgData.length==0">
+          <p>
+            <img :src="require('../../assets/images/noData.png')">
+          </p>
+          <p>暂无聊天记录</p>
+        </div>
+
+<!-- <div class="msgNoData" v-if="sysData.length==0&&userMsgData.length==0">
+  暂无数据
+</div> -->
+
+      <div class="msgContent" v-if="!show2">
+     
         <swipeout>
           <!-- :disabled="msgList.status==0?true:false" -->
           <swipeout-item
@@ -91,14 +103,8 @@
                 ></badge>
 
                 <div class="msgAvatarImg">
-                  <!-- <img :src="userInfo.msg.msg_body.extras.userAvatar==' '?require('../../assets/images/myFans-Mask.png'):userInfo.msg.msg_body.extras.userAvatar"> -->
-                  <!-- <img :src="require('../../assets/images/myFans-Mask.png')"> -->
-                  <!-- {{userInfo.msg.from_id==myId?userInfo.msg.msg_body.extras.targetAvatar:userInfo.msg.msg_body.extras.userAvatar}} -->
-                    <img :src="userInfo.msg.from_id==myId?userInfo.msg.msg_body.extras.targetAvatar:userInfo.msg.msg_body.extras.userAvatar">
-                  <!-- {{userInfo.avatar}} -->
-                  <!-- <img
-                    :src="userInfo.avatar==''?require('../../assets/images/myFans-Mask.png'):userInfo.avatar"
-                  >-->
+                    <img :src="userInfo.msg.from_id==myId?userInfo.msg.msg_body.extras.targetAvatar=='no'?require('../../assets/images/myFans-Mask.png'):userInfo.msg.msg_body.extras.targetAvatar:userInfo.msg.msg_body.extras.userAvatar">
+                 
                 </div>
               </div>
               <div class="msgListBox fl">
@@ -169,7 +175,8 @@ export default {
         toastType: "success"
       },
       myId:getStorage('userToken').userId,
-      show2: true,
+      show2: false,
+      noData:false,
       sysData: [
         // {
         //   Avatar: require("../../assets/images/msgIcons-dd.png"),
@@ -301,15 +308,13 @@ export default {
     JIMlogin() {
       //创建初始化JIM
       let _that = this;
-
       let userId = getStorage("userToken").userId;
-
       JIM.login({
         username: userId,
         password: userId
       }).onSuccess(function(data) {
         // console.log("success:" + JSON.stringify(data));
-       
+      //  console.log(data)
         //监听聊天变化
         JIM.onMsgReceive(function(res) {
           // console.log(res)
@@ -360,21 +365,90 @@ export default {
             });
           }
         });
-
+if(data.code ==0){
+  
+_that.getConvers();
+}
  
-        _that.getConvers();
+        
         // console.log(_that.userMsgData)
         // _that.getConversation()
       });
     },
     //获取离线消息
     getConvers() {
+    
       let _that = this;
+ 
+
+
+
+//           JIM.onSyncConversation(function(Pdata) {
+//         //离线消息同步监听
+//         // _that.getConversation();
+//         // console.log(Pdata)
+         
+//         let arr = [];
+//         Pdata.forEach(e => {
+//           arr.push({
+//             from_username: e.from_username,
+//             msg: e.msgs[e.msgs.length - 1].content
+//           });
+//         });
+//         //获取回话
+//         JIM.getConversation()
+//           .onSuccess(function(data) {
+//                 let newArr = [],
+//                 userArr = [],
+//                 sysMsgsArr = [];
+//             if (data.code == 0) {
+//              data.conversations.forEach(e=>{
+//                 if (e.name.length>=32) {
+//                   e.from_type = 'user';
+//                 } else{
+//                    e.from_type = 'admin';
+//                 }
+
+              
+
+//                  arr.forEach(el=>{
+                
+//                   if (el.msg.msg_body.extras == undefined) {
+//                   el.msg.msg_body.extras = {
+//                     userAvatar: " "
+//                   };
+//                 }
+//                 if (el.msg.msg_body.extras.userAvatar == undefined) {
+//                   el.msg.msg_body.extras.userAvatar = " ";
+//                 }
+//                 if(el.from_username == e.name){
+//                   e.msg = el
+//                 }
+//                })
+
+
+//                 if (e.from_type == "admin") {
+//                    sysMsgsArr.push(e);
+//                 } else if (e.from_type == "user") {
+//                    userArr.push(e);
+//                 }
+
+//              })
+// _that.sysData = sysMsgsArr
+// _that.userMsgData = userArr
+//             _that.show2 = false; 
+      //       }
+      //     })
+      //     .onFail(function(data) {
+     
+      //     });
+      // });
+
+
+
       JIM.onSyncConversation(function(Pdata) {
-       
+          _that.show2 =true
         //离线消息同步监听
-        // _that.getConversation();
-        console.log(Pdata,"---------")
         let arr = [];
         Pdata.forEach(e => {
           arr.push({
@@ -382,10 +456,15 @@ export default {
             msg: e.msgs[e.msgs.length - 1].content
           });
         });
-        //获取回话
+
+        if(arr.length==0){
+          _that.noData = true;
+          _that.show2 = false;
+        }else{
+//获取回话
         JIM.getConversation()
           .onSuccess(function(data) {
-            console.log('11111111',data)
+        
             if (data.code == 0) {
               let newArr = [],
                 userArr = [],
@@ -425,15 +504,13 @@ export default {
               _that.show2 = false;
             
             }
-
-
-
-
-
           })
           .onFail(function(data) {
-            console.log("error:" + JSON.stringify(data));
+            // console.log("error:" + JSON.stringify(data));
           });
+        }
+ 
+        
       });
     },
     //系统消息删除

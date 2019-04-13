@@ -86,6 +86,7 @@ export default {
       checkToken().then(Pdata => {
         getDataInfo("get", "/refollow/follow/fans", fansObj).then(res => {
           if (res.data.code == 200) {
+            // console.log(res)
             this.myfanData = res.data.data.myFens;
             this.myfanLen = res.data.data.fensNum;
             setTimeout(function() {

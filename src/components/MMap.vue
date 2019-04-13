@@ -90,7 +90,7 @@ export default {
   methods: {
     //点击查看详情
     goToDetail(id){
-      console.log(id)
+      // console.log(id)
        this.$router.push({
         path: "/meetDetail/" + id,
         query: { meetingId: id }

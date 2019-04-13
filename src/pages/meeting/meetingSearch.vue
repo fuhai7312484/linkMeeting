@@ -321,7 +321,7 @@ export default {
       // console.log(val);
     },
     handSearchClick(id) {
-      console.log(id);
+      // console.log(id);
       this.$router.push({
         path: "/meetDetail/" + id,
         query: { meetingId: id }
@@ -335,7 +335,7 @@ export default {
       this.show = true;
     },
     onCancel() {
-      console.log("on cancel");
+      // console.log("on cancel");
     },
     onConfirm(msg) {
       stoRemove("meetVal");

@@ -389,7 +389,7 @@ export default {
       // console.log(item);
     },
     change(val, label) {
-      console.log("change", val, label);
+      // console.log("change", val, label);
     },
     //价格不为0的时候添加或者编辑联系人
     AddContact() {
@@ -513,7 +513,7 @@ export default {
         checkToken().then(Pdata => {
           getDataInfo("post2", "ordermeeting/ordermeeting", orderObj).then(
             res => {
-              console.log(res);
+              // console.log(res);
               if (res.data.code == 200) {
                 if (this.TicketData.price == 0) {
                   let priceObj = {
@@ -538,12 +538,12 @@ export default {
                             orderId: res.data.data
                           }
                         });
-                        console.log(resq);
+                        // console.log(resq);
                       }
                     });
                   });
                 } else {
-                  console.log("收费票创建订单成功下面走支付");
+                  // console.log("收费票创建订单成功下面走支付");
                 }
               } else if (res.data.code == 1002) {
                 this.toastInfo = {

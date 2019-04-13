@@ -150,7 +150,7 @@ export default {
   },
   methods: {
     SearchInputChange(val) {
-      console.log(val);
+      // console.log(val);
     },
     handSearchClick(val) {
       // this.$store.commit('changeCity',city)
@@ -162,7 +162,7 @@ export default {
         this.show = true;
     },
     onCancel () {
-      console.log('on cancel')
+      // console.log('on cancel')
     },
      onConfirm (msg) {
          alert("清除掉所有搜索记录")

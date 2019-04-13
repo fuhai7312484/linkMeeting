@@ -170,11 +170,11 @@ export default {
         address += e.addressComponent.district;
         address += e.addressComponent.street;
         address += e.addressComponent.streetNumber;
-        alert("当前定位地址为：" + address + lng + "--" + lat);
+        // alert("当前定位地址为：" + address + lng + "--" + lat);
       });
       geolocationControl.addEventListener("locationError", function(e) {
         // 定位失败事件
-        alert(e.message);
+        // alert(e.message);
       });
 	  map.addControl(geolocationControl);
    var markers = [];

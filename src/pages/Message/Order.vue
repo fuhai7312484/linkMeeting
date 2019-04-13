@@ -77,7 +77,7 @@ export default {
   methods: {
     //点击消息链接
     sysMsgChange(type,id) {
-      console.log(type)
+      // console.log(type)
       switch(type){
         case '1':
         return console.log('订单')

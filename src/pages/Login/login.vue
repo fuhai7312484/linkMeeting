@@ -273,10 +273,10 @@ export default {
               flag: 1
             })
               .onSuccess(function(data) {
-                console.log("success:" + JSON.stringify(data));
+                // console.log("success:" + JSON.stringify(data));
               })
               .onFail(function(data) {
-                console.log("error:" + JSON.stringify(data));
+                // console.log("error:" + JSON.stringify(data));
               });
           }
         });

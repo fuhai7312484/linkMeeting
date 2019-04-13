@@ -264,10 +264,10 @@ export default {
   },
   methods: {
      onHide () {
-      console.log('on hide')
+      // console.log('on hide')
     },
     onShow () {
-      console.log('on show')
+      // console.log('on show')
     },
     goToback() {
       this.showInput = false;
@@ -345,7 +345,7 @@ export default {
         getDataInfo("post", "user/sendSms", SmsObj).then(res => {
           let data = res.data;
           if (data.code === 200) {
-            alert(data.data)
+            // alert(data.data)
             // console.log(data.data);
             _that.OldCode = data.data;
             _that.Resend = false;
@@ -372,7 +372,7 @@ export default {
             getDataInfo("post", "user/sendSms", SmsObj).then(res => {
               let data = res.data;
               if (data.code === 200) {
-                alert(data.data)
+                // alert(data.data)
                 // console.log(data.data);
                 _that.newCode = data.data;
                 _that.Resend = false;

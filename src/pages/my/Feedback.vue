@@ -96,7 +96,7 @@ import {
         
              checkToken().then(Pdata => {
         getDataInfo("post", "/feedback/feedback", feedObj).then(res => {
-          console.log(res)
+          // console.log(res)
           if(res.data.code ==200){
             
       this.toastInfo = {

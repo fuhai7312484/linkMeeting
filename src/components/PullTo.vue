@@ -25,6 +25,7 @@
         </slot>
       </footer>
     </section>
+   
   </div>
 </template>
 
@@ -84,21 +85,24 @@ export default {
       this.touching = true
     },
     touchMove(e) {
+     
       if (!this.enableRefresh || this.$el.scrollTop > 0 || !this.touching) {
         return
       }
       let diff = e.targetTouches[0].pageY - this.startY - this.startScroll
       if (diff > 0) e.preventDefault()
       this.top = Math.pow(diff, 0.8) + (this.state === 2 ? this.offset : 0)
-
       if (this.state === 2) { // in refreshing
         return
       }
+      // console.log(this.top,this.offset)
+      
       if (this.top >= this.offset) {
         this.state = 1
       } else {
         this.state = 0
       }
+      // console.log(e)
     },
     touchEnd(e) {
       if (!this.enableRefresh) return
@@ -119,6 +123,8 @@ export default {
       this.state = 2
       this.top = this.offset
       this.onRefresh(this.refreshDone)
+      this.infiniteLoading = false
+      // console.log(1111111)
     },
     refreshDone() {
       this.state = 0
@@ -135,16 +141,22 @@ export default {
     },
 
     onScroll(e) {
+      // console.log(this.enableInfinite,this.infiniteLoading)
       if (!this.enableInfinite || this.infiniteLoading) {
         return
       }
+     
       let outerHeight = this.$el.clientHeight
       let innerHeight = this.$el.querySelector('.inner').clientHeight
       let scrollTop = this.$el.scrollTop
       let ptrHeight = this.onRefresh ? this.$el.querySelector('.pull-refresh').clientHeight : 0
       let infiniteHeight = this.$el.querySelector('.load-more').clientHeight
       let bottom = innerHeight - outerHeight - scrollTop - ptrHeight
-      if (bottom < infiniteHeight) this.infinite()
+      //  console.log(bottom,infiniteHeight)
+      if (bottom < infiniteHeight){
+        //  console.log(11111)
+this.infinite()
+      } 
     }
 
     //  loadmore() {

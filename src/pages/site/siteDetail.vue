@@ -963,7 +963,7 @@ export default {
       getDataInfo("get", "place/detail", dataObj).then(res => {
         if (res.data.code == 200) {
           this.sitData = res.data.data
-          console.log(res)
+          // console.log(res)
      
         } else if (res.data.code == 400 || res.data.code == 100101) {
         }
@@ -982,7 +982,7 @@ export default {
             if (res.data.code == 200) {
               this.IsColl = res.data.data;
             } else if (res.data.code == 400 || res.data.code == 100101) {
-              console.log("登录");
+              // console.log("登录");
             }
           });
         });
@@ -1014,7 +1014,7 @@ export default {
                 this.IsColl = 1;
 
                 } else if (res.data.code == 400 || res.data.code == 100101) {
-                  console.log('登录')
+                  // console.log('登录')
                 }
               }
             );
@@ -1037,14 +1037,14 @@ export default {
                   };
                   this.IsColl = 2;
                 } else if (res.data.code == 400 || res.data.code == 100101) {
-                  console.log('登录')
+                  // console.log('登录')
                 }
               }
             );
           });
         }
       } else {
-        console.log("登录");
+        // console.log("登录");
       }
     },
     //锚点跳转

@@ -63,10 +63,10 @@
                 <span
                   slot
                   class="Ticket-company-status"
-                  :class="taPos.status==0?'T-s1':taPos.status==2&&taPos.joinType==0?'T-s2':taPos.status==8||taPos.status==4?'T-s4':taPos.status==0?'T-s1':taPos.joinType==0?'T-s3':''"
-                >{{taPos.status==0?'待付款':taPos.status==2&&taPos.joinType==0?'待参会':taPos.status==8?'交易关闭':taPos.status==4?'已完成':taPos.status==0?'待付款':taPos.joinType==0?'退款中':''}}</span>
+                  :class="taPos.status==0?'T-s1':taPos.joinType==0?'T-s2':taPos.status==8||taPos.status==4?'T-s4':taPos.status==0?'T-s1':taPos.joinType==0?'T-s3':''"
+                >{{taPos.status==0?'待参会':taPos.status==1?'已验票':taPos.status==2?'已退款':'退款中'}}</span>
               </cell>
-              <cell class="Ticket-meetingInfoBox" link="/">
+              <cell class="Ticket-meetingInfoBox" :link="'/orderdetail/'+taPos.orderId">
                 <div slot="icon" class="Ticket-meetingIconBox">
                   <img :src="taPos.cover" width="100">
                 </div>
@@ -83,7 +83,7 @@
                 <div class="Ticket-piaoInfoSpan fr">
                   <span class="piaoInfoNun">共{{taPos.ticketNum}}张</span>
 
-                  <span class="piaoInfoPrice">合计：{{taPos.price==0?'免费':'¥ '+taPos.price}}</span>
+                  <span class="piaoInfoPrice">合计：{{taPos.price==0?'¥ 0.00':'¥ '+taPos.price}}</span>
                 </div>
               </div>
             </group>
@@ -198,7 +198,7 @@ export default {
       this.CancelId = "";
     },
     onConfirm(msg) {
-      console.log(msg);
+      // console.log(msg);
 
       let CanceObj = {
         id: msg
@@ -206,7 +206,7 @@ export default {
       checkToken().then(Pdata => {
         getDataInfo("patch", "ordermeeting/ordermeeting/cancel", CanceObj).then(
           res => {
-            console.log(res);
+            // console.log(res);
             if (res.data.code == 200) {
               this.toastInfo = {
                 showMsg: "订单取消成功！",
@@ -250,18 +250,22 @@ export default {
       let TicketObj = {
         params: {
           // type:'0',
+          
+          pageNum:1,
+          pageSize:20,
           userId: getStorage("userToken").userId
         }
       };
       if (status != undefined) {
         TicketObj.params.status = status;
       }
+      // console.log(TicketObj)
       checkToken().then(Pdata => {
         getDataInfo("get", "myMeeting/myMeeting/myCoupon", TicketObj).then(
           res => {
             console.log(res);
             if (res.data.code == 200) {
-              this.TaPosted = res.data.data;
+              this.TaPosted = res.data.data.myCoupons;
               this.show2 = false;
             } else if (res.data.code == 100101) {
               _that.$router.push("/login");
@@ -287,7 +291,7 @@ export default {
   },
   watch: {
     index(n, o) {
-      console.log(n);
+      // console.log(n);
       switch (n) {
         case 0:
           this.getTicketData();

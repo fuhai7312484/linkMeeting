@@ -492,16 +492,16 @@
       })
       },
       logIndexChange1(arg) {
-        console.log(arg);
+        // console.log(arg);
       },
       logIndexChange2(arg) {
-        console.log(arg);
+        // console.log(arg);
       },
        logIndexChange3(arg) {
-        console.log(arg);
+        // console.log(arg);
       },
       logIndexChange4(arg) {
-        console.log(arg);
+        // console.log(arg);
       },
       show1(index) {
   

@@ -211,12 +211,12 @@ import {
           id: this.$route.query.orderId,
         }
       };
-      console.log(orderObj)
+      // console.log(orderObj)
       getDataInfo("get", "ordermeeting/ordermeeting", orderObj).then(
         res => {
           // console.log(res)
           if (res.data.code == 200) {
-            console.log(res.data.data)
+            // console.log(res.data.data)
             this.orderInfo = res.data.data
             this.show2 = false;
           }

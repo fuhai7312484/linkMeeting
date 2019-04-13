@@ -613,7 +613,7 @@ export default {
         this.$router.push({path:'/ticket', query:{meeting_id:this.$route.query.meetingId}})
       }else{
         this.$router.push('/login')
-        console.log('去登录')
+        // console.log('去登录')
       }
     },
     //点击收藏或者取消收藏
@@ -639,7 +639,7 @@ export default {
                   };
                   this.IsColl = 1;
                 } else if (res.data.code == 400 || res.data.code == 100101) {
-                  console.log("登录");
+                  // console.log("登录");
                 }
               }
             );
@@ -662,14 +662,14 @@ export default {
                   };
                   this.IsColl = 2;
                 } else if (res.data.code == 400 || res.data.code == 100101) {
-                  console.log("登录");
+                  // console.log("登录");
                 }
               }
             );
           });
         }
       } else {
-        console.log("登录");
+        // console.log("登录");
       }
     },
 
@@ -681,7 +681,7 @@ export default {
 
     //过滤封面图片和视频、附件
     processImgType(type, arr) {
-      console.log(arr);
+      // console.log(arr);
       // switch(type){
       //   case 0:
       //   return arr.filter(e=>{
@@ -802,7 +802,7 @@ export default {
             if (res.data.code == 200) {
               this.IsColl = res.data.data;
             } else if (res.data.code == 400 || res.data.code == 100101) {
-              console.log("登录");
+              // console.log("登录");
             }
           });
         });
@@ -939,7 +939,7 @@ export default {
     },
     tabClick(index) {
       // this.infoTab = !this.infoTab
-      console.log(index);
+      // console.log(index);
     },
     showAdBullet() {
       this.showHideOnBlur = false;

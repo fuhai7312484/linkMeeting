@@ -661,7 +661,7 @@ export default {
       return transDate(time, type);
     },
     gotoDetil(id) {
-      console.log(id);
+      // console.log(id);
       this.$router.push({
         path: "/meetDetail/" + id,
         query: { meetingId: id }
@@ -689,7 +689,7 @@ export default {
     checkBoxSubmit() {
       //这里请求选择行业的数据接口
 
-      console.log(this.IndType, this.tabMunes);
+      // console.log(this.IndType, this.tabMunes);
       let arr = ["关注", "推荐"];
       //  this.tabMunes = this.IndType
       this.IndType.forEach(e => {
@@ -699,12 +699,12 @@ export default {
       // this.showToast = false;
       this.listData = this.data1[0]["1"];
       this.show2 = false;
-      console.log("请求推荐接口");
+      // console.log("请求推荐接口");
     },
     //切换地图
     gotoMapChange() {
       this.IsShowMap = !this.IsShowMap;
-      console.log(this.listData);
+      // console.log(this.listData);
     },
     //设置地图高度
     getOrderHight() {
@@ -715,7 +715,7 @@ export default {
     //设置地图显示按钮的高
     GotoMapHeight(value) {
       this.MapH = value;
-      console.log(value);
+      // console.log(value);
     },
     //设置筛选后的结果页
     showFilter() {
@@ -782,10 +782,10 @@ export default {
         }
       }
 
-      console.log(val, item);
+      // console.log(val, item);
     },
     getMoreList(loaded){
-      console.log(loaded)
+      // console.log(loaded)
     },
 
     determineFilter() {
@@ -798,7 +798,7 @@ export default {
             arr.push(e.name);
           });
           this.filterData = arr;
-          console.log("这里请求接口", this.FeatureData);
+          // console.log("这里请求接口", this.FeatureData);
         } else {
           this.show1 = true;
         }
@@ -841,7 +841,7 @@ export default {
   },
   watch: {
     tabsIndex(n, o) {
-      console.log("请求一下接口", n);
+      // console.log("请求一下接口", n);
       if (n == 0) {
         if (this.isLogin) {
           let dataObj = {

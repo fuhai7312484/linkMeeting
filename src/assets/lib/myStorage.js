@@ -9,7 +9,7 @@ export function getDataInfo(mode, url, obj) {
   //测试环境
   let ipUrl = "http://192.168.1.177/lhy/v0.1/api/";
   //服务器正式环境
-  // let ipUrl = "http://47.92.227.226:8080/lhy/v0.1/api/";
+  // let ipUrl = "http://lianhuiyi.woneast.com/lhy/v0.1/api/";
   // let ipUrl = "http://192.168.1.170:8080/v0.1/api/";
   // let ipUrl = "http://192.168.1.125:8080/v0.1/api/";
   var qs = require("qs");
@@ -253,9 +253,9 @@ export function JIMinitchange(callback) {
 function JIMinit(callback) {
   let Obj = {};
   checkToken().then(Pdata => {
-    // console.log(Pdata)
+   
     getDataInfo("get", "jpush/im/auth", Obj).then(res => {
-      console.log(res);
+      // console.log(res);
       if (res.data.code == 200) {
         let stringObj = res.data.data;
         stringObj.flag = 1;
@@ -280,6 +280,7 @@ export function JIMlogin(callback) {
     username: userId,
     password: userId
   }).onSuccess(function(data) {
+    // console.log(data)
     callback();
   });
 }

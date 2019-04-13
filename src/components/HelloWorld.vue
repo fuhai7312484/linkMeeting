@@ -132,7 +132,7 @@ export default {
         setCookie("accessToken", tokenInfo.access_token);
         setStorage("userToken", userInfo);
 
-        console.log(res);
+        // console.log(res);
         // if (res.data.code == 200) {
         //   this.showPositionValue = true;
         //   this.showMsg = res.data.msg;
@@ -163,7 +163,7 @@ export default {
         }
         // headers:{"APP-User-Token":token}
       };
-      alert(2222);
+      // alert(2222);
       //        getDataInfo("get", "user/userById", userObj).then(res => {
       // console.log(res)
       // this.myData2 = res.data.data
@@ -184,7 +184,7 @@ export default {
 
           // alert(res)
 
-          console.log(res);
+          // console.log(res);
           if (res.data.code == 200) {
             this.myData2 = res.data.data;
             // console.log(res.data.data)
@@ -192,7 +192,7 @@ export default {
             //   _that.show2 = false;
 
             // },500)
-            console.log(token);
+            // console.log(token);
           } else if (res.data.code == 100101 || res.data.code == 400) {
             alert("请重新登录！");
           }

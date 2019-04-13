@@ -174,7 +174,7 @@ export default {
     },
     //点击城市切换城市
     handCityClick(city) {
-      console.log(city);
+      // console.log(city);
       if (getStorage("historyCity")) {
         let arr = getStorage("historyCity");
         arr = arr.filter(e => {
@@ -237,7 +237,7 @@ export default {
                 return city;
               }
             }
-            console.log(r);
+            // console.log(r);
             let obj={
                params:{
               province:r.address.province,
@@ -246,9 +246,9 @@ export default {
                }
               
             }
-            console.log(obj)
+            // console.log(obj)
             getDataInfo("get", "region/code", obj).then(res => {
-              console.log(res)
+              // console.log(res)
         if(res.data.code==200){
            _that.positionCity = res.data.data[0]
         }

@@ -175,7 +175,7 @@ export default {
       this.isLogin = isLogin()
       this.getMyData()
     }else{
-      console.log('没登录')
+      // console.log('没登录')
     }
  
   

@@ -1,5 +1,6 @@
 <template>
   <div class="box">
+    <!-- <div @click="ios">唤醒IOS</div> -->
     <div class="siteHeaderBox">
       <h3 class="fl siteHeaderTitle">找会议</h3>
       <router-link tag="div" class="fl siteCity" to="/city">
@@ -139,7 +140,7 @@
       <div
         v-for="(item, index) in tabMunes"
         :key="index"
-        style=" position: relative; height:61vh; padding-bottom:1rem;"
+        style=" position: relative; height:71vh; padding-bottom:1rem;"
         v-if="tabsIndex==index"
       >
         <pull-tod :on-refresh="onRefresh" :on-infinite="onInfinite" :IsCompleted="IsCompleted">
@@ -159,14 +160,8 @@
             <li v-else-if="listData.length==0 && tabsIndex!=0" class="ListNoContent">
               <p>您还没有关注任何内容</p>
             </li>
-
-            <li
-              v-else
-              class="tabMeetingList"
-              v-for="(DataItem,index) in listData"
-              :key="index"
-              @click="gotoDetil(DataItem.id)"
-            >
+            <li v-else class="tabMeetingList" v-for="(DataItem,index) in listData" :key="index"  @click="gotoDetil(DataItem.id)">
+             
               <div class="tabMeetingTopBox" v-if="tabsIndex==0">
                 <div class="orgLogo fl">
                   <img
@@ -176,8 +171,9 @@
                 <div class="orgname fl">{{DataItem.userName}}</div>
                 <div class="orgUptime fr">{{ProTime(DataItem.createTime,'T')}}</div>
               </div>
-              <div>
-                <!-- {{DataItem.meetingFileList}} -->
+
+                 <div>
+             
                 <div class="tabMeetingImg fl">
                   <span
                     v-for="(img,index) in DataItem.meetingFileList"
@@ -190,27 +186,36 @@
                   </span>
                 </div>
 
-                <div class="tabMeetingTextBox fl">
+
+          <div class="tabMeetingTextBox fl">
                   <h4 class="tabMeetingTextTitle">{{DataItem.theme}}</h4>
                   <div class="tabMeetingTime">
                     <span>
                       {{DataItem.beginTime}}
-                   &nbsp;&nbsp; {{addressSplit(DataItem.address)}}
+                      &nbsp;&nbsp; {{addressSplit(DataItem.address)}}
                     </span>
-                    <!-- <span>{{DataItem.region}}</span> -->
+                  
                   </div>
                   <div class="tabMeetingTagBox">
                     <div class="tabMeetingTag fl">
                       <span v-if="DataItem.status==0" class="IsOver">已结束</span>
-                      <!-- <span v-else-if="DataItem.status==1" class="LiveIn">直播中</span> -->
-                      <span v-else-if="DataItem.status==2 || DataItem.status==1" class="processing">进行中</span>
+                   
+                      <span
+                        v-else-if="DataItem.status==2 || DataItem.status==1"
+                        class="processing"
+                      >进行中</span>
                       <span v-else-if="DataItem.status==3" class="notStarted">未开始</span>
                     </div>
                     <div class="tabMeetingNum fr">{{DataItem.msg}}</div>
                   </div>
                 </div>
-              </div>
+
+
+
+                 </div>
+
             </li>
+             
           </ul>
         </pull-tod>
 
@@ -389,7 +394,6 @@
                   <div class="tabMeetingTime">
                     <span>{{DataItem.beginTime}}</span>
                     <span>{{DataItem.region}}</span>
-                    
                   </div>
                   <div class="tabMeetingTagBox">
                     <div class="tabMeetingTag fl">
@@ -422,7 +426,8 @@ import {
   isLogin,
   transDate,
   getPositioning,
-  setStorage,timeLimit
+  setStorage,
+  timeLimit
 } from "../../assets/lib/myStorage.js";
 import MMap from "@/components/MMap";
 import {
@@ -637,7 +642,7 @@ export default {
       page: 1,
 
       counter: 1, //默认已经显示出5条数据 count等于一是让从6条开始加载
-      num: 5, // 一次显示多少条
+      num: 15, // 一次显示多少条
       pageStart: 0, // 开始页数
       pageEnd: 0, // 结束页数
       IsCompleted: false
@@ -647,25 +652,49 @@ export default {
     ...mapState(["city"])
   },
   methods: {
-    addressSplit(add){
-      var reg = /.+?(省|市|自治区|自治州|县|区)/g;
-      let addArr = add.match(reg)
-      let str = ''
-      addArr.forEach(e => {
-  
-       if(e.indexOf('市')!= -1){
-         str = e.replace('市','')
-       } 
-        if(e.indexOf('区')!= -1&&e.length<5){
-         str += ' '+ e.replace('区','')
-       } 
-      });
-      return str 
+    //唤醒IOS
+    ios(){
+     window.location.href ='com.lianhuiyi://com.lianhuiyi'
     },
-     //处理时间范围
-    getTimeLimit(beginTime,endTime){
-      if(beginTime||endTime){
-      return timeLimit(beginTime,endTime)
+    addressSplit(add) {
+      var reg = /.+?(省|市|自治区|自治州|县|区|镇)/g;
+      let addArr = add.match(reg);
+      let str = "";
+      if(addArr){
+        let newArr =[]
+      
+        if(addArr.length>=2){
+  newArr = [addArr[0],addArr[1]]
+        }else if(addArr.length<2){
+  newArr = [addArr[0]]
+        }
+  newArr.forEach(e => {
+    if (e.indexOf("省") != -1) {
+          str = e.replace("省", "");
+        }
+        if (e.indexOf("市") != -1) {
+          str += " " + e.replace("市", "");
+        }
+        if (e.indexOf("区") != -1 && e.length < 5) {
+          str += " " + e.replace("区", "");
+        }
+         if (e.indexOf("镇") != -1 && e.length < 5) {
+          str += " " + e.replace("镇", "");
+        }
+         if (e.indexOf("县") != -1 && e.length < 5) {
+          str += " " + e.replace("县", "");
+        }
+      });
+
+      }
+    
+      return str;
+
+    },
+    //处理时间范围
+    getTimeLimit(beginTime, endTime) {
+      if (beginTime || endTime) {
+        return timeLimit(beginTime, endTime);
       }
     },
     //处理时间格式
@@ -926,7 +955,7 @@ export default {
     //设置地图显示按钮的高
     GotoMapHeight(value) {
       this.MapH = value;
-      console.log(value);
+      // console.log(value);
     },
     //设置筛选后的结果页
     showFilter() {
@@ -994,7 +1023,7 @@ export default {
       // console.log(val, item);
     },
     getMoreList(loaded) {
-      console.log(loaded);
+      // console.log(loaded);
     },
 
     determineFilter() {
@@ -1006,9 +1035,9 @@ export default {
             arr.push(e.name);
           });
           this.filterData = arr;
-          console.log("这里请求接口", this.FeatureData);
+          // console.log("这里请求接口", this.FeatureData);
         } else {
-          console.log("这里请求接口", this.FeatureData);
+          // console.log("这里请求接口", this.FeatureData);
           let filterObj = {
             params: {
               //  currentPage:this.counter,
@@ -1064,7 +1093,7 @@ export default {
             // filterObj.params[e.type] = e.name
           });
 
-          console.log(filterObj);
+          // console.log(filterObj);
           this.show1 = true;
 
           getDataInfo(
@@ -1075,7 +1104,7 @@ export default {
             if (res.data.code == 200) {
               this.filterList = res.data.data.meetingShowList;
             }
-            console.log(res);
+            // console.log(res);
             //  this.filterList = [{}];
 
             // if (res.data.code == 200) {
@@ -1152,12 +1181,12 @@ export default {
         "meetingdetails/meetingdetailsListByGoodMeeting",
         goodObj
       ).then(res => {
+        console.log(res)
         if (res.data.code == 200) {
           if (res.data.data.meetingShowList.length == 0) {
             this.IsCompleted = true;
             // console.log("数据加载完毕！！");
           } else {
-        
             this.listData = [
               ...this.listData,
               ...res.data.data.meetingShowList
@@ -1181,8 +1210,8 @@ export default {
         }
       };
       if (type == 0) {
-     
         if (isLogin()) {
+         
           dataObj.params.flag = "1";
           dataObj.params.userId = getStorage("userToken").userId;
           if (this.isLogin) {
@@ -1192,7 +1221,7 @@ export default {
                 "meetingdetails/meetingdetailsList",
                 dataObj
               ).then(res => {
-               
+             
                 if (res.data.code == 200) {
                   this.listData = res.data.data;
                   this.show3 = false;
@@ -1201,7 +1230,6 @@ export default {
             });
           }
         } else {
-          
           this.show3 = false;
         }
       } else if (type == 1) {
@@ -1212,7 +1240,13 @@ export default {
         ).then(res => {
           if (res.data.code == 200) {
             this.show3 = false;
-            this.listData = res.data.data.meetingShowList;
+            if(res.data.data){
+               this.listData = res.data.data.meetingShowList;
+            }else{
+              this.IsCompleted = true;
+              this.listData =[]
+            }
+           
           }
         });
       } else {
@@ -1225,6 +1259,10 @@ export default {
           res => {
             if (res.data.code == 200) {
               this.show3 = false;
+              if (res.data.data.meetingShowList.length < this.num) {
+                this.IsCompleted = true;
+              }
+
               this.listData = res.data.data.meetingShowList;
             }
           }
@@ -1279,16 +1317,15 @@ export default {
           if (res.data.code == 200) {
             let placeObj = {
               params: {
-                // lng:this.PositObj.lng,
-                // lat:this.PositObj.lat,
+               
                 cityCode: stor ? stor.regionCode : res.data.data[0].regionCode
               }
             };
             getDataInfo("get", "place", placeObj).then(resd => {
               if (resd.data.code == 200) {
-                // console.log(resd.data.data.data);
+            
                 this.TaPosted = resd.data.data.data;
-                // this.show2 = false;
+              
               }
             });
           }
@@ -1299,31 +1336,18 @@ export default {
 
   mounted() {
     this.getOrderHight();
-    // this.IndType = [...this.IndTypeData];
     this.filterData = [this.tabTitle];
     this.getAllData(this.tabsIndex);
     this.getPlaceData();
     this.getTabMunes();
 
-    // console.log(this.tabsIndex);
-    // this.getGoodMeeting({ counter: this.counter });
+
   },
   watch: {
     tabsIndex(n, o) {
-      // console.log("请求一下接口", n);
+
       this.getAllData(n);
 
-      // if (n == 0) {
-      //   if (this.isLogin) {
-      //     this.getDataList({counter:this.counter})
-      //   }
-      // } else if(n==1) {
-
-      //  this.getGoodMeeting({counter:this.counter})
-
-      // }
-
-      // this.listData = this.data1[0][n];
       this.filterData = [this.tabMunes[n]];
       this.tabTitle = this.tabMunes[n];
     }

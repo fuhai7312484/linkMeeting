@@ -123,7 +123,7 @@ export default {
     checkerChange(val, itemDisabled) {
       this.valchange = true;
       this.ReqVal = val;
-      console.log(val);
+      // console.log(val);
       switch (val) {
         case "3":
           this.ReqValtext = "确定参会";
@@ -140,7 +140,7 @@ export default {
     },
     //获取当前会议信息
     getMeetingData() {
-      console.log(this.$route.params.id, this.$route.query.mobile);
+      // console.log(this.$route.params.id, this.$route.query.mobile);
       let Obj = {
         params: {
           id: this.$route.params.id
@@ -149,7 +149,7 @@ export default {
       getDataInfo("get", "meetingdetails/meetingDetailsById", Obj).then(res => {
         if (res.data.code == 200) {
           this.meetingData = res.data.data.draftsVo;
-          console.log(res);
+          // console.log(res);
         }
       });
     },
@@ -189,7 +189,7 @@ export default {
         path: "/meetDetail/" + this.$route.params.id,
         query: { meetingId: this.$route.params.id }
       });
-      console.log(this.ReminderId);
+      // console.log(this.ReminderId);
     },
 
     onCancel() {
@@ -203,9 +203,9 @@ export default {
           joinStatus: this.ReqVal
         }
       };
-      console.log(ReceiptObj);
+      // console.log(ReceiptObj);
       getDataInfo("get", "ordermeeting/ticketReceipt", ReceiptObj).then(res => {
-        console.log(res);
+        // console.log(res);
         if (res.data.code == 200) {
           this.$router.push({ path: "/Success/" + this.$route.params.id });
         }
