@@ -1,5 +1,5 @@
 import axios from "axios";
-
+// let staus = false;
 //post接口请求公共调用
 export function getDataInfo(mode, url, obj) {
   let token = getCookie("accessToken");
@@ -110,7 +110,7 @@ export function getStorage(key) {
     if (dataObj.time) {
       let newDate = new Date().getTime();
       if (newDate - dataObj.time > 3000) {
-        console.log("信息已过期");
+        // console.log("信息已过期");
         stoRemove(key);
       } else {
         return dataObj;
@@ -248,6 +248,7 @@ export function JIMinitchange(callback) {
   window.JIM = new JMessage({
     debug: true
   });
+
   JIMinit(callback);
 }
 function JIMinit(callback) {
@@ -263,6 +264,7 @@ function JIMinit(callback) {
           .onSuccess(function(data) {
             // console.log("success:" + JSON.stringify(data));
             callback();
+         
           })
           .onFail(function(data) {
             // console.log("error:" + JSON.stringify(data));
@@ -281,6 +283,7 @@ export function JIMlogin(callback) {
     password: userId
   }).onSuccess(function(data) {
     // console.log(data)
+    
     callback();
   });
 }
@@ -301,14 +304,17 @@ export function sendSysMsg(obj) {
 }
 //处理开始时间和结束时间显示方式
 export function timeLimit(beginTime,endTime){
+ 
   let begin = beginTime.split(' ')
   let end = endTime.split(' ')
   let beginM = begin[0].split('-')
+
   if(begin[0] == end[0]){
+ 
     return beginM[1] +'-'+ beginM[2] +' '+ begin[1]+' 至 '+end[1]
   }else{
     let endM = end[0].split('-')
-    return beginM[1] +'-'+ beginM[2] +' '+ begin[1]+' 至 '+ endM[1]+'-'+endM[1]+' '+ end[1]
+    return beginM[1] +'-'+ beginM[2] +' '+ begin[1]+' 至 '+ endM[1]+'-'+endM[2]+' '+ end[1]
   }
 }
 //时间戳转时间
@@ -404,9 +410,51 @@ export function getGetAxios() {
     })
 
     .then(function(response) {
-      console.log(response);
+      // console.log(response);
     })
     .catch(function(error) {
-      console.log(error);
+      // console.log(error);
     });
+}
+
+//判断当前系统
+export function getNavigator(){
+  var u = navigator.userAgent;
+  // console.log(u)
+  var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+
+  var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+  
+  if(isAndroid){
+      return 'Android'
+  }
+  if(isiOS){
+      return 'IOS'
+  }
+
+}
+
+
+//唤醒APP
+
+export function  wakeApp(){
+//  console.log(getNavigator())
+
+  if(getNavigator() =='Android'){
+       
+        window.location.href = 'lianhuiyi://com.chain.meeting/openwith'
+         window.setTimeout(function(){
+           window.location.href = "https://www.pgyer.com/NSM9"; /***打开app的协议，有安卓同事提供***/
+        },2000);
+     
+      }else if(getNavigator() =='IOS'){
+        window.location.href = 'com.lianhuiyi://com.lianhuiyi'
+        window.setTimeout(function(){
+           window.location.href = "https://www.pgyer.com/NSM9"; /***下载app的地址***/
+        },2000)
+      
+      }
+
+
+
 }

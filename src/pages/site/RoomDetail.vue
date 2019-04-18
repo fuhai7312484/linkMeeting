@@ -321,7 +321,7 @@ export default {
         fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
         sources: [{
           type: "video/mp4",
-          src: "http://59.110.95.211:81/image/2018/12/06/5b29e8f9aec24a97b3f54c763a3d448d.mp4" //url地址
+          src: "http://yd-lhy.oss-cn-beijing.aliyuncs.com/user/1f6ebee8dfd0bc42/video/1f6ebee8dfd0bc42&1553937801048.mp4" //url地址
         }
         ],
         poster: "http://59.110.95.211:81/image/2C9136AE66CE8BD301678190E06C154D.jpg", //你的封面地址
@@ -390,11 +390,11 @@ export default {
 
       SVideoList: [
         {
-          url: "javascript:",
-           type: "video/mp4",
-          img: "http://59.110.95.211:81/image/2C9136AE66CE8BD301678190E06C154D.jpg",
-          title: "这里是视频",
-          src:'http://59.110.95.211:81/image/2018/12/06/5b29e8f9aec24a97b3f54c763a3d448d.mp4',
+          // url: "javascript:",
+          //  type: "video/mp4",
+          // img: "http://59.110.95.211:81/image/2C9136AE66CE8BD301678190E06C154D.jpg",
+          // title: "这里是视频",
+          // src:'http://yd-lhy.oss-cn-beijing.aliyuncs.com/user/1f6ebee8dfd0bc42/video/1f6ebee8dfd0bc42&1553937801048.mp4',
 
           playerOptions : {
         playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
@@ -407,7 +407,7 @@ export default {
         fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
         sources: [{
           type: "video/mp4",
-          src: "http://59.110.95.211:81/image/2018/12/06/5b29e8f9aec24a97b3f54c763a3d448d.mp4" //url地址
+          src: "http://yd-lhy.oss-cn-beijing.aliyuncs.com/user/1f6ebee8dfd0bc42/video/1f6ebee8dfd0bc42&1553937801048.mp4" //url地址
         }
         ],
         poster: "http://59.110.95.211:81/image/2C9136AE66CE8BD301678190E06C154D.jpg", //你的封面地址
@@ -422,68 +422,7 @@ export default {
     },
 
         },
-        {
-          url: "javascript:",
-           type: "video/mp4",
-          img:
-            "http://59.110.95.211:81/image/2C9136AE66CE8BD3016781AC81B81552.jpg",
-          title: "这里是视频",
-              src:'http://59.110.95.211:81/image/2018/12/06/3c654b9e7c144ba498dadc0006ad2531.mp4',
-              playerOptions : {
-        playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
-        autoplay: true, //如果true,浏览器准备好时开始回放。
-        muted: false, // 默认情况下将会消除任何音频。
-        loop: false, // 导致视频一结束就重新开始。
-        preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
-        language: 'zh-CN',
-        aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
-        fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
-        sources: [{
-          type: "video/mp4",
-          src: "http://59.110.95.211:81/image/2018/12/06/3c654b9e7c144ba498dadc0006ad2531.mp4" //url地址
-        }],
-        poster: "http://59.110.95.211:81/image/2C9136AE66CE8BD3016781AC81B81552.jpg", //你的封面地址
-        // width: document.documentElement.clientWidth,
-        notSupportedMessage: '此视频暂无法播放，请稍后再试', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
-        controlBar: {
-          timeDivider: true,
-          durationDisplay: true,
-          remainingTimeDisplay: false,
-          fullscreenToggle: true  //全屏按钮
-        }
-    },
-        },
-          {
-          url: "javascript:",
-           type: "video/mp4",
-          img:
-            "http://59.110.95.211:81/image/2C9136AE66CE8BD3016781AC81B81552.jpg",
-          title: "这里是视频",
-              src:'http://59.110.95.211:81/image/2018/12/06/3c654b9e7c144ba498dadc0006ad2531.mp4',
-              playerOptions : {
-        playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
-        autoplay: true, //如果true,浏览器准备好时开始回放。
-        muted: false, // 默认情况下将会消除任何音频。
-        loop: false, // 导致视频一结束就重新开始。
-        preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
-        language: 'zh-CN',
-        aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
-        fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
-        sources: [{
-          type: "video/mp4",
-          src: "http://59.110.95.211:81/image/2018/12/06/3c654b9e7c144ba498dadc0006ad2531.mp4" //url地址
-        }],
-        poster: "http://59.110.95.211:81/image/2C9136AE66CE8BD3016781AC81B81552.jpg", //你的封面地址
-        // width: document.documentElement.clientWidth,
-        notSupportedMessage: '此视频暂无法播放，请稍后再试', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
-        controlBar: {
-          timeDivider: true,
-          durationDisplay: true,
-          remainingTimeDisplay: false,
-          fullscreenToggle: true  //全屏按钮
-        }
-    },
-        }
+       
       ],
       demo01_index: 0,
       roomFacilityData: [

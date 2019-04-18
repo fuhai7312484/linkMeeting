@@ -309,13 +309,30 @@ export default {
       //创建初始化JIM
       let _that = this;
       let userId = getStorage("userToken").userId;
+    
       JIM.login({
         username: userId,
         password: userId
       }).onSuccess(function(data) {
         // console.log("success:" + JSON.stringify(data));
       //  console.log(data)
+      
+//业务事件监听
+        // console.log(JIM.isLogin())
+        // JIM.onEventNotification(function(data) {
+        //   console.log(data)
+        //   if(data.event_type==1){
+        //     alert('您被顶掉了')
+        //   }
+
+
+        // })
+
+
         //监听聊天变化
+      
+      
+        // JIM.isLogin()
         JIM.onMsgReceive(function(res) {
           // console.log(res)
       

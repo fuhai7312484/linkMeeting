@@ -716,7 +716,11 @@
   top: 1.2rem;
 }
 .addressTitle {
-  font-size: 1rem;
+  font-size: .8rem;
+  width: 95%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   // margin:.3rem 0;
 }
 .addressTag {
@@ -785,6 +789,12 @@
 }
 .site-room-list {
   margin: 0.8rem 0;
+  h4{
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
   .site-room-imgBox {
     img {
       width: 100%;
@@ -828,6 +838,12 @@ h4.site-room-title {
     margin-right: 0.4rem;
   }
 }
+.site-room-Deposit{
+  text-align: center;
+  font-size: .7rem;
+  color: #fe5d6c;
+}
+
 .site-room-destine {
   background: #fe5d6c;
   border-radius: 0.3rem;
@@ -886,7 +902,8 @@ h4.site-room-title {
 .site-room-Introduction {
   padding: 1rem 0;
   font-size: 0.9rem;
-
+  width: 100%;
+ 
   color: #787878;
   line-height: 1.5rem;
   p {
@@ -969,7 +986,7 @@ h4.site-room-title {
 
 .meetingList {
   width: 92%;
-  margin: 1rem auto;
+  margin: .3rem 0;
   img {
     width: 100%;
   }
@@ -2064,6 +2081,70 @@ h4.site-room-title {
     margin: 15px 0;
   }
 }
+
+.attentionOrganizerBox {
+  // background: #000;
+  box-sizing: border-box;
+  padding: 0.4rem 0.8rem;
+  border-top: 5px solid rgb(245, 245, 245);
+  border-bottom: 5px solid rgb(245, 245, 245);
+  margin: 1.2rem 0;
+  width: 100%;
+  // height: 70px;
+  overflow: hidden;
+  .OrganizerLogo {
+    width: 70px;
+    height: 70px;
+    margin-right: 0.5rem;
+    overflow: hidden;
+    border-radius: 50%;
+    img {
+      width: 70px;
+      height: 70px;
+    }
+  }
+  .OrganizerNameBox {
+    // background: #000;
+
+    max-width: 46%;
+    .OrganizerName {
+      height: 30px;
+      width: 100%;
+      padding: 0.5rem 0 0 0;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .OrganizerInfo {
+      color: #d8d8d8;
+      span {
+        display: inline-block;
+        font-size: 0.8rem;
+        color: #969696;
+      }
+    }
+  }
+  .is-attent {
+    border: 1px solid #fe666b;
+    color: #fe666b;
+  }
+  .no-attent {
+    border: 1px solid #b4b4b4;
+    color: #b4b4b4;
+  }
+  .attentionBtn {
+    max-width: 15%;
+    text-align: center;
+    font-size: 0.9rem;
+
+    padding: 0.3rem 1.2rem;
+    font-weight: bold;
+    border-radius: 5px;
+    margin-top: 1rem;
+  }
+}
+
+
 .meetingContent {
   // margin: 60px 0 ;
   margin-bottom: 4rem;
@@ -2132,68 +2213,13 @@ h4.site-room-title {
     }
   }
 
-  .attentionOrganizerBox {
-    // background: #000;
-    box-sizing: border-box;
-    padding: 0.4rem 0.8rem;
-    border-top: 5px solid rgb(245, 245, 245);
-    border-bottom: 5px solid rgb(245, 245, 245);
-    margin: 1.2rem 0;
+  
+  .orderPeople-nodata {
     width: 100%;
-    // height: 70px;
-    overflow: hidden;
-    .OrganizerLogo {
-      width: 70px;
-      height: 70px;
-      margin-right: 0.5rem;
-      overflow: hidden;
-      border-radius: 50%;
-      img {
-        width: 70px;
-        height: 70px;
-      }
-    }
-    .OrganizerNameBox {
-      // background: #000;
-
-      max-width: 46%;
-      .OrganizerName {
-        height: 30px;
-        width: 100%;
-        padding: 0.5rem 0 0 0;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-      }
-      .OrganizerInfo {
-        color: #d8d8d8;
-        span {
-          display: inline-block;
-          font-size: 0.8rem;
-          color: #969696;
-        }
-      }
-    }
-    .is-attent {
-      border: 1px solid #fe666b;
-      color: #fe666b;
-    }
-    .no-attent {
-      border: 1px solid #b4b4b4;
-      color: #b4b4b4;
-    }
-    .attentionBtn {
-      max-width: 15%;
-      text-align: center;
-      font-size: 0.9rem;
-
-      padding: 0.3rem 1.2rem;
-      font-weight: bold;
-      border-radius: 5px;
-      margin-top: 1rem;
-    }
+    text-align: center;
+    color: #ccc;
+    font-size: 1rem;
   }
-
   //会议嘉宾
   .guest-boxList {
     overflow: hidden;
@@ -2248,7 +2274,7 @@ h4.site-room-title {
       }
     }
   }
-
+ 
   .meetingRegListBox {
     width: 100%;
     margin: 0.8rem 0;
@@ -2280,12 +2306,7 @@ h4.site-room-title {
       // height: 50px;
       // margin:.5rem 0;
       padding: 0.8rem 0;
-      .orderPeople-nodata {
-        width: 100%;
-        text-align: center;
-        color: #ccc;
-        font-size: 1rem;
-      }
+      
       li {
         width: 45px;
         height: 85px;
@@ -2312,69 +2333,75 @@ h4.site-room-title {
     }
   }
 
-  .meetingAssessBox {
+
+}
+
+
+
+.meetingAssessBox {
+  width: 100%;
+  margin: 0.8rem 0;
+  // height: 120px;
+  overflow: hidden;
+  border-bottom: 1px solid #e6e6e6;
+  // height: 70px;
+  // background: #000;
+  .orderPeople-nodata {
     width: 100%;
-    margin: 0.8rem 0;
-    // height: 120px;
+    text-align: center;
+    color: #ccc;
+    font-size: 1rem;
+    padding: 0.8rem 0;
+  }
+  .meetingRegListTitle {
     overflow: hidden;
-    border-bottom: 1px solid #e6e6e6;
-    // height: 70px;
-    // background: #000;
-    .orderPeople-nodata {
-      width: 100%;
-      text-align: center;
-      color: #ccc;
-      font-size: 1rem;
-      padding: 0.8rem 0;
-    }
-    .meetingRegListTitle {
-      overflow: hidden;
 
-      .RegListTitle {
-      }
-      .RegListPeopleNumBox {
-        .Reg-PeopleNum {
-          color: #787878;
-          font-size: 0.9rem;
-          .vux-x-icon {
-            vertical-align: middle;
-            fill: #969696;
-          }
-        }
-      }
+    .RegListTitle {
     }
-
-    .meetingAssessListbox {
-      overflow: hidden;
-      padding: 0.8rem 0;
-      .meetingAssess {
-        width: 45px;
-        margin-right: 1rem;
-        img {
-          width: 45px;
-          height: 45px;
-          border-radius: 50%;
-        }
-      }
-      .meetingAssessCenten {
-        width: 80%;
-        overflow: hidden;
-        .meetingAssessnameBox {
-          overflow: hidden;
-          .meetingAssessTime {
-            font-size: 0.8rem;
-            color: #a0a0a0;
-          }
-        }
-        p {
-          font-size: 0.9rem;
-          color: #787878;
-          font-weight: bold;
+    .RegListPeopleNumBox {
+      .Reg-PeopleNum {
+        color: #787878;
+        font-size: 0.9rem;
+        .vux-x-icon {
+          vertical-align: middle;
+          fill: #969696;
         }
       }
     }
   }
+
+  .meetingAssessListbox {
+    overflow: hidden;
+    padding: 0.8rem 0;
+    .meetingAssess {
+      width: 45px;
+      margin-right: 1rem;
+      img {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+      }
+    }
+    .meetingAssessCenten {
+      width: 80%;
+      overflow: hidden;
+      .meetingAssessnameBox {
+        overflow: hidden;
+        .meetingAssessTime {
+          font-size: 0.8rem;
+          color: #a0a0a0;
+        }
+      }
+      p {
+        font-size: 0.9rem;
+        color: #787878;
+        font-weight: bold;
+      }
+    }
+  }
 }
+
+
 
 .showMeetingContent {
   padding: 0.8rem 0 6rem 0;
@@ -2990,6 +3017,7 @@ h4.site-room-title {
       text-align: right;
       color: #fe666b;
       font-weight: bold;
+    
     }
   }
   .ticket-disabled-TitleBox {
@@ -3646,7 +3674,7 @@ h4.site-room-title {
     dl {
       // margin: 1rem 0;
       overflow: hidden;
-      padding: 0.4rem 0;
+      padding: 0.6rem 0;
     }
     dt {
       width: 30%;
@@ -3664,6 +3692,7 @@ h4.site-room-title {
         display: inline-block;
         font-size: 1.5rem;
         margin-top: -1.5rem;
+        // padding: .8rem 0;
         // font-size: 1.5rem;
         vertical-align: bottom;
       }
@@ -4053,5 +4082,13 @@ h4.site-room-title {
       float: left;
       color: #505050;
     }
+  }
+}
+
+.orderPeopleList{
+  img{
+    width: 35px;
+    height: 40px;
+    border-radius:50%; 
   }
 }

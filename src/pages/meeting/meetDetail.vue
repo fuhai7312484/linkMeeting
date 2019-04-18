@@ -68,7 +68,7 @@
             <div class="downAppTitle fl">
               <h4>链会议</h4>
             </div>
-            <div class="downAppBtn fr">下载APP</div>
+            <div class="downAppBtn fr" @click="godown"  >下载APP</div>
           </div>
         </sticky>
       </div>
@@ -116,6 +116,9 @@
       </flexbox>
     </div>
     <!-- {{meetingData.draftsVo.meetingDetails.meetingFileList}} -->
+
+
+
     <div class="site-img-showBox" v-if="meetingData.draftsVo!=undefined">
       <!-- :list="swiperType=='img'?SImgList:SVideoList" -->
       <swiper
@@ -130,7 +133,7 @@
         <div v-if="swiperType=='video'" class="video-btn-box">
           <div class="jiao"></div>
         </div>
-        <router-link tag="div" class="meetingAnnex" to="/downannex">附件下载</router-link>
+        <!-- <router-link tag="div" class="meetingAnnex" to="/downannex">附件下载</router-link> -->
         <!-- <div class="meetingAnnex">附件下载 ></div> -->
         <div class="site-img-markBox">
           <span
@@ -151,6 +154,13 @@
         </div>
       </swiper>
     </div>
+
+
+
+
+
+
+
 
     <div v-transfer-dom>
       <loading :show="show2" text="数据加载中..."></loading>
@@ -233,6 +243,8 @@
           </div>
         </flexbox-item>
       </flexbox>
+
+
       <flexbox :gutter="0" class="magrTB padlr" v-if="comTypeList('支持单位').length!=0">
         <flexbox-item :span="1.1/5">
           <span class="meetingdetailTitles">支持单位：</span>
@@ -255,6 +267,8 @@
           </div>
         </flexbox-item>
       </flexbox>
+
+
 
       <div class="attentionOrganizerBox" v-if="meetingData.userMeetingInfo!=undefined">
         <div
@@ -318,6 +332,14 @@
           </div>
         </div>
         <div v-if="tabsIndex==1" class="showMeetingContent">
+          <div class="noData-default" v-if="meetingData.draftsVo.meCompanyList.guestList.length==0">
+          <p>
+            <img :src="require('../../assets/images/noData.png')">
+          </p>
+          <p>暂时还没有人关注你</p>
+        </div>
+
+
           <div class="padlr">
             <!-- 这里是会议嘉宾 -->
             <!-- {{meetingData.draftsVo.meCompanyList.guestList}} -->
@@ -337,6 +359,16 @@
           </div>
         </div>
         <div v-if="tabsIndex==2" class="showMeetingContent padlr">
+
+           <div class="noData-default" v-if="meetingData.draftsVo.meCompanyList.partnerList.length==0">
+          <p>
+            <img :src="require('../../assets/images/noData.png')">
+          </p>
+          <p>暂时还没有人关注你</p>
+        </div>
+
+
+
           <div class="padlr">
             <ul class="meCompany-boxList">
               <li
@@ -371,7 +403,7 @@
         <ul class="RegListUl">
           <li class="orderPeople-nodata" v-if="orderPersonNum==0">暂无人报名</li>
           <li v-for="(orderP,index) in orderPeople" :key="index" class="orderPeopleList">
-            <img :src="require('../../assets/images/myFans-Mask.png')">
+            <img :src="orderP.mainPic?orderP.mainPic:require('../../assets/images/myFans-Mask.png')">
             <p>{{orderP.name}}</p>
           </li>
         </ul>
@@ -388,11 +420,11 @@
           </div>
         </div>
         <ul>
-          <li class="orderPeople-nodata" v-if="CommentVo.meetingCommentVoList.length==0">暂无评论</li>
-          <li v-for="(comment,index) in CommentVo.meetingCommentVoList" :key="index">
+          <li class="orderPeople-nodata" v-if="CommentVo.meetingCommentVoList&&CommentVo.meetingCommentVoList.length==0">暂无评论</li>
+          <li v-for="(comment,index) in CommentVo.meetingCommentVoList" :key="index" v-if="index<3">
             <div class="meetingAssessListbox">
               <div class="meetingAssess fl">
-                <img :src="comment.meetingComment.userPic">
+                <img :src="comment.meetingComment.userPic?comment.meetingComment.userPic:require('../../assets/images/myFans-Mask.png')">
               </div>
               <div class="meetingAssessCenten fl">
                 <div class="meetingAssessnameBox">
@@ -412,7 +444,8 @@
           <h4 class="RegListTitle fl">为您推荐</h4>
           <div class="RegListPeopleNumBox fr">
             <ul class="tabMeetingListUl">
-              <li v-for="(comment,index) in goodData" :key="index" class="tabMeetingList">
+             
+              <li v-for="(comment,index) in goodData" :key="index" class="tabMeetingList" @click="gotoDetil(comment.id)">
                 <!-- {{comment}} -->
 
                 <div>
@@ -427,7 +460,6 @@
                       >
                     </span>
                   </div>
-
                   <div class="tabMeetingTextBox fl">
                     <h4 class="tabMeetingTextTitle">{{comment.theme}}</h4>
                     <div class="tabMeetingTime">
@@ -436,10 +468,14 @@
                     </div>
                     <div class="tabMeetingTagBox">
                       <div class="tabMeetingTag fl">
-                        <span v-if="comment.status==0" class="IsOver">已结束</span>
-                        <span v-else-if="comment.status==1" class="LiveIn">直播中</span>
-                        <span v-else-if="comment.status==2" class="processing">进行中</span>
-                        <span v-else-if="comment.status==3" class="notStarted">未开始</span>
+                       
+                      <span v-if="comment.status==2" class="IsOver">已结束</span>
+                      <span
+                        v-else-if="comment.status==3 || comment.status==1"
+                        class="processing"
+                      >进行中</span>
+                      <span v-else-if="comment.status==0" class="notStarted">未开始</span>
+
                       </div>
                       <div class="tabMeetingNum fr">{{comment.msg}}</div>
                     </div>
@@ -474,11 +510,9 @@ import {
   Sticky,
   Flexbox,
   Swiper,
-  Group,
   Tab,
   TabItem,
   Actionsheet,
-  Cell,
   FlexboxItem,
   XDialog,
   Popup,
@@ -495,8 +529,6 @@ export default {
     Sticky,
     Flexbox,
     Swiper,
-    Group,
-    Cell,
     FlexboxItem,
     Tab,
     TabItem,
@@ -537,58 +569,10 @@ export default {
       demo01_index: 0,
       addressTitle: "默认地址为空",
       SImgList: [
-        {
-          url: "javascript:",
-          img:
-            "https://ww1.sinaimg.cn/large/663d3650gy1fq66vvsr72j20p00gogo2.jpg",
-          title: "送你一朵fua"
-        },
-        {
-          url: "javascript:",
-          img:
-            "https://ww1.sinaimg.cn/large/663d3650gy1fq66vw1k2wj20p00goq7n.jpg",
-          title: "送你一辆车"
-        },
-        {
-          url: "javascript:",
-          img: "https://static.vux.li/demo/5.jpg", // 404
-          title: "送你一次旅行",
-          fallbackImg:
-            "https://ww1.sinaimg.cn/large/663d3650gy1fq66vw50iwj20ff0aaaci.jpg"
-        },
-        {
-          url: "javascript:",
-          img:
-            "https://ww1.sinaimg.cn/large/663d3650gy1fq66vvsr72j20p00gogo2.jpg",
-          title: "送你一朵fua"
-        },
-        {
-          url: "javascript:",
-          img:
-            "https://ww1.sinaimg.cn/large/663d3650gy1fq66vw1k2wj20p00goq7n.jpg",
-          title: "送你一辆车"
-        },
-        {
-          url: "javascript:",
-          img: "https://static.vux.li/demo/5.jpg", // 404
-          title: "送你一次旅行",
-          fallbackImg:
-            "https://ww1.sinaimg.cn/large/663d3650gy1fq66vw50iwj20ff0aaaci.jpg"
-        }
+       
       ],
       SVideoList: [
-        {
-          url: "javascript:",
-          img:
-            "https://ww1.sinaimg.cn/large/663d3650gy1fq66vvsr72j20p00gogo2.jpg",
-          title: "这里是视频"
-        },
-        {
-          url: "javascript:",
-          img:
-            "https://ww1.sinaimg.cn/large/663d3650gy1fq66vw1k2wj20p00goq7n.jpg",
-          title: "这里是视频"
-        }
+        
       ],
       showSpace: false,
       disabled:
@@ -596,11 +580,23 @@ export default {
         /iphone/i.test(navigator.userAgent) &&
         /ucbrowser/i.test(navigator.userAgent),
       tabsIndex: 0,
-      tabMunes: ["会议详情", "会议嘉宾", "合作单位"],
+      tabMunes: ["会议详情", "会议嘉宾", "合作伙伴"],
       tabTitle: "会议详情"
     };
   },
   methods: {
+    godown(){
+      window.location.href = 'https://www.pgyer.com/NSM9'
+    },
+    gotoDetil(id){
+      // console.log(id)
+       this.$router.push({
+        path: "/meetDetail/" + id,
+        query: { meetingId: id }
+      });
+
+      this.$router.go(0)
+    },
       //处理时间范围
     getTimeLimit(beginTime,endTime){
       if(beginTime||endTime){
@@ -782,6 +778,7 @@ export default {
 
     //获取详情数据
     getMeetingData() {
+      // console.log(this.$route.query.meetingId)
       //获取详情数据
       this.show2 = true;
 
@@ -813,14 +810,13 @@ export default {
           id: this.$route.query.meetingId
         }
       };
-
-      if (getStorage("userToken"))
-        detailObj.params.userId = getStorage("userToken").userId;
+   
+      if (isLogin())detailObj.params.userId = getStorage("userToken").userId;
       getDataInfo("get", "meetingdetails/meetingDetailsById", detailObj).then(
         res => {
+  
           if (res.data.code == 200) {
             this.meetingData = res.data.data;
-
             let imgArr = [],
               videoArr = [];
             res.data.data.draftsVo.meetingDetails.meetingFileList.forEach(e => {
@@ -887,7 +883,7 @@ export default {
         "ordermeeting/ordermeeting/person/list",
         personObj
       ).then(res => {
-        // console.log(res);
+       
         if (res.data.code == 200) {
           //  this. personData = res.data.data.content
           this.orderPersonNum = res.data.data.orderPersonNum;

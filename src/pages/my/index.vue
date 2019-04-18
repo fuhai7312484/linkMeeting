@@ -172,6 +172,7 @@ export default {
 
   mounted() {
     if(isLogin()){
+     
       this.isLogin = isLogin()
       this.getMyData()
     }else{

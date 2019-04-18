@@ -11,14 +11,14 @@ import CodeLogin from "@/pages/Login/CodeLogin";
 import Reg from "@/pages/Login/reg";
 import Retpass from "@/pages/Login/Retpass";
 import MyDetailsList from "@/pages/my/MydetailsList";
-import TaDetail from "@/pages/my/TaDetail";
+// import TaDetail from "@/pages/my/TaDetail";
 import SiteIndex from "@/pages/site/index";
 import SiteSearch from "@/pages/site/siteSearch";
-import SiteDetail from "@/pages/site/siteDetail";
+// import SiteDetail from "@/pages/site/siteDetail";
 import roomDetail from "@/pages/site/RoomDetail";
-import MeetingIndex from "@/pages/meeting/index";
+// import MeetingIndex from "@/pages/meeting/index";
 import meetingSearch from "@/pages/meeting/meetingSearch";
-import MeetDetail from "@/pages/meeting/meetDetail";
+// import MeetDetail from "@/pages/meeting/meetDetail";
 import NavMap from "@/components/NavMap";
 import Ticket from "@/pages/meeting/Ticket";
 import TicketSuccess from "@/pages/meeting/TicketSuccess.vue";
@@ -72,7 +72,9 @@ export default new Router({
       // meta: {
       //   index: 0,
       // },
-      component: MeetingIndex
+      // component: resolve => require(['/'],resolve)
+      component: resolve => require(['@/pages/meeting/index'],resolve)
+      // component: MeetingIndex
     },
     // {
     //   path: "/",
@@ -122,12 +124,14 @@ export default new Router({
     {
       path: "/tadetail/:id",
       name: "TaDetail",
-      component: TaDetail
+      component: resolve => require(['@/pages/my/TaDetail'],resolve)
+      // component: TaDetail
     },
     {
       path: "/sitedetail/:id",
       name: "SiteDetail",
-      component: SiteDetail
+      component: resolve => require(['@/pages/site/siteDetail'],resolve)
+      // component: SiteDetail
     },
     {
       path: "/siteSearch",
@@ -148,7 +152,8 @@ export default new Router({
       // meta: {
       //   index: 1,
       // },
-      component: MeetingIndex
+      component: resolve => require(['@/pages/meeting/index'],resolve)
+      // component: MeetingIndex
     },
     {
       path: "/meetingSearch",
@@ -161,7 +166,9 @@ export default new Router({
       // meta: {
       //   index: 1,
       // },
-      component: MeetDetail
+
+      component: resolve => require(['@/pages/meeting/meetDetail'],resolve)
+      // component: MeetDetail
     },
 
     {

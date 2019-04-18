@@ -48,7 +48,7 @@
               <div
                 class="fr"
                 :style="{color:item.joinType==0?'#54B105':'#B4B4B4'}"
-              >{{item.joinType==0?'待验票':item.joinType==1?'已验票':'已退款'}}</div>
+              >{{item.joinType==0?'待参会':item.joinType==1?'已验票':'已退款'}}</div>
             </div>
             <div class="TicketList-mob">{{item.userName}} &nbsp;&nbsp;{{item.userMobile}}</div>
             <div
@@ -232,7 +232,7 @@ export default {
     //报名人
 
     Applicant() {
-      console.log(11111);
+      // console.log(11111);
     },
     change() {},
     //提交退款原因

@@ -3,14 +3,12 @@
     <!-- <div v-transfer-dom>
       <loading :show="show2" text="数据加载中..."></loading>
     </div>-->
-    <div class="map-headerBox potFStyle potF borBottm">
+    <!-- <div class="map-headerBox potFStyle potF borBottm">
       <div class="map-go-back" @click="$router.go(-1)"></div>
       <h3 class="map-headerTitle">参会提醒</h3>
 
-      <!-- <div class="Homepage fr">
-        <img src="../../assets/images/Homepage.png"> 主页
-      </div>-->
-    </div>
+    
+    </div> -->
     <div class="reminder-contentBox" v-if="meetingData.meetingDetails">
       <div class="padlr">
         <h2>{{meetingData.meetingDetails.theme}}</h2>
@@ -40,7 +38,15 @@
               <p v-for="(und,index) in comTypeList('承办单位')" :key="index">{{und.companyName}}</p>
             </dd>
           </dl>
-          <div class="reminder-checkerBox">
+
+          <dl  v-if="!isRestore">
+            <dt class="fl">当前状态:</dt>
+            <dd class="fl">
+              <p>确认参会</p>
+            </dd>
+          </dl>
+
+          <div class="reminder-checkerBox" v-if="isRestore">
             <checker
               v-model="ReqVal"
               radio-required
@@ -58,7 +64,7 @@
               </checker-item>
             </checker>
           </div>
-          <div class="reminder-meetingDetails" @click="gotoMeeting">查看详情 >></div>
+          <div class="reminder-meetingDetails" v-if="isRestore" @click="gotoMeeting">查看详情 >></div>
         </div>
       </div>
 
@@ -116,7 +122,8 @@ export default {
       ReqValtext: "",
       valchange: false,
       ReminderId: "",
-      meetingData: {}
+      meetingData: {},
+      isRestore:false,
     };
   },
   methods: {
@@ -140,14 +147,35 @@ export default {
     },
     //获取当前会议信息
     getMeetingData() {
-      // console.log(this.$route.params.id, this.$route.query.mobile);
+      // console.log(this.$route.params.id, this.$route.query.mobile)
+      let findObj = {
+        params: {
+          meetingId: this.$route.params.id,
+          mobile:this.$route.query.mobile
+        }
+      };
+      getDataInfo("get", "ordermeeting/findPeopleReceipt", findObj).then(res => {
+        console.log(1111,res)
+        if (res.data.code == 200) {
+        
+          // this.meetingData = res.data.data.draftsVo;
+          // console.log(res);
+        }
+      });
+
+
+
+
+
       let Obj = {
         params: {
           id: this.$route.params.id
         }
       };
       getDataInfo("get", "meetingdetails/meetingDetailsById", Obj).then(res => {
+        // console.log(1111,res)
         if (res.data.code == 200) {
+        
           this.meetingData = res.data.data.draftsVo;
           // console.log(res);
         }
@@ -217,7 +245,10 @@ export default {
     onHide() {
       // console.log('plugin hide')
     },
-    getMyInfochange() {}
+    getMyInfochange() {
+
+      console.log(11111)
+    }
     //   //提交选择
     //   submitVal() {
 

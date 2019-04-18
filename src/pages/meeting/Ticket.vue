@@ -24,7 +24,7 @@
             :value="Titem"
             @on-item-click="ticketChange"
           >
-            <div :class="Titem.isOrder==2||Titem.isOrder==null || Titem.leftnum==0?'ticketTitleBox':'ticket-disabled-TitleBox'">
+            <div :class="!Discontinued(Titem.timeEnd)&&Titem.isOrder!=1?'ticketTitleBox':'ticket-disabled-TitleBox'">
               <div class="ticketTitle fl">{{ Titem.name }} <span class="ticketTitleAnnex" v-if="Titem.authority==0">附件</span> <span class="ticketTitleIsOrder" v-if="Titem.isOrder==1">已购票</span></div>
               <div class="ticketPrice fr">
                 {{ Titem.price == 0 ? "免费" : "¥" + Titem.price + "/人" }}
@@ -135,13 +135,34 @@ import {
       };
     },
     methods: {
-      ticketChange(val,itemDisabled){
-        if(val.isOrder ==2 || val.isOrder==null){
-          // console.log(val.price)
-          this.next(val)
-        }else if(val.isOrder ==1 || Titem.leftnum==0){
-          //  console.log('不能购买！')
+      //当前票种是否为停售
+      Discontinued(time){
+        var timestamp = Date.parse(new Date())
+        var endtime = Date.parse(new Date(time))
+        // console.log('当前时间戳：'+timestamp,'结束时间戳：'+endtime)
+        if(time){
+            if(timestamp>endtime){
+            return true
+            }else{
+              return false
+            }
         }
+      },
+      ticketChange(val,itemDisabled){
+        
+      // console.log(val.isOrder)
+       if( !this.Discontinued(val.timeEnd) && val.isOrder!=1){
+          this.next(val)
+       }else{
+        //  console.log('不能购买！')
+       }
+     
+        // if(val.isOrder ==2 || val.isOrder==null){
+        //   console.log(val.price)
+        //   this.next(val)
+        // }else if(val.isOrder ==1 || Titem.leftnum==0){
+        //    console.log('不能购买！')
+        // }
         
       },
       //获取当前会议的票价信息
@@ -155,7 +176,7 @@ import {
         }
           checkToken().then(Pdata => {
         getDataInfo("get", "ordermeeting/ordermeeting/ticket", TicketObj).then(res => {
-    //  console.log(res)
+    //  console.log(1111111,res)
           if (res.data.code == 200) {
             this.ticketData = res.data.data
             // this.userData = res.data.data;

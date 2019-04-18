@@ -26,7 +26,6 @@
         </tab>
       </sticky>
     </div>
-    <!-- {{index}} -->
     <swiper
       ref="swiperHeight"
       v-model="index"
@@ -38,7 +37,6 @@
       :loop="true"
     >
       <swiper-item v-for="(lis,i) in list2" :key="i">
-        <!-- {{swiperH}} -->
         <div :ref="'pubUiHF'+i">
           <div class="noData-default" v-if="TaPosted.length==0">
             <p>
@@ -49,9 +47,6 @@
 
           <div class="Ticket-listBox" v-for="(taPos,index) in TaPosted" :key="index" v-if="!show2">
             <group>
-              <!-- <div class="padlr">
-              公司标题
-              </div>-->
               <cell class="Ticket-companyBox">
                 <img
                   slot="icon"
@@ -63,8 +58,8 @@
                 <span
                   slot
                   class="Ticket-company-status"
-                  :class="taPos.status==0?'T-s1':taPos.joinType==0?'T-s2':taPos.status==8||taPos.status==4?'T-s4':taPos.status==0?'T-s1':taPos.joinType==0?'T-s3':''"
-                >{{taPos.status==0?'待参会':taPos.status==1?'已验票':taPos.status==2?'已退款':'退款中'}}</span>
+                  :class="taPos.status==0?'T-s1':taPos.status==2?'T-s2':taPos.status==1?'T-s2':taPos.status==8||taPos.status==6||taPos.status==4||taPos.status==20?'T-s4':taPos.status==4?'T-s1':taPos.status==5?'T-s3':''"
+                >{{taPos.status==0?'待付款':taPos.status==2?'待参会':taPos.status==4?'已完成':taPos.status==5?'退款中':taPos.status==6?'已退款':taPos.status==8?'交易关闭':taPos.status==20?'退款失败':''}}</span>
               </cell>
               <cell class="Ticket-meetingInfoBox" :link="'/orderdetail/'+taPos.orderId">
                 <div slot="icon" class="Ticket-meetingIconBox">
@@ -78,11 +73,9 @@
                 </div>
               </cell>
               <div class="Ticket-piaoInfoBox padlr">
-                <!-- {{taPos.status}} --- {{taPos.joinType}}  -->
                 <h4 class="fl">{{taPos.ticketName}}</h4>
                 <div class="Ticket-piaoInfoSpan fr">
                   <span class="piaoInfoNun">共{{taPos.ticketNum}}张</span>
-
                   <span class="piaoInfoPrice">合计：{{taPos.price==0?'¥ 0.00':'¥ '+taPos.price}}</span>
                 </div>
               </div>
@@ -91,7 +84,7 @@
               <!-- <span>取消订单</span> -->
               <span
                 class="Ticket-PayBtn"
-                v-if="taPos.status==2&&taPos.joinType==0"
+                v-if="taPos.status==2"
                 @click="getETicket(taPos.orderId)"
               >查看电子票</span>
               <span v-if="taPos.status==0" @click="cancelOrder(taPos.orderId)">取消订单</span>
@@ -263,7 +256,7 @@ export default {
       checkToken().then(Pdata => {
         getDataInfo("get", "myMeeting/myMeeting/myCoupon", TicketObj).then(
           res => {
-            console.log(res);
+      // console.log(res)
             if (res.data.code == 200) {
               this.TaPosted = res.data.data.myCoupons;
               this.show2 = false;

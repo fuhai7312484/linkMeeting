@@ -117,9 +117,9 @@
         <p>2、入场时，请提前打开电子票，调亮手机屏幕，扫描二维码检 票入场。</p>
       </div>
     </div>
-    <div v-transfer-dom v-if="!show2">
+    <!-- <div v-transfer-dom v-if="!show2">
       <div class="ETicketFooter" v-if="ETicketData.orderMeetingList[index].joinType==1">评价</div>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>

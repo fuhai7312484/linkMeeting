@@ -17,7 +17,8 @@ import {
   checkToken,
   getDataInfo,
   isweixin,
-  GetQueryString
+  GetQueryString,
+  JIMinitchange
 } from "./assets/lib/myStorage.js";
 export default {
   name: "app",
@@ -26,10 +27,19 @@ export default {
       transitionName: ""
     };
   },
+  methods: {
+  
+  },
   created() {
     // JIMinitchange()
   },
   mounted() {
+  
+
+
+ 
+
+
   //   if (isweixin()) {
 
   //     // let express = require("express");

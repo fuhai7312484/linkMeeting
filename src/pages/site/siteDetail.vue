@@ -1,21 +1,43 @@
 <template>
   <div class="box">
+
+  
+
+
+    <div>
+      <div style="height:50px;position: relative; z-index: 9997;">
+        <sticky :check-sticky-support="false">
+          <div class="downloadAppBox padlr">
+            <div class="downLogo fl">
+              <img :src="require('../../assets/images/lianhuiyiLogo.png')">
+            </div>
+            <div class="downAppTitle fl">
+              <h4>链会议</h4>
+            </div>
+            <div class="downAppBtn fr" @click="godown">下载APP</div>
+          </div>
+        </sticky>
+      </div>
+    </div>
+
     <div class="footer">
       <flexbox :gutter="0" class="footer-nav-box">
-        <flexbox-item :span="1/5" :order="1">
-          <div class="footer-nav-icons">
+        <flexbox-item :span="1/5" :order="2">
+          <div class="footer-nav-icons" @click="showAdvisory = !showAdvisory">
             <span>
               <img src="../../assets/images/meetingAdvisory.png">
             </span>
             咨询
           </div>
         </flexbox-item>
-        <flexbox-item :span="1/5" :order="2">
+        <flexbox-item :span="1/5" :order="1">
           <div class="footer-nav-icons" @click="Collection">
             <span>
-              <img :src="IsColl==2?require('../../assets/images/meeting-like.png'):require('../../assets/images/meeting-like-s.png')">
+              <img
+                :src="IsColl==2?require('../../assets/images/meeting-like.png'):require('../../assets/images/meeting-like-s.png')"
+              >
             </span>
-          {{IsColl==2?'收藏':'已收藏'}} 
+            {{IsColl==2?'收藏':'已收藏'}}
           </div>
         </flexbox-item>
 
@@ -24,6 +46,94 @@
         </flexbox-item>
       </flexbox>
     </div>
+
+
+  <!-- <video-player  class="video-player vjs-custom-skin"
+     ref="videoPlayer"
+     :playsinline="true"
+     :options="playerOptions"
+     @play="onPlayerPlay($event)"
+                     @pause="onPlayerPause($event)"
+></video-player> -->
+
+
+
+    <div class="site-img-showBox" v-if="sitData!=undefined">
+      <!-- :list="swiperType=='img'?SImgList:SVideoList" -->
+      
+        <!-- <div v-if="swiperType=='video'" class="video-btn-box">
+          <div class="jiao"></div>
+        </div> -->
+        <!-- <router-link tag="div" class="meetingAnnex" to="/downannex">附件下载</router-link> -->
+        <!-- <div class="meetingAnnex">附件下载 ></div> -->
+        <div class="site-img-markBox">
+          <span
+            v-if="SImgList.length!=0"
+            @click="swiperType='img'"
+            :class="swiperType=='img'?'site-img-type':'site-img-length'"
+          >照片({{ SImgList.length }})</span>
+          <span
+            v-if="SVideoList.length!=0"
+            @click="swiperType='video'"
+            :class="swiperType=='video'?'site-img-type':'site-img-length'"
+          >视频({{ SVideoList.length }})</span>
+          <span class="site-img-length">
+            {{ demo01_index + 1 }}/{{
+            swiperType == "img" ? SImgList.length : SVideoList.length
+            }}
+          </span>
+        </div>
+
+
+             
+<swiper height="390px" :show-desc-mask="false" :show-dots="false"  v-if="swiperType=='video'"
+ v-model="demo01_index"
+  >
+      <swiper-item class="swiper-demo-img" v-for="(video,index) in SVideoList" :key="index">
+            <video-player  class="video-player vjs-custom-skin"
+                ref="videoPlayer"
+                :playsinline="true"
+                :options="video.playerOptions"
+                @play="onPlayerPlay($event)"
+                  @pause="onPlayerPause($event)"
+            ></video-player>
+        </swiper-item>
+         
+    </swiper>
+<!-- {{demo01_index}} -->
+      <swiper
+      v-if="swiperType=='img'"
+        :list="swiperType=='img'?SImgList:SVideoList"
+        height="240px"
+        :show-desc-mask="false"
+        v-model="demo01_index"
+        :show-dots="false"
+        @click.native="currentChan"
+        :loop="true"
+      >
+  
+
+      
+        <!-- <div v-if="swiperType=='video'" class="video-btn-box">
+          <div class="jiao"></div>
+        </div> -->
+      
+      </swiper>
+
+
+
+
+
+
+
+ 
+
+
+
+
+    </div>
+
+    <!-- 
 
     <div class="site-img-showBox">
       <swiper
@@ -54,55 +164,83 @@
           </span>
         </div>
       </swiper>
+    </div>-->
+
+    <div v-transfer-dom>
+      <loading :show="show2" text="数据加载中..."></loading>
     </div>
-    <div class="site-content-box borBottm">
+
+    <div class="site-content-box borBottm" v-if="!show2">
       <flexbox class="linH padlr">
-        <flexbox-item :span="4/5">
+        <flexbox-item :span="3.5/5">
           <h3 class="site-flex-title">{{sitData.name}}</h3>
         </flexbox-item>
-        <flexbox-item :span="1/5">
-          <div class="site-flex-v">
+        <flexbox-item :span="1.5/5">
+          <!-- <div class="site-flex-v">
             <img :src="require('../../assets/images/v.png')">认证
+          </div>-->
+
+          <div :class="idensChange(1,sitData.idens)?'site-flex-v':'meeting-flex-nov'">
+            <img
+              :src="idensChange(1,sitData.idens)?require('../../assets/images/v.png'):require('../../assets/images/icon-uncertified.png')"
+            >
+            {{idensChange(1,sitData.idens)?'已认证':'未认证'}}
           </div>
         </flexbox-item>
       </flexbox>
       <flexbox :gutter="0" class="linH padlr">
         <flexbox-item class="listContent-tagbox">
-          <span class="listContent-Ttags">五星酒店</span>
-          <span class="listContent-tags">餐饮</span>
-          <span class="listContent-tags">游泳</span>
+          <!-- <div v-for="(TypeList,index) in meetingData.draftsVo.meetingTypeList" :key="index">
+            <span class="listContent-Ttags">{{TypeList.name}}</span>
+            <span class="listContent-tags">{{TypeList.industry}}</span>
+          </div>-->
+
+          <span class="listContent-Ttags">{{sitData.type}}</span>
+          <span
+            class="listContent-tags"
+            v-for="(Feat,index) in sitData.placeFeature"
+            :key="index"
+          >{{Feat.name}}</span>
+          <!-- <span class="listContent-tags">餐饮</span>
+          <span class="listContent-tags">游泳</span>-->
         </flexbox-item>
       </flexbox>
 
       <flexbox class="linH padlr">
         <flexbox-item>
-          <div class="flex-demo">营业时间：周一至周日 {{sitData.openTime}}-{{sitData.closeTime}}</div>
+          <div class="flex-demo">营业时间：{{sitData.openTime}}-{{sitData.closeTime}}</div>
         </flexbox-item>
       </flexbox>
       <grid :show-vertical-dividers="false" :show-lr-borders="false" class="padlr">
         <grid-item>
           <img slot="icon" src="../../assets/images/siteicon.png">
           <span class="siteAmountTitle" slot="label">会场/场地</span>
-          <span class="siteAmount">60间</span>
+          <span class="siteAmount">{{sitData.meetingRoom.length}}间</span>
         </grid-item>
 
         <grid-item>
           <img slot="icon" src="../../assets/images/siteicon.png">
           <span class="siteAmountTitle" slot="label">最大面积</span>
-          <span class="siteAmount">500㎡</span>
+          <span class="siteAmount">{{rooMMost('area',sitData.meetingRoom)}}㎡</span>
         </grid-item>
 
         <grid-item>
           <img slot="icon" src="../../assets/images/siteicon.png">
           <span class="siteAmountTitle" slot="label">最多容纳</span>
-          <span class="siteAmount">1800人</span>
+          <span class="siteAmount">{{rooMMost('falleryful',sitData.meetingRoom)}}人</span>
         </grid-item>
       </grid>
 
       <group>
-        <cell is-link class="potR" :border-intent="false" inline-desc="朝阳区 CBD商圈 建外大街650米">
+        <cell
+          is-link
+          class="potR"
+          :border-intent="false"
+          :inline-desc="sitData.remarks?sitData.remarks:' '"
+          :link="{path:'/navmap', query:{address:sitData.address,lng:sitData.longitude,lat:sitData.latitude}}"
+        >
           <div slot="title">
-            <div class="addressTitle">{{ addressTitle }}</div>
+            <div class="addressTitle">{{ sitData.address }}</div>
             <!--
               <div class="addressTag">
                 朝阳区 CBD商圈 建外大街650米
@@ -120,7 +258,17 @@
 
       <group title="联系我们" class="site-onPhoneBox-title">
         <ul class="site-conPhone padlr">
-          <li>
+          <li v-for="(Contacts,index) in sitData.placeContacts">
+            <span>{{showPhone(Contacts.phone)}}</span>
+            <span>{{Contacts.name}}</span>
+            <span @click="callPhone(Contacts.phone)">
+              <img width="15" :src="require('../../assets/images/phone.png')">
+            </span>
+            <span @click="advisoryClick('Online')">
+              <img width="15" :src="require('../../assets/images/msg.png')">
+            </span>
+          </li>
+          <!-- <li>
             <span>138****2456</span>
             <span>张先森</span>
             <span>
@@ -129,72 +277,73 @@
             <span>
               <img width="15" :src="require('../../assets/images/msg.png')">
             </span>
-          </li>
-          <li>
-            <span>138****2456</span>
-            <span>张先森</span>
-            <span>
-              <img width="15" :src="require('../../assets/images/phone.png')">
-            </span>
-            <span>
-              <img width="15" :src="require('../../assets/images/msg.png')">
-            </span>
-          </li>
+          </li>-->
         </ul>
       </group>
     </div>
 
-    <div class="borBottm padlr">
-      <flexbox class="site-room-title">
+    <div class="borBottm" v-if="!show2">
+      <flexbox class="site-room-title padlr">
         <flexbox-item :span="1/3">
           <h3 id="anchor">会议室</h3>
-          <span>{{ roomData.length }}间</span>
+          <span>{{sitData.meetingRoom.length }}间</span>
         </flexbox-item>
       </flexbox>
 
-      <div class="site-room-listBox">
+      <div class="site-room-listBox padlr">
         <div v-for="(roomItme, index) in showdetailList" :key="index" class="site-room-list">
-          <flexbox>
+          <flexbox :gutter="3">
             <flexbox-item :span="1/4" class="site-room-imgBox">
-              <img :src="roomItme.img">
+              <img
+                :src="roomItme.meetingPic?roomItme.meetingPic:require('../../assets/images/noimg.png') "
+              >
             </flexbox-item>
-
             <flexbox-item :span="3/4">
               <flexbox>
                 <flexbox-item :span="1.8/3">
-                  <h4 class="site-room-title">{{ roomItme.title }}-A{{ index + 1 }}</h4>
+                  <h4 class="site-room-title">{{ roomItme.name }}</h4>
                 </flexbox-item>
                 <flexbox-item :span="1.1/3">
-                  <div class="site-room-price">
-                    ¥{{ roomItme.price }}
+                  <div class="site-room-price" v-if="roomItme.priceType==2">
+                    ¥{{roomItme.priceHalfday}}半天
                     <span>起</span>
                   </div>
+
+                  <div v-else-if="roomItme.priceType==1" class="site-room-price">价格面议</div>
                 </flexbox-item>
               </flexbox>
-              <flexbox>
-                <flexbox-item>
+              <flexbox :gutter="0">
+                <flexbox-item :span="1.8/3">
                   <div class="site-room-TagInfo">
-                    <span>{{ roomItme.proportion }}</span>
-                    <span>{{ roomItme.distance }}</span>
-                    <span>{{ roomItme.hold }}</span>
+                    <span>{{ roomItme.area}}㎡</span>
+                    <span>{{ roomItme.high }}m</span>
+                    <span>{{ roomItme.falleryful}}人</span>
                   </div>
+                </flexbox-item>
+
+                <flexbox-item :span="1.2/3">
+                  <div
+                    class="site-room-Deposit"
+                    v-if="roomItme.isBargain==1"
+                  >{{roomItme.bargainType==1?' 定金:全天价'+roomItme.bargainRatio+'%':' 定金:¥'+roomItme.bargainAmount+'/天'}}</div>
                 </flexbox-item>
                 <flexbox-item></flexbox-item>
               </flexbox>
-              <flexbox>
-                <flexbox-item :span="3/4">
+              <flexbox :gutter="0">
+                <flexbox-item :span="3.2/4">
                   <div class="site-room-timesBox">
                     <div
-                      v-for="(rootTime,index) in roomItme.times"
+                      v-for="(rootTime,index) in roomItme.currentRoomWorking"
+                      v-if="index>0"
                       :key="index"
                       class="site-room-timesTag fl"
-                      :class="rootTime.status==0?'timesBox-active':''"
+                      :class="rootTime.status==1?'timesBox-active':''"
                     >
-                      <span class="fl">{{ rootTime.time }}</span>
+                      <span class="fl">{{getDayName(rootTime.xdate) }}</span>
                       <span
                         class="room-full fl"
-                        :class="rootTime.status==0?'':'room-idle'"
-                      >{{ rootTime.status == 0 ? "已满" : "有空" }}</span>
+                        :class="rootTime.status==1?'':'room-idle'"
+                      >{{ rootTime.status == 1 ? "已满" : "有空" }}</span>
                     </div>
                     <div class="site-room-timesTag fl">
                       <span class="fl">更多</span>
@@ -202,8 +351,8 @@
                     </div>
                   </div>
                 </flexbox-item>
-                <flexbox-item :span="0.9/4">
-                  <div class="site-room-destine">预定</div>
+                <flexbox-item :span="0.8/4">
+                  <div class="site-room-destine" @click="gotoReserve">预定</div>
                 </flexbox-item>
               </flexbox>
             </flexbox-item>
@@ -211,10 +360,32 @@
         </div>
       </div>
 
-      <div class="site-room-dropDown" @click="showRoomsChange()">查看更多会场(
+      <div class="site-room-dropDown" @click="showRoomsChange()">
+        查看更多会场(
         <countup :start-val="0" :end-val="computeRoomDatelen" :duration="2" class="demo1"></countup>)
         <x-icon v-if="roomShow" type="ios-arrow-up" class="site-icon-down" size="20"></x-icon>
         <x-icon v-else-if="!roomShow" type="ios-arrow-down" class="site-icon-down" size="20"></x-icon>
+      </div>
+
+      <div class="attentionOrganizerBox" v-if="sitData.cuser!=undefined">
+        <div class="OrganizerLogo fl" @click="goToTaDetail(sitData.cuser.id)">
+          <img
+            :src="sitData.cuser.mainPic!=null?sitData.cuser.mainPic:require('../../assets/images/myFans-Mask.png')"
+          >
+        </div>
+        <div class="OrganizerNameBox fl">
+          <h4 class="OrganizerName">{{sitData.cuser.name}}</h4>
+          <div class="OrganizerInfo">
+            <span>会议室 {{sitData.cuser.mnum}}</span>&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;
+            <span>粉丝 {{sitData.cuser.fnum}}</span>
+          </div>
+        </div>
+
+        <div
+          class="attentionBtn fr"
+          :class="IsFollow==1?'no-attent':'is-attent'"
+          @click="followCompany(sitData.cuser.id)"
+        >{{IsFollow==1?'已关注':'关注'}}</div>
       </div>
 
       <div>
@@ -232,213 +403,72 @@
           >{{ tabs }}</tab-item>
         </tab>
         <div v-if="tabsIndex==0" class="site-room-Introduction">
-          <p>北京昆泰酒店是由北京昆泰嘉豪房地产开发有限公司酒店分公司运营，坐落在世界百强企业云集的望京科技创业园区，毗邻著名的北京第二CBD“大望京商圈”。</p>
-          <p>北京昆泰酒店是由北京昆泰嘉豪房地产开发有限公司酒店分公司运营，坐落在世界百强企业云集的望京科技创业园区，毗邻著名的北京第二CBD“大望京商圈”。</p>
+          <p>{{sitData.introduce}}</p>
         </div>
 
         <div v-else-if="tabsIndex==1">
-          <div class="site-room-setting" v-for="(setting,index) in roomSettingData" :key="index">
-            <h4>{{ setting.titleName }}</h4>
-            <span v-for="(SettingTags,index) in setting.tags" :key="index">
+          <div class="site-room-setting" v-for="(setting,index) in sitData.placeEnvir" :key="index">
+            <h4>{{ setting.name }}</h4>
+            <span v-for="(SettingTags,index) in setting.placeEnvir" :key="index">
               {{
-              SettingTags
+              SettingTags.name
               }}
             </span>
           </div>
         </div>
 
         <div v-else-if="tabsIndex==2">
-          <div class="site-room-setting" v-for="(facility,index) in roomFacilityData" :key="index">
-            <h4>{{ facility.titleName }}</h4>
-            <span v-for="(facilityTags,index) in facility.tags" :key="index">
-              {{
-              facilityTags
-              }}
-            </span>
+          <div class="site-room-setting" v-for="(facility,index) in sitData.placeSet" :key="index">
+            <h4>{{ facility.name }}</h4>
+            <span
+              v-for="(facilityTags,index) in facility.placeEnvir"
+              :key="index"
+            >{{facilityTags.name}}</span>
           </div>
         </div>
 
         <div v-else-if="tabsIndex==3">
-          <flexbox :gutter="0" wrap="wrap">
-            <flexbox-item v-for="i in 4" :key="i" :span="1/2">
-              <div class="meetingList">
-                <img src="https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg">
-                <h4>A{{i}}-历史会议名称中国国际交流会</h4>
-                <time>2018-10-26</time>
-              </div>
-            </flexbox-item>
+          <flexbox :gutter="0" wrap="wrap" v-if="!show2">
+            <div class="meetingList" v-for="(His,index) in sitData.meetingHistory" :key="index">
+              <h5>{{His.name}}</h5>
+            </div>
           </flexbox>
         </div>
       </div>
     </div>
 
+    <div class="meetingAssessBox padlr">
+      <div class="meetingRegListTitle">
+        <h4 class="RegListTitle fl">会友评价</h4>
+        <div class="RegListPeopleNumBox fr">
+          <div class="Reg-PeopleNum">
+            {{assessData.totalCount}}条
+            <x-icon type="ios-arrow-right" :style="{color:'#969696'}" size="20"></x-icon>
+          </div>
+        </div>
+      </div>
+      <ul>
+        <li class="orderPeople-nodata" v-if="assessData.totalCount==0">暂无评论</li>
+        <li v-for="(comment,index) in assessData.meetingCommentVoList" :key="index">
+          <div class="meetingAssessListbox">
+            <div class="meetingAssess fl">
+              <img :src="comment.meetingComment.userPic">
+            </div>
+            <div class="meetingAssessCenten fl">
+              <div class="meetingAssessnameBox">
+                <h4 class="meetingAssessname fl">{{comment.meetingComment.userName}}</h4>
+                <time class="meetingAssessTime fr">{{comment.meetingComment.createTime}}</time>
+              </div>
+              <rater v-model="comment.meetingComment.score" disabled></rater>
+              <p>{{comment.meetingComment.content}}</p>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
     <div class="padlr">
-      <flexbox class="site-room-title">
-        <flexbox-item :span="1/3">
-          <h3>会友评价</h3>
-        </flexbox-item>
-      </flexbox>
-      <tab
-        active-color="#fe666b"
-        default-color="#a0a0a0"
-        custom-bar-width="43%"
-        v-model="assessIndex"
-      >
-        <tab-item
-          v-for="(assess,index) in assessMunes"
-          :key="index"
-          :selected="assessTitle === assess"
-          @on-item-click="tabClick(index)"
-        >{{ assess }}({{assessLenChange(index)}})</tab-item>
-      </tab>
-
-      <div v-if="assessIndex==0">
-        <div class="site-assess-Box" v-for="(as,index) in assessData" v-if="index<5" :key="index">
-          <flexbox>
-            <flexbox-item :span="1/6">
-              <div class="assess-Avatar">
-                <img :src="as.userAvatar">
-              </div>
-            </flexbox-item>
-            <flexbox-item :span="5/6">
-              <flexbox orient="vertical" :gutter="0">
-                <flexbox-item>
-                  <flexbox>
-                    <flexbox-item :span="2.4/4">
-                      <h4>{{as.userName}}</h4>
-                    </flexbox-item>
-                    <flexbox-item :span="1.4/4">
-                      <time>{{as.time}}</time>
-                    </flexbox-item>
-                  </flexbox>
-                </flexbox-item>
-                <flexbox-item>
-                  <rater v-model="as.star" disabled></rater>
-                </flexbox-item>
-                <flexbox-item>
-                  <div class="assess-content">{{as.msg}}</div>
-                </flexbox-item>
-              </flexbox>
-            </flexbox-item>
-          </flexbox>
-        </div>
-      </div>
-
-      <div v-if="assessIndex==1">
-        <div
-          class="site-assess-Box"
-          v-for="(as,index) in assessData"
-          :key="index"
-          v-if="as.status==1"
-        >
-          <flexbox>
-            <flexbox-item :span="1/6">
-              <div class="assess-Avatar">
-                <img :src="as.userAvatar">
-              </div>
-            </flexbox-item>
-            <flexbox-item :span="5/6">
-              <flexbox orient="vertical" :gutter="0">
-                <flexbox-item>
-                  <flexbox>
-                    <flexbox-item :span="2.4/4">
-                      <h4>{{as.userName}}</h4>
-                    </flexbox-item>
-                    <flexbox-item :span="1.4/4">
-                      <time>{{as.time}}</time>
-                    </flexbox-item>
-                  </flexbox>
-                </flexbox-item>
-                <flexbox-item>
-                  <rater v-model="as.star" disabled></rater>
-                </flexbox-item>
-                <flexbox-item>
-                  <div class="assess-content">{{as.msg}}</div>
-                </flexbox-item>
-              </flexbox>
-            </flexbox-item>
-          </flexbox>
-        </div>
-      </div>
-
-      <div v-if="assessIndex==2">
-        <div
-          class="site-assess-Box"
-          v-for="(as,index) in assessData"
-          :key="index"
-          v-if="as.status==2"
-        >
-          <flexbox>
-            <flexbox-item :span="1/6">
-              <div class="assess-Avatar">
-                <img :src="as.userAvatar">
-              </div>
-            </flexbox-item>
-            <flexbox-item :span="5/6">
-              <flexbox orient="vertical" :gutter="0">
-                <flexbox-item>
-                  <flexbox>
-                    <flexbox-item :span="2.4/4">
-                      <h4>{{as.userName}}</h4>
-                    </flexbox-item>
-                    <flexbox-item :span="1.4/4">
-                      <time>{{as.time}}</time>
-                    </flexbox-item>
-                  </flexbox>
-                </flexbox-item>
-                <flexbox-item>
-                  <rater v-model="as.star" disabled></rater>
-                </flexbox-item>
-                <flexbox-item>
-                  <div class="assess-content">{{as.msg}}</div>
-                </flexbox-item>
-              </flexbox>
-            </flexbox-item>
-          </flexbox>
-        </div>
-      </div>
-
-      <div v-if="assessIndex==3">
-        <div
-          class="site-assess-Box"
-          v-for="(as,index) in assessData"
-          :key="index"
-          v-if="as.status==3"
-        >
-          <flexbox>
-            <flexbox-item :span="1/6">
-              <div class="assess-Avatar">
-                <img :src="as.userAvatar">
-              </div>
-            </flexbox-item>
-            <flexbox-item :span="5/6">
-              <flexbox orient="vertical" :gutter="0">
-                <flexbox-item>
-                  <flexbox>
-                    <flexbox-item :span="2.4/4">
-                      <h4>{{as.userName}}</h4>
-                    </flexbox-item>
-                    <flexbox-item :span="1.4/4">
-                      <time>{{as.time}}</time>
-                    </flexbox-item>
-                  </flexbox>
-                </flexbox-item>
-                <flexbox-item>
-                  <rater v-model="as.star" disabled></rater>
-                </flexbox-item>
-                <flexbox-item>
-                  <div class="assess-content">{{as.msg}}</div>
-                </flexbox-item>
-              </flexbox>
-            </flexbox-item>
-          </flexbox>
-        </div>
-      </div>
-
-      <div class="site-room-dropDown">查看更多评价(
-        <countup :start-val="0" :end-val="assessData.length" :duration="2" class="demo1"></countup>)
-        <x-icon type="ios-arrow-right" class="site-icon-down" size="20"></x-icon>
-      </div>
+      <!-- {{Surrounding}} -->
 
       <flexbox class="site-room-title">
         <flexbox-item :span="1/3">
@@ -447,36 +477,53 @@
       </flexbox>
 
       <div>
-        <div class="site-room-list" v-for="(i,index) in 3" :key="index">
+        <div
+          class="site-room-list"
+          v-for="(Surr,index) in Surrounding.data"
+          :key="index"
+          @click="gotoDetil(Surr.id)"
+        >
           <flexbox>
             <flexbox-item :span="1/4" class="site-room-imgBox">
-              <img src="https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg">
+              <img
+                :src="Surr.homepagePic?Surr.homepagePic:require('../../assets/images/noimg.png')"
+              >
             </flexbox-item>
             <flexbox-item :span="2/4">
               <flexbox orient="vertical" :gutter="0">
                 <flexbox-item>
-                  <h4 class="site-recommend-title">北京凯宾斯基会议中心</h4>
+                  <h4 class="site-recommend-title">{{Surr.name}}</h4>
                 </flexbox-item>
 
                 <flexbox-item>
                   <flexbox>
-                    <flexbox-item class="site-recommend-info">面积320㎡</flexbox-item>
-                    <flexbox-item class="site-recommend-info">容纳30人</flexbox-item>
+                    <flexbox-item
+                      class="site-recommend-info"
+                    >{{Surr.area==null?'面积暂无':'面积'+Surr.area+'㎡'}}</flexbox-item>
+                    <flexbox-item
+                      class="site-recommend-info"
+                    >{{Surr.falleryful==null?'容纳暂无':'容纳'+Surr.falleryful+'人'}}</flexbox-item>
                   </flexbox>
                 </flexbox-item>
                 <flexbox-item>
                   <flexbox>
-                    <flexbox-item class="site-recommend-info">会场50间</flexbox-item>
-                    <flexbox-item class="site-recommend-info">客房10间</flexbox-item>
+                    <flexbox-item
+                      class="site-recommend-info"
+                    >{{Surr.count==0?'暂无会场':'会场'+Surr.count+'间'}}</flexbox-item>
+                    <flexbox-item
+                      class="site-recommend-info"
+                    >{{Surr.high==null?'暂无内高':'内高'+Surr.high+''}}</flexbox-item>
                   </flexbox>
                 </flexbox-item>
               </flexbox>
             </flexbox-item>
             <flexbox-item :span="0.8/4">
               <flexbox orient="vertical">
-                <flexbox-item class="site-recommend-distance">距离130米</flexbox-item>
+                <flexbox-item
+                  class="site-recommend-distance"
+                >{{Surr.distance==null?'暂无距离':'距离'+Surr.distance+'米'}}</flexbox-item>
                 <flexbox-item>
-                  <x-button mini plain type="warn" style="border-color:#fe666b; color:#fe666b;">询价</x-button>
+                  <x-button mini plain type="warn" style="border-color:#505050; color:#505050;">详情</x-button>
                 </flexbox-item>
               </flexbox>
             </flexbox-item>
@@ -484,15 +531,13 @@
         </div>
       </div>
 
-      <div class="site-room-dropDown">查看更多推荐
+      <div class="site-room-dropDown">
+        查看更多推荐
         <x-icon type="ios-arrow-right" class="site-icon-down" size="20"></x-icon>
       </div>
       <div></div>
     </div>
     <div class="Placeholder"></div>
-
-    
-
 
     <toast
       v-model="toastInfo.showPositionValue"
@@ -503,8 +548,12 @@
       is-show-mask
     >{{toastInfo.showMsg}}</toast>
 
-
-
+    <actionsheet
+      v-model="showAdvisory"
+      :menus="advisoryMenus"
+      @on-click-menu="advisoryClick"
+      show-cancel
+    ></actionsheet>
   </div>
 </template>
 <script>
@@ -513,9 +562,13 @@ import {
   getPositioning,
   checkToken,
   getStorage,
-  isLogin
+  isLogin,
+  getNavigator,
+  wakeApp
 } from "../../assets/lib/myStorage.js";
 import {
+  Actionsheet,
+  TransferDomDirective as TransferDom,
   XHeader,
   XButton,
   Flexbox,
@@ -523,6 +576,7 @@ import {
   Grid,
   GridItem,
   Swiper,
+   SwiperItem,
   XAddress,
   ChinaAddressV4Data,
   Group,
@@ -533,18 +587,24 @@ import {
   TabItem,
   Countup,
   Rater,
-   Toast,
+  Toast,
+  Loading,
+  Sticky
 } from "vux";
 export default {
   name: "siteDetail",
-
+  directives: {
+    TransferDom
+  },
   components: {
+    Actionsheet,
     XHeader,
     Flexbox,
     FlexboxItem,
     Grid,
     GridItem,
     Swiper,
+     SwiperItem,
     XAddress,
     Group,
     Cell,
@@ -555,246 +615,27 @@ export default {
     TabItem,
     Countup,
     Rater,
-     Toast,
+    Toast,
+    Loading,
+    Sticky
   },
   data() {
     return {
-       toastInfo: {
+
+      toastInfo: {
         showMsg: "",
         showPositionValue: false,
         toastType: "success"
       },
-      sitData:{},
-      roomData: [
-        {
-          img:
-            "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
-          title: "【世外桃园】洽谈会议室",
-          price: "5000/半天",
-          proportion: "320㎡",
-          hold: "30人",
-          distance: "4.2m",
-          times: [
-            {
-              time: "明天",
-              status: 0
-            },
-            {
-              time: "后天",
-              status: 1
-            }
-          ]
-        },
-        {
-          img:
-            "http://img.zcool.cn/community/01991d5541a1d5000001a64bb80f00.jpg",
-          title: "【世外桃园】中型会议室",
-          price: "9000/半天",
-          proportion: "520㎡",
-          hold: "90人",
-          distance: "7.2m",
-          times: [
-            {
-              time: "明天",
-              status: 1
-            },
-            {
-              time: "后天",
-              status: 1
-            }
-          ]
-        },
-        {
-          img:
-            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=500816895,1453900421&fm=26&gp=0.jpg",
-          title: "【世外桃园】会议大厅",
-          price: "12000/半天",
-          proportion: "520㎡",
-          hold: "90人",
-          distance: "7.2m",
-          times: [
-            {
-              time: "明天",
-              status: 1
-            },
-            {
-              time: "后天",
-              status: 1
-            }
-          ]
-        },
-        {
-          img:
-            "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
-          title: "【世外桃园】洽谈会议室",
-          price: "5000/半天",
-          proportion: "320㎡",
-          hold: "30人",
-          distance: "4.2m",
-          times: [
-            {
-              time: "明天",
-              status: 0
-            },
-            {
-              time: "后天",
-              status: 1
-            }
-          ]
-        },
-        {
-          img:
-            "http://img.zcool.cn/community/01991d5541a1d5000001a64bb80f00.jpg",
-          title: "【世外桃园】中型会议室",
-          price: "9000/半天",
-          proportion: "520㎡",
-          hold: "90人",
-          distance: "7.2m",
-          times: [
-            {
-              time: "明天",
-              status: 1
-            },
-            {
-              time: "后天",
-              status: 1
-            }
-          ]
-        },
-        {
-          img:
-            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=500816895,1453900421&fm=26&gp=0.jpg",
-          title: "【世外桃园】会议大厅",
-          price: "12000/半天",
-          proportion: "520㎡",
-          hold: "90人",
-          distance: "7.2m",
-          times: [
-            {
-              time: "明天",
-              status: 1
-            },
-            {
-              time: "后天",
-              status: 1
-            }
-          ]
-        },
-        {
-          img:
-            "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
-          title: "【世外桃园】洽谈会议室",
-          price: "5000/半天",
-          proportion: "320㎡",
-          hold: "30人",
-          distance: "4.2m",
-          times: [
-            {
-              time: "明天",
-              status: 0
-            },
-            {
-              time: "后天",
-              status: 1
-            }
-          ]
-        },
-        {
-          img:
-            "http://img.zcool.cn/community/01991d5541a1d5000001a64bb80f00.jpg",
-          title: "【世外桃园】中型会议室",
-          price: "9000/半天",
-          proportion: "520㎡",
-          hold: "90人",
-          distance: "7.2m",
-          times: [
-            {
-              time: "明天",
-              status: 1
-            },
-            {
-              time: "后天",
-              status: 1
-            }
-          ]
-        },
-        {
-          img:
-            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=500816895,1453900421&fm=26&gp=0.jpg",
-          title: "【世外桃园】会议大厅",
-          price: "12000/半天",
-          proportion: "520㎡",
-          hold: "90人",
-          distance: "7.2m",
-          times: [
-            {
-              time: "明天",
-              status: 1
-            },
-            {
-              time: "后天",
-              status: 1
-            }
-          ]
-        },
-        {
-          img:
-            "https://goss2.vcg.com/creative/vcg/800/version23/VCG21db81d37a5.jpg",
-          title: "【世外桃园】洽谈会议室",
-          price: "5000/半天",
-          proportion: "320㎡",
-          hold: "30人",
-          distance: "4.2m",
-          times: [
-            {
-              time: "明天",
-              status: 0
-            },
-            {
-              time: "后天",
-              status: 1
-            }
-          ]
-        },
-        {
-          img:
-            "http://img.zcool.cn/community/01991d5541a1d5000001a64bb80f00.jpg",
-          title: "【世外桃园】中型会议室",
-          price: "9000/半天",
-          proportion: "520㎡",
-          hold: "90人",
-          distance: "7.2m",
-          times: [
-            {
-              time: "明天",
-              status: 1
-            },
-            {
-              time: "后天",
-              status: 1
-            }
-          ]
-        },
-        {
-          img:
-            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=500816895,1453900421&fm=26&gp=0.jpg",
-          title: "【世外桃园】会议大厅",
-          price: "12000/半天",
-          proportion: "520㎡",
-          hold: "90人",
-          distance: "7.2m",
-          times: [
-            {
-              time: "明天",
-              status: 1
-            },
-            {
-              time: "后天",
-              status: 1
-            }
-          ]
-        }
-      ],
+      IsFollow: 2,
+      show2: true,
+      sitData: {},
+      showAdvisory: false,
+      advisoryMenus: {
+        Tel: "电话咨询",
+        Online: "在线咨询"
+      },
+      roomData: [],
       addressTitle: "默认地址为空",
       addressValue: [],
       addressData: ChinaAddressV4Data,
@@ -803,155 +644,161 @@ export default {
       roomShow: false,
       infoTab: true,
       swiperType: "img",
-      SImgList: [
-        {
-          url: "javascript:",
-          img:
-            "https://ww1.sinaimg.cn/large/663d3650gy1fq66vvsr72j20p00gogo2.jpg",
-          title: "送你一朵fua"
-        },
-        {
-          url: "javascript:",
-          img:
-            "https://ww1.sinaimg.cn/large/663d3650gy1fq66vw1k2wj20p00goq7n.jpg",
-          title: "送你一辆车"
-        },
-        {
-          url: "javascript:",
-          img: "https://static.vux.li/demo/5.jpg", // 404
-          title: "送你一次旅行",
-          fallbackImg:
-            "https://ww1.sinaimg.cn/large/663d3650gy1fq66vw50iwj20ff0aaaci.jpg"
-        },
-        {
-          url: "javascript:",
-          img:
-            "https://ww1.sinaimg.cn/large/663d3650gy1fq66vvsr72j20p00gogo2.jpg",
-          title: "送你一朵fua"
-        },
-        {
-          url: "javascript:",
-          img:
-            "https://ww1.sinaimg.cn/large/663d3650gy1fq66vw1k2wj20p00goq7n.jpg",
-          title: "送你一辆车"
-        },
-        {
-          url: "javascript:",
-          img: "https://static.vux.li/demo/5.jpg", // 404
-          title: "送你一次旅行",
-          fallbackImg:
-            "https://ww1.sinaimg.cn/large/663d3650gy1fq66vw50iwj20ff0aaaci.jpg"
-        }
-      ],
+      SImgList: [],
 
-      SVideoList: [
-        {
-          url: "javascript:",
-          img:
-            "https://ww1.sinaimg.cn/large/663d3650gy1fq66vvsr72j20p00gogo2.jpg",
-          title: "这里是视频"
-        },
-        {
-          url: "javascript:",
-          img:
-            "https://ww1.sinaimg.cn/large/663d3650gy1fq66vw1k2wj20p00goq7n.jpg",
-          title: "这里是视频"
-        }
-      ],
+      SVideoList: [],
       tabsIndex: 0,
-      tabMunes: ["会场介绍", "外部环境", "配套设施", "历史会议"],
-      tabTitle: "会场介绍",
-      roomSettingData: [
-        {
-          titleName: "交通",
-          tags: ["机场", "公交站", "地铁站", "出租车", "多条公交线路", "公交站"]
-        },
-        {
-          titleName: "绿化",
-          tags: ["草坪", "生态公园", "郊野公园"]
-        },
-        {
-          titleName: "餐饮",
-          tags: ["中餐厅", "西餐厅", "美食广场"]
-        },
-        {
-          titleName: "商城",
-          tags: ["万达广场", "物美超市"]
-        },
-        {
-          titleName: "娱乐",
-          tags: ["KTV", "游乐场"]
-        }
-      ],
+      tabMunes: ["场地介绍", "外部环境", "配套设施", "历史会议"],
+      tabTitle: "场地介绍",
+      roomSettingData: [],
 
-      roomFacilityData: [
-        {
-          titleName: "招待",
-          tags: ["大厅接待", "前台服务", "一站式服务", "停车位"]
-        },
-        {
-          titleName: "休闲",
-          tags: ["茶饮", "咖啡", "电影"]
-        },
-        {
-          titleName: "健身",
-          tags: ["健身", "游泳", "网球", "高尔夫"]
-        },
-        {
-          titleName: "体验游戏",
-          tags: ["真人CS", "AR游戏"]
-        }
-      ],
-      assessIndex: 0,
-      assessMunes: ["全部", "好评", "中评", "差评"],
-      assessTitle: "全部",
-      assessData: [
-        {
-          userName: "王小姐",
-          time: "2018.10.03",
-          star: "5",
-          status: "1",
-          userAvatar:
-            "https://www.qqtouxiang.com/d/file/dongtai/2016-11-28/ed5be90cba48bb1a470fb09ca4e1c38f.gif",
-          msg: "很好,服务环境都挺好的,价格也挺合适的。"
-        },
-        {
-          userName: "李铁柱",
-          time: "2018.10.02",
-          star: "3",
-          status: "2",
-          userAvatar:
-            "http://tupian.qqw21.com/article/UploadPic/2017-1/2017118188867920.jpg",
-          msg: "还可以，这里给你个中评吧。"
-        },
-        {
-          userName: "王钢蛋",
-          time: "2018.10.01",
-          star: "3",
-          status: "2",
-          userAvatar:
-            "https://5b0988e595225.cdn.sohucs.com/images/20180601/f2cabd562ffe4e83b95458d863ba7271.jpeg",
-          msg: "还可以，这里给你个中评吧。"
-        },
-        {
-          userName: "王二麻子",
-          time: "2018.09.03",
-          star: "1",
-          status: "3",
-          userAvatar:
-            "http://www.qqtouxiang.com/d/file/dongtai/2016-11-28/140d0b919802d23235ab331db1b5c741.gif",
-          msg: "这是什么，有问题差评。"
-        }
-      ],
+      roomFacilityData: [],
+      assessData: [],
       raterData: "4",
-      IsColl: 2
+      IsColl: 2,
+      Surrounding: {}
       // img: require("../../assets/images/a.jpeg")
     };
   },
+    computed: {
+    player() {
+      return this.$refs.videoPlayer.player
+    }
+  },
   methods: {
+    onPlayerPlay(player){
+      console.log(player)
+    },
+    onPlayerPause(player){
+      console.log(player)
+    },
+
+    //点击关注或取消关注承办方
+    followCompany(id) {
+      if (isLogin()) {
+        if (this.IsFollow == 1) {
+          let followObj = {
+            params: {
+              userId: getStorage("userToken").userId,
+              target: id
+            }
+          };
+          checkToken().then(Pdata => {
+            getDataInfo("delete", "refollow/follow", followObj).then(res => {
+              if (res.data.code == 200) {
+                this.toastInfo = {
+                  showMsg: res.data.msg,
+                  showPositionValue: true,
+                  toastType: "text"
+                };
+                this.IsFollow = 2;
+              } else if (res.data.code == 400 || res.data.code == 100101) {
+                setTimeout(function() {
+                  _that.$router.push("/login");
+                }, 500);
+              }
+            });
+          });
+        } else {
+          let followObj = {
+            user: getStorage("userToken").userId,
+            taget: id,
+            type: "1"
+          };
+          checkToken().then(Pdata => {
+            getDataInfo("post", "refollow/follow", followObj).then(res => {
+              if (res.data.code == 200) {
+                this.toastInfo = {
+                  showMsg: res.data.msg,
+                  showPositionValue: true,
+                  toastType: "text"
+                };
+                this.IsFollow = 1;
+              } else if (res.data.code == 400 || res.data.code == 100101) {
+                setTimeout(function() {
+                  _that.$router.push("/login");
+                }, 500);
+              }
+            });
+          });
+        }
+      } else {
+        console.log("没登录请先登录！");
+        //  this.$router.push("/login");
+      }
+    },
+
+    //跳转他的详情页面
+    goToTaDetail(id) {
+      this.$router.push("/tadetail/" + id);
+      // console.log(id)
+    },
+
+    gotoReserve() {
+      wakeApp();
+    },
+    godown() {
+      window.location.href = "https://www.pgyer.com/NSM9";
+    },
+    gotoDetil(id) {
+      // console.log(id)
+      this.$router.push({
+        path: "/sitedetail/" + id
+      });
+
+      this.$router.go(0);
+    },
+    // 处理今天明天后天
+    getDayName(d) {
+      var td = new Date();
+      td = new Date(td.getFullYear(), td.getMonth(), td.getDate());
+      var od = new Date(d);
+      od = new Date(od.getFullYear(), od.getMonth(), od.getDate());
+      var xc = (od - td) / 1000 / 60 / 60 / 24;
+      if (xc < -2) {
+        return -xc + "天前";
+      } else if (xc < -1) {
+        return "前天";
+      } else if (xc < 0) {
+        return "昨天";
+      } else if (xc == 0) {
+        return "今天";
+      } else if (xc < 2) {
+        return "明天";
+      } else if (xc < 3) {
+        return "后天";
+      } else {
+        return xc + "天后";
+      }
+    },
+    //处理手机号
+    showPhone(phone) {
+      var str = phone.substr(0, 3) + "****" + phone.substr(7);
+      return str;
+    },
+    //处理最大面积会议室和最大容量会议室
+    rooMMost(type, arr) {
+      let m = arr[0][type];
+      arr.forEach(e => {
+        if (m < e.type) {
+          m = e.type;
+        }
+      });
+      return m;
+      // console.log(m)
+    },
+    //检查是否认证
+    idensChange(typeNum, arr) {
+      if (arr.indexOf(typeNum) != -1) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     //获取数据和查询是否收藏
     getSitedetailData() {
-      let detailId = this.$route.query.detailId
+      // console.log(getNavigator())
+      let detailId = this.$route.params.id;
 
       //获取当前场地数据
       let dataObj = {
@@ -959,21 +806,127 @@ export default {
           id: detailId
         }
       };
-    
+
       getDataInfo("get", "place/detail", dataObj).then(res => {
         if (res.data.code == 200) {
-          this.sitData = res.data.data
-          // console.log(res)
-     
+          console.log(res);
+          this.sitData = res.data.data;
+          //登录后获取是否关注了当前用户
+          if (isLogin()) {
+            let followObj = {
+              params: {
+                userId: getStorage("userToken").userId,
+                taget: res.data.data.cuser.id
+              }
+            };
+
+            checkToken().then(Pdata => {
+              getDataInfo("get", "refollow/follow/isFollow", followObj).then(
+                res => {
+                  if (res.data.code == 200) {
+                    this.IsFollow = res.data.data;
+                  } else if (res.data.code == 400 || res.data.code == 100101) {
+                    // console.log("登录");
+                  }
+                }
+              );
+            });
+          }
+
+          //获取周边推荐
+          let SurrObj = {
+            params: {
+              longitude: res.data.data.longitude,
+              latitude: res.data.data.latitude
+            }
+          };
+          getDataInfo("get", "place", dataObj).then(res => {
+            if (res.data.code == 200) {
+              this.Surrounding = res.data.data;
+            }
+          });
+
+          //  console.log(SurrObj)
+
+          let imgArr = [],
+            videoArr = [];
+          res.data.data.rePlaceFile.forEach(e => {
+            if (e.fileType == 0) {
+              imgArr.push({
+                url: "javascript:",
+                fileType: e.fileType,
+                img: e.objectKey,
+                fileId: e.id,
+                belong: e.belong
+              });
+            } else if (e.fileType == 1) {
+              videoArr.push({
+                url: "javascript:",
+                fileType: e.fileType,
+                img: e.objectKey,
+                fileId: e.id,
+                belong: e.belong,
+
+              
+      playerOptions : {
+        playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
+        autoplay: false, //如果true,浏览器准备好时开始回放。
+        muted: false, // 默认情况下将会消除任何音频。
+        loop: false, // 导致视频一结束就重新开始。
+        preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
+        language: 'zh-CN',
+        aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
+        fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
+        sources: [{
+          type: "video/mp4",
+          src: e.objectKey //url地址
+        }],
+        poster: "../../static/images/test.jpg", //你的封面地址
+        // width: document.documentElement.clientWidth,
+        notSupportedMessage: '此视频暂无法播放，请稍后再试', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
+        controlBar: {
+          timeDivider: true,
+          durationDisplay: true,
+          remainingTimeDisplay: false,
+          fullscreenToggle: true  //全屏按钮
+        }
+    },
+
+
+              });
+            }
+          });
+
+          this.SImgList = imgArr;
+          this.SVideoList = videoArr;
+          console.log(videoArr);
+          this.show2 = false;
         } else if (res.data.code == 400 || res.data.code == 100101) {
         }
       });
+
+      //获取当前场地评论
+      let AssObj = {
+        params: {
+          mdId: this.$route.params.id,
+          type: 0,
+          currentPage: 1,
+          pageSize: 3
+        }
+      };
+
+      getDataInfo("get", "meetingcomment/meetingcomment", AssObj).then(res => {
+        if (res.data.code == 200) {
+          this.assessData = res.data.data;
+        }
+      });
+
       //判断当前登录状态来获取收藏状态
       if (isLogin()) {
-         let UserId = getStorage('userToken').userId
+        let UserId = getStorage("userToken").userId;
         let Obj = {
           params: {
-            target:detailId,
+            target: detailId,
             userId: UserId
           }
         };
@@ -990,11 +943,10 @@ export default {
     },
     //点击收藏或者取消收藏
     Collection() {
-        let detailId = this.$route.query.detailId
-     
+      let detailId = this.$route.query.detailId;
 
       if (isLogin()) {
-         let UserId = getStorage('userToken').userId
+        let UserId = getStorage("userToken").userId;
         if (this.IsColl == 2) {
           let reColleObj = {
             type: "1",
@@ -1006,13 +958,12 @@ export default {
             getDataInfo("post", "reCollection/reCollection", reColleObj).then(
               res => {
                 if (res.data.code == 200) {
-                   this.toastInfo = {
+                  this.toastInfo = {
                     showMsg: res.data.msg,
                     showPositionValue: true,
                     toastType: "text"
                   };
-                this.IsColl = 1;
-
+                  this.IsColl = 1;
                 } else if (res.data.code == 400 || res.data.code == 100101) {
                   // console.log('登录')
                 }
@@ -1030,7 +981,7 @@ export default {
             getDataInfo("delete", "reCollection/reCollection", reColleObj).then(
               res => {
                 if (res.data.code == 200) {
-                   this.toastInfo = {
+                  this.toastInfo = {
                     showMsg: res.data.msg,
                     showPositionValue: true,
                     toastType: "text"
@@ -1044,7 +995,7 @@ export default {
           });
         }
       } else {
-        // console.log("登录");
+        console.log("登录");
       }
     },
     //锚点跳转
@@ -1087,6 +1038,31 @@ export default {
           break;
       }
       // console.log(index)
+    },
+    //点击拨打号码
+    callPhone(phone) {
+      window.location.href = "tel://" + phone;
+    },
+    //弹出显示咨询菜单
+    advisoryClick(key) {
+      if (key == "Tel") {
+        this.callPhone(this.phone);
+      } else if (key == "Online") {
+        // alert('在线咨询')
+        // this.showDialogStyle = true;
+        // console.log(this.meetingData.draftsVo.meetingDetails.createPerson)
+        if (isLogin()) {
+          this.$router.push({
+            path: "/dialog/" + this.sitData.cuser.id,
+            query: {
+              dialogId: this.sitData.cuser.id
+            }
+          });
+        } else {
+          alert("请先登录");
+          this.$router.push("/login");
+        }
+      }
     }
   },
   mounted() {
@@ -1095,9 +1071,11 @@ export default {
   computed: {
     showdetailList() {
       if (this.roomShow) {
-        return this.roomData;
+        return this.sitData.meetingRoom;
       } else {
-        let arr = this.roomData.slice(0, this.count);
+        // let arr = this.sitData.meetingRoom.slice(0, this.count);
+        let arr = [this.sitData.meetingRoom[0]];
+
         return arr;
       }
     },
@@ -1106,28 +1084,53 @@ export default {
         return 0;
       } else {
         // roomShow?0:roomData.length-count< 0?0:roomData.length-count
-        if (this.roomData.length - this.count < 0) {
+        if (this.sitData.meetingRoom.length - this.count < 0) {
           return 0;
         } else {
-          return this.roomData.length - this.count;
+          return this.sitData.meetingRoom.length;
         }
       }
     }
   },
   watch: {
-    demo01_index() {
-      if (this.swiperType == "img") {
-        // console.log(this.demo01_index * 1 + 1, this.SImgList.length);
-        if (this.demo01_index * 1 + 1 > this.SImgList.length) {
-          this.swiperType = "video";
-          // console.log("切换视频");
-        }
+    // demo01_index() {
+    //   if (this.swiperType == "img") {
+    //     // console.log(this.demo01_index * 1 + 1, this.SImgList.length);
+    //     if (this.demo01_index * 1 + 1 > this.SImgList.length) {
+    //       this.swiperType = "video";
+    //       // console.log("切换视频");
+    //     }
+    //   }
+    // },
+    // swiperType(n, o) {
+    //   // this.swiporArrListChange()
+    //   // console.log(n,o)
+    // }
+
+      swiperType(n,o){
+     console.log(n)
+      this.demo01_index = 0;
+      if(n=='img'){
+        console.log( this.$refs.videoPlayer[0])
+       
       }
+     
     },
-    swiperType(n, o) {
-      // this.swiporArrListChange()
-      // console.log(n,o)
-    }
+    demo01_index(n,o){
+      if(this.swiperType=='video'){
+        console.log(n)
+        if( this.$refs.videoPlayer && this.$refs.videoPlayer[o]!=undefined && this.$refs.videoPlayer[n]!=undefined){
+     this.$refs.videoPlayer[o].player.pause()
+       this.$refs.videoPlayer[n].player.play()
+      //  console.log(this.$refs.videoPlayer)
+        }
+     
+      }
+    
+    },
+
+
+
   }
 };
 </script>
@@ -1136,4 +1139,10 @@ export default {
 @import "../../assets/style/tools.less";
 @import "../../assets/style/global.less";
 @import "~vux/src/styles/reset.less";
+
+
+.video-js .vjs-big-play-button{
+  width: 70px;
+border-radius:50px; 
+}
 </style>

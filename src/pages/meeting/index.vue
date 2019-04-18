@@ -160,8 +160,13 @@
             <li v-else-if="listData.length==0 && tabsIndex!=0" class="ListNoContent">
               <p>您还没有关注任何内容</p>
             </li>
-            <li v-else class="tabMeetingList" v-for="(DataItem,index) in listData" :key="index"  @click="gotoDetil(DataItem.id)">
-             
+            <li
+              v-else
+              class="tabMeetingList"
+              v-for="(DataItem,index) in listData"
+              :key="index"
+              @click="gotoDetil(DataItem.id)"
+            >
               <div class="tabMeetingTopBox" v-if="tabsIndex==0">
                 <div class="orgLogo fl">
                   <img
@@ -172,50 +177,47 @@
                 <div class="orgUptime fr">{{ProTime(DataItem.createTime,'T')}}</div>
               </div>
 
-                 <div>
-             
+              <div>
                 <div class="tabMeetingImg fl">
+                  <!-- {{DataItem.meetingFileList}} -->
                   <span
-                    v-for="(img,index) in DataItem.meetingFileList"
+                    v-for="(img,index) in filterBelong(DataItem.meetingFileList)"
                     :key="index"
-                    v-if="img.belong==1"
+                    v-if="filterBelong(DataItem.meetingFileList).length!=0"
                   >
-                    <img
-                      :src="img.fileUrl==null?require('../../assets/images/myFans-Mask.png'):img.fileUrl"
-                    >
+                    <img :src="img.fileUrl?img.fileUrl:require('../../assets/images/noimg.png')"
+                    > 
+                  </span>
+                  <span v-if="filterBelong(DataItem.meetingFileList).length==0">
+                  <img :src="require('../../assets/images/noimg.png')" />
+
                   </span>
                 </div>
 
-
-          <div class="tabMeetingTextBox fl">
+                <div class="tabMeetingTextBox fl">
                   <h4 class="tabMeetingTextTitle">{{DataItem.theme}}</h4>
                   <div class="tabMeetingTime">
                     <span>
                       {{DataItem.beginTime}}
                       &nbsp;&nbsp; {{addressSplit(DataItem.address)}}
                     </span>
-                  
                   </div>
                   <div class="tabMeetingTagBox">
                     <div class="tabMeetingTag fl">
-                      <span v-if="DataItem.status==0" class="IsOver">已结束</span>
-                   
+                      <!-- {{DataItem.status}} -->
+                      <span v-if="DataItem.status==2" class="IsOver">已结束</span>
+
                       <span
-                        v-else-if="DataItem.status==2 || DataItem.status==1"
+                        v-else-if="DataItem.status==3 || DataItem.status==1"
                         class="processing"
                       >进行中</span>
-                      <span v-else-if="DataItem.status==3" class="notStarted">未开始</span>
+                      <span v-else-if="DataItem.status==0" class="notStarted">未开始</span>
                     </div>
                     <div class="tabMeetingNum fr">{{DataItem.msg}}</div>
                   </div>
                 </div>
-
-
-
-                 </div>
-
+              </div>
             </li>
-             
           </ul>
         </pull-tod>
 
@@ -383,6 +385,7 @@
                     :key="index"
                     v-if="img.belong==1"
                   >
+                  <!-- {{img.fileUrl}} -->
                     <img
                       :src="img.fileUrl==null?require('../../assets/images/myFans-Mask.png'):img.fileUrl"
                     >
@@ -397,10 +400,12 @@
                   </div>
                   <div class="tabMeetingTagBox">
                     <div class="tabMeetingTag fl">
-                      <span v-if="DataItem.status==0" class="IsOver">已结束</span>
-                      <span v-else-if="DataItem.status==1" class="LiveIn">直播中</span>
-                      <span v-else-if="DataItem.status==2" class="processing">进行中</span>
-                      <span v-else-if="DataItem.status==3" class="notStarted">未开始</span>
+                      <span v-if="DataItem.status==2" class="IsOver">已结束</span>
+                      <span
+                        v-else-if="DataItem.status==3 || DataItem.status==1"
+                        class="processing"
+                      >进行中</span>
+                      <span v-else-if="DataItem.status==0" class="notStarted">未开始</span>
                     </div>
                     <div class="tabMeetingNum fr">{{DataItem.msg}}</div>
                   </div>
@@ -427,7 +432,8 @@ import {
   transDate,
   getPositioning,
   setStorage,
-  timeLimit
+  timeLimit,
+  JIMinitchange
 } from "../../assets/lib/myStorage.js";
 import MMap from "@/components/MMap";
 import {
@@ -652,44 +658,45 @@ export default {
     ...mapState(["city"])
   },
   methods: {
+    filterBelong(arr){
+     return arr.filter(e=>{ return e.belong==1 })
+    },
     //唤醒IOS
-    ios(){
-     window.location.href ='com.lianhuiyi://com.lianhuiyi'
+    ios() {
+      window.location.href = "com.lianhuiyi://com.lianhuiyi";
     },
     addressSplit(add) {
       var reg = /.+?(省|市|自治区|自治州|县|区|镇)/g;
       let addArr = add.match(reg);
       let str = "";
-      if(addArr){
-        let newArr =[]
-      
-        if(addArr.length>=2){
-  newArr = [addArr[0],addArr[1]]
-        }else if(addArr.length<2){
-  newArr = [addArr[0]]
-        }
-  newArr.forEach(e => {
-    if (e.indexOf("省") != -1) {
-          str = e.replace("省", "");
-        }
-        if (e.indexOf("市") != -1) {
-          str += " " + e.replace("市", "");
-        }
-        if (e.indexOf("区") != -1 && e.length < 5) {
-          str += " " + e.replace("区", "");
-        }
-         if (e.indexOf("镇") != -1 && e.length < 5) {
-          str += " " + e.replace("镇", "");
-        }
-         if (e.indexOf("县") != -1 && e.length < 5) {
-          str += " " + e.replace("县", "");
-        }
-      });
+      if (addArr) {
+        let newArr = [];
 
+        if (addArr.length >= 2) {
+          newArr = [addArr[0], addArr[1]];
+        } else if (addArr.length < 2) {
+          newArr = [addArr[0]];
+        }
+        newArr.forEach(e => {
+          if (e.indexOf("省") != -1) {
+            str = e.replace("省", "");
+          }
+          if (e.indexOf("市") != -1) {
+            str += " " + e.replace("市", "");
+          }
+          if (e.indexOf("区") != -1 && e.length < 5) {
+            str += " " + e.replace("区", "");
+          }
+          if (e.indexOf("镇") != -1 && e.length < 5) {
+            str += " " + e.replace("镇", "");
+          }
+          if (e.indexOf("县") != -1 && e.length < 5) {
+            str += " " + e.replace("县", "");
+          }
+        });
       }
-    
-      return str;
 
+      return str;
     },
     //处理时间范围
     getTimeLimit(beginTime, endTime) {
@@ -730,6 +737,7 @@ export default {
     show2Change() {
       this.show2 = true;
       let sotr = getStorage("industry");
+       
       if (isLogin()) {
         let userId = getStorage("userToken").userId;
         let intObj = {
@@ -854,6 +862,7 @@ export default {
     //获取导航栏菜单
     getTabMunes() {
       let sotr = getStorage("industry");
+//  console.log(sotr,JIM.isLogin())
       if (isLogin()) {
         let userId = getStorage("userToken").userId;
         let intObj = {
@@ -1181,7 +1190,7 @@ export default {
         "meetingdetails/meetingdetailsListByGoodMeeting",
         goodObj
       ).then(res => {
-        console.log(res)
+        // console.log(res)
         if (res.data.code == 200) {
           if (res.data.data.meetingShowList.length == 0) {
             this.IsCompleted = true;
@@ -1211,7 +1220,6 @@ export default {
       };
       if (type == 0) {
         if (isLogin()) {
-         
           dataObj.params.flag = "1";
           dataObj.params.userId = getStorage("userToken").userId;
           if (this.isLogin) {
@@ -1238,15 +1246,15 @@ export default {
           "meetingdetails/meetingdetailsListByGoodMeeting",
           dataObj
         ).then(res => {
+              console.log(res)
           if (res.data.code == 200) {
             this.show3 = false;
-            if(res.data.data){
-               this.listData = res.data.data.meetingShowList;
-            }else{
+            if (res.data.data) {
+              this.listData = res.data.data.meetingShowList;
+            } else {
               this.IsCompleted = true;
-              this.listData =[]
+              this.listData = [];
             }
-           
           }
         });
       } else {
@@ -1257,7 +1265,9 @@ export default {
 
         getDataInfo("get", "meetingdetails/meetingByConditions", dataObj).then(
           res => {
+           
             if (res.data.code == 200) {
+              //  console.log(res)
               this.show3 = false;
               if (res.data.data.meetingShowList.length < this.num) {
                 this.IsCompleted = true;
@@ -1317,15 +1327,12 @@ export default {
           if (res.data.code == 200) {
             let placeObj = {
               params: {
-               
                 cityCode: stor ? stor.regionCode : res.data.data[0].regionCode
               }
             };
             getDataInfo("get", "place", placeObj).then(resd => {
               if (resd.data.code == 200) {
-            
                 this.TaPosted = resd.data.data.data;
-              
               }
             });
           }
@@ -1340,12 +1347,9 @@ export default {
     this.getAllData(this.tabsIndex);
     this.getPlaceData();
     this.getTabMunes();
-
-
   },
   watch: {
     tabsIndex(n, o) {
-
       this.getAllData(n);
 
       this.filterData = [this.tabMunes[n]];

@@ -398,10 +398,16 @@ export default {
     },
     //给Ta发消息
     gotoMsg() {
-      this.$router.push({
+      if(isLogin()){
+ this.$router.push({
         path: "/dialog/" + this.$route.params.id,
         query: { dialogId: this.$route.params.id }
       });
+
+      }else{
+         this.$router.push('/login');
+      }
+     
     },
     handChange() {
       // console.log("11111111");
@@ -411,7 +417,9 @@ export default {
     },
     //点击关注或取消关注承办方
     attChange() {
-      if (this.TaData.isMyFollow == 1) {
+
+     if(isLogin()){
+if (this.TaData.isMyFollow == 1) {
         let followObj = {
           params: {
             userId: getStorage("userToken").userId,
@@ -453,6 +461,11 @@ export default {
           });
         });
       }
+
+     }else{
+       this.$router.push('/login')
+     }
+      
 
       // console.log(this.TaData.isMyFollow);
       // if (this.attention) {

@@ -235,7 +235,13 @@ export default {
           // }
 
           setTimeout(function() {
-            _that.$router.push("/myindex");
+            
+            // location.hash = '/myindex'
+
+            // console.log(window.location.hash,location.hash)
+          // location.hash='/myindex'
+          //   console.log(location.hash)
+            _that.$router.push("/meeting");
           }, 1000);
         } else if (res.data.code == 1003) {
           this.showPositionValue = true;
