@@ -194,7 +194,7 @@ export default {
       let _that = this;
       let obj = {};
       //获取全部城市列表
-      getDataInfo("get", "region/dcity", obj).then(res => {
+      getDataInfo("get", "region/cityMeeting", obj).then(res => {
         if (res.data.code == 200) {
           let data = res.data.data;
           data.forEach(e => {

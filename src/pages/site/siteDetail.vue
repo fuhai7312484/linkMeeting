@@ -1,9 +1,5 @@
 <template>
   <div class="box">
-
-  
-
-
     <div>
       <div style="height:50px;position: relative; z-index: 9997;">
         <sticky :check-sticky-support="false">
@@ -20,7 +16,7 @@
       </div>
     </div>
 
-    <div class="footer">
+    <div class="footer" v-if="sitData">
       <flexbox :gutter="0" class="footer-nav-box">
         <flexbox-item :span="1/5" :order="2">
           <div class="footer-nav-icons" @click="showAdvisory = !showAdvisory">
@@ -47,62 +43,62 @@
       </flexbox>
     </div>
 
-
-  <!-- <video-player  class="video-player vjs-custom-skin"
+    <!-- <video-player  class="video-player vjs-custom-skin"
      ref="videoPlayer"
      :playsinline="true"
      :options="playerOptions"
      @play="onPlayerPlay($event)"
                      @pause="onPlayerPause($event)"
-></video-player> -->
+    ></video-player>-->
 
-
-
-    <div class="site-img-showBox" v-if="sitData!=undefined">
+    <div class="site-img-showBox" v-if="sitData">
       <!-- :list="swiperType=='img'?SImgList:SVideoList" -->
-      
-        <!-- <div v-if="swiperType=='video'" class="video-btn-box">
+
+      <!-- <div v-if="swiperType=='video'" class="video-btn-box">
           <div class="jiao"></div>
-        </div> -->
-        <!-- <router-link tag="div" class="meetingAnnex" to="/downannex">附件下载</router-link> -->
-        <!-- <div class="meetingAnnex">附件下载 ></div> -->
-        <div class="site-img-markBox">
-          <span
-            v-if="SImgList.length!=0"
-            @click="swiperType='img'"
-            :class="swiperType=='img'?'site-img-type':'site-img-length'"
-          >照片({{ SImgList.length }})</span>
-          <span
-            v-if="SVideoList.length!=0"
-            @click="swiperType='video'"
-            :class="swiperType=='video'?'site-img-type':'site-img-length'"
-          >视频({{ SVideoList.length }})</span>
-          <span class="site-img-length">
-            {{ demo01_index + 1 }}/{{
-            swiperType == "img" ? SImgList.length : SVideoList.length
-            }}
-          </span>
-        </div>
+      </div>-->
+      <!-- <router-link tag="div" class="meetingAnnex" to="/downannex">附件下载</router-link> -->
+      <!-- <div class="meetingAnnex">附件下载 ></div> -->
 
+      <div class="site-img-markBox">
+        <span
+          v-if="SImgList.length!=0"
+          @click="swiperType='img'"
+          :class="swiperType=='img'?'site-img-type':'site-img-length'"
+        >照片({{ SImgList.length }})</span>
+        <span
+          v-if="SVideoList.length!=0"
+          @click="swiperType='video'"
+          :class="swiperType=='video'?'site-img-type':'site-img-length'"
+        >视频({{ SVideoList.length }})</span>
+        <span class="site-img-length">
+          {{ demo01_index + 1 }}/{{
+          swiperType == "img" ? SImgList.length : SVideoList.length
+          }}
+        </span>
+      </div>
 
-             
-<swiper height="390px" :show-desc-mask="false" :show-dots="false"  v-if="swiperType=='video'"
- v-model="demo01_index"
-  >
-      <swiper-item class="swiper-demo-img" v-for="(video,index) in SVideoList" :key="index">
-            <video-player  class="video-player vjs-custom-skin"
-                ref="videoPlayer"
-                :playsinline="true"
-                :options="video.playerOptions"
-                @play="onPlayerPlay($event)"
-                  @pause="onPlayerPause($event)"
-            ></video-player>
-        </swiper-item>
-         
-    </swiper>
-<!-- {{demo01_index}} -->
       <swiper
-      v-if="swiperType=='img'"
+        height="390px"
+        :show-desc-mask="false"
+        :show-dots="false"
+        v-if="swiperType=='video'"
+        v-model="demo01_index"
+      >
+        <swiper-item class="swiper-demo-img" v-for="(video,index) in SVideoList" :key="index">
+          <video-player
+            class="video-player vjs-custom-skin"
+            ref="videoPlayer"
+            :playsinline="true"
+            :options="video.playerOptions"
+            @play="onPlayerPlay($event)"
+            @pause="onPlayerPause($event)"
+          ></video-player>
+        </swiper-item>
+      </swiper>
+      <!-- {{demo01_index}} -->
+      <swiper
+        v-if="swiperType=='img'"
         :list="swiperType=='img'?SImgList:SVideoList"
         height="240px"
         :show-desc-mask="false"
@@ -111,26 +107,10 @@
         @click.native="currentChan"
         :loop="true"
       >
-  
-
-      
         <!-- <div v-if="swiperType=='video'" class="video-btn-box">
           <div class="jiao"></div>
-        </div> -->
-      
+        </div>-->
       </swiper>
-
-
-
-
-
-
-
- 
-
-
-
-
     </div>
 
     <!-- 
@@ -170,7 +150,7 @@
       <loading :show="show2" text="数据加载中..."></loading>
     </div>
 
-    <div class="site-content-box borBottm" v-if="!show2">
+    <div class="site-content-box borBottm" v-if="sitData">
       <flexbox class="linH padlr">
         <flexbox-item :span="3.5/5">
           <h3 class="site-flex-title">{{sitData.name}}</h3>
@@ -264,7 +244,7 @@
             <span @click="callPhone(Contacts.phone)">
               <img width="15" :src="require('../../assets/images/phone.png')">
             </span>
-            <span @click="advisoryClick('Online')">
+            <span @click="smsPhone(Contacts.phone)">
               <img width="15" :src="require('../../assets/images/msg.png')">
             </span>
           </li>
@@ -282,7 +262,7 @@
       </group>
     </div>
 
-    <div class="borBottm" v-if="!show2">
+    <div class="borBottm" v-if="sitData">
       <flexbox class="site-room-title padlr">
         <flexbox-item :span="1/3">
           <h3 id="anchor">会议室</h3>
@@ -296,6 +276,7 @@
             <flexbox-item :span="1/4" class="site-room-imgBox">
               <img
                 :src="roomItme.meetingPic?roomItme.meetingPic:require('../../assets/images/noimg.png') "
+                :onerror="errorImg01"
               >
             </flexbox-item>
             <flexbox-item :span="3/4">
@@ -403,11 +384,22 @@
           >{{ tabs }}</tab-item>
         </tab>
         <div v-if="tabsIndex==0" class="site-room-Introduction">
-          <p>{{sitData.introduce}}</p>
+          <p class="padlr">{{sitData.introduce}}</p>
         </div>
 
         <div v-else-if="tabsIndex==1">
-          <div class="site-room-setting" v-for="(setting,index) in sitData.placeEnvir" :key="index">
+          <div class="noData-default" v-if="sitData.placeEnvir.length==0">
+            <p>
+              <img :src="require('../../assets/images/noData.png')">
+            </p>
+            <p>暂无信息</p>
+          </div>
+
+          <div
+            class="site-room-setting padlr"
+            v-for="(setting,index) in sitData.placeEnvir"
+            :key="index"
+          >
             <h4>{{ setting.name }}</h4>
             <span v-for="(SettingTags,index) in setting.placeEnvir" :key="index">
               {{
@@ -418,7 +410,18 @@
         </div>
 
         <div v-else-if="tabsIndex==2">
-          <div class="site-room-setting" v-for="(facility,index) in sitData.placeSet" :key="index">
+          <div class="noData-default" v-if="sitData.placeSet.length==0">
+            <p>
+              <img :src="require('../../assets/images/noData.png')">
+            </p>
+            <p>暂无信息</p>
+          </div>
+
+          <div
+            class="site-room-setting padlr"
+            v-for="(facility,index) in sitData.placeSet"
+            :key="index"
+          >
             <h4>{{ facility.name }}</h4>
             <span
               v-for="(facilityTags,index) in facility.placeEnvir"
@@ -428,8 +431,18 @@
         </div>
 
         <div v-else-if="tabsIndex==3">
+          <div class="noData-default" v-if="sitData.meetingHistory.length==0">
+            <p>
+              <img :src="require('../../assets/images/noData.png')">
+            </p>
+            <p>暂无信息</p>
+          </div>
           <flexbox :gutter="0" wrap="wrap" v-if="!show2">
-            <div class="meetingList" v-for="(His,index) in sitData.meetingHistory" :key="index">
+            <div
+              class="meetingList padlr"
+              v-for="(His,index) in sitData.meetingHistory"
+              :key="index"
+            >
               <h5>{{His.name}}</h5>
             </div>
           </flexbox>
@@ -437,7 +450,7 @@
       </div>
     </div>
 
-    <div class="meetingAssessBox padlr">
+    <div class="meetingAssessBox padlr" v-if="sitData">
       <div class="meetingRegListTitle">
         <h4 class="RegListTitle fl">会友评价</h4>
         <div class="RegListPeopleNumBox fr">
@@ -467,7 +480,7 @@
       </ul>
     </div>
 
-    <div class="padlr">
+    <div class="padlr" v-if="sitData">
       <!-- {{Surrounding}} -->
 
       <flexbox class="site-room-title">
@@ -487,6 +500,7 @@
             <flexbox-item :span="1/4" class="site-room-imgBox">
               <img
                 :src="Surr.homepagePic?Surr.homepagePic:require('../../assets/images/noimg.png')"
+                :onerror="errorImg01"
               >
             </flexbox-item>
             <flexbox-item :span="2/4">
@@ -512,16 +526,17 @@
                     >{{Surr.count==0?'暂无会场':'会场'+Surr.count+'间'}}</flexbox-item>
                     <flexbox-item
                       class="site-recommend-info"
-                    >{{Surr.high==null?'暂无内高':'内高'+Surr.high+''}}</flexbox-item>
+                    >{{Surr.high==null?'暂无内高':'内高'+Surr.high+'m'}}</flexbox-item>
                   </flexbox>
                 </flexbox-item>
               </flexbox>
             </flexbox-item>
             <flexbox-item :span="0.8/4">
               <flexbox orient="vertical">
+                <!-- {{ Surr.distance}} -->
                 <flexbox-item
                   class="site-recommend-distance"
-                >{{Surr.distance==null?'暂无距离':'距离'+Surr.distance+'米'}}</flexbox-item>
+                >{{Surr.distance==null?'暂无距离':'距离'+ GetDistance(sitData.latitude,sitData.longitude,Surr.latitude,Surr.longitude)+'米'}}</flexbox-item>
                 <flexbox-item>
                   <x-button mini plain type="warn" style="border-color:#505050; color:#505050;">详情</x-button>
                 </flexbox-item>
@@ -530,10 +545,13 @@
           </flexbox>
         </div>
       </div>
-
-      <div class="site-room-dropDown">
+      <div class="site-room-dropDown" v-if="pageshow" @click="loadMore">
         查看更多推荐
         <x-icon type="ios-arrow-right" class="site-icon-down" size="20"></x-icon>
+      </div>
+      <div class="site-room-dropDown1" v-if="!pageshow">
+        <!-- 数据已加载完 -->
+        <divider>数据已加载完</divider>
       </div>
       <div></div>
     </div>
@@ -576,7 +594,7 @@ import {
   Grid,
   GridItem,
   Swiper,
-   SwiperItem,
+  SwiperItem,
   XAddress,
   ChinaAddressV4Data,
   Group,
@@ -589,7 +607,8 @@ import {
   Rater,
   Toast,
   Loading,
-  Sticky
+  Sticky,
+  Divider
 } from "vux";
 export default {
   name: "siteDetail",
@@ -604,7 +623,7 @@ export default {
     Grid,
     GridItem,
     Swiper,
-     SwiperItem,
+    SwiperItem,
     XAddress,
     Group,
     Cell,
@@ -617,19 +636,20 @@ export default {
     Rater,
     Toast,
     Loading,
-    Sticky
+    Sticky,
+    Divider
   },
   data() {
     return {
-
+      errorImg01: 'this.src="' + require("../../assets/images/noimg.png") + '"',
       toastInfo: {
         showMsg: "",
         showPositionValue: false,
         toastType: "success"
       },
       IsFollow: 2,
-      show2: true,
-      sitData: {},
+      show2: false,
+      sitData: null,
       showAdvisory: false,
       advisoryMenus: {
         Tel: "电话咨询",
@@ -641,6 +661,8 @@ export default {
       addressData: ChinaAddressV4Data,
       demo01_index: 0,
       count: 5,
+      pageNum: 1,
+      pageshow: true,
       roomShow: false,
       infoTab: true,
       swiperType: "img",
@@ -660,19 +682,38 @@ export default {
       // img: require("../../assets/images/a.jpeg")
     };
   },
-    computed: {
+  computed: {
     player() {
-      return this.$refs.videoPlayer.player
+      return this.$refs.videoPlayer.player;
     }
   },
   methods: {
-    onPlayerPlay(player){
-      console.log(player)
+    onPlayerPlay(player) {
+      console.log(player);
     },
-    onPlayerPause(player){
-      console.log(player)
+    onPlayerPause(player) {
+      console.log(player);
     },
-
+    //计算当前场地和周边场地的距离
+    GetDistance(lat1, lng1, lat2, lng2) {
+      var radLat1 = (lat1 * Math.PI) / 180.0;
+      var radLat2 = (lat2 * Math.PI) / 180.0;
+      var a = radLat1 - radLat2;
+      var b = (lng1 * Math.PI) / 180.0 - (lng2 * Math.PI) / 180.0;
+      var s =
+        2 *
+        Math.asin(
+          Math.sqrt(
+            Math.pow(Math.sin(a / 2), 2) +
+              Math.cos(radLat1) *
+                Math.cos(radLat2) *
+                Math.pow(Math.sin(b / 2), 2)
+          )
+        );
+      s = s * 6378.137; // EARTH_RADIUS;
+      s = Math.round(s * 10000) / 10000;
+      return Math.round(s * 100) / 100;
+    },
     //点击关注或取消关注承办方
     followCompany(id) {
       if (isLogin()) {
@@ -789,17 +830,45 @@ export default {
     },
     //检查是否认证
     idensChange(typeNum, arr) {
-      if (arr.indexOf(typeNum) != -1) {
-        return true;
-      } else {
-        return false;
+      if (arr) {
+        if (arr.indexOf(typeNum) != -1) {
+          return true;
+        } else {
+          return false;
+        }
       }
+    },
+
+    // 加载更多周边推荐
+    loadMore() {
+      //获取周边推荐
+      let SurrObj = {
+        params: {
+          longitude: this.sitData.longitude,
+          latitude: this.sitData.latitude,
+          pageSize: this.count,
+          pageNum: ++this.pageNum
+        }
+      };
+
+      getDataInfo("get", "place", SurrObj).then(res => {
+        if (res.data.code == 200) {
+          if (res.data.data.data.length == 0) {
+            this.pageshow = false;
+          }
+          this.Surrounding.data = [
+            ...this.Surrounding.data,
+            ...res.data.data.data
+          ];
+        }
+      });
     },
     //获取数据和查询是否收藏
     getSitedetailData() {
+      this.show2 = true;
+      let _that = this;
       // console.log(getNavigator())
       let detailId = this.$route.params.id;
-
       //获取当前场地数据
       let dataObj = {
         params: {
@@ -809,7 +878,7 @@ export default {
 
       getDataInfo("get", "place/detail", dataObj).then(res => {
         if (res.data.code == 200) {
-          console.log(res);
+          // console.log(res);
           this.sitData = res.data.data;
           //登录后获取是否关注了当前用户
           if (isLogin()) {
@@ -819,7 +888,6 @@ export default {
                 taget: res.data.data.cuser.id
               }
             };
-
             checkToken().then(Pdata => {
               getDataInfo("get", "refollow/follow/isFollow", followObj).then(
                 res => {
@@ -837,12 +905,18 @@ export default {
           let SurrObj = {
             params: {
               longitude: res.data.data.longitude,
-              latitude: res.data.data.latitude
+              latitude: res.data.data.latitude,
+              pageSize: this.count,
+              pageNum: this.pageNum
             }
           };
-          getDataInfo("get", "place", dataObj).then(res => {
+
+          getDataInfo("get", "place", SurrObj).then(resd => {
             if (res.data.code == 200) {
-              this.Surrounding = res.data.data;
+              // console.log(res.data.data.latitude,res.data.data.longitude,resd.data.data.data[1].latitude,resd.data.data.data[1].longitude)
+              // console.log(this.GetDistance(res.data.data.latitude,res.data.data.longitude,res.data.data.data[1].latitude,res.data.data.data[1].longitude))
+
+              this.Surrounding = resd.data.data;
             }
           });
 
@@ -857,7 +931,8 @@ export default {
                 fileType: e.fileType,
                 img: e.objectKey,
                 fileId: e.id,
-                belong: e.belong
+                belong: e.belong,
+                fallbackImg: require("../../assets/images/noimg.png")
               });
             } else if (e.fileType == 1) {
               videoArr.push({
@@ -867,41 +942,53 @@ export default {
                 fileId: e.id,
                 belong: e.belong,
 
-              
-      playerOptions : {
-        playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
-        autoplay: false, //如果true,浏览器准备好时开始回放。
-        muted: false, // 默认情况下将会消除任何音频。
-        loop: false, // 导致视频一结束就重新开始。
-        preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
-        language: 'zh-CN',
-        aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
-        fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
-        sources: [{
-          type: "video/mp4",
-          src: e.objectKey //url地址
-        }],
-        poster: "../../static/images/test.jpg", //你的封面地址
-        // width: document.documentElement.clientWidth,
-        notSupportedMessage: '此视频暂无法播放，请稍后再试', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
-        controlBar: {
-          timeDivider: true,
-          durationDisplay: true,
-          remainingTimeDisplay: false,
-          fullscreenToggle: true  //全屏按钮
-        }
-    },
-
-
+                playerOptions: {
+                  playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
+                  autoplay: false, //如果true,浏览器准备好时开始回放。
+                  muted: false, // 默认情况下将会消除任何音频。
+                  loop: false, // 导致视频一结束就重新开始。
+                  preload: "auto", // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
+                  language: "zh-CN",
+                  aspectRatio: "16:9", // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
+                  fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
+                  sources: [
+                    {
+                      type: "video/mp4",
+                      src: e.objectKey //url地址
+                    }
+                  ],
+                  poster: "../../static/images/test.jpg", //你的封面地址
+                  // width: document.documentElement.clientWidth,
+                  notSupportedMessage: "此视频暂无法播放，请稍后再试", //允许覆盖Video.js无法播放媒体源时显示的默认信息。
+                  controlBar: {
+                    timeDivider: true,
+                    durationDisplay: true,
+                    remainingTimeDisplay: false,
+                    fullscreenToggle: true //全屏按钮
+                  }
+                }
               });
             }
           });
 
           this.SImgList = imgArr;
           this.SVideoList = videoArr;
-          console.log(videoArr);
           this.show2 = false;
+        } else if (res.data.code == 401) {
+          //  this.$router.push('/meeting')
+          this.show2 = false;
+
+          this.toastInfo = {
+            showMsg: "当前场地已删除",
+            showPositionValue: true,
+            toastType: "cancel"
+          };
+
+          setTimeout(function() {
+            _that.$router.push("/meeting");
+          }, 2000);
         } else if (res.data.code == 400 || res.data.code == 100101) {
+          // this.$router.push('/meeting')
         }
       });
 
@@ -1043,6 +1130,10 @@ export default {
     callPhone(phone) {
       window.location.href = "tel://" + phone;
     },
+    //点击拨打号码
+    smsPhone(phone) {
+      window.location.href = "sms:" + phone;
+    },
     //弹出显示咨询菜单
     advisoryClick(key) {
       if (key == "Tel") {
@@ -1074,8 +1165,10 @@ export default {
         return this.sitData.meetingRoom;
       } else {
         // let arr = this.sitData.meetingRoom.slice(0, this.count);
-        let arr = [this.sitData.meetingRoom[0]];
-
+        let arr =
+          this.sitData.meetingRoom.length < 5
+            ? this.sitData.meetingRoom
+            : this.sitData.meetingRoom.slice(0, 5);
         return arr;
       }
     },
@@ -1084,11 +1177,12 @@ export default {
         return 0;
       } else {
         // roomShow?0:roomData.length-count< 0?0:roomData.length-count
-        if (this.sitData.meetingRoom.length - this.count < 0) {
-          return 0;
-        } else {
-          return this.sitData.meetingRoom.length;
-        }
+        return this.sitData.meetingRoom.length;
+        // if (this.sitData.meetingRoom.length - this.count < 0) {
+        //   return 0;
+        // } else {
+        //   return this.sitData.meetingRoom.length;
+        // }
       }
     }
   },
@@ -1107,30 +1201,27 @@ export default {
     //   // console.log(n,o)
     // }
 
-      swiperType(n,o){
-     console.log(n)
+    swiperType(n, o) {
+      // console.log(n);
       this.demo01_index = 0;
-      if(n=='img'){
-        console.log( this.$refs.videoPlayer[0])
-       
+      if (n == "img") {
+        // console.log(this.$refs.videoPlayer[0]);
       }
-     
     },
-    demo01_index(n,o){
-      if(this.swiperType=='video'){
-        console.log(n)
-        if( this.$refs.videoPlayer && this.$refs.videoPlayer[o]!=undefined && this.$refs.videoPlayer[n]!=undefined){
-     this.$refs.videoPlayer[o].player.pause()
-       this.$refs.videoPlayer[n].player.play()
-      //  console.log(this.$refs.videoPlayer)
+    demo01_index(n, o) {
+      if (this.swiperType == "video") {
+        // console.log(n);
+        if (
+          this.$refs.videoPlayer &&
+          this.$refs.videoPlayer[o] != undefined &&
+          this.$refs.videoPlayer[n] != undefined
+        ) {
+          this.$refs.videoPlayer[o].player.pause();
+          this.$refs.videoPlayer[n].player.play();
+          //  console.log(this.$refs.videoPlayer)
         }
-     
       }
-    
-    },
-
-
-
+    }
   }
 };
 </script>
@@ -1140,9 +1231,8 @@ export default {
 @import "../../assets/style/global.less";
 @import "~vux/src/styles/reset.less";
 
-
-.video-js .vjs-big-play-button{
+.video-js .vjs-big-play-button {
   width: 70px;
-border-radius:50px; 
+  border-radius: 50px;
 }
 </style>

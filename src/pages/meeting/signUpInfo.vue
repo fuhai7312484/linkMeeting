@@ -112,7 +112,10 @@
                 <div class="ContactListcheckbox" v-for="(item, index) in ContactList" :key="index">
                   <checker-item :value="item">
                     <div class="ContactListItemBox">
-                      <div class="ContactListItem-selected fl">√</div>
+                      <div class="ContactListItem-selected fl">
+<!--                        
+                        √ -->
+                        </div>
                       <div class="ContactListItem-name fl" :class="item.company==''?'linH35':''">
                         <h4 class="ContactListItemTitleBox">
                           <span>{{item.name}}</span>
@@ -123,7 +126,7 @@
                     </div>
                   </checker-item>
 
-                  <div class="ContactListItem-edit" @click="ContactListEdit(item)">编辑</div>
+                  <div class="ContactListItem-edit" @click="ContactListEdit(item)"><img :src="require('../../assets/images/edit.png')" />编辑</div>
                 </div>
               </checker>
               <br>
@@ -167,13 +170,15 @@
                 </div>
 
                 <div class="signUpInputs borBm padlr">
-                  <div class="signUpLabel fl">邮箱地址</div>
+                  <div class="signUpLabel fl"> <span>*</span>邮箱地址</div>
                   <div class="signUpInput fr">
                     <x-input
                       name="email"
+                      ref="email"
                       placeholder="你的常用邮箱"
                       is-type="email"
                       v-model="newForm.email"
+                      @on-change="InputChange"
                     ></x-input>
                   </div>
                 </div>
@@ -586,10 +591,10 @@ export default {
 
     // 姓名和手机号输入框输入事件监听
     InputChange(ev) {
-      if (this.newForm.name.length != 0 && this.newForm.mobile.length != 0) {
+      if (this.newForm.name.length != 0 && this.newForm.mobile.length != 0 && this.newForm.email.length!=0) {
         if (
           this.$refs.username.valid == true &&
-          this.$refs.mobile.valid == true
+          this.$refs.mobile.valid == true &&  this.$refs.email.valid == true
         ) {
           this.signUpBtn = true;
         }
@@ -692,6 +697,11 @@ export default {
     text-align: center;
     font-size: 0.8rem;
     color: #fe666b;
+    img{
+      width: 12px;
+      //  vertical-align:middle;
+      margin-right:3px; 
+    }
     // background: #000;
   }
 }
@@ -714,6 +724,8 @@ export default {
       color: #fff;
       text-align: center;
       line-height: 20px;
+      //  <img :src="require('../../assets/images/edit.png')" />
+      // background: url('../../assets/images/edit.png')
     }
 
     .checkCompanyInfo {
@@ -744,8 +756,10 @@ export default {
   .demo1-item-selected {
     // border: 1px solid green;
     .ContactListItem-selected {
-      border: 1px solid #ff596b;
-      background: #ff596b;
+      border: 1px solid #FE666B;
+      // background: #ff596b;
+       background: url('../../assets/images/demo1-item-selected.png') no-repeat;
+       background-size: 100%;
     }
   }
 }

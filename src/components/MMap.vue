@@ -125,6 +125,8 @@ export default {
         var cenLat = (parseFloat(maxLat)+parseFloat(minLat))/2;
         obj.cenLng = cenLng
         obj.cenLat = cenLat
+
+        // console.log(obj)
         return obj
 			}
     },
@@ -142,21 +144,27 @@ export default {
 
           //根据经纬极值计算绽放级别。
 function getZoom (obj) {
-			var zoom = ["50","100","200","500","1000","2000","5000","10000","20000","25000","50000","100000","200000","500000","1000000","2000000"]//级别18到3。
+			var zoom = ["50","100","200","500","1000","2000","5000","10000","20000","25000","50000","100000","200000","500000","1000000","2000000","4000000"]//级别18到3。
 			var pointA = new BMap.Point(obj.maxLng,obj.maxLat);  // 创建点坐标A
       var pointB = new BMap.Point(obj.minLng,obj.minLat);  // 创建点坐标B
       var distance = map.getDistance(pointA,pointB).toFixed(1);  //获取两点距离,保留小数点后两位
+     
 			for (var i = 0,zoomLen = zoom.length; i < zoomLen; i++) {
+        
 				if(zoom[i] - distance > 0){
-					return 18-i+1;//之所以会多3，是因为地图范围常常是比例尺距离的10倍以上。所以级别会增加3。
+          console.log(18-i+3)
+					return 18-i+3>=18?18:18-i+3;//之所以会多3，是因为地图范围常常是比例尺距离的10倍以上。所以级别会增加3。
 				}
 			};
     }
   //  console.log( getZoom(this.setZoom(this.data_info)))
+  let zoomNum = 5;
   if(this.data_info.length==0){
-map.centerAndZoom(new BMap.Point(103.388611,35.563611), 5);  
+map.centerAndZoom(new BMap.Point(103.388611,35.563611), zoomNum);  
   }else{
- map.centerAndZoom(new BMap.Point(this.setZoom(this.data_info).cenLng, this.setZoom(this.data_info).cenLat), getZoom(this.setZoom(this.data_info))); // 初始化地图,设置中心点坐标和地图级别
+    zoomNum = getZoom(this.setZoom(this.data_info))
+ console.log(zoomNum)
+ map.centerAndZoom(new BMap.Point(this.setZoom(this.data_info).cenLng, this.setZoom(this.data_info).cenLat), zoomNum); // 初始化地图,设置中心点坐标和地图级别
   }
       
       map.setCurrentCity("北京"); // 设置地图显示的城市 此项是必须设置的
@@ -262,6 +270,8 @@ map.centerAndZoom(new BMap.Point(103.388611,35.563611), 5);
         (function() {
           var index = i;
           markers[i].addEventListener("click", function(e) {
+             map.centerAndZoom(new BMap.Point(e.target._position.lng, e.target._position.lat),zoomNum); // 初始化地图,设置中心点坐标和地图级别
+            // console.log(e.target._position.lng)
             for (let j = 0; j < _that.data_info.length; j++) {
               markers[j]._container.firstChild.className = "Bmap-infoBox";
               markers[j]._container.style["z-index"] = 9998;

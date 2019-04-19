@@ -1184,6 +1184,9 @@ export default {
           pageSize: this.num
         }
       };
+      goodObj.params.city = this.city.name
+          ? this.city.name
+          : this.PositObj.city;
       // console.log(obj.counter)
       getDataInfo(
         "get",
@@ -1241,12 +1244,16 @@ export default {
           this.show3 = false;
         }
       } else if (type == 1) {
+ dataObj.params.city = this.city.name
+          ? this.city.name
+          : this.PositObj.city;
+// console.log(dataObj)
+        // let city = 
         getDataInfo(
           "get",
           "meetingdetails/meetingdetailsListByGoodMeeting",
           dataObj
         ).then(res => {
-              console.log(res)
           if (res.data.code == 200) {
             this.show3 = false;
             if (res.data.data) {

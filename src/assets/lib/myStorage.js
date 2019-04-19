@@ -7,9 +7,9 @@ export function getDataInfo(mode, url, obj) {
   // axios.defaults.headers.common["Content-Type"] = 'application/json;charset=UTF-8';
 
   //测试环境
-  let ipUrl = "http://192.168.1.177/lhy/v0.1/api/";
+  // let ipUrl = "http://192.168.1.177/lhy/v0.1/api/";
   //服务器正式环境
-  // let ipUrl = "http://lianhuiyi.woneast.com/lhy/v0.1/api/";
+  let ipUrl = "http://lianhuiyi.woneast.com/lhy/v0.1/api/";
   // let ipUrl = "http://192.168.1.170:8080/v0.1/api/";
   // let ipUrl = "http://192.168.1.125:8080/v0.1/api/";
   var qs = require("qs");
@@ -86,7 +86,7 @@ export function checkToken() {
           setStorage("userToken", TokenInfo);
           resolve();
         } else if (res.data.code == 400) {
-          console.log(res)
+          // console.log(res)
           resolve(400);
 
           // _that.$router.push('/login')

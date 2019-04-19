@@ -1,14 +1,16 @@
 <template>
   <div class="box" :style="{ overflow:'hidden',}">
+
+
     <!-- <div @click="wakeApp">唤醒APP</div> -->
     <div v-transfer-dom>
       <popup v-model="Support" position="left" width="100%">
         <div class="SupportListBox">
-          <h3>支持单位</h3>
+          <h3>{{SupportObj.companyType}}</h3>
 
-          <ul v-if="meetingData.draftsVo!=undefined">
+          <ul v-if="meetingData">
             <!-- {{comTypeList('支持单位')}} -->
-            <li v-for="(stand,index) in comTypeList('支持单位')" :key="index">{{stand.companyName}}</li>
+            <li v-for="(stand,index) in SupportObj.companyNameList" :key="index">{{stand.companyName}}</li>
           </ul>
           <div class="Suppor-close">
             <span class="vux-close" @click="Support = false">
@@ -62,19 +64,22 @@
         <sticky :check-sticky-support="false">
           <div class="downloadAppBox padlr">
             <div class="downLogo fl">
-              <img :src="require('../../assets/images/lianhuiyiLogo.png')"/>
-
+              <img :src="require('../../assets/images/lianhuiyiLogo.png')">
             </div>
             <div class="downAppTitle fl">
               <h4>链会议</h4>
             </div>
-            <div class="downAppBtn fr" @click="godown"  >下载APP</div>
+            <div class="downAppBtn fr" @click="godown">下载APP</div>
           </div>
         </sticky>
       </div>
     </div>
 
-    <div class="footer">
+    
+   
+
+
+    <div class="footer" v-if="meetingData">
       <flexbox :gutter="0" class="footer-nav-box">
         <flexbox-item :span="1/6" :order="2">
           <div class="footer-nav-icons" @click="Collection">
@@ -102,15 +107,12 @@
           </div>
         </flexbox-item>
         <flexbox-item :span="4/6" :order="4">
-        <div class="footer-nav-destineBtn" @click="gotoTiaket">
-报名参会
-
-        </div>
+          <div class="footer-nav-destineBtn" @click="gotoTiaket">报名参会</div>
           <!-- <router-link
             tag="div"
             class="footer-nav-destineBtn"
             :to=" {path:'/ticket', query:{meeting_id:this.$route.query.meetingId}}"
-          >报名参会</router-link> -->
+          >报名参会</router-link>-->
           <!-- <div class="footer-nav-destineBtn">报名参会</div> -->
         </flexbox-item>
       </flexbox>
@@ -119,7 +121,8 @@
 
 
 
-    <div class="site-img-showBox" v-if="meetingData.draftsVo!=undefined">
+
+    <div class="site-img-showBox" v-if="meetingData">
       <!-- :list="swiperType=='img'?SImgList:SVideoList" -->
       <swiper
         :list="swiperType=='img'?SImgList:SVideoList"
@@ -155,18 +158,18 @@
       </swiper>
     </div>
 
-
-
-
-
-
-
-
     <div v-transfer-dom>
       <loading :show="show2" text="数据加载中..."></loading>
     </div>
 
-    <div class="meetingContent" v-if="meetingData.draftsVo!=undefined">
+    <div class="meetingContent" v-if="meetingData">
+
+      
+ 
+
+
+
+
       <h3 class="meeting-title padlr">
         <!-- {{meetingData.draftsVo==undefined?'':meetingData.draftsVo.meetingDetails.theme}} -->
         {{meetingData.draftsVo.meetingDetails.theme}}
@@ -245,7 +248,51 @@
       </flexbox>
 
 
-      <flexbox :gutter="0" class="magrTB padlr" v-if="comTypeList('支持单位').length!=0">
+      <flexbox :gutter="0" class="magrTB padlr" v-for="(en,index) in comTypeList('自定义')" :key="index">
+        <flexbox-item :span="1.1/5">
+          <span class="meetingdetailTitles">{{en.companyType}}：</span>
+        </flexbox-item>
+        <flexbox-item :span="3.9/5">
+          <div class="meetingdetailInfo" @click="SupportChange(en)" v-if="en.companyNameList.length>=2">
+            <div class="meetingdetailInfoBox fl">
+              <div class="meetingdetailInfoA fl">
+                <span
+                  v-for="(enItem,index) in en.companyNameList"
+                  :key="index"
+                >{{enItem.companyName}};</span>
+           
+              </div>
+              <div class="meetingdetailInfoB fl">等{{en.companyNameList.length}}家单位</div>
+            </div>
+            <div class="meetingdetailInfoIcons2 fr">
+              <x-icon type="ios-arrow-right" :style="{color:'#969696'}" size="20"></x-icon>
+            </div>
+          </div>
+
+
+          <div class="meetingdetailInfo" v-if="en.companyNameList.length<2">
+            <div class="meetingdetailInfoBox fl">
+              <div class="meetingdetailInfoA fl">
+                <span
+                  v-for="(enItem,index) in en.companyNameList"
+                  :key="index"
+                >{{enItem.companyName}};</span>
+           
+              </div>
+              <div class="meetingdetailInfoB fl">等{{en.companyNameList.length}}家单位</div>
+            </div>
+           
+          </div>
+
+
+        </flexbox-item>
+      </flexbox>
+
+
+
+
+
+       <!-- <flexbox :gutter="0" class="magrTB padlr" v-if="comTypeList('支持单位').length!=0">
         <flexbox-item :span="1.1/5">
           <span class="meetingdetailTitles">支持单位：</span>
         </flexbox-item>
@@ -257,7 +304,7 @@
                   v-for="(stand,index) in comTypeList('支持单位')"
                   :key="index"
                 >{{stand.companyName}};</span>
-                <!-- 中国建设集团;中国科技中心 -->
+            
               </div>
               <div class="meetingdetailInfoB fl">等{{comTypeList('支持单位').length}}家单位</div>
             </div>
@@ -266,9 +313,10 @@
             </div>
           </div>
         </flexbox-item>
-      </flexbox>
+      </flexbox> -->
 
 
+      
 
       <div class="attentionOrganizerBox" v-if="meetingData.userMeetingInfo!=undefined">
         <div
@@ -333,12 +381,11 @@
         </div>
         <div v-if="tabsIndex==1" class="showMeetingContent">
           <div class="noData-default" v-if="meetingData.draftsVo.meCompanyList.guestList.length==0">
-          <p>
-            <img :src="require('../../assets/images/noData.png')">
-          </p>
-          <p>暂时还没有人关注你</p>
-        </div>
-
+            <p>
+              <img :src="require('../../assets/images/noData.png')">
+            </p>
+            <p>暂无嘉宾</p>
+          </div>
 
           <div class="padlr">
             <!-- 这里是会议嘉宾 -->
@@ -359,15 +406,15 @@
           </div>
         </div>
         <div v-if="tabsIndex==2" class="showMeetingContent padlr">
-
-           <div class="noData-default" v-if="meetingData.draftsVo.meCompanyList.partnerList.length==0">
-          <p>
-            <img :src="require('../../assets/images/noData.png')">
-          </p>
-          <p>暂时还没有人关注你</p>
-        </div>
-
-
+          <div
+            class="noData-default"
+            v-if="meetingData.draftsVo.meCompanyList.partnerList.length==0"
+          >
+            <p>
+              <img :src="require('../../assets/images/noData.png')">
+            </p>
+            <p>暂无合作伙伴</p>
+          </div>
 
           <div class="padlr">
             <ul class="meCompany-boxList">
@@ -403,7 +450,9 @@
         <ul class="RegListUl">
           <li class="orderPeople-nodata" v-if="orderPersonNum==0">暂无人报名</li>
           <li v-for="(orderP,index) in orderPeople" :key="index" class="orderPeopleList">
-            <img :src="orderP.mainPic?orderP.mainPic:require('../../assets/images/myFans-Mask.png')">
+            <img
+              :src="orderP.mainPic?orderP.mainPic:require('../../assets/images/myFans-Mask.png')"
+            >
             <p>{{orderP.name}}</p>
           </li>
         </ul>
@@ -420,18 +469,35 @@
           </div>
         </div>
         <ul>
-          <li class="orderPeople-nodata" v-if="CommentVo.meetingCommentVoList&&CommentVo.meetingCommentVoList.length==0">暂无评论</li>
+          <li
+            class="orderPeople-nodata"
+            v-if="CommentVo.meetingCommentVoList&&CommentVo.meetingCommentVoList.length==0"
+          >暂无评论</li>
           <li v-for="(comment,index) in CommentVo.meetingCommentVoList" :key="index" v-if="index<3">
             <div class="meetingAssessListbox">
               <div class="meetingAssess fl">
-                <img :src="comment.meetingComment.userPic?comment.meetingComment.userPic:require('../../assets/images/myFans-Mask.png')">
+                <img
+                  :src="comment.meetingComment.userPic?comment.meetingComment.userPic:require('../../assets/images/myFans-Mask.png')"
+                >
               </div>
               <div class="meetingAssessCenten fl">
                 <div class="meetingAssessnameBox">
                   <h4 class="meetingAssessname fl">{{comment.meetingComment.userName}}</h4>
                   <time class="meetingAssessTime fr">{{comment.meetingComment.createTime}}</time>
                 </div>
-                <rater v-model="comment.meetingComment.score" disabled></rater>
+                <!-- {{comment.meetingComment.score}} -->
+                <!-- <rater v-model="comment.meetingComment.score" disabled></rater> -->
+<span v-for="(itemClass,index) in itemClasses(comment.meetingComment.score)" :key="index" :class="itemClass" class="star-item" track-by="index"></span>
+    <!-- <div class="evaStar">
+<ul class="star">
+<li v-for="(itemClass,index) in itemClasses(comment.meetingComment.score)" :class="itemClass" :key="index"
+@click="stars(index)" 
+ class="star-item"
+ track-by="index">
+ </li>
+
+</ul>
+</div> -->
                 <p>{{comment.meetingComment.content}}</p>
               </div>
             </div>
@@ -444,8 +510,12 @@
           <h4 class="RegListTitle fl">为您推荐</h4>
           <div class="RegListPeopleNumBox fr">
             <ul class="tabMeetingListUl">
-             
-              <li v-for="(comment,index) in goodData" :key="index" class="tabMeetingList" @click="gotoDetil(comment.id)">
+              <li
+                v-for="(comment,index) in goodData"
+                :key="index"
+                class="tabMeetingList"
+                @click="gotoDetil(comment.id)"
+              >
                 <!-- {{comment}} -->
 
                 <div>
@@ -468,14 +538,12 @@
                     </div>
                     <div class="tabMeetingTagBox">
                       <div class="tabMeetingTag fl">
-                       
-                      <span v-if="comment.status==2" class="IsOver">已结束</span>
-                      <span
-                        v-else-if="comment.status==3 || comment.status==1"
-                        class="processing"
-                      >进行中</span>
-                      <span v-else-if="comment.status==0" class="notStarted">未开始</span>
-
+                        <span v-if="comment.status==2" class="IsOver">已结束</span>
+                        <span
+                          v-else-if="comment.status==3 || comment.status==1"
+                          class="processing"
+                        >进行中</span>
+                        <span v-else-if="comment.status==0" class="notStarted">未开始</span>
                       </div>
                       <div class="tabMeetingNum fr">{{comment.msg}}</div>
                     </div>
@@ -483,9 +551,32 @@
                 </div>
               </li>
             </ul>
+
+            <div class="site-room-dropDown" v-if="pageshow" @click="loadMore">
+              查看更多推荐
+              <x-icon type="ios-arrow-right" class="site-icon-down" size="20"></x-icon>
+            </div>
+            <div class="site-room-dropDown1" v-if="!pageshow">
+              <!-- 数据已加载完 -->
+              <divider>数据已加载完</divider>
+            </div>
           </div>
         </div>
       </div>
+    </div>
+
+    <div v-transfer-dom class="gotoLiginChange">
+      <confirm
+        v-model="showConfirm"
+        title="您还没有登录"
+        @on-cancel="onCancel"
+        @on-confirm="onConfirm"
+        confirm-text="去登录"
+      >
+        <!-- @on-show="onShow"
+        @on-hide="onHide"-->
+        <p style="text-align:center; color:#000;">是否先去登录</p>
+      </confirm>
     </div>
 
     <toast
@@ -496,6 +587,10 @@
       :time="1500"
       is-show-mask
     >{{toastInfo.showMsg}}</toast>
+
+
+   
+
   </div>
 </template>
 <script>
@@ -504,7 +599,8 @@ import {
   checkToken,
   getDataInfo,
   isLogin,
-  transDate,timeLimit
+  transDate,
+  timeLimit
 } from "../../assets/lib/myStorage.js";
 import {
   Sticky,
@@ -519,7 +615,9 @@ import {
   Rater,
   TransferDomDirective as TransferDom,
   Toast,
-  Loading
+  Loading,
+  Divider,
+  Confirm
 } from "vux";
 export default {
   directives: {
@@ -537,11 +635,15 @@ export default {
     Popup,
     Rater,
     Toast,
-    Loading
+    Loading,
+    Divider,
+    Confirm
   },
   name: "meetDetail",
   data() {
     return {
+      showConfirm: false,
+      pageshow: true,
       goodData: [],
       IsColl: 2,
       show2: false,
@@ -554,7 +656,7 @@ export default {
       orderPersonNum: 0,
       orderPeople: [],
       meetingContent: "",
-      meetingData: {},
+      meetingData: null,
       Support: false,
       showDialogStyle: false,
       showAdvisory: false,
@@ -568,12 +670,10 @@ export default {
       swiperType: "img",
       demo01_index: 0,
       addressTitle: "默认地址为空",
-      SImgList: [
-       
-      ],
-      SVideoList: [
-        
-      ],
+      SImgList: [],
+      SVideoList: [],
+      count: 5,
+      pageNum: 1,
       showSpace: false,
       disabled:
         typeof navigator !== "undefined" &&
@@ -581,34 +681,100 @@ export default {
         /ucbrowser/i.test(navigator.userAgent),
       tabsIndex: 0,
       tabMunes: ["会议详情", "会议嘉宾", "合作伙伴"],
-      tabTitle: "会议详情"
+      tabTitle: "会议详情",
+      score: 2,
+      SupportObj:{},
     };
   },
+
+  computed: {
+    
+  },
+ 
   methods: {
-    godown(){
-      window.location.href = 'https://www.pgyer.com/NSM9'
+    SupportChange(obj){
+      this.Support = true;
+      this.SupportObj = obj
     },
-    gotoDetil(id){
+    //计算评论星星属性
+    itemClasses(scoreInd) {
+      let result = []; // 返回的是一个数组,用来遍历输出星星
+      let score = Math.floor(scoreInd * 2) / 2; // 计算所有星星的数量
+      let hasDecimal = score % 1 !== 0; // 非整数星星判断
+      let integer = Math.floor(score); // 整数星星判断
+      for (let i = 0; i < integer; i++) {
+        // 整数星星使用on
+        result.push("on"); // 一个整数星星就push一个CLS_ON到数组
+      }
+      if (hasDecimal) {
+        // 非整数星星使用half
+        result.push("half"); // 类似
+      }
+      while (result.length < 5) {
+        // 余下的用无星星补全,使用off
+        result.push("off");
+      }
+      return result;
+    },
+     stars(index) {
+      this.score = index + 1;
+    },
+
+    onCancel() {},
+    onConfirm(msg) {
+      this.$router.push("/login");
+    },
+    // 加载更多周边推荐
+    loadMore() {
+      let goodObj = {
+        params: {
+          currentPage: ++this.pageNum,
+          pageSize: this.count
+        }
+      };
+      // console.log(goodObj)
+      getDataInfo(
+        "get",
+        "meetingdetails/meetingdetailsListByGoodMeeting",
+        goodObj
+      ).then(res => {
+        // console.log(res)
+        if (res.data.code == 200) {
+          if (res.data.data.meetingShowList.length == 0) {
+            this.pageshow = false;
+          }
+          this.goodData = [...this.goodData, ...res.data.data.meetingShowList];
+        }
+      });
+    },
+
+    godown() {
+      window.location.href = "https://www.pgyer.com/NSM9";
+    },
+    gotoDetil(id) {
       // console.log(id)
-       this.$router.push({
+      this.$router.push({
         path: "/meetDetail/" + id,
         query: { meetingId: id }
       });
 
-      this.$router.go(0)
+      this.$router.go(0);
     },
-      //处理时间范围
-    getTimeLimit(beginTime,endTime){
-      if(beginTime||endTime){
-      return timeLimit(beginTime,endTime)
+    //处理时间范围
+    getTimeLimit(beginTime, endTime) {
+      if (beginTime || endTime) {
+        return timeLimit(beginTime, endTime);
       }
     },
     //跳转报名参会页面
-    gotoTiaket(){
-      if(isLogin()){
-        this.$router.push({path:'/ticket', query:{meeting_id:this.$route.query.meetingId}})
-      }else{
-        this.$router.push('/login')
+    gotoTiaket() {
+      if (isLogin()) {
+        this.$router.push({
+          path: "/ticket",
+          query: { meeting_id: this.$route.query.meetingId }
+        });
+      } else {
+        this.$router.push("/login");
         // console.log('去登录')
       }
     },
@@ -665,6 +831,8 @@ export default {
           });
         }
       } else {
+        this.showConfirm = true;
+
         // console.log("登录");
       }
     },
@@ -705,9 +873,7 @@ export default {
             }
           };
           checkToken().then(Pdata => {
-          
             getDataInfo("delete", "refollow/follow", followObj).then(res => {
-            
               if (res.data.code == 200) {
                 this.toastInfo = {
                   showMsg: res.data.msg,
@@ -730,8 +896,6 @@ export default {
           };
           checkToken().then(Pdata => {
             getDataInfo("post", "refollow/follow", followObj).then(res => {
-           
-
               if (res.data.code == 200) {
                 this.toastInfo = {
                   showMsg: res.data.msg,
@@ -748,32 +912,33 @@ export default {
           });
         }
       } else {
-        console.log("没登录请先登录！");
+        this.showConfirm = true;
+
         //  this.$router.push("/login");
       }
     },
     //筛选承办方主办方
     comTypeList(str) {
-      let arr = [];
+      // let arr = [];
       switch (str) {
         case "主办单位":
-          arr = this.meetingData.draftsVo.companyTypeList.filter(e => {
+          return this.meetingData.draftsVo.companyTypeList.filter(e => {
             return e.companyType == "主办单位";
-          })[0];
+          })[0].companyNameList;
           break;
         case "承办单位":
-          arr = this.meetingData.draftsVo.companyTypeList.filter(e => {
+         return this.meetingData.draftsVo.companyTypeList.filter(e => {
             return e.companyType == "承办单位";
-          })[0];
+          })[0].companyNameList;
           break;
         default:
-          arr = this.meetingData.draftsVo.companyTypeList.filter(e => {
+         return this.meetingData.draftsVo.companyTypeList.filter(e => {
             return e.companyType != "承办单位" && e.companyType != "主办单位";
-          })[0];
+          });
+         
           break;
       }
-
-      return arr != undefined ? arr.companyNameList : [];
+    
     },
 
     //获取详情数据
@@ -781,7 +946,7 @@ export default {
       // console.log(this.$route.query.meetingId)
       //获取详情数据
       this.show2 = true;
-
+      let _that = this;
       // console.log(this.$route.query.meetingId);
       // console.log(getStorage("userToken").userId);
 
@@ -810,11 +975,11 @@ export default {
           id: this.$route.query.meetingId
         }
       };
-   
-      if (isLogin())detailObj.params.userId = getStorage("userToken").userId;
+
+      if (isLogin()) detailObj.params.userId = getStorage("userToken").userId;
       getDataInfo("get", "meetingdetails/meetingDetailsById", detailObj).then(
         res => {
-  
+          //  console.log(res)
           if (res.data.code == 200) {
             this.meetingData = res.data.data;
             let imgArr = [],
@@ -847,29 +1012,41 @@ export default {
             // console.log(videoArr)
             this.SImgList = imgArr;
             this.SVideoList = videoArr;
+
+            //获取会议详情介绍
+
+            let SitObj = {
+              params: {
+                mdId: this.$route.query.meetingId
+              }
+            };
+
+            if (getStorage("userToken"))
+              SitObj.params.userId = getStorage("userToken").userId;
+            getDataInfo("get", "meetingdetails/meetingSituation", SitObj).then(
+              res => {
+                // console.log(res);
+                if (res.data.code == 200) {
+                  this.show2 = false;
+                  this.meetingContent = res.data.data.content;
+                }
+              }
+            );
+          } else if (res.data.code == 401) {
             this.show2 = false;
+
+            this.toastInfo = {
+              showMsg: "当前会议已删除",
+              showPositionValue: true,
+              toastType: "cancel"
+            };
+            setTimeout(function() {
+              _that.$router.push("/meeting");
+            }, 1000);
           }
         }
       );
 
-      //获取会议详情介绍
-
-      let SitObj = {
-        params: {
-          mdId: this.$route.query.meetingId
-        }
-      };
-
-      if (getStorage("userToken"))
-        SitObj.params.userId = getStorage("userToken").userId;
-      getDataInfo("get", "meetingdetails/meetingSituation", SitObj).then(
-        res => {
-          // console.log(res);
-          if (res.data.code == 200) {
-            this.meetingContent = res.data.data.content;
-          }
-        }
-      );
       //获取已报名人数
       let personObj = {
         params: {
@@ -883,7 +1060,6 @@ export default {
         "ordermeeting/ordermeeting/person/list",
         personObj
       ).then(res => {
-       
         if (res.data.code == 200) {
           //  this. personData = res.data.data.content
           this.orderPersonNum = res.data.data.orderPersonNum;
@@ -909,11 +1085,10 @@ export default {
         }
       );
       //获取为您推荐
-
       let goodObj = {
         params: {
-          currentPage: 1,
-          pageSize: 99999
+          currentPage: this.pageNum,
+          pageSize: this.count
         }
       };
       // console.log(obj.counter)
@@ -966,7 +1141,8 @@ export default {
             }
           });
         } else {
-          alert("请先登录");
+          this.showConfirm = true;
+          // alert("请先登录");
         }
       }
     }
@@ -1024,6 +1200,21 @@ export default {
   z-index: 9998 !important;
   background: rgba(255, 255, 255, 0.93) !important;
 }
+
+.gotoLiginChange {
+  .weui-dialog__hd {
+    text-align: center;
+  }
+  .weui-dialog__btn {
+    text-align: center;
+  }
+  .weui-dialog__btn_primary {
+    color: #007aff !important;
+  }
+}
+
+
+
 </style>
 
 

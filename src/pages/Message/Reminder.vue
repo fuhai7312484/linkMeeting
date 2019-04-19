@@ -39,14 +39,14 @@
             </dd>
           </dl>
 
-          <dl  v-if="!isRestore">
+          <dl  v-if="isRestore.isReceipt=='1'">
             <dt class="fl">当前状态:</dt>
             <dd class="fl">
               <p>确认参会</p>
             </dd>
           </dl>
 
-          <div class="reminder-checkerBox" v-if="isRestore">
+          <div class="reminder-checkerBox" v-if="isRestore.isReceipt=='0'">
             <checker
               v-model="ReqVal"
               radio-required
@@ -64,7 +64,7 @@
               </checker-item>
             </checker>
           </div>
-          <div class="reminder-meetingDetails" v-if="isRestore" @click="gotoMeeting">查看详情 >></div>
+          <div class="reminder-meetingDetails" v-if="isRestore.isReceipt=='0'" @click="gotoMeeting">查看详情 >></div>
         </div>
       </div>
 
@@ -123,7 +123,7 @@ export default {
       valchange: false,
       ReminderId: "",
       meetingData: {},
-      isRestore:false,
+      isRestore:{},
     };
   },
   methods: {
@@ -157,7 +157,7 @@ export default {
       getDataInfo("get", "ordermeeting/findPeopleReceipt", findObj).then(res => {
         console.log(1111,res)
         if (res.data.code == 200) {
-        
+        this.isRestore = res.data.data
           // this.meetingData = res.data.data.draftsVo;
           // console.log(res);
         }

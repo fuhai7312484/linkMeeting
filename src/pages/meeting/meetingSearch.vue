@@ -55,18 +55,31 @@
                 </div>
 
                 <div class="tabMeetingTextBox fl">
-                  <h4 class="tabMeetingTextTitle">{{DataItem.theme}}</h4>
+                  <h4 class="tabMeetingTextTitle" v-html="DataItem.theme"></h4>
                   <div class="tabMeetingTime">
                     <span>{{DataItem.beginTime}}</span>
                     <span>{{DataItem.region}}</span>
                   </div>
                   <div class="tabMeetingTagBox">
-                    <div class="tabMeetingTag fl">
+
+                     <div class="tabMeetingTag fl">
+                      <span v-if="DataItem.status==2" class="IsOver">已结束</span>
+                      <span
+                        v-else-if="DataItem.status==3 || DataItem.status==1"
+                        class="processing"
+                      >进行中</span>
+                      <span v-else-if="DataItem.status==0" class="notStarted">未开始</span>
+                    </div>
+
+
+                    <!-- <div class="tabMeetingTag fl">
                       <span v-if="DataItem.status==0" class="IsOver">已结束</span>
                       <span v-else-if="DataItem.status==1" class="LiveIn">直播中</span>
                       <span v-else-if="DataItem.status==2" class="processing">进行中</span>
                       <span v-else-if="DataItem.status==3" class="notStarted">未开始</span>
-                    </div>
+                    </div> -->
+
+
                     <div class="tabMeetingNum fr">{{DataItem.msg}}</div>
                   </div>
                 </div>
@@ -86,7 +99,7 @@
     </flexbox>
 
     <div class="padlr" v-if="!showResult" style=" margin-top: 2.8rem;">
-      <div v-transfer-dom>
+      <div v-transfer-dom class="siteSearchConfirm">
         <confirm v-model="show" title="清除搜索历史" @on-cancel="onCancel" @on-confirm="onConfirm">
           <!-- @on-show="onShow"
           @on-hide="onHide"-->
@@ -212,6 +225,7 @@ export default {
   },
   methods: {
     onblurChange() {
+      // console.log(this.keyword)
       this.show2 = true;
       if (this.keyword != "") {
         this.showResult = true;
@@ -237,11 +251,23 @@ export default {
               this.show2 = false;
               this.getGoodMeeting({ counter: this.counter });
             } else {
+
+               let replaceReg = new RegExp(this.keyword, 'g');
+               let replaceString = '<span class="search-text">' + this.keyword + '</span>';
+
+             
+              res.data.data.meetingShowList.forEach(e => {
+                e.theme = e.theme.replace(replaceReg, replaceString);
+              });
+              //  console.log(res.data.data.meetingShowList)
               this.list = res.data.data.meetingShowList;
+
               if (res.data.data.meetingShowList.length < this.num) {
                 this.IsCompleted = true;
               }
               this.show2 = false;
+
+
             }
           }
           // if (res.data.code == 200) {
@@ -453,6 +479,21 @@ export default {
 @import "~vux/src/styles/reset.less";
 .weui-dialog{
   text-align: center !important;
+}
+.search-text{
+  color: #FF6469;
+}
+.siteSearchConfirm{
+  .weui-dialog__hd{
+    text-align: center;
+  }
+  .weui-dialog__ft{
+    text-align: center;
+    .weui-dialog__btn{
+ color: #007AFF !important;
+    }
+   
+  }
 }
 
 </style>
