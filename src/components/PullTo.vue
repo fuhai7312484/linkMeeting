@@ -19,7 +19,7 @@
           <!-- <span>加载中……</span> -->
 
           <load-more v-if="!IsCompleted" :tip="'加载中'"></load-more>
-           <load-more v-if="IsCompleted" :show-loading="false" :tip="'数据已加载完'" background-color="#fbf9fe"></load-more>
+           <load-more v-if="IsCompleted&&!hide" :show-loading="false" :tip="'数据已加载完'" background-color="#fbf9fe"></load-more>
 
 
         </slot>
@@ -48,6 +48,10 @@ export default {
       default: true
     },
     IsCompleted:{
+       type: Boolean,
+      default: false,
+    },
+    hide:{
        type: Boolean,
       default: false,
     },

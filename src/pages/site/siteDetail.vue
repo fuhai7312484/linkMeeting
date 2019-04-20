@@ -688,6 +688,9 @@ export default {
     }
   },
   methods: {
+    currentChan(){
+      
+    },
     onPlayerPlay(player) {
       console.log(player);
     },
@@ -819,13 +822,16 @@ export default {
     },
     //处理最大面积会议室和最大容量会议室
     rooMMost(type, arr) {
-      let m = arr[0][type];
+      if(arr.length!=0){
+   let m = arr[0][type];
       arr.forEach(e => {
         if (m < e.type) {
           m = e.type;
         }
       });
       return m;
+      }
+   
       // console.log(m)
     },
     //检查是否认证
@@ -877,6 +883,7 @@ export default {
       };
 
       getDataInfo("get", "place/detail", dataObj).then(res => {
+        console.log(res)
         if (res.data.code == 200) {
           // console.log(res);
           this.sitData = res.data.data;
@@ -927,7 +934,7 @@ export default {
           res.data.data.rePlaceFile.forEach(e => {
             if (e.fileType == 0) {
               imgArr.push({
-                url: "javascript:",
+                url: "/gallery/"+this.$route.params.id,
                 fileType: e.fileType,
                 img: e.objectKey,
                 fileId: e.id,
@@ -936,7 +943,7 @@ export default {
               });
             } else if (e.fileType == 1) {
               videoArr.push({
-                url: "javascript:",
+                url: "/gallery/"+this.$route.params.id,
                 fileType: e.fileType,
                 img: e.objectKey,
                 fileId: e.id,

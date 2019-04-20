@@ -42,7 +42,7 @@
           <dl  v-if="isRestore.isReceipt=='1'">
             <dt class="fl">当前状态:</dt>
             <dd class="fl">
-              <p>确认参会</p>
+              <p>{{isRestore.status==1?'不参会':isRestore.status==2?'待定':'确认参会'}}</p>
             </dd>
           </dl>
 
@@ -87,6 +87,14 @@
         >{{ReqVal==3?'确认参加此次会议?':ReqVal==2?'暂不确定是否参加此次会议?':ReqVal==1?'确定不参加此次会议?':''}}</p>
       </confirm>
     </div>
+     <toast
+      v-model="toastInfo.showPositionValue"
+      width="10em"
+      :type="toastInfo.toastType"
+      position="middle"
+      :time="1500"
+      is-show-mask
+    >{{toastInfo.showMsg}}</toast>
   </div>
 </template>
 <script>
@@ -101,7 +109,7 @@ import {
   TransferDomDirective as TransferDom,
   Checker,
   CheckerItem,
-  Confirm
+  Confirm,  Toast,
 } from "vux";
 export default {
   name: "Reminder",
@@ -112,7 +120,7 @@ export default {
     Checker,
     CheckerItem,
     Loading,
-    Confirm
+    Confirm,  Toast,
   },
   data() {
     return {
@@ -124,6 +132,11 @@ export default {
       ReminderId: "",
       meetingData: {},
       isRestore:{},
+       toastInfo: {
+        showMsg: "",
+        showPositionValue: false,
+        toastType: "success"
+      },
     };
   },
   methods: {
@@ -148,25 +161,7 @@ export default {
     //获取当前会议信息
     getMeetingData() {
       // console.log(this.$route.params.id, this.$route.query.mobile)
-      let findObj = {
-        params: {
-          meetingId: this.$route.params.id,
-          mobile:this.$route.query.mobile
-        }
-      };
-      getDataInfo("get", "ordermeeting/findPeopleReceipt", findObj).then(res => {
-        console.log(1111,res)
-        if (res.data.code == 200) {
-        this.isRestore = res.data.data
-          // this.meetingData = res.data.data.draftsVo;
-          // console.log(res);
-        }
-      });
-
-
-
-
-
+let _that = this
       let Obj = {
         params: {
           id: this.$route.params.id
@@ -177,7 +172,37 @@ export default {
         if (res.data.code == 200) {
         
           this.meetingData = res.data.data.draftsVo;
+
+            let findObj = {
+        params: {
+          meetingId: this.$route.params.id,
+          mobile:this.$route.query.mobile
+        }
+      };
+      getDataInfo("get", "ordermeeting/findPeopleReceipt", findObj).then(resd => {
+
+        if (resd.data.code == 200) {
+        this.isRestore = resd.data.data
+          // this.meetingData = res.data.data.draftsVo;
           // console.log(res);
+        }
+      });
+
+
+          // console.log(res);
+        }else if(res.data.code ==401){
+
+             this.toastInfo = {
+            showMsg: "当前会议已删除",
+            showPositionValue: true,
+            toastType: "cancel"
+          };
+
+          setTimeout(function() {
+            _that.$router.push("/meeting");
+          }, 2000);
+
+
         }
       });
     },
@@ -247,7 +272,7 @@ export default {
     },
     getMyInfochange() {
 
-      console.log(11111)
+     
     }
     //   //提交选择
     //   submitVal() {

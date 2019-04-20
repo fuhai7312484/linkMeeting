@@ -25,6 +25,7 @@ import { getCookie } from "./assets/lib/myStorage";
 
 
 import VideoPlayer from 'vue-video-player'
+import Video from 'video.js'
 require('video.js/dist/video-js.css')
 require('vue-video-player/src/custom-theme.css')
 Vue.use(VideoPlayer)
@@ -32,8 +33,15 @@ Vue.use(VideoPlayer)
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
-Vue.use(ElementUI);
 
+import preview from 'vue-photo-preview'
+import 'vue-photo-preview/dist/skin.css'
+Vue.use(preview)
+
+
+
+Vue.use(ElementUI);
+Vue.prototype.$video = Video
 
 FastClick.attach(document.body)
 

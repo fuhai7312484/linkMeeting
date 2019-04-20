@@ -377,7 +377,7 @@ export default new Router({
       component: roomDetail
     },
     {
-      path: "/gallery",
+      path: "/gallery/:id",
       name: "gallery",
       component: gallery
     },

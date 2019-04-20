@@ -143,12 +143,18 @@
         style=" position: relative; height:71vh; padding-bottom:1rem;"
         v-if="tabsIndex==index"
       >
-        <pull-tod :on-refresh="onRefresh" :on-infinite="onInfinite" :IsCompleted="IsCompleted">
+        <pull-tod
+          :on-refresh="onRefresh"
+          :on-infinite="onInfinite"
+          :IsCompleted="IsCompleted"
+          :hide="hide"
+        >
           <ul class="tabMeetingListUl padlr" style="height:100%;" v-if="!show3">
             <li v-if="!isLogin && tabsIndex==0" class="ListNoContent">
               <p>您还没有登录</p>
               <p>这里有很多值得您关注的会议</p>
-              <span class="ListNoContentBtn">去登录</span>
+              <router-link to="/login" tag="span" class="ListNoContentBtn">去登录</router-link>
+              <!-- <span class="ListNoContentBtn" >去登录</span> -->
             </li>
 
             <li v-else-if="listData.length==0 && tabsIndex==0" class="ListNoContent">
@@ -185,12 +191,10 @@
                     :key="index"
                     v-if="filterBelong(DataItem.meetingFileList).length!=0"
                   >
-                    <img :src="img.fileUrl?img.fileUrl:require('../../assets/images/noimg.png')"
-                    > 
+                    <img :src="img.fileUrl?img.fileUrl:require('../../assets/images/noimg.png')">
                   </span>
                   <span v-if="filterBelong(DataItem.meetingFileList).length==0">
-                  <img :src="require('../../assets/images/noimg.png')" />
-
+                    <img :src="require('../../assets/images/noimg.png')">
                   </span>
                 </div>
 
@@ -385,7 +389,7 @@
                     :key="index"
                     v-if="img.belong==1"
                   >
-                  <!-- {{img.fileUrl}} -->
+                    <!-- {{img.fileUrl}} -->
                     <img
                       :src="img.fileUrl==null?require('../../assets/images/myFans-Mask.png'):img.fileUrl"
                     >
@@ -475,6 +479,7 @@ export default {
   },
   data() {
     return {
+      hide: false,
       show3: false,
       PositObj: {},
       showMore: false,
@@ -658,8 +663,10 @@ export default {
     ...mapState(["city"])
   },
   methods: {
-    filterBelong(arr){
-     return arr.filter(e=>{ return e.belong==1 })
+    filterBelong(arr) {
+      return arr.filter(e => {
+        return e.belong == 1;
+      });
     },
     //唤醒IOS
     ios() {
@@ -737,7 +744,7 @@ export default {
     show2Change() {
       this.show2 = true;
       let sotr = getStorage("industry");
-       
+
       if (isLogin()) {
         let userId = getStorage("userToken").userId;
         let intObj = {
@@ -862,7 +869,7 @@ export default {
     //获取导航栏菜单
     getTabMunes() {
       let sotr = getStorage("industry");
-//  console.log(sotr,JIM.isLogin())
+      //  console.log(sotr,JIM.isLogin())
       if (isLogin()) {
         let userId = getStorage("userToken").userId;
         let intObj = {
@@ -1185,8 +1192,8 @@ export default {
         }
       };
       goodObj.params.city = this.city.name
-          ? this.city.name
-          : this.PositObj.city;
+        ? this.city.name
+        : this.PositObj.city;
       // console.log(obj.counter)
       getDataInfo(
         "get",
@@ -1232,23 +1239,25 @@ export default {
                 "meetingdetails/meetingdetailsList",
                 dataObj
               ).then(res => {
-             
                 if (res.data.code == 200) {
                   this.listData = res.data.data;
+                   this.hide = false ;
                   this.show3 = false;
                 }
               });
             });
           }
         } else {
+          this.IsCompleted = true;
+          this.hide = true;
           this.show3 = false;
         }
       } else if (type == 1) {
- dataObj.params.city = this.city.name
+        dataObj.params.city = this.city.name
           ? this.city.name
           : this.PositObj.city;
-// console.log(dataObj)
-        // let city = 
+        // console.log(dataObj)
+        // let city =
         getDataInfo(
           "get",
           "meetingdetails/meetingdetailsListByGoodMeeting",
@@ -1260,6 +1269,7 @@ export default {
               this.listData = res.data.data.meetingShowList;
             } else {
               this.IsCompleted = true;
+              this.hide = false;
               this.listData = [];
             }
           }
@@ -1272,12 +1282,13 @@ export default {
 
         getDataInfo("get", "meetingdetails/meetingByConditions", dataObj).then(
           res => {
-           
             if (res.data.code == 200) {
               //  console.log(res)
               this.show3 = false;
+              this.hide = false ;
               if (res.data.data.meetingShowList.length < this.num) {
                 this.IsCompleted = true;
+                 
               }
 
               this.listData = res.data.data.meetingShowList;
@@ -1533,5 +1544,13 @@ export default {
 }
 .vux-popup-dialog {
   background: #fff !important;
+}
+
+.meeting-tab {
+  .scrollable .vux-tab-item {
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 18%;
+    flex: 0 0 18%;
+  }
 }
 </style>
