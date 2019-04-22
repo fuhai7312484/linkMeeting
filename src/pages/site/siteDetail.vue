@@ -52,6 +52,8 @@
     ></video-player>-->
 
     <div class="site-img-showBox" v-if="sitData">
+       <router-link to="/meeting" class="site-img-showBoxGotoHome" ><img :src="require('../../assets/images/home.png')"/>首页</router-link>
+     
       <!-- :list="swiperType=='img'?SImgList:SVideoList" -->
 
       <!-- <div v-if="swiperType=='video'" class="video-btn-box">

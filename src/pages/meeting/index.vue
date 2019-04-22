@@ -62,9 +62,11 @@
     </sticky>-->
     <div v-if="IsShowMap">
       <!-- 地图 -->
+
       <m-map
+        v-if="IsShowMap"
         :OrderHight="OrderHight-55"
-        :data_info="listData"
+        :data_info="mapListData"
         :tabTitle="filterData"
         @GotoMapHeight="GotoMapHeight"
       ></m-map>
@@ -75,13 +77,13 @@
             <img src="../../assets/images/meetingfilterIcon.png">
         </div>-->
         <div class="meeting-tabBox">
-          <div class="meeting-tab fl">
+          <div class="meeting-tab">
             <tab
               active-color="#fe666b"
               default-color="#a0a0a0"
               custom-bar-width="33%"
               v-model="tabsIndex"
-              :line-width="0"
+              :line-width="3"
             >
               <tab-item
                 v-for="(tabs,index) in tabMunes"
@@ -92,7 +94,7 @@
             </tab>
           </div>
 
-          <div class="meetingfilterIcon fr" @click="show2Change">
+          <div class="meetingfilterIcon" @click="show2Change">
             <img src="../../assets/images/meetAdd.png">
           </div>
         </div>
@@ -303,11 +305,33 @@
       <footer-nav></footer-nav>
     </div>
 
-    <div class="siteGotoMap" :style="{bottom:MapH,}" @click="gotoMapChange">
-      <img src="../../assets/images/button-gotomap.png" v-if="!IsShowMap && tabsIndex!=0">
-      <img src="../../assets/images/button-backlist.png" v-if="IsShowMap">
+    <div
+      class="siteGotoMap"
+      :style="{bottom:'90px',}"
+      @click="gotoMapChange"
+      v-if="!IsShowMap && tabsIndex!=0"
+    >
+      <img src="../../assets/images/button-gotomap.png">
+
       <!-- <img src="../../assets/images/button-gotomap.png"> -->
       <!-- IsShowMap -->
+    </div>
+
+    <div class="siteGotoList" :style="{bottom:MapH,}" v-if="IsShowMap">
+      <div>
+        <spinner :type="'ios-small'" size="40px" v-if="showMapLoding"></spinner>
+        <img
+          src="../../assets/images/button-map-loading copy.png"
+          v-if="!NoMapMore&&!showMapLoding"
+          @click="MapLoadMore"
+        >
+        <img src="../../assets/images/NoMapMore.png" v-if="NoMapMore&&!showMapLoding">
+      </div>
+      <div>
+        <img src="../../assets/images/button-backlist.png" @click="gotoMapChange">
+      </div>
+
+      <!-- <img src="../../assets/images/button-backlist.png" v-if="IsShowMap"> -->
     </div>
 
     <div v-transfer-dom>
@@ -452,7 +476,8 @@ import {
   Flexbox,
   FlexboxItem,
   LoadMore,
-  Loading
+  Loading,
+  Spinner
 } from "vux";
 import FooterNav from "@/components/footerNav";
 export default {
@@ -475,7 +500,8 @@ export default {
     FlexboxItem,
     LoadMore,
     PullTod,
-    Loading
+    Loading,
+    Spinner
   },
   data() {
     return {
@@ -487,13 +513,16 @@ export default {
       MapH: "90px",
       OrderHight: 0,
       listData: [],
+      mapListData: [],
       filterList: [],
       tabMunes: ["关注", "推荐"],
       tabTitle: "推荐",
       filterData: [],
       tabsIndex: 1,
+      showMapLoding: false,
       // showToast: true,
       IsShowMap: false,
+      NoMapMore: false,
       show9: false,
       show1: false,
       show2: false,
@@ -654,6 +683,7 @@ export default {
 
       counter: 1, //默认已经显示出5条数据 count等于一是让从6条开始加载
       num: 15, // 一次显示多少条
+      mapNum: 10,
       pageStart: 0, // 开始页数
       pageEnd: 0, // 结束页数
       IsCompleted: false
@@ -960,7 +990,17 @@ export default {
     },
     //切换地图
     gotoMapChange() {
-      this.IsShowMap = !this.IsShowMap;
+      if (!this.IsShowMap) {
+        this.getMapAllData(this.tabsIndex);
+      } else {
+        this.IsShowMap = false;
+        this.NoMapMore = false;
+        this.getAllData(this.tabsIndex);
+      }
+    },
+    MapLoadMore() {
+      // console.log(this.listData,this.filterData,this.tabsIndex)
+      this.getMapAllDataM(this.tabsIndex);
     },
     //设置地图高度
     getOrderHight() {
@@ -1037,9 +1077,6 @@ export default {
       }
 
       // console.log(val, item);
-    },
-    getMoreList(loaded) {
-      // console.log(loaded);
     },
 
     determineFilter() {
@@ -1217,6 +1254,140 @@ export default {
         }
       });
     },
+    //请求地图数据
+    getMapAllData(index) {
+      let dataObj = {
+        params: {
+          currentPage: this.counter,
+          pageSize: this.mapNum
+        }
+      };
+
+      if (index == 1) {
+        dataObj.params.city = this.city.name
+          ? this.city.name
+          : this.PositObj.city;
+        // console.log(dataObj)
+        // let city =
+        getDataInfo(
+          "get",
+          "meetingdetails/meetingdetailsListByGoodMeeting",
+          dataObj
+        ).then(res => {
+          if (res.data.code == 200) {
+            this.IsShowMap = true;
+            if (res.data.data.meetingShowList.length < this.mapNum) {
+              this.NoMapMore = true;
+            }
+            this.mapListData = res.data.data.meetingShowList;
+            // console.log(this.mapListData)
+          }
+        });
+      } else {
+        dataObj.params.city = this.city.name
+          ? this.city.name
+          : this.PositObj.city;
+        dataObj.params.industry = this.tabMunes[index];
+
+        getDataInfo("get", "meetingdetails/meetingByConditions", dataObj).then(
+          res => {
+            if (res.data.code == 200) {
+              this.IsShowMap = true;
+              if (res.data.data.meetingShowList.length < this.mapNum) {
+                getDataInfo(
+                  "get",
+                  "meetingdetails/meetingdetailsListByGoodMeeting",
+                  dataObj
+                ).then(resd => {
+                  if (resd.data.code == 200) {
+                    this.IsShowMap = true;
+                    this.NoMapMore = true;
+                  
+                    let arr = [
+                      ...res.data.data.meetingShowList,
+                      ...resd.data.data.meetingShowList
+                    ];
+                    let obj = {};
+                    let newArr = arr.reduce((cur, next) => {
+                      obj[next.id]
+                        ? ""
+                        : (obj[next.id] = true && cur.push(next));
+                      return cur;
+                    }, []); //设置cur默认类型为数组，并且初始值为空的数组
+              // console.log(newArr)
+                  // console.log(newArr.slice(0,this.mapNum))
+
+                    this.mapListData = newArr.length>this.mapNum?newArr.slice(0,this.mapNum):newArr;
+               
+                  }
+                });
+              } else {
+                this.mapListData = res.data.data.meetingShowList;
+              }
+            }
+          }
+        );
+      }
+    },
+
+    //请求地图更多数据
+    getMapAllDataM(index) {
+      this.showMapLoding = true;
+      let dataObj = {
+        params: {
+          currentPage: ++this.counter,
+          pageSize: this.mapNum
+        }
+      };
+
+      if (index == 1) {
+        dataObj.params.city = this.city.name
+          ? this.city.name
+          : this.PositObj.city;
+        // console.log(dataObj)
+        // let city =
+        getDataInfo(
+          "get",
+          "meetingdetails/meetingdetailsListByGoodMeeting",
+          dataObj
+        ).then(res => {
+          // console.log(res)
+          if (res.data.code == 200) {
+            if (res.data.data) {
+              if (res.data.data.meetingShowList.length < this.mapNum) {
+                this.NoMapMore = true;
+              }
+              this.mapListData = [
+                ...this.mapListData,
+                ...res.data.data.meetingShowList
+              ];
+              this.showMapLoding = false;
+              // console.log(this.mapListData)
+            }
+          }
+        });
+      } else {
+        dataObj.params.city = this.city.name
+          ? this.city.name
+          : this.PositObj.city;
+        dataObj.params.industry = this.tabMunes[index];
+
+        getDataInfo("get", "meetingdetails/meetingByConditions", dataObj).then(
+          res => {
+            if (res.data.code == 200) {
+              if (res.data.data.meetingShowList.length < this.mapNum) {
+                this.NoMapMore = true;
+              }
+              this.mapListData = [
+                ...this.mapListData,
+                ...res.data.data.meetingShowList
+              ];
+              this.showMapLoding = false;
+            }
+          }
+        );
+      }
+    },
 
     //请求数据并且下拉刷新页面
     getAllData(type) {
@@ -1241,7 +1412,7 @@ export default {
               ).then(res => {
                 if (res.data.code == 200) {
                   this.listData = res.data.data;
-                   this.hide = false ;
+                  this.hide = false;
                   this.show3 = false;
                 }
               });
@@ -1285,10 +1456,9 @@ export default {
             if (res.data.code == 200) {
               //  console.log(res)
               this.show3 = false;
-              this.hide = false ;
+              this.hide = false;
               if (res.data.data.meetingShowList.length < this.num) {
                 this.IsCompleted = true;
-                 
               }
 
               this.listData = res.data.data.meetingShowList;
@@ -1373,6 +1543,16 @@ export default {
       this.filterData = [this.tabMunes[n]];
       this.tabTitle = this.tabMunes[n];
     }
+    //     IsShowMap(n,o){
+    //       if(n){
+    // this.getMapAllData(this.tabsIndex)
+    // //  console.log('调取推荐接口',this.tabsIndex)
+
+    //       }else{
+    //             this.getAllData(this.tabsIndex);
+    //       }
+
+    //     }
   }
 };
 </script>

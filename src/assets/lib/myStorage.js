@@ -7,9 +7,9 @@ export function getDataInfo(mode, url, obj) {
   // axios.defaults.headers.common["Content-Type"] = 'application/json;charset=UTF-8';
 
   //测试环境
-  let ipUrl = "http://192.168.1.177/lhy/v0.1/api/";
+  // let ipUrl = "http://192.168.1.177/lhy/v0.1/api/";
   //服务器正式环境
-  // let ipUrl = "http://lianhuiyi.woneast.com/lhy/v0.1/api/";
+  let ipUrl = "http://lianhuiyi.woneast.com/lhy/v0.1/api/";
   // let ipUrl = "http://192.168.1.170:8080/v0.1/api/";
   // let ipUrl = "http://192.168.1.125:8080/v0.1/api/";
   var qs = require("qs");
@@ -335,7 +335,14 @@ export function getToTime(timeStamp, str) {
   let s = toDou(date.getSeconds());
   return Y + M + D + h + m + s;
 }
+//已报名时间规范
+export function RegTime(time){
+  
+  let arr = time.split(' ')
+  let strArr = arr[0].split('-')
+  return strArr[1]+'月'+ strArr[2]+'日'
 
+}
 // 时间统一函数
 export function transDate(time,type) {
   // var $time =document.getElementById("share-time");

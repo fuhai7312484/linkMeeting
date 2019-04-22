@@ -37,21 +37,31 @@
                 <div class="tabMeetingTextBox fl">
                   <h4 class="tabMeetingTextTitle">{{DataItem.theme}}</h4>
                   <div class="tabMeetingTime">
-                    <span>{{DataItem.beginTime}}</span>
+                    <span>{{DataItem.beginTime}}  &nbsp;&nbsp; {{addressSplit(DataItem.address)}}</span>
                     <!-- <span>{{DataItem.address}}</span> -->
                   </div>
                   <div class="tabMeetingTagBox">
-                    <div class="tabMeetingPrice fl">¥{{DataItem.price}}起</div>
+                    <!-- <div class="tabMeetingPrice fl">¥{{DataItem.price}}起</div> -->
+
+
+                    <div class="tabMeetingTag fl">
+                      <span v-if="DataItem.status==2" class="IsOver">已结束</span>
+                      <span
+                        v-else-if="DataItem.status==3 || DataItem.status==1"
+                        class="processing"
+                      >进行中</span>
+                      <span v-else-if="DataItem.status==0" class="notStarted">未开始</span>
+                    </div>
+                    <div class="tabMeetingNum fr">{{DataItem.msg}}</div>
+              
+
                     <!-- <div class="tabMeetingTag fl">
                   <span v-if="DataItem.status==0" class="IsOver">已结束</span>
                   <span v-else-if="DataItem.status==1" class="LiveIn">直播中</span>
                   <span v-else-if="DataItem.status==2" class="processing">进行中</span>
                   <span v-else-if="DataItem.status==3" class="notStarted">未开始</span>
                     </div>-->
-                    <div class="tabMeetingNum fr">
-                      {{DataItem.msg}}
-                      <!-- {{DataItem.status==0?'查看附件':DataItem.status==2?'报名将截止':DataItem.status==3?'马上抢票':DataItem.pepople+'人已报名'}} -->
-                    </div>
+                   
                   </div>
                 </div>
               </div>
@@ -82,6 +92,39 @@ export default {
     FlexboxItem
   },
   methods: {
+     addressSplit(add) {
+      var reg = /.+?(省|市|自治区|自治州|县|区|镇)/g;
+      let addArr = add.match(reg);
+      let str = "";
+      if (addArr) {
+        let newArr = [];
+
+        if (addArr.length >= 2) {
+          newArr = [addArr[0], addArr[1]];
+        } else if (addArr.length < 2) {
+          newArr = [addArr[0]];
+        }
+        newArr.forEach(e => {
+          if (e.indexOf("省") != -1) {
+            str = e.replace("省", "");
+          }
+          if (e.indexOf("市") != -1) {
+            str += " " + e.replace("市", "");
+          }
+          if (e.indexOf("区") != -1 && e.length < 5) {
+            str += " " + e.replace("区", "");
+          }
+          if (e.indexOf("镇") != -1 && e.length < 5) {
+            str += " " + e.replace("镇", "");
+          }
+          if (e.indexOf("县") != -1 && e.length < 5) {
+            str += " " + e.replace("县", "");
+          }
+        });
+      }
+
+      return str;
+    },
     //点击查看详情
     goToDetail(id) {
       // console.log(id)
@@ -135,7 +178,7 @@ export default {
 
 
     map() {
-   
+   console.log(this.data_info.length)
 
       // 百度地图API功能
       var map = new BMap.Map("allmap",{minZoom:4,maxZoom:17}); // 创建Map实例
@@ -152,7 +195,7 @@ function getZoom (obj) {
 			for (var i = 0,zoomLen = zoom.length; i < zoomLen; i++) {
         
 				if(zoom[i] - distance > 0){
-          console.log(18-i+3)
+       
 					return 18-i+3>=18?18:18-i+3;//之所以会多3，是因为地图范围常常是比例尺距离的10倍以上。所以级别会增加3。
 				}
 			};
@@ -163,7 +206,7 @@ function getZoom (obj) {
 map.centerAndZoom(new BMap.Point(103.388611,35.563611), zoomNum);  
   }else{
     zoomNum = getZoom(this.setZoom(this.data_info))
- console.log(zoomNum)
+
  map.centerAndZoom(new BMap.Point(this.setZoom(this.data_info).cenLng, this.setZoom(this.data_info).cenLat), zoomNum); // 初始化地图,设置中心点坐标和地图级别
   }
       
@@ -304,6 +347,9 @@ map.centerAndZoom(new BMap.Point(103.388611,35.563611), zoomNum);
   watch: {
     showData() {
       //  console.log(this.OrderHight)
+    },
+    data_info(){
+       this.map();
     }
   },
   mounted() {

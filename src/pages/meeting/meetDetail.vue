@@ -124,6 +124,9 @@
 
     <div class="site-img-showBox" v-if="meetingData">
       <!-- :list="swiperType=='img'?SImgList:SVideoList" -->
+      <router-link to="/meeting" class="site-img-showBoxGotoHome" ><img :src="require('../../assets/images/home.png')"/>首页</router-link>
+     
+      <!-- <div class="site-img-showBoxGotoHome"></div> -->
       <swiper
         :list="swiperType=='img'?SImgList:SVideoList"
         height="240px"
@@ -370,9 +373,12 @@
             >这里是张图片</p>-->
             <!-- {{meetingContent}} -->
           </div>
+          <div v-if="!showAll" class="bottomMark-floatBtn" @click="showAll = true">
+            <img :src="require('../../assets/images/bottomMark-floatBtn.png')"/>
+          </div>
           <div class="bottomMarkBox">
             <div class="bottomMark"></div>
-            <div class="bottomMarkTitle" @click="showAll =!showAll">
+            <div class="bottomMarkTitle" v-if="showAll" @click="showAll =false">
               {{showAll?'展开详情':'收起详情'}}
               <x-icon v-if="showAll" type="ios-arrow-down" size="15"></x-icon>
               <x-icon v-if="!showAll" type="ios-arrow-up" size="15"></x-icon>
@@ -380,16 +386,31 @@
           </div>
         </div>
         <div v-if="tabsIndex==1" class="showMeetingContent">
-          <div class="noData-default" v-if="meetingData.draftsVo.meCompanyList.guestList.length==0">
+
+
+
+          <!-- <div class="noData-default" v-if="meetingData.draftsVo.meCompanyList.guestList.length==0">
             <p>
               <img :src="require('../../assets/images/noData.png')">
             </p>
             <p>暂无嘉宾</p>
-          </div>
+          </div> -->
 
           <div class="padlr">
             <!-- 这里是会议嘉宾 -->
             <!-- {{meetingData.draftsVo.meCompanyList.guestList}} -->
+           
+            <ul class="meCompany-boxList" v-if="meetingData.draftsVo.meCompanyList.partnerList.length==0">
+              <li v-for="(i,index) in 6" :key="index">
+                 <img :src="require('../../assets/images/myFans-Mask.png')"
+                >
+<h4 class="guest-boxList-H4">嘉宾</h4>
+              </li>
+            </ul>
+
+
+
+
             <ul class="guest-boxList">
               <li
                 v-for="(guest,index) in meetingData.draftsVo.meCompanyList.guestList"
@@ -406,7 +427,7 @@
           </div>
         </div>
         <div v-if="tabsIndex==2" class="showMeetingContent padlr">
-          <div
+          <!-- <div
             class="noData-default"
             v-if="meetingData.draftsVo.meCompanyList.partnerList.length==0"
           >
@@ -414,9 +435,18 @@
               <img :src="require('../../assets/images/noData.png')">
             </p>
             <p>暂无合作伙伴</p>
-          </div>
+          </div> -->
 
           <div class="padlr">
+             <ul class="meCompany-boxList" v-if="meetingData.draftsVo.meCompanyList.partnerList.length==0">
+              <li v-for="(i,index) in 6" :key="index">
+                 <img :src="require('../../assets/images/myFans-Mask1.png')"
+                >
+<h4 class="guest-boxList-H4">合作伙伴</h4>
+              </li>
+            </ul>
+
+
             <ul class="meCompany-boxList">
               <li
                 v-for="(meCompany,index) in meetingData.draftsVo.meCompanyList.partnerList"
@@ -424,7 +454,7 @@
               >
                 <!-- {{meCompany}} -->
                 <img
-                  :src="meCompany.mainPic!=null?meCompany.mainPic:require('../../assets/images/myFans-Mask.png')"
+                  :src="meCompany.mainPic!=null?meCompany.mainPic:require('../../assets/images/myFans-Mask1.png')"
                 >
                 <h4>{{meCompany.name}}</h4>
               </li>
@@ -437,7 +467,7 @@
       </div>
 
       <div class="meetingRegListBox padlr">
-        <div class="meetingRegListTitle">
+        <div class="meetingRegListTitle" @click="gotoRegistered">
           <h4 class="RegListTitle fl">已报名</h4>
           <div class="RegListPeopleNumBox fr">
             <div class="Reg-PeopleNum">
@@ -579,6 +609,41 @@
       </confirm>
     </div>
 
+    <div v-transfer-dom class="show8Style">
+      <popup v-model="show8" position="left" width="100%">
+        <div class="show8Style-demo">
+           <div class="map-headerBox borBottm">
+            <div class="map-go-back" @click="show8 = false"></div>
+            <h3 class="map-headerTitle">已报名</h3>
+          </div>
+          <div class="show8Num">
+            共{{orderPeople.length}}人报名
+          </div>
+          
+ <group class="show8listBox" v-if="orderPeople!=0">
+          <cell
+            v-for="(fan,index) in orderPeople"
+            :key="index"
+            :title="fan.name"
+            :value="RegisteredTime(fan.createTime)"
+          >
+         <!-- {{fan.createTime}} -->
+            <img
+              slot="icon"
+              width="45"
+              height="45"
+              style="display:block;margin-right:.8rem;border-radius:50%;"
+              :src="fan.mainPic==null?require('../../assets/images/myFans-Mask.png'):fan.mainPic"
+            >
+          </cell>
+        </group>
+
+          <!-- <span class="vux-close" >11111</span> -->
+        </div>
+      </popup>
+    </div>
+
+
     <toast
       v-model="toastInfo.showPositionValue"
       width="10em"
@@ -600,7 +665,7 @@ import {
   getDataInfo,
   isLogin,
   transDate,
-  timeLimit
+  timeLimit,RegTime
 } from "../../assets/lib/myStorage.js";
 import {
   Sticky,
@@ -617,7 +682,7 @@ import {
   Toast,
   Loading,
   Divider,
-  Confirm
+  Confirm,Group,Cell
 } from "vux";
 export default {
   directives: {
@@ -637,7 +702,7 @@ export default {
     Toast,
     Loading,
     Divider,
-    Confirm
+    Confirm,Group,Cell
   },
   name: "meetDetail",
   data() {
@@ -647,6 +712,7 @@ export default {
       goodData: [],
       IsColl: 2,
       show2: false,
+      show8:false,
       toastInfo: {
         showMsg: "",
         showPositionValue: false,
@@ -692,6 +758,13 @@ export default {
   },
  
   methods: {
+    //查看已报名人列表
+    gotoRegistered(){
+      if(this.orderPeople.length>0)this.show8= true;
+      
+// console.log(this.orderPeople)
+
+    },
     SupportChange(obj){
       this.Support = true;
       this.SupportObj = obj
@@ -759,6 +832,10 @@ export default {
       });
 
       this.$router.go(0);
+    },
+    //处理已报名时间
+    RegisteredTime(time){
+    return RegTime(time)
     },
     //处理时间范围
     getTimeLimit(beginTime, endTime) {
@@ -1210,6 +1287,20 @@ export default {
   }
   .weui-dialog__btn_primary {
     color: #007aff !important;
+  }
+}
+.show8Style{
+  .vux-popup-dialog{
+    background: #F8F8F8 !important;
+  }
+
+  .vux-label{
+    font-size: .9rem;
+    font-weight: bold;
+    color: #000;
+  }
+  .weui-cell__ft{
+    font-size: .8rem;
   }
 }
 
