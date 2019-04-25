@@ -110,7 +110,7 @@ import {
   setStorage,
   getCookie,
   removeCookie,
-  checkToken
+  checkToken,isweixin
 } from "../../assets/lib/myStorage.js";
 import {
   Group,

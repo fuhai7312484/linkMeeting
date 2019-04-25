@@ -251,7 +251,7 @@
       </flexbox>
 
 
-      <flexbox :gutter="0" class="magrTB padlr" v-for="(en,index) in comTypeList('自定义')" :key="index">
+      <flexbox :gutter="0" class="magrTB padlr" v-if="comTypeList('自定义')" v-for="(en,index) in comTypeList('自定义')" :key="index">
         <flexbox-item :span="1.1/5">
           <span class="meetingdetailTitles">{{en.companyType}}：</span>
         </flexbox-item>
@@ -997,7 +997,9 @@ export default {
     //筛选承办方主办方
     comTypeList(str) {
       // let arr = [];
-      switch (str) {
+    
+      if(this.meetingData.draftsVo.companyTypeList.length!=0){
+   switch (str) {
         case "主办单位":
           return this.meetingData.draftsVo.companyTypeList.filter(e => {
             return e.companyType == "主办单位";
@@ -1015,6 +1017,10 @@ export default {
          
           break;
       }
+      }else{
+        return []
+      }
+   
     
     },
 

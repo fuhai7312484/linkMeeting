@@ -1,11 +1,29 @@
 <template>
   <div class="home">
     <!-- {{data_info}} -->
+
+    
+
+
     <div class="filterResult">
+
+       <div v-transfer-dom>
+      <popup v-model="show10" position="top" :show-mask="false">
+        <div class="position-vertical-demo1" v-if="!dataEnd">
+      {{MapTotal}}场会议，优先展示前{{data_info.length}}场
+        </div>
+         <div class="position-vertical-demo1" v-if="dataEnd">
+        {{data_info.length}}场会议，加载完毕
+        </div>
+      </popup>
+    </div>
+
+
+
       <div class="filterInfoTags">
         <span v-for="(tab,index) in  tabTitle" :key="index">{{tab}}</span>
       </div>
-      <div class="filterInfoNum">共{{data_info.length}}场</div>
+      <div class="filterInfoNum"></div>
     </div>
     <div id="allmap" ref="allmap" :style="{height:showData?OrderHight-93 +'px':OrderHight+'px'}"></div>
     <div v-transfer-dom>
@@ -79,11 +97,13 @@ export default {
     TransferDom
   },
   name: "BMap",
-  props: ["OrderHight", "data_info", "tabTitle"],
+  props: ["OrderHight", "data_info", "tabTitle","MapTotal"],
   data() {
     return {
       showData: false,
-      evData: []
+      evData: [],
+      show10:false,
+      dataEnd:false,
     };
   },
   components: {
@@ -134,7 +154,7 @@ export default {
       });
     },
     change() {
-      let H = this.showData ? "190px" : "90px";
+      let H = this.showData ? "190px" : "30px";
       this.$emit("GotoMapHeight", H);
     },
 //设置地图级别
@@ -178,8 +198,8 @@ export default {
 
 
     map() {
-   console.log(this.data_info.length)
-
+  //  console.log(this.data_info.length)
+  this.show10 = true
       // 百度地图API功能
       var map = new BMap.Map("allmap",{minZoom:4,maxZoom:17}); // 创建Map实例
       //  console.log(this.setZoom(this.data_info).cenLng,this.setZoom(this.data_info).cenLat) 
@@ -349,7 +369,16 @@ map.centerAndZoom(new BMap.Point(103.388611,35.563611), zoomNum);
       //  console.log(this.OrderHight)
     },
     data_info(){
+      console.log(this.data_info.length)
        this.map();
+      
+    },
+     show10 (val) {
+      if (val) {
+        setTimeout(() => {
+          this.show10 = false
+        }, 3000)
+      }
     }
   },
   mounted() {
@@ -380,6 +409,15 @@ map.centerAndZoom(new BMap.Point(103.388611,35.563611), zoomNum);
     white-space: nowrap;
     text-overflow: ellipsis;
   }
+}
+
+.position-vertical-demo1 {
+  background-color: #FFEFCB;
+  text-align: center;
+  // padding: 15px;
+  font-size: .8rem;
+  padding: .6rem 0;
+  color:#C17306,
 }
 </style>
 

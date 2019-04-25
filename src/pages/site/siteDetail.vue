@@ -883,8 +883,10 @@ export default {
           id: detailId
         }
       };
+    
 
       getDataInfo("get", "place/detail", dataObj).then(res => {
+          
         console.log(res)
         if (res.data.code == 200) {
           // console.log(res);

@@ -8,7 +8,7 @@
     -->
 
     <div v-transfer-dom>
-      <x-dialog v-model="showAcc" class="dialog-demo" hide-on-blur :dialog-style="{width:'100%'}">
+      <x-dialog v-model="showAcc" class="dialog-demo-gallery" hide-on-blur :dialog-style="{width:'100%'}">
         <div class="img-box">
           <oplay :accObj="accObj" v-if="showAcc"></oplay>
         </div>
@@ -646,7 +646,7 @@ export default {
 @import "../assets/style/global.less";
 @import "~vux/src/styles/reset.less";
 
-.dialog-demo {
+.dialog-demo-gallery {
   .weui-mask {
     z-index: 9998;
   }

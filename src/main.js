@@ -47,9 +47,12 @@ FastClick.attach(document.body)
 
 Vue.config.productionTip = false
 
-
-
+// router.afterEach((to, from)=>{
+//   console.log('即将进入：', to);
+//   console.log('即将离开：', from);
+// });
 router.beforeEach((to, from, next) => {
+  // console.log(to,from)
   if (to.matched.some(record => record.meta.requireAuth)) {
     // 判断该路由是否需要登录权限
 

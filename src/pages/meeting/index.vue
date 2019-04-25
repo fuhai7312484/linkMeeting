@@ -19,7 +19,7 @@
         </div>
       </div>
 
-      <div v-transfer-dom>
+      <div v-transfer-dom class="InterestedBox">
         <popup v-model="show2" height="100%">
           <div class="IntereClosed" @click="show2Cancel">
             <x-icon type="ios-close-empty" size="30"></x-icon>
@@ -53,6 +53,8 @@
           </div>
         </popup>
       </div>
+
+      
     </div>
     <!-- 
 <sticky scroll-box="vux_view_box_body" :check-sticky-support="false" :offset="46">
@@ -68,6 +70,7 @@
         :OrderHight="OrderHight-55"
         :data_info="mapListData"
         :tabTitle="filterData"
+        :MapTotal="MapTotal"
         @GotoMapHeight="GotoMapHeight"
       ></m-map>
     </div>
@@ -77,7 +80,7 @@
             <img src="../../assets/images/meetingfilterIcon.png">
         </div>-->
         <div class="meeting-tabBox">
-          <div class="meeting-tab">
+          <div class="meeting-tab fl">
             <tab
               active-color="#fe666b"
               default-color="#a0a0a0"
@@ -94,7 +97,7 @@
             </tab>
           </div>
 
-          <div class="meetingfilterIcon" @click="show2Change">
+          <div class="meetingfilterIcon fr" @click="show2Change">
             <img src="../../assets/images/meetAdd.png">
           </div>
         </div>
@@ -378,7 +381,7 @@
         </div>
       </popup>
     </div>
-    <div v-transfer-dom>
+    <div v-transfer-dom class="FilterMuneBox">
       <popup v-model="show1" height="100%">
         <div class="FilterListBox padlr">
           <div class="FilterTags">
@@ -510,7 +513,7 @@ export default {
       PositObj: {},
       showMore: false,
       isLogin: isLogin(),
-      MapH: "90px",
+      MapH: "30px",
       OrderHight: 0,
       listData: [],
       mapListData: [],
@@ -686,7 +689,8 @@ export default {
       mapNum: 10,
       pageStart: 0, // 开始页数
       pageEnd: 0, // 结束页数
-      IsCompleted: false
+      IsCompleted: false,
+MapTotal:0,
     };
   },
   computed: {
@@ -898,6 +902,7 @@ export default {
     },
     //获取导航栏菜单
     getTabMunes() {
+      let _that = this
       let sotr = getStorage("industry");
       //  console.log(sotr,JIM.isLogin())
       if (isLogin()) {
@@ -914,9 +919,14 @@ export default {
             intObj
           ).then(res => {
             if (res.data.code == 200) {
+              // console.log(res)
               if (res.data.data != null) {
                 this.tabMunes = [...["关注", "推荐"], ...res.data.data];
                 setStorage("industry", [...["关注", "推荐"], ...res.data.data]);
+                this.tabsIndex = 0
+                setTimeout(function(){
+                  _that.tabsIndex = 1
+                },300)
               } else {
                 this.show2 = true;
 
@@ -972,6 +982,7 @@ export default {
             intObj
           ).then(res => {
             if (res.data.code == 200) {
+              
               this.show2 = false;
               this.tabMunes = [...arr, ...serverArr];
               setStorage("industry", [...arr, ...serverArr]);
@@ -1010,6 +1021,7 @@ export default {
     },
     //设置地图显示按钮的高
     GotoMapHeight(value) {
+    
       this.MapH = value;
       // console.log(value);
     },
@@ -1082,24 +1094,19 @@ export default {
     determineFilter() {
       this.show9 = false;
       if (this.FeatureData.length != 0) {
-        if (this.IsShowMap) {
-          let arr = [];
-          this.FeatureData.forEach(e => {
-            arr.push(e.name);
-          });
-          this.filterData = arr;
-          // console.log("这里请求接口", this.FeatureData);
-        } else {
-          // console.log("这里请求接口", this.FeatureData);
-          let filterObj = {
+
+
+  let filterObj = {
             params: {
               //  currentPage:this.counter,
               // pageSize:this.num,
 
               currentPage: 1,
-              pageSize: 99999
+              pageSize: this.IsShowMap?this.mapNum:99999
             }
           };
+
+      
 
           this.FeatureData.forEach(e => {
             switch (e.type) {
@@ -1146,51 +1153,32 @@ export default {
             // filterObj.params[e.type] = e.name
           });
 
-          // console.log(filterObj);
-          this.show1 = true;
+          console.log(filterObj)
 
-          getDataInfo(
+   getDataInfo(
             "get",
             "meetingdetails/meetingByConditions",
             filterObj
           ).then(res => {
             if (res.data.code == 200) {
-              this.filterList = res.data.data.meetingShowList;
-            }
-            // console.log(res);
-            //  this.filterList = [{}];
-
-            // if (res.data.code == 200) {
-            //   if (res.data.data.length == 0) {
-            //     this.IsCompleted = true;
-            //     // console.log("数据加载完毕！！");
-            //   } else {
-            //     this.listData = [...this.listData, ...res.data.data];
-            //     if (obj.fun) {
-            //       obj.fun();
-            //     }
-            //   }
-            // }
+        if (this.IsShowMap) {
+          let arr = [];
+          this.FeatureData.forEach(e => {
+            arr.push(e.name);
           });
-
-          //   let filterObj={
-          //     industry:'',//行业
-          //     meetingType:'',//会议类型
-          //     sort:'',//排序方式
-          //     money:'',//收费与否
-          //     time:'',//发布时段
-          //     longitudeNow:'',//离我最近的填写经度
-          //     latitudeNow:'',//离我最近的填写纬度
-          //     status:'',//会议进行的状态
-          //     city:'',//当前的城市
-          //     currentPage:this.counter,
-          //     pageSize:this.num,
-          //   }
-
-          //  console.log(filterObj)
+          this.filterData = arr;
+          console.log(this.filterData);
+          this.mapListData = res.data.data.meetingShowList
+          this.MapTotal = res.data.data.totalCount
+        } else {
+      
+         this.show1 = true;
+         this.filterList = res.data.data.meetingShowList;
         }
+            }
+          });
       }
-      // console.log(this.FeatureData,this.filterData)
+     
     },
     //请求我的关注数据
     getDataList(obj) {
@@ -1279,6 +1267,8 @@ export default {
             if (res.data.data.meetingShowList.length < this.mapNum) {
               this.NoMapMore = true;
             }
+            console.log(res)
+            this.MapTotal = res.data.data.totalCount
             this.mapListData = res.data.data.meetingShowList;
             // console.log(this.mapListData)
           }
@@ -1332,6 +1322,7 @@ export default {
 
     //请求地图更多数据
     getMapAllDataM(index) {
+
       this.showMapLoding = true;
       let dataObj = {
         params: {
@@ -1339,6 +1330,7 @@ export default {
           pageSize: this.mapNum
         }
       };
+      console.log(dataObj)
 
       if (index == 1) {
         dataObj.params.city = this.city.name
@@ -1731,6 +1723,17 @@ export default {
     -webkit-box-flex: 0;
     -webkit-flex: 0 0 18%;
     flex: 0 0 18%;
+  }
+}
+.FilterMuneBox{
+  .vux-popup-dialog{
+ z-index: 9998;
+  }
+ 
+}
+.InterestedBox{
+  .vux-popup-dialog{
+    z-index:501 !important;
   }
 }
 </style>

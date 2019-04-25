@@ -6,7 +6,9 @@ Vue.use(vuex);
 export default new vuex.Store({
   state: {
     city:  localStorage.city?JSON.parse(localStorage.city):'' || "北京",
-    isLogin: 0
+    isLogin: 0,
+    codeUrl:'/'
+
   },
   getters: {
     // 请求数据时加载状态
@@ -19,6 +21,9 @@ export default new vuex.Store({
       try {
         localStorage.city = JSON.stringify(city);
       } catch (error) {}
+    },
+    codeUrlChange(state, url){
+      state.codeUrl = url;
     }
   },
   actions: {}
