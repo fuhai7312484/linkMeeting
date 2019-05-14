@@ -1,22 +1,44 @@
 <template>
   <div class="box">
-    <!-- <div @click="showAcc = !showAcc">11111</div> -->
+ <div v-transfer-dom>
+      <loading :show="showLoding" text="数据加载中..."></loading>
+    </div>
+<!-- {{meetingImg}} -->
+   
+    
+  
 
+    <!-- <div @click="showAcc = !showAcc">11111</div> -->
+    <!-- <ul>
+              <li v-for="(images,index) in meetingImg" class="fl previewer-demo-img1" :key="index">
+               
+                <img :src="images.src" preview="20" :onerror="errorImg01">
+              </li>
+    </ul>-->
     <!-- 
 <img src="http://yd-lhy.oss-cn-beijing.aliyuncs.com/user/14ac2eea2b28b952/image/14ac2eea2b28b952&1555732129145.png" preview="1" preview-text="描述1">
 <img src="http://yd-lhy.oss-cn-beijing.aliyuncs.com/user/14ac2eea2b28b952/image/14ac2eea2b28b952&1555732129196.png" preview="1" preview-text="描述2">
     -->
-
+<div v-if="!showLoding">
     <div v-transfer-dom>
-      <x-dialog v-model="showAcc" class="dialog-demo-gallery" hide-on-blur :dialog-style="{width:'100%'}">
+      <x-dialog
+        v-model="showAcc"
+        class="dialog-demo-gallery"
+        hide-on-blur
+        :dialog-style="{width:'100%'}"
+      >
         <div class="img-box">
-          <oplay :accObj="accObj" v-if="showAcc"></oplay>
+          <!-- {{accObj}} -->
+
+            <video width="320" height="240" controls id="upvideo">
+              </video>
+          <!-- <oplay :accObj="accObj" v-if="showAcc"></oplay> -->
         </div>
       </x-dialog>
     </div>
 
     <div>
-      <sticky>
+      <sticky v-if="imgType==1||imgType==2">
         <tab
           active-color="#fe666b"
           default-color="#a0a0a0"
@@ -32,25 +54,68 @@
         </tab>
       </sticky>
 
-      <div v-if="tabsIndex==0" class="padlr">
+      <!-- 
+      <div v-if="imgType==0" class="padlr">
+         <div class="gallery-imagesListBox">
+            <div class="m2">
+           <ul>
+              <li v-for="(images,index) in meetingImg" class="fl previewer-demo-img1" :key="index">
+             
+                <img :src="images.src" preview="20" :onerror="errorImg01">
+              </li>
+            </ul>
+            </div>
+         </div>
+      </div>-->
+
+      <div v-if="tabsIndex==0">
+
+
+
+         <!-- <div class="gallery-imagesListBox" v-if="imgType==0&&meetingImg">
+        
+      </div> -->
+
         <div class="gallery-imagesListBox">
-          <div class="m2" v-if="ExtData&&ExtData.length!=0">
+<!-- {{meetingImg}} -->
+
+
+          <div class="m2" v-if="imgType==0&&meetingImg&&meetingImg.length!=0" >
+           <flexbox class="site-room-title">
+             <flexbox-item>
+                <h4 class="gallery-h4">会议展示</h4>
+                <span class="gallery-len">{{meetingImg.length}}张</span>
+              </flexbox-item>
+            </flexbox>
+          <ul>
+            <li class="fl previewer-demo-img1" v-for="(images,index) in meetingImg" :key="index">
+                <div v-if="images.fileType==1" class="video-btn-box" @click="show1(images,index)">
+                  <div class="jiao"></div>
+                </div>
+              <img
+                :src="images.src"
+                preview="1"
+              >
+            </li>
+         
+          </ul>
+        </div>
+
+
+          <div class="m2" v-if="imgType==1|| imgType==2 &&ExtData&&ExtData.length!=0">
             <flexbox class="site-room-title">
               <flexbox-item>
-                <h4 class="gallery-h4">建筑外观</h4>
+                <h4 class="gallery-h4">{{imgType==1?'建筑外观':'平面图'}}</h4>
                 <span class="gallery-len">{{ExtData.length}}张</span>
               </flexbox-item>
             </flexbox>
-
+<!-- {{meetingImg}} -->
             <ul>
               <li v-for="(images,index) in ExtData" class="fl previewer-demo-img1" :key="index">
                 <div v-if="images.fileType==1" class="video-btn-box" @click="show1(images,index)">
                   <div class="jiao"></div>
                 </div>
-
-               
-
-                <img :src="images.src" preview="1" preview-text="建筑外观" :onerror="errorImg01">
+                <img :src="images.src" preview="1" :preview-text="imgType==1?'建筑外观':'平面图'" :onerror="errorImg01">
               </li>
             </ul>
 
@@ -67,7 +132,7 @@
           <div class="m2" v-if="SurData&&SurData.length!=0">
             <flexbox class="site-room-title">
               <flexbox-item>
-                <h4 class="gallery-h4">外观环境</h4>
+                <h4 class="gallery-h4">{{imgType==1?'外观环境':'整体图'}}</h4>
                 <span class="gallery-len">{{SurData.length}}张</span>
               </flexbox-item>
             </flexbox>
@@ -123,7 +188,7 @@
         <div class="gallery-imagesListBox" v-if="ExtData">
           <flexbox class="site-room-title">
             <flexbox-item>
-              <h4 class="gallery-h4">建筑外观</h4>
+              <h4 class="gallery-h4">{{imgType==1?'建筑外观':'平面图'}}</h4>
               <span class="gallery-len">{{ExtData.length}}张</span>
             </flexbox-item>
           </flexbox>
@@ -136,8 +201,7 @@
               <div v-if="images.fileType==1" class="video-btn-box" @click="show1(images,index)">
                 <div class="jiao"></div>
               </div>
-              <img :src="images.src" preview="1" preview-text="建筑外观" :onerror="errorImg01">
-              <!-- <img :src="images.src" @click="show1(images,index)" :onerror="errorImg01"> -->
+              <img :src="images.src" preview="1" :preview-text="imgType==1?'建筑外观':'平面图'" :onerror="errorImg01">
             </li>
           </ul>
         </div>
@@ -147,7 +211,7 @@
         <div class="gallery-imagesListBox" v-if="SurData">
           <flexbox class="site-room-title">
             <flexbox-item>
-              <h4 class="gallery-h4">外观环境</h4>
+              <h4 class="gallery-h4">{{imgType==1?'外观环境':'整体图'}}</h4>
               <span class="gallery-len">{{SurData.length}}张</span>
             </flexbox-item>
           </flexbox>
@@ -161,7 +225,7 @@
               <div v-if="images.fileType==1" class="video-btn-box" @click="show2(images,index)">
                 <div class="jiao"></div>
               </div>
-              <img :src="images.src" preview="1" preview-text="外观环境" :onerror="errorImg01">
+              <img :src="images.src" preview="1" :preview-text="imgType==1?'外观环境':'整体图'"  :onerror="errorImg01">
               <!-- <img :src="images.src" @click="show2(images,index)" :onerror="errorImg01"> -->
             </li>
           </ul>
@@ -172,7 +236,7 @@
         <div class="gallery-imagesListBox" v-if="Matching">
           <flexbox class="site-room-title">
             <flexbox-item>
-              <h4 class="gallery-h4">配套设施</h4>
+              <h4 class="gallery-h4">{{imgType==1?'配套设施':'细节图'}}</h4>
               <span class="gallery-len">{{Matching.length}}张</span>
             </flexbox-item>
           </flexbox>
@@ -186,7 +250,7 @@
               <div v-if="images.fileType==1" class="video-btn-box" @click="show3(images,index)">
                 <div class="jiao"></div>
               </div>
-              <img :src="images.src" preview="1" preview-text="配套设施" :onerror="errorImg01">
+              <img :src="images.src" preview="1" :preview-text="imgType==1?'配套设施':'细节图'" :onerror="errorImg01">
 
               <!-- <img :src="images.src" @click="show3(images,index)" :onerror="errorImg01"> -->
             </li>
@@ -198,7 +262,7 @@
         <div class="gallery-imagesListBox" v-if="other">
           <flexbox class="site-room-title">
             <flexbox-item>
-              <h4 class="gallery-h4">其他</h4>
+              <h4 class="gallery-h4">{{imgType==1?'其他':'配套设施'}}</h4>
               <span class="gallery-len">{{other.length}}张</span>
             </flexbox-item>
           </flexbox>
@@ -212,7 +276,7 @@
               <div v-if="images.fileType==1" class="video-btn-box" @click="show4(images,index)">
                 <div class="jiao"></div>
               </div>
-              <img :src="images.src" preview="1" preview-text="其他" :onerror="errorImg01">
+              <img :src="images.src" preview="1" :preview-text="imgType==1?'其他':'配套设施'" :onerror="errorImg01">
               <!-- <img :src="images.src" @click="show4(images,index)" :onerror="errorImg01"> -->
             </li>
           </ul>
@@ -264,6 +328,7 @@
         ></previewer>
       </div>-->
     </div>
+</div>
   </div>
 </template>
 <script>
@@ -277,7 +342,7 @@ import {
   FlexboxItem,
   Previewer,
   TransferDom,
-  XDialog
+  XDialog,Loading
 } from "vux";
 export default {
   directives: {
@@ -292,12 +357,15 @@ export default {
     FlexboxItem,
     Previewer,
     oplay,
-    XDialog
+    XDialog,Loading
   },
   data() {
     return {
       //建筑外观data
+      showLoding:true,
+      meetingLength: 0,
       showAcc: false,
+      imgType: null,
       accObj: {
         coursewareList: [
           {
@@ -308,6 +376,7 @@ export default {
           }
         ]
       },
+      meetingImg: null,
       ExtData: null,
       SurData: null,
       Matching: null,
@@ -477,35 +546,90 @@ export default {
   methods: {
     //获取全部图片列表
     getAllImgData() {
+      //  console.log(this.$router.query)
+      this.imgType = this.$route.query.type;
+
       let AssObj = {
         params: {
           prid: this.$route.params.id
+          // prid:'1ab03a5fca57413ead237a4cf129c979'
         }
       };
       getDataInfo("get", "file/oplace", AssObj).then(res => {
         console.log(res);
         if (res.data.code == 200) {
-          let arr = res.data.data.filter(e => {
-            return e.type == 1 && e.belong != 1;
-          });
-          let tabMNub = [0];
-          arr.forEach(el => {
-            el.src = el.objectKey;
-            tabMNub.push(el.belong);
-          });
-          let muneArr = [];
-          new Set(tabMNub).forEach(ele => {
-            muneArr.push(this.setMunes(ele));
-          });
-          this.tabMunes = muneArr;
+          this.showLoding = false
+          if (this.$route.query.type == 1) {
+            let arr = res.data.data.filter(e => {
+              return e.type == 1 && e.belong != 1;
+            });
+            let tabMNub = [0];
+            arr.forEach(el => {
+              el.src = el.objectKey;
+              tabMNub.push(el.belong);
+            });
+            let muneArr = [];
+            new Set(tabMNub).forEach(ele => {
+              muneArr.push(this.setMunes(ele));
+            });
+            this.tabMunes = muneArr;
+            this.allImgData = arr;
+            console.log(tabMNub)
+            this.filterData();
+          } else if (this.$route.query.type == 0) {
+            let arr = res.data.data;
+            arr.forEach(el => {
+              el.src = el.objectKey;
+            });
+            this.allImgData = arr;
+            // console.log(this.allImgData)
+             this.filterData()
+            // this.meetingLength = this.meetingImg.length;
+          }else{
+               let arr = res.data.data.filter(e => {
+              return e.type == 2 && e.belong != 1;
+            });
+            let tabMNub = [0];
+            arr.forEach(el => {
+              el.src = el.objectKey;
+              tabMNub.push(el.belong);
+            });
+            let muneArr = [];
+            new Set(tabMNub).forEach(ele => {
+              muneArr.push(this.setMunes1(ele));
+            });
+              
+            this.tabMunes = muneArr;
+            this.allImgData = arr;
+         
+            this.filterData();
+          }
 
-          this.allImgData = arr;
-          this.filterData();
           // console.log(this.allImgData)
           // this.filterData();
           // this.assessData = res.data.data;
         }
       });
+    },
+     //会议室菜单标题
+    setMunes1(num) {
+      switch (num) {
+        case 0:
+          return "全部";
+          break;
+        case 2:
+          return "平面图";
+          break;
+        case 3:
+          return "整体图";
+          break;
+        case 4:
+          return "细节图";
+          break;
+        case 5:
+          return "配套设置";
+          break;
+      }
     },
 
     //出来菜单标题
@@ -533,19 +657,25 @@ export default {
       // this.infoTab = !this.infoTab
     },
     filterOvAndImg(beNum) {
-      let ovArr = this.allImgData.filter(e => {
+      if(beNum){
+ let ovArr = this.allImgData.filter(e => {
         return e.belong == beNum && e.fileType == 1;
       });
       let imgArr = this.allImgData.filter(e => {
         return e.belong == beNum && e.fileType == 0;
       });
       return [...ovArr, ...imgArr];
+      }else{
+         return this.allImgData
+      }
+     
     },
     filterData() {
       this.ExtData = this.filterOvAndImg(2);
       this.SurData = this.filterOvAndImg(3);
       this.Matching = this.filterOvAndImg(4);
       this.other = this.filterOvAndImg(5);
+      this.meetingImg = this.filterOvAndImg()
       // this.SurData = this.allImgData.filter(e => {
       //   return e.pid == 2;
       // });
@@ -568,6 +698,37 @@ export default {
     logIndexChange4(arg) {
       // console.log(arg);
     },
+
+     findvideocover(obj) {
+      let _this = this;
+      this.$nextTick(() => {
+        let video = document.getElementById("upvideo");
+        let source = document.createElement("source");
+        // source.src = require("../../assets/5b086751dbb7af1ea8fa8d05e66fe5c3.mp4");this.formLabelAlign.video
+        source.src = obj.coursewareList[0].coursewarePath;
+        source.type = "video/mp4";
+        video.appendChild(source);
+        video.addEventListener("loadeddata", function() {
+          var canvas = document.createElement("canvas");
+          canvas.width = "320";
+          canvas.height = "320";
+          canvas
+            .getContext("2d")
+            .drawImage(video, 0, 0, canvas.width, canvas.width);
+          var img = document.createElement("img");
+          let imgsrc = canvas.toDataURL("image/png");
+          console.log(imgsrc)
+          _this.Videoframehandle(imgsrc.split(",")[1]);
+        });
+      });
+    },
+
+
+    showMeeting(item, index) {
+      console.log(item, index);
+      this.showAcc = true;
+      this.$refs.previewer1.show(index);
+    },
     show1(item, index) {
       // console.log(this.$refs.previewer1)
       // console.log(index,item)
@@ -584,6 +745,7 @@ export default {
         };
       } else if (item.fileType == 0) {
         this.$refs.previewer1.show(index);
+        console.log(this.$refs.previewer1)
       }
     },
     show2(item, index) {
@@ -637,6 +799,21 @@ export default {
   },
   mounted() {
     this.getAllImgData();
+   
+  },
+  watch: {
+    showAcc(n,o){
+      if(n){
+         this.findvideocover(this.accObj)
+      }
+      // console.log(n)
+    },
+    meetingImg(n, o) {
+      if (n) {
+        this.meetingLength = n.length;
+        // console.log(n.length)
+      }
+    }
   }
 };
 </script>
@@ -686,4 +863,5 @@ export default {
   font-size: 14px;
   color: #fff !important;
 }
+
 </style>

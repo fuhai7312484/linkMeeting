@@ -939,7 +939,7 @@ export default {
           res.data.data.rePlaceFile.forEach(e => {
             if (e.fileType == 0) {
               imgArr.push({
-                url: "/gallery/"+this.$route.params.id,
+                url: "/gallery/"+this.$route.params.id+'?type=1',
                 fileType: e.fileType,
                 img: e.objectKey,
                 fileId: e.id,
@@ -948,7 +948,7 @@ export default {
               });
             } else if (e.fileType == 1) {
               videoArr.push({
-                url: "/gallery/"+this.$route.params.id,
+                url: "/gallery/"+this.$route.params.id+'?type=1',
                 fileType: e.fileType,
                 img: e.objectKey,
                 fileId: e.id,

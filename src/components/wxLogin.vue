@@ -153,7 +153,8 @@ export default {
         wxProvince: obj.wxProvince,
         wxCity: obj.wxCity,
         wxCountry: obj.wxCountry,
-        wxUnionid: obj.wxUnionid
+        wxUnionid: obj.wxUnionid,
+        wxType:'wx',
         // wxUnionid:obj.Unionid,
       };
 

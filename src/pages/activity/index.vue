@@ -4,10 +4,13 @@
           
 
             <div class="wxLotbtnsBox">
-                <div @click="NotBegun">
+              <router-link tag="div" :to="'/awardlist/123'" >
+               <img :src="require('../../assets/images/lotteryBtn1.png')"/>
+              </router-link>
+                <!-- <div>
                     <img :src="require('../../assets/images/lotteryBtn1.png')"/>
-                </div>
-                <div  @click="NotBegun">
+                </div> -->
+                <div @click="NotBegun">
                   <img :src="require('../../assets/images/lotteryBtn2.png')"/>
                 </div>
   <!-- {{wxData}} -->

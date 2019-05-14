@@ -603,8 +603,8 @@
 
         <ul class="RegListUl">
           <li class="orderPeople-nodata" v-if="orderPersonNum==0">暂无人报名</li>
-          <li v-for="(orderP,index) in orderPeople" :key="index" class="orderPeopleList">
-            <div class="show8listIconTip" v-if="orderP.peopleCount!='1'">{{'x'+orderP.peopleCount}}</div>
+          <li v-for="(orderP,index) in orderPeople" :key="index" class="orderPeopleList" v-if="orderP.name">
+            <div class="show8listIconTip" v-if="orderP.peopleCount&&orderP.peopleCount!='1'">{{'x'+orderP.peopleCount}}</div>
             <img
               :src="orderP.mainPic?orderP.mainPic:require('../../assets/images/myFans-Mask.png')"
             >
@@ -779,10 +779,11 @@
               :key="index"
               :title="fan.name"
               :value="RegisteredTime(fan.createTime)"
+              v-if="fan.name"
             >
               <!-- {{fan.createTime}} -->
               <div slot="icon" class="show8listIcon">
-                <div class="show8listIconTip" v-if="fan.peopleCount!='1'">{{'x'+fan.peopleCount}}</div>
+                <div class="show8listIconTip" v-if="fan.peopleCount&&fan.peopleCount!='1'">{{'x'+fan.peopleCount}}</div>
                 <img
                   width="45"
                   height="45"
@@ -1297,7 +1298,7 @@ export default {
             res.data.data.draftsVo.meetingDetails.meetingFileList.forEach(e => {
               if (e.fileType == 0) {
                 imgArr.push({
-                  url: "javascript:",
+                    url: "/gallery/"+this.$route.params.id+'?type=0',
                   fileType: e.fileType,
                   img: e.fileUrl,
                   fileId: e.fileId,
@@ -1308,7 +1309,7 @@ export default {
                 });
               } else if (e.fileType == 1) {
                 videoArr.push({
-                  url: "javascript:",
+                     url: "/gallery/"+this.$route.params.id+'?type=0',
                   fileType: e.fileType,
                   img: e.fileUrl,
                   fileId: e.fileId,
@@ -1375,6 +1376,7 @@ export default {
         if (res.data.code == 200) {
           //  this. personData = res.data.data.content
           this.orderPersonNum = res.data.data.orderPersonNum;
+          console.log(res.data.data.orderPeople)
           this.orderPeople = res.data.data.orderPeople;
         }
       });
