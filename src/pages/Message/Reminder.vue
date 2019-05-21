@@ -311,7 +311,17 @@ let _that = this
 @import "../../assets/style/tools.less";
 @import "../../assets/style/global.less";
 @import "~vux/src/styles/reset.less";
-
+.reminder-checkerBox{
+  overflow: hidden;
+  .vux-checker-box{
+    overflow: hidden;
+     display: flex;
+     justify-content:space-between;
+      flex-direction: row;
+            flex-wrap: wrap;
+          
+  }
+}
 .ReqVal-item {
   width: 30%;
   border: 1px solid #ececec;
@@ -319,6 +329,7 @@ let _that = this
   text-align: center;
   padding: 5px 0;
   color: #787878;
+  // float: left;
   span {
     display: none;
   }

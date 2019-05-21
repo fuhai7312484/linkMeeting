@@ -717,7 +717,7 @@ export default {
             .drawImage(video, 0, 0, canvas.width, canvas.width);
           var img = document.createElement("img");
           let imgsrc = canvas.toDataURL("image/png");
-          console.log(imgsrc)
+          // console.log(imgsrc)
           _this.Videoframehandle(imgsrc.split(",")[1]);
         });
       });

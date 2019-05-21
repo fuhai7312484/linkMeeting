@@ -100,9 +100,9 @@
           :src="showVoice?require('../../assets/images/x-msg-voice.png'):require('../../assets/images/x-msg-text.png')"
         > -->
       </div>
-      <div class="x-msg-formBox fl">
+      <div class="x-msg-formBox fl" @click="msgFChange">
         <div class="x-msg-form">
-          <x-input v-model="value" placeholder="想对Ta说点什么" show-clear></x-input>
+          <x-input v-model="value" placeholder="想对Ta说点什么" ref="msgF" show-clear></x-input>
         </div>
         <!-- <div v-else>
           <div></div>
@@ -165,7 +165,9 @@ export default {
   },
   methods: {
     //语音部分
-
+    msgFChange(){
+      this.$refs.msgF.focus()
+    },
     playing(id) {
       // console.log('开始');
       // console.log(id)

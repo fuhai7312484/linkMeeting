@@ -190,27 +190,27 @@
 
     <div class="meetingContent" v-if="meetingData">
       <flexbox :gutter="0" class="linH padlr">
-        <flexbox-item :span="3.5/5" class="listContent-tagbox">
+        <flexbox-item class="listContent-tagbox">
           <h3 class="meeting-title">
             <!-- {{meetingData.draftsVo==undefined?'':meetingData.draftsVo.meetingDetails.theme}} -->
             {{meetingData.draftsVo.meetingDetails.theme}}
           </h3>
         </flexbox-item>
-        <flexbox-item :span="1.5/5">
+        <!-- <flexbox-item :span="1.5/5">
           <div :class="idensChange(0,meetingData.idens)?'meeting-flex-v':'meeting-flex-nov'">
             <img
               :src="idensChange(0,meetingData.idens)?require('../../assets/images/meeting-v.png'):require('../../assets/images/icon-uncertified.png')"
             >
             {{idensChange(0,meetingData.idens)?'已认证':'未认证'}}
           </div>
-        </flexbox-item>
+        </flexbox-item> -->
       </flexbox>
 
-      <flexbox :gutter="0" class="linH padlr">
+      <flexbox :gutter="0" class="linH padlr" :span="3.5/5">
         <flexbox-item class="listContent-tagbox">
-          <div>
+          <div class="listContent-TtagsCenBox">
         
-            <span class="listContent-Ttags" v-if="meetingData.draftsVo.meetingTypeList.length!=0">    {{meetingData.draftsVo.meetingTypeList.length!=0?meetingData.draftsVo.meetingTypeList[0].name:''}}</span>
+            <!-- <span class="listContent-Ttags" v-if="meetingData.draftsVo.meetingTypeList.length!=0">    {{meetingData.draftsVo.meetingTypeList.length!=0?meetingData.draftsVo.meetingTypeList[0].name:''}}</span> -->
 
             <!-- <span  v-for="(TypeList,index) in meetingData.draftsVo.meetingTypeList" :key="index" class="listContent-Ttags">{{TypeList.name}}</span> -->
             <span
@@ -218,6 +218,16 @@
               :key="i"
               class="listContent-tags"
             >{{tag}}</span>
+          </div>
+        </flexbox-item>
+
+
+         <flexbox-item :span="1.5/5">
+          <div :class="idensChange(0,meetingData.idens)?'meeting-flex-v':'meeting-flex-nov'">
+            <img
+              :src="idensChange(0,meetingData.idens)?require('../../assets/images/meeting-v.png'):require('../../assets/images/icon-uncertified.png')"
+            >
+            {{idensChange(0,meetingData.idens)?'已认证':'未认证'}}
           </div>
         </flexbox-item>
 
@@ -256,7 +266,7 @@
           >
             <div class="meetingdetailInfoC fl">{{meetingData.draftsVo.meetingDetails.address}}</div>
             <div class="meetingdetailInfoIcons fr">
-              <img width="20" :src="require('../../assets/images/map.png')">
+              <img width="15" :src="require('../../assets/images/map.png')">
               <x-icon type="ios-arrow-right" :style="{color:'#969696'}" size="20"></x-icon>
             </div>
           </router-link>
@@ -304,7 +314,9 @@
                 <span
                   v-for="(cbf,index) in comTypeList('承办单位')"
                   :key="index"
-                >{{cbf.companyName}};</span>
+                >
+                {{index==comTypeList('承办单位').length-1?cbf.companyName:cbf.companyName+';'}}
+                </span>
               </div>
               <div class="meetingdetailInfoB fl">等{{comTypeList('承办单位').length}}家单位</div>
             </div>
@@ -320,9 +332,9 @@
                 <span
                   v-for="(cbf,index) in comTypeList('承办单位')"
                   :key="index"
-                >{{cbf.companyName}};</span>
+                >  {{index==comTypeList('承办单位').length-1?cbf.companyName:cbf.companyName+';'}}</span>
               </div>
-              <div class="meetingdetailInfoB fl">等{{comTypeList('承办单位').length}}家单位</div>
+              <div class="meetingdetailInfoB fl"  v-if="comTypeList('承办单位').length>1">等{{comTypeList('承办单位').length}}家单位</div>
             </div>
           </div>
 
@@ -391,7 +403,10 @@
                 <span
                   v-for="(enItem,index) in en.companyNameList"
                   :key="index"
-                >{{enItem.companyName}};</span>
+                >
+                   {{index==en.companyNameList.length-1?enItem.companyName:enItem.companyName+';'}}
+                <!-- {{enItem.companyName}}; -->
+                </span>
               </div>
               <div class="meetingdetailInfoB fl">等{{en.companyNameList.length}}家单位</div>
             </div>
@@ -406,7 +421,10 @@
                 <span
                   v-for="(enItem,index) in en.companyNameList"
                   :key="index"
-                >{{enItem.companyName}};</span>
+                >
+                  {{index==en.companyNameList.length-1?enItem.companyName:enItem.companyName+';'}}
+                <!-- {{enItem.companyName}}; -->
+                </span>
               </div>
               <div class="meetingdetailInfoB fl">等{{en.companyNameList.length}}家单位</div>
             </div>
@@ -449,13 +467,15 @@
         </div>
         <div class="OrganizerNameBox fl">
           <h4 class="OrganizerName">
+
+          <!-- {{TypeListChange(meetingData.draftsVo.companyTypeList)}} -->
             <span
-              v-for="(self,index) in meetingData.draftsVo.companyTypeList"
+              v-for="(self,index) in TypeListChange(meetingData.draftsVo.companyTypeList)"
               :key="index"
-              v-if="index<1"
             >
-              {{self.companyNameList[0].companyName}}
-              <!-- {{self.companyType&&self.type==3?self.companyNameList[0].companyName:''}} -->
+         {{self.companyNameList[0].companyName}}
+            
+         
             </span>
           </h4>
           <div class="selfOrganinzer">{{meetingData.userMeetingInfo.name}}</div>
@@ -465,14 +485,17 @@
           </div>
         </div>
         <!-- {{meetingData.userMeetingInfo.isMyFollow}} -->
+        
         <div
           class="attentionBtn fr"
           :class="meetingData.userMeetingInfo.isMyFollow==1?'no-attent':'is-attent'"
           @click="followCompany(meetingData.draftsVo.meetingDetails.createPerson)"
         >{{meetingData.userMeetingInfo.isMyFollow==1?'已关注':'关注'}}</div>
+         <div ref="backTab"></div>
       </div>
-
-      <div style="border-bottom:5px solid rgb(245, 245, 245); ">
+ 
+      <div style="border-bottom:10px solid rgb(245, 245, 245); ">
+      
         <tab
           active-color="#fe666b"
           default-color="#a0a0a0"
@@ -500,7 +523,7 @@
             >这里是张图片</p>-->
             <!-- {{meetingContent}} -->
           </div>
-          <div v-if="!showAll" class="bottomMark-floatBtn" @click="showAll = true">
+          <div v-if="!showAll" class="bottomMark-floatBtn" @click="showDetails">
             <img :src="require('../../assets/images/bottomMark-floatBtn.png')">
           </div>
           <div class="bottomMarkBox">
@@ -695,7 +718,7 @@
                   <div class="tabMeetingTextBox fl">
                     <h4 class="tabMeetingTextTitle">{{comment.theme}}</h4>
                     <div class="tabMeetingTime">
-                      <span v-if="comment.status==0" class="TimeC0">
+                      <!-- <span v-if="comment.status==0" class="TimeC0">
                         <img :src="require('../../assets/images/timeC0.png')">
 
                         {{CountdownTime(comment.beginTime)}}
@@ -708,7 +731,7 @@
                       </span> &nbsp;&nbsp;
                       <span>
                         <img :src="require('../../assets/images/timeAdd.png')">
-                      </span>
+                      </span> -->
 
                       {{addressSplit(comment.address)}}
                     </div>
@@ -727,10 +750,24 @@
                       >进行中</span>
                         <span v-else-if="DataItem.status==0" class="notStarted">未开始</span>-->
                       </div>
+                      <div class="tabMeetingNumBox">
                       <div
-                        class="tabMeetingNum"
+                        class="tabMeetingNum fl"
                         :class="comment.status==0?'TimeC0':'TimeC2'"
                       >{{comment.status==0?'火热报名中':comment.status==1 || comment.status==3?'报名即将截止':'报名已结束'}}</div>
+                         <div class="tabMeetingNumStatus fr">
+                        <span v-if="comment.status==0" style="color:#FE7210">
+                             <img :src="require('../../assets/images/timeC0.png')">  {{CountdownTime(comment.beginTime)}}
+                            </span>
+                            <span v-if="comment.status==3 || comment.status==1" style="color:#66C103">
+                          <img :src="require('../../assets/images/timeC1.png')" /> 进行中
+                        </span>
+                        <span v-if="comment.status==2" style="color:#505050">
+                          <img :src="require('../../assets/images/timeC2.png')" /> 已结束
+                        </span>
+
+                      </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -738,8 +775,8 @@
             </ul>
 
             <div class="site-room-dropDown" v-if="pageshow" @click="loadMore">
-              查看更多推荐
-              <x-icon type="ios-arrow-right" class="site-icon-down" size="20"></x-icon>
+              点击查看更多
+              <!-- <x-icon type="ios-arrow-right" class="site-icon-down" size="20"></x-icon> -->
             </div>
             <div class="site-room-dropDown1" v-if="!pageshow">
               <!-- 数据已加载完 -->
@@ -873,6 +910,7 @@ export default {
   name: "meetDetail",
   data() {
     return {
+       showIndex:null,
       Supportcbf:false,
       SupportcbfArr:[],
       showConfirm: false,
@@ -924,6 +962,35 @@ export default {
   computed: {},
 
   methods: {
+   TypeListChange(arr){
+    //  console.log(arr)
+     if(arr.filter(e=>{return e.type=='3'}).length!=0){
+        return arr.filter(e=>{return e.type=='3'})
+     }else{
+     return arr.filter(e=>{
+         return e.companyType =='承办单位'
+       })
+     }
+    
+    //  arr.forEach((e,index)=>{
+    //    if(e.type=='3'){
+    //      return [e]
+    //    }else{
+    //      return index==0
+    //    }
+    //   //  console.log(e)
+    //  })
+    },
+     showDetails(){
+      
+      //  console.log(this.$refs.backTab.offsetTop)
+          this.$nextTick(function () {
+             this.showAll = true
+       window.scrollTo({"behavior":"smooth","top":(this.$refs.backTab.offsetTop-13)});
+          })
+
+     },
+
     CountdownTime(time) {
       return meetingBeTime(time);
     },
@@ -1061,6 +1128,11 @@ export default {
           query: { meeting_id: this.$route.query.meetingId }
         });
       } else {
+
+
+         let login_Url = '/meetDetail/'+this.$route.query.meetingId+'?meetingId='+this.$route.query.meetingId
+        //  console.log(login_Url)
+      setStorage('login_url',login_Url)
         this.$router.push("/login");
         // console.log('去登录')
       }
@@ -1376,7 +1448,7 @@ export default {
         if (res.data.code == 200) {
           //  this. personData = res.data.data.content
           this.orderPersonNum = res.data.data.orderPersonNum;
-          console.log(res.data.data.orderPeople)
+          // console.log(res.data.data.orderPeople)
           this.orderPeople = res.data.data.orderPeople;
         }
       });
@@ -1578,6 +1650,9 @@ export default {
   .weui-cell__ft {
     font-size: 0.8rem;
   }
+}
+.linH{
+  position: relative;
 }
 </style>
 

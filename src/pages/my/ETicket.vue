@@ -127,7 +127,7 @@ import {
   getStorage,
   checkToken,
   getDataInfo,
-  timeLimit
+  timeLimit,isweixin,isLogin,WeChatLogin,setStorage
 } from "../../assets/lib/myStorage.js";
 import {
   Group,
@@ -233,7 +233,42 @@ export default {
   },
 
   mounted() {
-    this.getETicketData();
+  
+
+     if(isLogin()){
+ this.getETicketData();
+     }else{
+        let login_url = 'Eticket/'+this.$route.params.id
+      setStorage('login_url',login_url)
+
+       if(isweixin()){
+           let wx_Url = 'Eticket/'+this.$route.params.id
+      setStorage('wx_url',wx_Url)
+        WeChatLogin()
+       }else{
+this.$router.push('/login')
+       }
+
+     }
+
+// Eticket/19051714360001
+
+// if(isweixin()){
+//   if(isLogin()){
+ 
+//   }else{
+
+//   }
+// }else{
+//    this.getETicketData();
+// }
+   
+    //     let wx_Url =
+    //   "meetDetail/" +
+    //   this.$route.query.meetingId +
+    //   "?meetingId=" +
+    //   this.$route.query.meetingId;
+    // setStorage("wx_url", wx_Url);
   }
 };
 </script>

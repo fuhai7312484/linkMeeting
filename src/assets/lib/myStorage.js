@@ -10,13 +10,13 @@ export function getDataInfo(mode, url, obj) {
   //测试环境
   // let ipUrl = "http://192.168.1.165/lhy/v0.1/api/";
   //服务器正式环境
-  // let ipUrl = "http://lianhuiyi.woneast.com/lhy/v0.1/api/";
+  let ipUrl = "http://lianhuiyi.woneast.com/lhy/v0.1/api/";
   // 外网测试服务器
   // let ipUrl = "http://47.92.227.226:8081/lhy/v0.1/api/";
   // let ipUrl = "http://192.168.1.170:8080/v0.1/api/";
   // let ipUrl = "http://192.168.1.125:8080/v0.1/api/";
   // let ipUrl = 'http://192.168.1.152:8080/v0.1/api/'  
-    let ipUrl = 'http://192.168.1.149:8080/v0.1/api/'  
+    // let ipUrl = 'http://192.168.1.149:8080/v0.1/api/'  
   
   var qs = require("qs");
 
@@ -71,14 +71,15 @@ export function isweixin() {
 export function WeChatLogin(){
     let _that = this;
     let code = GetQueryString("code");
-    var callback = "http%3a%2f%2f192.168.1.118%3a8080%2f%23%2fwxlogin";
-  //  var callback ='http%3a%2f%2flianhuiyi.woneast.com%2f%23%2fwxlogin';
+    // var callback = "http%3a%2f%2f47.92.227.226%3a8081%2f%23%2fwxlogin";
+    // var callback = "http%3a%2f%2f192.168.1.118%3a8080%2f%23%2fwxlogin";
+   var callback ='http%3a%2f%2flianhuiyi.woneast.com%2f%23%2fwxlogin';
     // 正式版
-    // var appId = "wx837aea6e0dd3f50e";
+    var appId = "wx837aea6e0dd3f50e";
     // 开放平台APPID
     // var appId = "wx74e86a6fcd9d2166";
     // 测试版
-    var appId = "wx41dad60740c7be25";
+    // var appId = "wx41dad60740c7be25";
     // var redirect_url = window.location.origin + window.location.pathname;
     //获取code值
 
@@ -455,14 +456,17 @@ function toDou(n) {
 export function meetingBeTime(time) {
 
   // 指定日期和时间
-  var EndTime = new Date(time);
+  var EndTime = new Date(time.replace(/-/g, "/"));
+ 
   // 当前系统时间
   var NowTime = new Date();
+  // return NowTime
   var t = EndTime.getTime() - NowTime.getTime();
   var d = Math.floor(t / 1000 / 60 / 60 / 24);
   var h = Math.floor(t / 1000 / 60 / 60 % 24);
   var m = Math.floor(t / 1000 / 60 % 60);
   var s = Math.floor(t / 1000 % 60);
+ 
   if(t>0){
     if(d>=1){
       return '还剩' + d+'天开始'
@@ -521,24 +525,41 @@ export function getNavigator(){
 
 
 //唤醒APP
-
 export function  wakeApp(){
-//  console.log(getNavigator())
+  //  console.log(getNavigator())
+  let _that = this;
+  
+    if(getNavigator() =='Android'){
+          window.location.href = 'lianhuiyi://com.chain.meeting/openwith'
+           window.setTimeout(function(){
+            window.location.href = window.location.href.split("/#/")[0]+'/#/downApp'
+          },1500);
+        }else if(getNavigator() =='IOS'){
+          window.location.href = 'com.lianhuiyi://com.lianhuiyi'
+          window.setTimeout(function(){
+            window.location.href = window.location.href.split("/#/")[0]+'/#/downApp'
+          },1500)
+        }
+  }
 
-  if(getNavigator() =='Android'){
+
+// export function  wakeApp(){
+// //  console.log(getNavigator())
+
+//   if(getNavigator() =='Android'){
        
-        window.location.href = 'lianhuiyi://com.chain.meeting/openwith'
-         window.setTimeout(function(){
-           window.location.href = "https://www.pgyer.com/NSM9"; /***打开app的协议，有安卓同事提供***/
-        },2000);
+//         window.location.href = 'lianhuiyi://com.chain.meeting/openwith'
+//          window.setTimeout(function(){
+//            window.location.href = "https://www.pgyer.com/NSM9"; /***打开app的协议，有安卓同事提供***/
+//         },1500);
      
-      }else if(getNavigator() =='IOS'){
-        window.location.href = 'com.lianhuiyi://com.lianhuiyi'
-        window.setTimeout(function(){
-           window.location.href = "https://www.pgyer.com/NSM9"; /***下载app的地址***/
-        },2000)
-      }
-}
+//       }else if(getNavigator() =='IOS'){
+//         window.location.href = 'com.lianhuiyi://com.lianhuiyi'
+//         window.setTimeout(function(){
+//            window.location.href = "https://www.pgyer.com/NSM9"; /***下载app的地址***/
+//         },1500)
+//       }
+// }
 //分享初始化配置
 export function wxRegister(url,callback){
      let wxchatObj = {

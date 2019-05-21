@@ -368,15 +368,28 @@ export default {
           //   _that.$router.go(-1)
           // }
 
-          setTimeout(function() {
-            
-            // location.hash = '/myindex'
+           setTimeout(function() {
+              if (getStorage('login_url')) {
+                _that.$router.push(getStorage('login_url'));
+                console.log(getStorage('login_url'))
+                setTimeout(function() {
+                  stoRemove("login_url");
+                }, 500);
+              } else {
+                _that.$router.push("/myindex");
+              }
+            }, 500);
 
-            // console.log(window.location.hash,location.hash)
-          // location.hash='/myindex'
-          //   console.log(location.hash)
-            _that.$router.push("/meeting");
-          }, 1000);
+
+          // setTimeout(function() {
+            
+          //   // location.hash = '/myindex'
+
+          //   // console.log(window.location.hash,location.hash)
+          // // location.hash='/myindex'
+          // //   console.log(location.hash)
+          //   _that.$router.push("/meeting");
+          // }, 1000);
         } else if (res.data.code == 1003) {
            this.toastInfo = {
               showMsg: res.data.msg,

@@ -18,10 +18,21 @@
       </div>
 
       <div class="meetSuccessTop">
+        <div class="meetSuccessTopImg">
+ <img :src="require('../assets/images/bind-mobile-success.png')">
+        </div>
         <h3>
-          <img :src="require('../assets/images/icon-success.png')">提交成功
+         提交成功
         </h3>
-        <p>谢谢您的回复，更多精彩会议尽在链会议APP</p>
+        <p>感谢您的回复，更多精彩会议尽在链会议APP</p>
+      </div>
+      <div class="meetSuccessBtn" @click="gotoMeeting">
+      查看会议详情
+      </div>
+<!-- <router-link tag="div" to="/meeting" class="meetSuccessByHome" > 更多精彩会议</router-link> -->
+
+      <div class="meetSuccessByHome" @click="godown">
+        更多精彩会议
       </div>
       <!-- <div @click="weixinShareTimeline('这里是标题','这块是简介','http://www.baidu.com','logo.png')">分享给微信好友</div>
       <div>分享到朋友圈</div> -->
@@ -66,7 +77,7 @@ import {
   checkToken,
   getDataInfo,
   wxRegister,
-  ShareTimeline
+  ShareTimeline,wakeApp
 } from "../assets/lib/myStorage.js";
 import {
   Sticky,
@@ -130,6 +141,11 @@ export default {
     };
   },
   methods: {
+     godown() {
+      // this.$router.push("/downApp");
+      wakeApp()
+      // window.location.href = "https://www.pgyer.com/NSM9";
+    },
     weixinShareTimeline(title, desc, link, imgUrl) {
       WeixinJSBridge.invoke("shareTimeline", {
         img_url: imgUrl,
@@ -161,11 +177,12 @@ export default {
     gotoMyTicket() {
       this.$router.push("/MyTicket");
     },
+
     //返回会议详情
     gotoMeeting() {
       this.$router.push({
-        path: "/meetDetail/" + this.$route.query.meeting_id,
-        query: { meetingId: this.$route.query.meeting_id }
+        path: "/meetDetail/" + this.$route.params.id,
+        query: { meetingId: this.$route.params.id }
       });
     },
     //获取当前会议的票价信息

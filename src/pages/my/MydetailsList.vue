@@ -169,12 +169,22 @@
                   <h3>{{ taPos.theme }}</h3>
                 </div>
                 <div class="mylistInfoPar">{{taPos.beginTime}}</div>
-                <div class="tabMeetingTag">
+                <div class="tabMeetingTag fl">
+                      <span v-if="taPos.status==2" class="IsOver">已结束</span>
+                      <span
+                        v-else-if="taPos.status==3 || taPos.status==1"
+                        class="processing"
+                      >进行中</span>
+                      <span v-else-if="taPos.status==0" class="notStarted">未开始</span>
+                    </div>
+
+
+                <!-- <div class="tabMeetingTag">
                   <span v-if="taPos.status=='0'" class="IsOver">已结束</span>
                   <span v-else-if="taPos.status=='1'" class="LiveIn">直播中</span>
                   <span v-else-if="taPos.status=='2'" class="processing">进行中</span>
                   <span v-else-if="taPos.status=='3'" class="notStarted">未开始</span>
-                </div>
+                </div> -->
               </flexbox-item>
             </flexbox>
           </li>
@@ -244,12 +254,21 @@
                   <h3>{{ taPos.theme }}</h3>
                 </div>
                 <div class="mylistInfoPar">{{taPos.beginTime}}</div>
-                <div class="tabMeetingTag">
+                 <div class="tabMeetingTag fl">
+                      <span v-if="taPos.status==2" class="IsOver">已结束</span>
+                      <span
+                        v-else-if="taPos.status==3 || taPos.status==1"
+                        class="processing"
+                      >进行中</span>
+                      <span v-else-if="taPos.status==0" class="notStarted">未开始</span>
+                    </div>
+
+                <!-- <div class="tabMeetingTag">
                   <span v-if="taPos.status=='0'" class="IsOver">已结束</span>
                   <span v-else-if="taPos.status=='1'" class="LiveIn">直播中</span>
                   <span v-else-if="taPos.status=='2'" class="processing">进行中</span>
                   <span v-else-if="taPos.status=='3'" class="notStarted">未开始</span>
-                </div>
+                </div> -->
               </flexbox-item>
             </flexbox>
           </li>
@@ -432,7 +451,7 @@ export default {
           TaObj.params.meId = getStorage("userToken").userId
         }
           getDataInfo("get", "myMeeting/myMeeting/me", TaObj).then(res => {
-            // console.log(res);
+            console.log(res);
             if (res.data.code == 200) {
               this.TaData = res.data.data;
               res.data.data.release.meetingList.forEach(e => {

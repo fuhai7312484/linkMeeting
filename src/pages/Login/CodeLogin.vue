@@ -88,7 +88,7 @@
             </div>
             <div v-if="Resend" class="custom-primary-red" @click="ReacquireCode">
 重新获取
-            </div> -->
+            </div>-->
             <x-button
               v-if="Resend"
               action-type="submit"
@@ -101,30 +101,25 @@
     </div>
 
     <div class="loginFooter">
-      
-       <x-dialog v-model="showHideOnBlur" class="dialog-demo" hide-on-blur>
-          <div class="TermsBox">
-            <div class="TermsTitle">
-              <div @click="showHideOnBlur=false">
-                <span class="TermsClose">
-                 <x-icon type="ios-close-empty" size="30"></x-icon>
-                </span>
-              </div>
-
-              <h3>{{TermsTitle}}</h3>
+      <x-dialog v-model="showHideOnBlur" class="dialog-demo" hide-on-blur>
+        <div class="TermsBox">
+          <div class="TermsTitle">
+            <div @click="showHideOnBlur=false">
+              <span class="TermsClose">
+                <x-icon type="ios-close-empty" size="30"></x-icon>
+              </span>
             </div>
-            <div class="TermsContent padlr">
 
-  <terms :termsType="termsType"></terms>
-
-            </div>
-          
+            <h3>{{TermsTitle}}</h3>
           </div>
-        </x-dialog>
-
-      
-      注册即表示同意链会议 <span @click="gotoTerms('FW')">服务条款</span> 和
-      <span @click="gotoTerms('YS')">隐私条款</span></div>
+          <div class="TermsContent padlr">
+            <terms :termsType="termsType"></terms>
+          </div>
+        </div>
+      </x-dialog>注册即表示同意链会议
+      <span @click="gotoTerms('FW')">服务条款</span> 和
+      <span @click="gotoTerms('YS')">隐私条款</span>
+    </div>
   </div>
 </template>
 <script>
@@ -132,16 +127,20 @@ import Terms from "@/components/Terms";
 import {
   getDataInfo,
   setCookie,
-  setStorage,isweixin
+  setStorage,
+  isweixin,
+  getStorage,stoRemove
 } from "../../assets/lib/myStorage.js";
-import { Group, XInput, XButton, Toast,XDialog } from "vux";
+import { Group, XInput, XButton, Toast, XDialog } from "vux";
 import axios from "axios";
 export default {
   components: {
     Group,
     XInput,
     XButton,
-    Toast,XDialog,Terms
+    Toast,
+    XDialog,
+    Terms
   },
   name: "reg",
   data() {
@@ -149,9 +148,9 @@ export default {
       OrderHight: 0,
       maskValue: "",
       disabled: true,
-       TermsTitle:'',
-       showHideOnBlur: false,
-       termsType: "",
+      TermsTitle: "",
+      showHideOnBlur: false,
+      termsType: "",
       showPositionValue: false,
       showMsg: "",
       showNext: "1",
@@ -187,16 +186,16 @@ export default {
   },
 
   methods: {
-     //服务条款
+    //服务条款
     gotoTerms(type) {
       this.showHideOnBlur = true;
-      switch(type){
+      switch (type) {
         case "FW":
-      this.TermsTitle = '注册协议及服务条款';
-      break;
-       case "YS":
-      this.TermsTitle = '链会议隐私条款';
-      break;
+          this.TermsTitle = "注册协议及服务条款";
+          break;
+        case "YS":
+          this.TermsTitle = "链会议隐私条款";
+          break;
       }
       this.termsType = type;
       // console.log(type)
@@ -205,9 +204,9 @@ export default {
     ReacquireCode() {
       // console.log(1111,this.maskValue)
       let _that = this;
-        // this.Resend = false;
+      // this.Resend = false;
       //这里单独请求获取验证码接口
-        // this.Reacquire();
+      // this.Reacquire();
 
       let SmsObj = {
         type: "login",
@@ -215,10 +214,8 @@ export default {
       };
       // console.log(this.showNext, SmsObj);
       getDataInfo("post", "user/sendSms", SmsObj).then(res => {
-      
         let data = res.data;
         if (data.code === 200) {
-        
           // console.log(data.data);
           _that.VerCode = data.data;
           _that.Resend = false;
@@ -243,12 +240,11 @@ export default {
 
     //提交手机号表单
     submitData() {
-     
       let _that = this;
       if (this.showNext == "1") {
         //showNext为1时这里请求发送验证码接口并且把showNext状态改为2
         // console.log("验证码已经发送至：" + this.maskValue);
- 
+
         let SmsObj = {
           type: "login",
           mobile: this.maskValue
@@ -257,10 +253,8 @@ export default {
 
         getDataInfo("post", "user/sendSms", SmsObj).then(res => {
           let data = res.data;
-       
-          if (data.code === 200) {
-          
 
+          if (data.code === 200) {
             _that.VerCode = data.data;
             _that.showNext = "2";
             _that.Resend = false;
@@ -293,12 +287,12 @@ export default {
     //输入验证码并直接登录
     refCodeChange(ev) {
       let _that = this;
-      if (ev!=''&&this.$refs.refcode.valid == true) {
+      if (ev != "" && this.$refs.refcode.valid == true) {
         let codeObj = {
           mobileCode: ev,
           mobile: this.maskValue
         };
-      
+
         getDataInfo("post", "user/user", codeObj).then(res => {
           // console.log(res)
           if (res.data.code == 200) {
@@ -314,9 +308,19 @@ export default {
 
             setCookie("accessToken", tokenInfo.access_token);
             setStorage("userToken", userInfo);
+            // console.log(getStorage(login_Url))
+            // console.log(getStorage('login_url'))
 
             setTimeout(function() {
-              _that.$router.push("/myindex");
+              if (getStorage('login_url')) {
+                _that.$router.push(getStorage('login_url'));
+                // console.log(getStorage('login_url'))
+                setTimeout(function() {
+                  stoRemove("login_url");
+                }, 500);
+              } else {
+                _that.$router.push("/myindex");
+              }
             }, 500);
           } else if (res.data.code == 1004) {
             this.showMsg = res.data.msg;
@@ -344,36 +348,33 @@ export default {
     this.getOrderHight();
   },
   mounted() {
-   if(isweixin()){
- WeChatLogin().then(res=>{
-
-          let code = GetQueryString("code");
-          if (res.data.code == 200) {
-            if (res.data.data.isRegistered == 0) {
-               this.wxshow1 = true;
-               this.wxData = res.data.data.userInfo;
-                    // console.log(res)
-            }else if(res.data.data.isRegistered == 1){
-               let wxBObj = {
+    if (isweixin()) {
+      WeChatLogin().then(res => {
+        let code = GetQueryString("code");
+        if (res.data.code == 200) {
+          if (res.data.data.isRegistered == 0) {
+            this.wxshow1 = true;
+            this.wxData = res.data.data.userInfo;
+            // console.log(res)
+          } else if (res.data.data.isRegistered == 1) {
+            let wxBObj = {
               wxOpenid: res.data.data.userInfo.openid,
               wxNickname: res.data.data.userInfo.nickname,
               wxHeadimgurl: res.data.data.userInfo.headimgurl,
               wxProvince: res.data.data.userInfo.province,
-              wxCity:res.data.data.userInfo.city,
+              wxCity: res.data.data.userInfo.city,
               wxCountry: res.data.data.userInfo.country,
-              code:code,
+              code: code
             };
             // console.log(wxBObj)
-              this.wxlogin(wxBObj,'auto')
-              // console.log(res.data.data.userInfo)
-            }
-          }else if (res.data.code == 401){
-            console.log('code过期')
+            this.wxlogin(wxBObj, "auto");
+            // console.log(res.data.data.userInfo)
           }
-        })
-
+        } else if (res.data.code == 401) {
+          console.log("code过期");
+        }
+      });
     }
-
   }
 };
 </script>

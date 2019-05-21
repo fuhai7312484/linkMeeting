@@ -43,7 +43,7 @@
         show-cancel></actionsheet>-->
       </div>
     </div>
-    <div v-transfer-dom>
+    <div v-transfer-dom class="my-inputsBoxInput">
       <popup v-model="showInput" height="100%">
         <div class="my-inputsBox">
           <!-- <div @click="show11=false">关闭1111111111111111</div> -->
@@ -305,8 +305,9 @@ export default {
       });
     },
     oldCodeChange(val) {
+      // console.log(val,this.OldCodeVal)
       if (this.step === 1) {
-        if (val == this.OldCode && val != "") {
+        if (val.length==6&&val != "") {
           this.showBtn = true;
         } else {
           if (val.length == 6) {
@@ -346,7 +347,7 @@ export default {
           let data = res.data;
           if (data.code === 200) {
             // alert(data.data)
-            // console.log(data.data);
+            // console.log(res);
             _that.OldCode = data.data;
             _that.Resend = false;
             _that.Reacquire();
@@ -436,14 +437,23 @@ export default {
       if (this.step === 1) {
         let oldmObj = {
           mobileOld: this.myData.mobile,
-          mobileCodeOld: this.OldCode
+          mobileCodeOld: this.OldCodeVal
         };
+        // console.log(oldmObj)
+      
         checkToken().then(Pdata => {
           getDataInfo("patch", "user/userMobile/old", oldmObj).then(res => {
+            // console.log(res)
             if (res.data.code == 200) {
               this.step = 2;
               this.OldCodeVal = this.newMobile = this.newCodeVal = "";
               this.clearCodeTime();
+            }else if(res.data.code == 1004){
+               this.toastInfo = {
+              showMsg: "验证码不正确！",
+              showPositionValue: true,
+              toastType: "text"
+            };
             }
           });
         });
@@ -523,8 +533,14 @@ export default {
 }
 .my-inputsBox{
   .weui-cell{
-    border: none;
+    border: none !important ;
   }
+}
+.my-inputsBoxInput{
+.vux-popup-dialog{
+  z-index: 511;
+}
+
 }
 </style>
 

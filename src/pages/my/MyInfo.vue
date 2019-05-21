@@ -61,7 +61,7 @@
         <!-- {{myData}} -->
       </div>
     </div>
-    <div v-transfer-dom>
+    <div v-transfer-dom class="My-info-PopupBox">
       <popup v-model="showInput" height="100%">
         <div class="my-inputsBox">
           <!-- <div @click="show11=false">关闭1111111111111111</div> -->
@@ -71,20 +71,23 @@
             <div class="my-saveBtn fr" @click="submitInputForm">保存</div>
           </div>
 
-          <div v-if="inputType=='name'">
+          <div v-if="inputType=='name'" class="my-infoNamefocus" @click="Namefocus" >
+          
             <x-input
               :placeholder="myData.name==null || myData.name=='' ?'请填写名字':myData.name"
-              v-model="myData.name"
+              v-model="myData.name" ref="nameF"
             ></x-input>
           </div>
-          <div v-if="inputType=='technical'">
+          <div v-if="inputType=='technical'" class="my-infoNamefocus" @click="Namefocus" >
             <x-input
+            ref="techF"
               :placeholder="myData.technical==null || myData.technical=='' ?'请填写职位':myData.technical"
               v-model="myData.technical"
             ></x-input>
           </div>
-          <div v-if="inputType=='company'">
+          <div v-if="inputType=='company'"  class="my-infoNamefocus" @click="Namefocus" >
             <x-input
+            ref="compF"
               :placeholder="myData.company==null || myData.company==''?'请填写公司名称':myData.company"
               v-model="myData.company"
             ></x-input>
@@ -169,7 +172,18 @@ export default {
   },
   methods: {
     //null
-
+Namefocus(){
+  // console.log(this.inputType)
+  if(this.inputType=='name'){
+    this.$refs.nameF.focus()
+  }else if(this.inputType=='technical'){
+     this.$refs.techF.focus()
+  }else if(this.inputType=='company'){
+     this.$refs.compF.focus()
+  }
+  // this.$refs.nameF.focus()
+// console.log(this.$refs.nameF.focus)
+},
     fileChange(ev){
       // console.log(ev)
     },
@@ -383,6 +397,15 @@ export default {
 }
 .vux-popup-dialog {
   background: #fff !important;
+}
+.My-info-PopupBox{
+  .vux-popup-dialog{
+    z-index: 511;
+  }
+}
+.my-infoNamefocus{
+  height: 50vh;
+  // background: #000;
 }
 </style>
 

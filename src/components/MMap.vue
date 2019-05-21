@@ -56,22 +56,53 @@
                 <div class="tabMeetingTextBox fl">
                   <h4 class="tabMeetingTextTitle">{{DataItem.theme}}</h4>
                   <div class="tabMeetingTime">
-                    <span>{{DataItem.beginTime}}  &nbsp;&nbsp; {{addressSplit(DataItem.address)}}</span>
+                    <span> {{addressSplit(DataItem.address)}}</span>
                     <!-- <span>{{DataItem.address}}</span> -->
                   </div>
                   <div class="tabMeetingTagBox">
-                    <!-- <div class="tabMeetingPrice fl">¥{{DataItem.price}}起</div> -->
+             
+ <div class="tabMeetingTag">
+                  
+                      <span v-for="(Tag,index) in DataItem.tags" :key="index" v-if="index<4">{{Tag}}</span>
+                       
+                      
+                    </div>
 
 
-                    <div class="tabMeetingTag fl">
+
+                    <!-- <div class="tabMeetingTag fl">
                       <span v-if="DataItem.status==2" class="IsOver">已结束</span>
                       <span
                         v-else-if="DataItem.status==3 || DataItem.status==1"
                         class="processing"
                       >进行中</span>
                       <span v-else-if="DataItem.status==0" class="notStarted">未开始</span>
+                    </div> -->
+
+          <div class="tabMeetingNumBox">
+                <div class="tabMeetingNum fl" :class="DataItem.status!=2?'TimeC0':'TimeC2'">
+                      {{DataItem.status==0?'火热报名中':DataItem.status==1 || DataItem.status==3?'报名即将截止':'报名已结束'}}
+                      
+                      </div>
+                      <div class="tabMeetingNumStatus fr">
+                        <span v-if="DataItem.status==0" style="color:#FE7210">
+                             <img :src="require('../assets/images/timeC0.png')">  
+                             {{CountdownTime(DataItem.beginTime)}}
+                        </span>
+
+                         <span v-if="DataItem.status==3 || DataItem.status==1" style="color:#66C103">
+                      <img :src="require('../assets/images/timeC1.png')" /> 进行中
+                    </span>
+
+                    <span v-if="DataItem.status==2" style="color:#505050">
+                      <img :src="require('../assets/images/timeC2.png')" /> 已结束
+                    </span>
+
+                      </div>
+
                     </div>
-                    <div class="tabMeetingNum fr">{{DataItem.msg}}</div>
+
+                    <!-- <div class="tabMeetingNum fr">{{DataItem.msg}}</div> -->
               
 
                     <!-- <div class="tabMeetingTag fl">
@@ -92,6 +123,7 @@
   </div>
 </template>
 <script>
+import { meetingBeTime } from "../assets/lib/myStorage.js";
 import { TransferDom, Popup, Flexbox, FlexboxItem } from "vux";
 export default {
   directives: {
@@ -113,6 +145,9 @@ export default {
     FlexboxItem
   },
   methods: {
+      CountdownTime(time){
+      return meetingBeTime(time)
+    },
      addressSplit(add) {
       var reg = /.+?(省|市|自治区|自治州|县|区|镇)/g;
       let addArr = add.match(reg);

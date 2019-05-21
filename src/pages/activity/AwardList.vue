@@ -1,6 +1,8 @@
 <template>
   <div>
     <div class="pr8">
+
+  
       <swipeout>
         <swipeout-item
           v-for="(awar,index) in awardData"
@@ -49,7 +51,7 @@
               </flexbox-item>
               <flexbox-item>
                 <div class="awardFlexBtn">
-                  <div class="OperatingBtn Op-initiate" v-if="awar.status==0">发起抽奖</div>
+                  <div class="OperatingBtn Op-initiate" @click="initAward(awar.id)" v-if="awar.status==0">发起抽奖</div>
 
                   <div
                     class="OperatingBtn Op-list"
@@ -110,8 +112,19 @@
           <div class="DialogTitle">
             <h3>{{WinnerList.name}}{{WinnerList.total}}名</h3>
           </div>
-          <ul>
-            <li></li>
+          <ul class="DialogWinUl">
+            <li v-for="(i,index) in WinnerList.WinnerData" :key="index">
+              <div class="DialogListIcon fl">
+                <img :src="i.mainPic">
+              </div>
+              <div class="DialogListName fl">
+                <h4>{{i.name}}</h4>
+              </div>
+              <div class="DialogListPrize fl">
+                获得
+                <span>{{WinnerList.prize}}</span>
+              </div>
+            </li>
           </ul>
           <!-- {{WinnerList}} -->
         </div>
@@ -193,7 +206,13 @@ export default {
           winNum: 3,
           roomCode: 1023,
           status: 1,
-          WinnerData: [{}]
+          WinnerData: [
+            {
+              openid: "12345678765",
+              name: "小猪佩奇",
+              mainPic: require("../../assets/images/20146216561084761.gif")
+            }
+          ]
         }
       ],
       toastInfo: {
@@ -233,6 +252,11 @@ export default {
     showHide(item) {
       this.showHideOnBlur = true;
       this.WinnerList = item;
+    },
+      //发起抽奖
+    initAward(id){
+      this.$router.push('/initlist/'+id)
+      console.log(id)
     },
     //提交表单
     Submit() {

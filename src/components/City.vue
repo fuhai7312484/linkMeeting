@@ -26,8 +26,19 @@
 
     <div class="cityListWrapper" ref="wrapper">
       <div>
+
+         <div class="cityListBox padlr" ref="Rec">
+          <!-- <div class="cityListTitle">当前位置</div> -->
+          <ul class="cityList">
+            <li @click="handCityClick()">
+             全国
+            </li>
+          </ul>
+        </div>
+
+
         <div class="cityListBox padlr" v-for="(i,index) in 1" :key="index" ref="Rec">
-          <div class="cityListTitle">根据您的定位推荐</div>
+          <div class="cityListTitle">当前位置</div>
           <ul class="cityList">
             <li @click="handCityClick(positionCity)">
               <img src="../assets/images/b-map-position.png" v-if="positionCity!==''">
@@ -174,6 +185,21 @@ export default {
     },
     //点击城市切换城市
     handCityClick(city) {
+      // console.log(city);
+      if(!city){
+        city={
+          centerLatitude: null,
+          centerLongitude: null,
+          higherCode: null,
+          hotFlag: 1,
+          jianPin: "ZHRMGHG",
+          level: 1,
+          name: "全国",
+          quanPin: "zhonghuarenmingongheguo",
+          regionCode: 100000,
+          zoneCode: null,
+        }
+      }
       // console.log(city);
       if (getStorage("historyCity")) {
         let arr = getStorage("historyCity");

@@ -40,6 +40,7 @@
           v-for="(item,index) in detailData.orderCouponShowList"
            v-if="item.status!=8"
           :key="index"
+          @click.stop="gotoEticket"
         >
           <div class="OrderTicketList-index fl">{{index+1}}</div>
           <div class="OrderTicketList-content fl">
@@ -56,7 +57,7 @@
             <div
               class="TicketList-btn"
               v-if="item.ticketType!=0&&item.joinType==0"
-              @click="RequestRefund(item.pid)"
+              @click.stop="RequestRefund(item.pid)"
             >申请退款</div>
           </div>
           <div class="OrderTicketList-Etickt fr" @click="gotoEticket"></div>
@@ -185,7 +186,7 @@ import {
   getStorage,
   checkToken,
   getDataInfo,
-  timeLimit
+  timeLimit,isweixin,isLogin,WeChatLogin,setStorage
 } from "../../assets/lib/myStorage.js";
 import {
   Group,
@@ -286,12 +287,12 @@ export default {
       };
       checkToken().then(Pdata => {
         getDataInfo("get", "meetingdetails/meTicket", DetailObj).then(res => {
-          console.log(res);
+          // console.log(res);
           if (res.data.code == 200) {
             this.detailData = res.data.data;
             this.show2 = false;
           } else if (res.data.code == 100101) {
-            _that.$router.push("/login");
+            // _that.$router.push("/login");
           }
         });
       });
@@ -299,8 +300,28 @@ export default {
   },
 
   mounted() {
-    this.getDetailData();
-  }
+    // this.getDetailData();
+   
+   
+      if(isLogin()){
+   this.getDetailData();
+     }else{
+        let login_url = 'orderdetail/'+this.$route.params.id
+      setStorage('login_url',login_url)
+      
+       if(isweixin()){
+           let wx_Url = 'orderdetail/'+this.$route.params.id
+      setStorage('wx_url',wx_Url)
+        WeChatLogin()
+       }else{
+this.$router.push('/login')
+       }
+
+     }
+
+
+  },
+
 };
 </script>
 

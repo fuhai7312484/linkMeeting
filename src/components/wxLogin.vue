@@ -27,7 +27,7 @@
           <h4>绑定手机号</h4>
           <div class="WXbindInfo">为了您的账号安全,请绑定手机号</div>
           <div>
-            <group>
+            <group class="WXbindInfo-af" @click="bindmobileChange">
               <x-input
                 placeholder="请输入手机号"
                 mask="99999999999"
@@ -42,7 +42,7 @@
             </group>
 
             <div class="bind-mobile-step1 padlr">
-              <div class="bind-mobile-title fl">
+              <div class="bind-mobile-title fl" @click="bindCodeChange">
                 <x-input
                   placeholder="请输入短信验证码"
                   ref="bindCode"
@@ -63,10 +63,11 @@
               <div class="bind-mobile-oldMob bind-col borL1 fr" v-if="!Resend">{{time+'s重新获取'}}</div>
             </div>
 
-            <div class="bind-mobile-loginBtn fr">
+            <div class="bind-mobile-loginBtn">
               <x-button
                 action-type="submit"
-                :class="ResBtnP?'bind-custom-primary':'bind-custom-primary-red'"
+                   :class="ResBtnP?'custom-primary':'custom-primary-red'"
+           
                 :disabled="ResBtnP"
                 @click.native="submitDataP"
                 :show-loading="showLoading"
@@ -142,6 +143,12 @@ export default {
     };
   },
   methods: {
+    bindmobileChange(){
+this.$refs.bindmobile.focus()
+    },
+    bindCodeChange(){
+      this.$refs.bindCode.focus()
+    },
     //微信直接登录
     wxlogin(obj, type) {
       let _that = this;
@@ -381,10 +388,15 @@ export default {
 @import "../assets/style/global.less";
 @import "~vux/src/styles/reset.less";
 .WXPopupBox {
+  overflow: hidden;
+  background: #fff;
+ 
   .vux-popup-dialog {
     z-index: 503;
+    background: #fff;
   }
 }
+
 .WXPopup1 {
   z-index: 9999;
   padding: 0.8rem;
@@ -419,6 +431,29 @@ export default {
   }
 }
 .WXPopup1{
+  h4{
+    margin-left:.8rem; 
+    margin-top:1.2rem; 
+    margin-bottom:.6rem; 
+  }
+  .WXbindInfo{
+    margin-left:.8rem; 
+  }
   input{ padding: .5rem 0;}
+}
+.bind-mobile-title{
+
+  .weui-input{
+font-size: 1rem;
+  }
+  
+}
+.WXbindInfo-af{
+  .weui-cells::before{
+    border: 0;
+  }
+}
+.bind-mobile-oldMob{
+line-height: 40px;
 }
 </style>

@@ -62,6 +62,7 @@ import city from "@/components/City";
 //抽奖活动
 import Lottery from "@/pages/activity/index"
 import AwardList from "@/pages/activity/AwardList"
+import initList from "@/pages/activity/initList"
 // import PullTod from "@/components/PullTo";
 Vue.use(Router);
 
@@ -440,6 +441,14 @@ export default new Router({
       //   index: 2,
       // },
       component: AwardList
+    },
+    {
+      path: "/initlist/:id",
+      name: "initList",
+      // meta: {
+      //   index: 2,
+      // },
+      component: initList
     },
   ]
 });

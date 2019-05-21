@@ -194,6 +194,9 @@ export default {
     (this.dialogId = this.$route.query.dialogId),
       (this.type = this.$route.query.type);
     JIMinitchange(this.JIMlogin);
+
+
+    
     // console.log(this.$route.params.dialogId,this.$route.params.type)
   }
 };

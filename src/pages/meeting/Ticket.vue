@@ -16,7 +16,6 @@
           v-model="ticketValue"
           default-item-class="ticket-item"
           selected-item-class="ticket-item-selected"
-        
         >
           <checker-item
             v-for="(Titem,index) in ticketData"
@@ -217,8 +216,8 @@ import {
   @import "../../assets/style/global.less";
   @import "~vux/src/styles/reset.less";
  .ticket-Box{
-   background: rgba(245,245,245,1);
-   height: 100vh;
+  //  background: rgba(245,245,245,1);
+  //  height: 100vh;
  }
   .router-link-active {
     color: #fff;

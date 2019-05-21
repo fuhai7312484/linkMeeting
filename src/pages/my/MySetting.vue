@@ -27,7 +27,7 @@
       </div>
     </div>
 
-    <div v-transfer-dom>
+    <div v-transfer-dom class="my-changePassword" >
       <popup v-model="showInput" height="100%">
         <div class="my-inputsBox">
        
@@ -386,5 +386,10 @@ export default {
     border: none;
   }
 
+}
+.my-changePassword{
+  .vux-popup-dialog{
+    z-index: 511;
+  }
 }
 </style>

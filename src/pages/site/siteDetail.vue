@@ -52,7 +52,7 @@
     ></video-player>-->
 
     <div class="site-img-showBox" v-if="sitData">
-       <router-link to="/meeting" class="site-img-showBoxGotoHome" ><img :src="require('../../assets/images/home.png')"/>首页</router-link>
+       <!-- <router-link to="/meeting" class="site-img-showBoxGotoHome" ><img :src="require('../../assets/images/home.png')"/>首页</router-link> -->
      
       <!-- :list="swiperType=='img'?SImgList:SVideoList" -->
 
@@ -195,28 +195,41 @@
       </flexbox>
       <grid :show-vertical-dividers="false" :show-lr-borders="false" class="padlr">
         <grid-item>
-          <img slot="icon" src="../../assets/images/siteicon.png">
+          <span class="siteAmountIcon" slot="icon">
+             <img src="../../assets/images/siteicon.png">
+          </span>
+         
           <span class="siteAmountTitle" slot="label">会场/场地</span>
           <span class="siteAmount">{{sitData.meetingRoom.length}}间</span>
         </grid-item>
 
         <grid-item>
-          <img slot="icon" src="../../assets/images/siteicon.png">
+           <span class="siteAmountIcon" slot="icon">
+          <img src="../../assets/images/area.png">
+           </span>
           <span class="siteAmountTitle" slot="label">最大面积</span>
           <span class="siteAmount">{{rooMMost('area',sitData.meetingRoom)}}㎡</span>
         </grid-item>
 
         <grid-item>
-          <img slot="icon" src="../../assets/images/siteicon.png">
+            <span class="siteAmountIcon" slot="icon">
+          <img src="../../assets/images/capacity.png">
+            </span>
           <span class="siteAmountTitle" slot="label">最多容纳</span>
           <span class="siteAmount">{{rooMMost('falleryful',sitData.meetingRoom)}}人</span>
+        </grid-item>
+
+         <grid-item class="no-a">
+          <!-- <img slot="icon" src="../../assets/images/siteicon.png">
+          <span class="siteAmountTitle" slot="label">会场/场地</span>
+          <span class="siteAmount">{{sitData.meetingRoom.length}}间</span> -->
         </grid-item>
       </grid>
 
       <group>
         <cell
           is-link
-          class="potR"
+          class="siteAddressIcon potR"
           :border-intent="false"
           :inline-desc="sitData.remarks?sitData.remarks:' '"
           :link="{path:'/navmap', query:{address:sitData.address,lng:sitData.longitude,lat:sitData.latitude}}"
@@ -231,23 +244,23 @@
           </div>
           <img
             slot="icon"
-            width="20"
+            width="15"
             class="cellIcon"
             :src="require('../../assets/images/map.png')"
           >
         </cell>
       </group>
 
-      <group title="联系我们" class="site-onPhoneBox-title">
+      <group title="联系方式" class="site-onPhoneBox-title">
         <ul class="site-conPhone padlr">
           <li v-for="(Contacts,index) in sitData.placeContacts">
-            <span>{{showPhone(Contacts.phone)}}</span>
-            <span>{{Contacts.name}}</span>
+            <span class="conPhone">{{showPhone(Contacts.phone)}}</span>
+            <span class="conPhoneTitle">{{Contacts.name}}</span>
             <span @click="callPhone(Contacts.phone)">
-              <img width="15" :src="require('../../assets/images/phone.png')">
+              <img width="12" :src="require('../../assets/images/phone.png')">
             </span>
             <span @click="smsPhone(Contacts.phone)">
-              <img width="15" :src="require('../../assets/images/msg.png')">
+              <img width="12" :src="require('../../assets/images/msg.png')">
             </span>
           </li>
           <!-- <li>
@@ -264,8 +277,35 @@
       </group>
     </div>
 
+
+
+       <div class="attentionOrganizerBox1" v-if="sitData&&sitData.cuser!=undefined">
+        <div class="OrganizerLogo fl" @click="goToTaDetail(sitData.cuser.id)">
+          <img
+            :src="sitData.cuser.mainPic!=null?sitData.cuser.mainPic:require('../../assets/images/myFans-Mask.png')"
+          >
+        </div>
+        <div class="OrganizerNameBox fl">
+          <h4 class="OrganizerName">{{sitData.cuser.name}}</h4>
+          <div class="OrganizerInfo">
+            <span>会议室 {{sitData.cuser.mnum}}</span>&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;
+            <span>粉丝 {{sitData.cuser.fnum}}</span>
+          </div>
+        </div>
+
+        <div
+          class="attentionBtn fr"
+          :class="IsFollow==1?'no-attent':'is-attent'"
+          @click="followCompany(sitData.cuser.id)"
+        >{{IsFollow==1?'已关注':'关注'}}</div>
+      </div>
+
+
+
+
+
     <div class="borBottm" v-if="sitData">
-      <flexbox class="site-room-title padlr">
+      <flexbox class="site-room-title1 padlr">
         <flexbox-item :span="1/3">
           <h3 id="anchor">会议室</h3>
           <span>{{sitData.meetingRoom.length }}间</span>
@@ -274,14 +314,14 @@
 
       <div class="site-room-listBox padlr">
         <div v-for="(roomItme, index) in showdetailList" :key="index" class="site-room-list">
-          <flexbox :gutter="3">
-            <flexbox-item :span="1/4" class="site-room-imgBox">
+          <flexbox :gutter="8">
+            <flexbox-item :span="1.1/4" class="site-room-imgBox">
               <img
                 :src="roomItme.meetingPic?roomItme.meetingPic:require('../../assets/images/noimg.png') "
                 :onerror="errorImg01"
               >
             </flexbox-item>
-            <flexbox-item :span="3/4">
+            <flexbox-item :span="2.8/4">
               <flexbox>
                 <flexbox-item :span="1.8/3">
                   <h4 class="site-room-title">{{ roomItme.name }}</h4>
@@ -335,7 +375,7 @@
                   </div>
                 </flexbox-item>
                 <flexbox-item :span="0.8/4">
-                  <div class="site-room-destine" @click="gotoReserve">预定</div>
+                  <div class="site-room-destine" @click="gotoReserve">预订</div>
                 </flexbox-item>
               </flexbox>
             </flexbox-item>
@@ -343,14 +383,14 @@
         </div>
       </div>
 
-      <div class="site-room-dropDown" @click="showRoomsChange()">
+      <div class="site-room-dropDown" v-if="showdetailList.length>5" @click="showRoomsChange()">
         查看更多会场(
         <countup :start-val="0" :end-val="computeRoomDatelen" :duration="2" class="demo1"></countup>)
         <x-icon v-if="roomShow" type="ios-arrow-up" class="site-icon-down" size="20"></x-icon>
         <x-icon v-else-if="!roomShow" type="ios-arrow-down" class="site-icon-down" size="20"></x-icon>
       </div>
 
-      <div class="attentionOrganizerBox" v-if="sitData.cuser!=undefined">
+      <!-- <div class="attentionOrganizerBox" v-if="sitData.cuser!=undefined">
         <div class="OrganizerLogo fl" @click="goToTaDetail(sitData.cuser.id)">
           <img
             :src="sitData.cuser.mainPic!=null?sitData.cuser.mainPic:require('../../assets/images/myFans-Mask.png')"
@@ -369,7 +409,7 @@
           :class="IsFollow==1?'no-attent':'is-attent'"
           @click="followCompany(sitData.cuser.id)"
         >{{IsFollow==1?'已关注':'关注'}}</div>
-      </div>
+      </div> -->
 
       <div>
         <tab
@@ -499,7 +539,7 @@
           @click="gotoDetil(Surr.id)"
         >
           <flexbox>
-            <flexbox-item :span="1/4" class="site-room-imgBox">
+            <flexbox-item :span="1.1/4" class="site-room-imgBox">
               <img
                 :src="Surr.homepagePic?Surr.homepagePic:require('../../assets/images/noimg.png')"
                 :onerror="errorImg01"
@@ -534,13 +574,13 @@
               </flexbox>
             </flexbox-item>
             <flexbox-item :span="0.8/4">
-              <flexbox orient="vertical">
+              <flexbox orient="vertical" class="site-recommendBox">
                 <!-- {{ Surr.distance}} -->
                 <flexbox-item
                   class="site-recommend-distance"
                 >{{Surr.distance==null?'暂无距离':'距离'+ GetDistance(sitData.latitude,sitData.longitude,Surr.latitude,Surr.longitude)+'米'}}</flexbox-item>
                 <flexbox-item>
-                  <x-button mini plain type="warn" style="border-color:#505050; color:#505050;">详情</x-button>
+                  <x-button mini plain type="warn" style="border-color:#323232; color:#323232;">详情</x-button>
                 </flexbox-item>
               </flexbox>
             </flexbox-item>
@@ -548,8 +588,8 @@
         </div>
       </div>
       <div class="site-room-dropDown" v-if="pageshow" @click="loadMore">
-        查看更多推荐
-        <x-icon type="ios-arrow-right" class="site-icon-down" size="20"></x-icon>
+        点击查看更多
+        <!-- <x-icon type="ios-arrow-right" class="site-icon-down" size="20"></x-icon> -->
       </div>
       <div class="site-room-dropDown1" v-if="!pageshow">
         <!-- 数据已加载完 -->
@@ -927,7 +967,12 @@ export default {
             if (res.data.code == 200) {
               // console.log(res.data.data.latitude,res.data.data.longitude,resd.data.data.data[1].latitude,resd.data.data.data[1].longitude)
               // console.log(this.GetDistance(res.data.data.latitude,res.data.data.longitude,res.data.data.data[1].latitude,res.data.data.data[1].longitude))
-
+       
+       
+       // let arr = resd.data.data
+        //   this.Surrounding =  arr.filter(e=>{
+        //     return e.id!=this.$route.query.detailId
+        //   }) ;
               this.Surrounding = resd.data.data;
             }
           });
@@ -1275,4 +1320,47 @@ setStorage('wx_url',wx_Url)
   width: 70px;
   border-radius: 50px;
 }
+.linH{
+  position: relative;
+  .flex-demo{
+    font-size: .8rem;
+    margin:.5rem 0; 
+  }
+}
+.siteAddressIcon{
+
+  img{
+    vertical-align: top;
+  }
+}
+.site-content-box{
+.weui-grid::after{
+    border:0;
+}
+
+.weui-grids{
+  border-bottom:1px solid #e6e6e6;
+}
+}
+.weui-grid__icon{
+  height: 16px;
+  text-align: center;
+.siteAmountIcon{
+display: inline-block;
+
+img{
+  width: 20px;
+height: 16px;
+}
+}
+}
+.site-content-box{
+  .weui-grid__icon{
+  height: 18px;
+  }
+  .weui-grid{
+    padding: 10px 10px;
+  }
+}
+
 </style>

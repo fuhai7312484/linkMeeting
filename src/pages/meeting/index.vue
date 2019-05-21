@@ -10,13 +10,15 @@
       </router-link>
 
       <div class="siteListIcosBox fr">
-        <router-link tag="div" to="/meetingSearch" :class="!IsShowMap?'fr HeaderSearch':'fl HeaderSearch'">
+         <div class="fr HeaderSearch" v-if="!IsShowMap" @click="show9Change">
+          <img src="../../assets/images/button-screen-black.png">
+        </div>
+        
+        <router-link tag="div" to="/meetingSearch" :class="!IsShowMap?'fr HeaderSearch':'fr HeaderSearch'">
           <img src="../../assets/images/HeaderSearch.png">
         </router-link>
         <!-- @click="gotoMapChange" -->
-        <div class="fr HeaderSearch" v-if="!IsShowMap" @click="show9Change">
-          <img src="../../assets/images/button-screen-black.png">
-        </div>
+       
       </div>
 
       <div v-transfer-dom class="InterestedBox">
@@ -84,7 +86,7 @@
               default-color="#a0a0a0"
               custom-bar-width="33%"
               v-model="tabsIndex"
-              :line-width="3"
+              :line-width="2"
             >
               <tab-item
                 v-for="(tabs,index) in tabMunes"
@@ -152,7 +154,7 @@
           :IsCompleted="IsCompleted"
           :hide="hide"
         >
-          <ul class="tabMeetingListUl padlr" style="height:100%;" v-if="!show3">
+          <ul class="tabMeetingListUl padlr6" style="height:100%;" v-if="!show3">
             <li v-if="!isLogin && tabsIndex==0" class="ListNoContent">
               <p>您还没有登录</p>
               <p>这里有很多值得您关注的会议</p>
@@ -204,7 +206,7 @@
                 <div class="tabMeetingTextBox fl">
                   <h4 class="tabMeetingTextTitle">{{DataItem.theme}}</h4>
                   <div class="tabMeetingTime">
-                    <span v-if="DataItem.status==0" class="TimeC0" >
+                    <!-- <span v-if="DataItem.status==0" class="TimeC0" >
 
                      <img :src="require('../../assets/images/timeC0.png')">  {{CountdownTime(DataItem.beginTime)}}
                 
@@ -215,9 +217,9 @@
                     <span v-if="DataItem.status==2" class="TimeC2">
                      <img :src="require('../../assets/images/timeC2.png')" /> 已结束
                     </span> &nbsp;&nbsp;
-                    <span>
+                    <span class="timeAdd">
 <img :src="require('../../assets/images/timeAdd.png')"/>
-                    </span>
+                    </span> -->
                      
                   {{addressSplit(DataItem.address)}}
 
@@ -233,12 +235,30 @@
                       >进行中</span>
                       <span v-else-if="DataItem.status==0" class="notStarted">未开始</span> -->
                     </div>
-                    <div class="tabMeetingNum" :class="DataItem.status!=2?'TimeC0':'TimeC2'">
-
-
+                    <div class="tabMeetingNumBox">
+                <div class="tabMeetingNum fl" :class="DataItem.status!=2?'TimeC0':'TimeC2'">
                       {{DataItem.status==0?'火热报名中':DataItem.status==1 || DataItem.status==3?'报名即将截止':'报名已结束'}}
                       
                       </div>
+                      <div class="tabMeetingNumStatus fr">
+                        <span v-if="DataItem.status==0" style="color:#FE7210">
+                             <img :src="require('../../assets/images/timeC0.png')">  {{CountdownTime(DataItem.beginTime)}}
+                        </span>
+
+                         <span v-if="DataItem.status==3 || DataItem.status==1" style="color:#66C103">
+                      <img :src="require('../../assets/images/timeC1.png')" /> 进行中
+                    </span>
+
+                    <span v-if="DataItem.status==2" style="color:#505050">
+                      <img :src="require('../../assets/images/timeC2.png')" /> 已结束
+                    </span>
+
+                      </div>
+
+                      
+
+                    </div>
+                   
                   </div>
                 </div>
 
@@ -421,6 +441,7 @@
             >
               <div class="tabMeetingTopBox" v-if="tabsIndex==0">
                 <div class="orgLogo fl">
+                 
                   <img
                     :src="DataItem.mainPic==null?require('../../assets/images/myFans-Mask.png'):DataItem.mainPic"
                   >
@@ -728,12 +749,20 @@ export default {
   },
   methods: {
     CountdownTime(time){
+      // return time
+      // console.log(time)
       return meetingBeTime(time)
     },
     filterBelong(arr) {
-      return arr.filter(e => {
+      // console.log(arr)
+      if(arr){
+ return arr.filter(e => {
         return e.belong == 1;
       });
+      }else{
+        return []
+      }
+     
     },
     //唤醒IOS
     ios() {
@@ -959,10 +988,10 @@ export default {
               if (res.data.data != null) {
                 this.tabMunes = [...["关注", "推荐"], ...res.data.data];
                 setStorage("industry", [...["关注", "推荐"], ...res.data.data]);
-                this.tabsIndex = 0;
-                setTimeout(function() {
-                  _that.tabsIndex = 1;
-                }, 300);
+                this.tabsIndex = 1;
+                // setTimeout(function() {
+                //   _that.tabsIndex = 1;
+                // }, 16.8);
               } else {
                 this.show2 = true;
                   this.IndType = [...this.IndTypeData];
@@ -1040,7 +1069,10 @@ export default {
     },
     //切换地图
     gotoMapChange() {
+      // console.log(111111)
+      // this.IsShowMap = !this.IsShowMap
       if (!this.IsShowMap) {
+        // this.IsShowMap = true;
         this.getMapAllData(this.tabsIndex);
       } else {
         this.IsShowMap = false;
@@ -1248,8 +1280,8 @@ export default {
       goodObj.params.city = this.city.name
         ? this.city.name
         : this.PositObj.city;
-         if(dataObj.params.city=="全国"){
-            dataObj.params.city = ''
+         if(goodObj.params.city=="全国"){
+            goodObj.params.city = ''
           }
       // console.log(obj.counter)
       getDataInfo(
@@ -1576,6 +1608,7 @@ export default {
   },
 
   mounted() {
+   
     this.getOrderHight();
        let wx_Url = 'meeting'
       setStorage('wx_url',wx_Url)
@@ -1589,20 +1622,19 @@ export default {
   watch: {
     tabsIndex(n, o) {
       this.getAllData(n);
-
       this.filterData = [this.tabMunes[n]];
       this.tabTitle = this.tabMunes[n];
     },
-    IsShowMap(n, o) {
-      if (n) {
-        if(!getStorage('IsFirst')){
-          this.showMapGuide = true;
-           setStorage('IsFirst',true)
-        }
+    // IsShowMap(n, o) {
+    //   if (n) {
+    //     if(!getStorage('IsFirst')){
+    //       this.showMapGuide = true;
+    //        setStorage('IsFirst',true)
+    //     }
        
-      }
-      // console.log(n)
-    }
+    //   }
+      
+    // }
     //     IsShowMap(n,o){
     //       if(n){
     // this.getMapAllData(this.tabsIndex)

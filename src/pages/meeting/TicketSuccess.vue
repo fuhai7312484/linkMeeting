@@ -9,7 +9,7 @@
             <!-- <router-link tag="div" to="/" class="my-saveBtn fr" >
 我的票券
             </router-link> -->
-             <div class="my-saveBtn fr" @click="gotoMyTicket">
+             <div class="my-saveBtn fr" @click="gotoETickt">
                我的票券
                </div>
           </div>
@@ -22,9 +22,14 @@
       </div>
 
 
-<div class="meetSuccessTop">
+<div class="meetSuccessTop1">
   <h3><img :src="require('../../assets/images/icon-success.png')"/>报名成功</h3>
-  <p>您已成功报名该会议,点击 <span @click="gotoMyTicket">我的票券</span> 即可查看</p>
+  <p v-if="orderInfo.meetingShow!=undefined&&RemainingTime(orderInfo.meetingShow.beginTime)==0" >成功报名该会议,会议已开始</p>
+  <p v-if="orderInfo.meetingShow!=undefined&&RemainingTime(orderInfo.meetingShow.beginTime)!=0" >成功报名该会议,会议剩余{{RemainingTime(orderInfo.meetingShow.beginTime)}}天开始</p>
+  <div class="meetSuccessTopETickt" @click="gotoETickt(orderInfo.orderMeeting.id)">
+    查看电子票
+  </div>
+  <!-- <p>您已成功报名该会议,点击 <span @click="gotoMyTicket">我的票券</span> 即可查看</p> -->
 
 </div>
       <div class="meetSuccessContentBox padlr" v-if="orderInfo.meetingShow">
@@ -37,7 +42,7 @@
 
      <div class="meetSuccessContent">
 <div class="meetSuccessInfoOne fl">会议时间：</div>
-<div class="meetSuccessInfoTwo fl">{{orderInfo.meetingShow.beginTime}}</div>
+<div class="meetSuccessInfoTwo fl">{{getTimeLimit(orderInfo.meetingShow.beginTime,orderInfo.meetingShow.endTime)}} 共{{compare(orderInfo.meetingShow.beginTime,orderInfo.meetingShow.endTime)}}天</div>
      </div>
 
      <div class="meetSuccessContent">
@@ -45,10 +50,34 @@
 <div class="meetSuccessInfoTwo fl">{{orderInfo.meetingShow.address}}</div>
      </div>
 
+
       <div class="meetSuccessContent">
-<div class="meetSuccessInfoOne fl">会议票种：</div>
-<div class="meetSuccessInfoTwo meTicket fl">{{orderInfo.meTicket.name}} &nbsp;&nbsp;{{orderInfo.orderMeeting.payType}}</div>
+<div class="meetSuccessInfoOne fl">报名人：</div>
+<div class="meetSuccessInfoTwo fl">{{orderInfo.orderMeeting.orderMeetingPersonList[0].name}}</div>
      </div>
+
+      <div class="meetSuccessContent">
+<div class="meetSuccessInfoOne fl">手机号：</div>
+<div class="meetSuccessInfoTwo fl">{{orderInfo.orderMeeting.orderMeetingPersonList[0].mobile}}</div>
+     </div>
+ <div class="meetSuccessContent">
+<div class="meetSuccessInfoOne fl">会议票种：</div>
+<div class="meetSuccessInfoTwo fl">{{orderInfo.meTicket.name}} <span>({{orderInfo.personNum}}张)</span></div>
+     </div>
+
+ <div class="meetSuccessContent">
+<div class="meetSuccessInfoOne fl">票种价格：</div>
+<div class="meetSuccessInfoTwo fl"><p>¥ {{orderInfo.meetingShow.price}}</p></div>
+     </div>
+
+      <div class="meetSuccessContent">
+<div class="meetSuccessInfoOne fl">订单编号：</div>
+<div class="meetSuccessInfoTwo fl">{{orderInfo.orderMeeting.id}}</div>
+     </div>
+
+
+
+<!--      
 
      <div class="meetSuccessContent">
 <div class="meetSuccessInfoOne fl">电子票号：</div>
@@ -69,7 +98,7 @@
 <div class="meetSuccessInfoOne fl">联系方式：</div>
 <div class="meetSuccessInfoTwo fl">{{orderInfo.orderMeeting.orderMeetingPersonList[0].mobile}}</div>
      </div>
-
+ -->
 
 
       </div>
@@ -137,7 +166,7 @@ import {
   getStorage,
   checkToken,
   getDataInfo,wxRegister,
-  ShareTimeline,ShareAppMessage,ShareAppShareQQ,ShareQZone,ShareWeibo
+  ShareTimeline,ShareAppMessage,ShareAppShareQQ,ShareQZone,ShareWeibo,timeLimit,
 } from "../../assets/lib/myStorage.js";
   import { Sticky,Card, TransferDomDirective as TransferDom,  Loading, } from "vux";
   export default {
@@ -195,7 +224,47 @@ import {
       };
     },
     methods: {
+      RemainingTime(time){
+ // 指定日期和时间
+  var EndTime = new Date(time.replace(/-/g, "/"));
+   
+  // 当前系统时间
+  var NowTime = new Date();
+  var t = EndTime.getTime() - NowTime.getTime();
+  var d = Math.floor(t / 1000 / 60 / 60 / 24);
+  var h = Math.floor(t / 1000 / 60 / 60 % 24);
+  var m = Math.floor(t / 1000 / 60 % 60);
+  var s = Math.floor(t / 1000 % 60);
+  return d
+ 
+      },
+compare(start, end) {
+  let s = new Date(start.replace(/-/g, "/"));
+   let e = new Date(end.replace(/-/g, "/"))
 
+  // console.log(start.getTime())
+  //   start = start.getTime()
+  //   end = end.getTime()
+    var time = 0
+   if (s > e) {
+     // this.snackBar.error('结束时间需要大于开始时间2！')
+     return false
+   } else {
+     time = e - s
+   }
+  //  console.log(Math.floor(time / 86400000))
+   return Math.floor(time / 86400000)
+},
+      //处理时间范围
+    getTimeLimit(beginTime, endTime) {
+      if (beginTime || endTime) {
+        return timeLimit(beginTime, endTime);
+      }
+    },
+gotoETickt(id){
+  this.$router.push('Eticket/'+id)
+ 
+},
        weixinShareTimeline(title, desc, link, imgUrl) {
       WeixinJSBridge.invoke("shareTimeline", {
         img_url: imgUrl,
@@ -249,7 +318,7 @@ import {
       // console.log(orderObj)
       getDataInfo("get", "ordermeeting/ordermeeting", orderObj).then(
         res => {
-          console.log(res)
+          // console.log(res)
           if (res.data.code == 200) {
             // console.log(res.data.data)
             this.orderInfo = res.data.data

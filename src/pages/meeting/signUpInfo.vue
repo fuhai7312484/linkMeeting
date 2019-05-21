@@ -79,7 +79,7 @@
             </div>
             <li slot="content" :class="Contact.company==''?'linH55':''">
               <h5 class="signUpMobilleTitleBox">
-                <span>{{Contact.name}}</span>
+                <span class="signUpMobilleName">{{Contact.name}}</span>
                 <span>{{Contact.mobile}}</span>
               </h5>
               <div class="signUpCompany" v-if="Contact.company!=''">{{Contact.company}}</div>
@@ -137,7 +137,7 @@
 
             <div v-if="addNewshow">
               <div class="signUpFormBox padlr">
-                <div class="signUpInputs borBm padlr">
+                <div class="signUpInputs borBm padlr" @click="usernameF">
                   <div class="signUpLabel fl">
                     <span>*</span> 姓名
                   </div>
@@ -154,7 +154,7 @@
                   </div>
                 </div>
 
-                <div class="signUpInputs borBm padlr">
+                <div class="signUpInputs borBm padlr" @click="mobileF">
                   <div class="signUpLabel fl">
                     <span>*</span> 手机号
                   </div>
@@ -171,7 +171,7 @@
                   </div>
                 </div>
 
-                <div class="signUpInputs borBm padlr">
+                <div class="signUpInputs borBm padlr" @click="emailF">
                   <div class="signUpLabel fl">
                     <span>*</span>邮箱地址
                   </div>
@@ -187,17 +187,17 @@
                   </div>
                 </div>
 
-                <div class="signUpInputs padlr">
+                <div class="signUpInputs borBm padlr" @click="companyF">
                   <div class="signUpLabel fl">公司名称</div>
                   <div class="signUpInput fr">
-                    <x-input placeholder="所在单位全称" v-model="newForm.company"></x-input>
+                    <x-input placeholder="所在单位全称" ref="company" v-model="newForm.company"></x-input>
                   </div>
                 </div>
 
-                <div class="signUpInputs borBm padlr">
+                <div class="signUpInputs borBm padlr" @click="positionF">
                   <div class="signUpLabel fl">职位</div>
                   <div class="signUpInput fr">
-                    <x-input placeholder="你的职位" v-model="newForm.position"></x-input>
+                    <x-input placeholder="你的职位" ref="position" v-model="newForm.position"></x-input>
                   </div>
                 </div>
               </div>
@@ -351,6 +351,21 @@ export default {
     };
   },
   methods: {
+    usernameF(){
+      this.$refs.username.focus()
+    },
+    mobileF(){
+       this.$refs.mobile.focus()
+    },
+    emailF(){
+      this.$refs.email.focus()
+    },
+    companyF(){
+      this.$refs.company.focus()
+    },
+    positionF(){
+      this.$refs.position.focus()
+    },
     onShow() {},
     onHide() {},
     closeShowInput() {
@@ -537,7 +552,7 @@ export default {
         // let orderObj = {
         //         Obj: [obj]
         //       };
-
+console.log(orderObj)
         checkToken().then(Pdata => {
           getDataInfo("post2", "ordermeeting/ordermeeting", orderObj).then(
             res => {
@@ -752,7 +767,7 @@ export default {
       height: 20px;
       border-radius: 20px;
       border: 1px solid #dcdcdc;
-      margin: 0.6rem 0.6rem 0.6rem 0;
+      margin: 0.3rem 0.6rem 0.6rem 0;
       color: #fff;
       text-align: center;
       line-height: 20px;
