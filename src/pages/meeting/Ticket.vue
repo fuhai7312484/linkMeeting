@@ -65,6 +65,22 @@
         </flexbox-item>
       </flexbox>
     </div> -->
+
+
+    <div v-transfer-dom class="ticket-por">
+      <confirm v-model="show"
+      confirm-text="去下载"
+      @on-cancel="onCancel"
+      @on-confirm="onConfirm"
+      @on-show="onShow"
+      @on-hide="onHide">
+        <p style="text-align:center;">
+          当前暂不支持购票，</br>请下载或打开链会议APP购票！
+        </p>
+      </confirm>
+    </div>
+
+
   </div>
 </template>
 <script>
@@ -73,20 +89,24 @@ import {
   removeCookie,
   getStorage,
   checkToken,
-  getDataInfo,setStorage
+  getDataInfo,setStorage,wakeApp
 } from "../../assets/lib/myStorage.js";
-  import { Flexbox, FlexboxItem, Sticky, Checker, CheckerItem } from "vux";
+  import { Flexbox, FlexboxItem, Sticky, Checker, CheckerItem,Confirm,TransferDomDirective as TransferDom  } from "vux";
   export default {
+    directives: {
+    TransferDom
+  },
     name: "Ticket",
     components: {
       Flexbox,
       FlexboxItem,
       Sticky,
       Checker,
-      CheckerItem
+      CheckerItem,Confirm 
     },
     data() {
       return {
+        show:false,
         disabled:
           typeof navigator !== "undefined" &&
           /iphone/i.test(navigator.userAgent) &&
@@ -134,6 +154,19 @@ import {
       };
     },
     methods: {
+      onCancel () {
+      // console.log('on cancel')
+    },
+    onConfirm (msg) {
+    wakeApp()
+      
+    },
+    onShow () {
+      // console.log('on show')
+    },
+     onHide () {
+      // console.log('on hide')
+    },
       //当前票种是否为停售
       Discontinued(time){
         var timestamp = Date.parse(new Date())
@@ -148,9 +181,16 @@ import {
         }
       },
       ticketChange(val,itemDisabled){
- 
+//  console.log(val.type==1)
+
        if( !this.Discontinued(val.timeEnd) && val.isOrder!=1){
-          this.next(val)
+          if(val.type==1){
+            this.show = true
+            console.log('去下APP')
+            }else{
+            this.next(val)
+            }
+         
        }else{
         //  console.log('不能购买！')
        }
@@ -242,4 +282,10 @@ import {
   //   background-size: 35px;
   //   border-color: #fe666b;
   // }
+  .ticket-por{
+    .weui-dialog__btn_primary{
+      text-align: center;
+      color:#000; 
+    }
+  }
 </style>

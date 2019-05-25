@@ -9,16 +9,19 @@
         <i class="el-icon-caret-bottom"></i>
       </router-link>
 
-      <div class="siteListIcosBox fr">
-         <div class="fr HeaderSearch" v-if="!IsShowMap" @click="show9Change">
+      <div class="siteListIcosBox">
+        <div class="fr HeaderSearch" v-if="!IsShowMap" @click="show9Change">
           <img src="../../assets/images/button-screen-black.png">
         </div>
-        
-        <router-link tag="div" to="/meetingSearch" :class="!IsShowMap?'fr HeaderSearch':'fr HeaderSearch'">
+
+        <router-link
+          tag="div"
+          to="/meetingSearch"
+          :class="!IsShowMap?'fr HeaderSearch':'fr HeaderSearch'"
+        >
           <img src="../../assets/images/HeaderSearch.png">
         </router-link>
         <!-- @click="gotoMapChange" -->
-       
       </div>
 
       <div v-transfer-dom class="InterestedBox">
@@ -76,23 +79,24 @@
     </div>
     <div v-if="!IsShowMap">
       <sticky :check-sticky-support="false" :offset="0">
-        <!-- <div class="meetingfilterIcon fr">
-            <img src="../../assets/images/meetingfilterIcon.png">
-        </div>-->
+      
         <div class="meeting-tabBox">
-          <div class="meeting-tab fl">
+          <div class="meeting-tab fl" ref="tabP" v-if="tabMunesShow">
             <tab
+            ref="tabBox"
               active-color="#fe666b"
-              default-color="#a0a0a0"
+              default-color="#000"
               custom-bar-width="33%"
               v-model="tabsIndex"
+              :custom-bar-width="getBarWidth"
               :line-width="2"
             >
               <tab-item
                 v-for="(tabs,index) in tabMunes"
                 :key="index"
                 :selected="tabTitle === tabs"
-                @on-item-click="tabClick(index)"
+                
+                @on-item-click="tabClick(tabs,index)"
               >{{ tabs }}</tab-item>
             </tab>
           </div>
@@ -182,7 +186,7 @@
                 <div class="orgLogo fl">
                   <img
                     :src="DataItem.mainPic==null?require('../../assets/images/myFans-Mask.png'):DataItem.mainPic"
-                  />
+                  >
                 </div>
                 <div class="orgname fl">{{DataItem.userName}}</div>
                 <div class="orgUptime fr">{{ProTime(DataItem.createTime,'T')}}</div>
@@ -196,10 +200,10 @@
                     :key="index"
                     v-if="filterBelong(DataItem.meetingFileList).length!=0"
                   >
-                    <img :src="img.fileUrl?img.fileUrl:require('../../assets/images/noimg.png')" />
+                    <img :src="img.fileUrl?img.fileUrl:require('../../assets/images/noimg.png')">
                   </span>
                   <span v-if="filterBelong(DataItem.meetingFileList).length==0">
-                    <img :src="require('../../assets/images/noimg.png')" />
+                    <img :src="require('../../assets/images/noimg.png')">
                   </span>
                 </div>
 
@@ -219,51 +223,42 @@
                     </span> &nbsp;&nbsp;
                     <span class="timeAdd">
 <img :src="require('../../assets/images/timeAdd.png')"/>
-                    </span> -->
-                     
-                  {{addressSplit(DataItem.address)}}
-
+                    </span>-->
+                    {{addressSplit(DataItem.address)}}
                   </div>
                   <div class="tabMeetingTagBox">
                     <div class="tabMeetingTag">
                       <!-- {{DataItem.status}} -->
                       <span v-for="(Tag,index) in DataItem.tags" :key="index" v-if="index<4">{{Tag}}</span>
-                       
+
                       <!-- <span
                         v-else-if="DataItem.status==3 || DataItem.status==1"
                         class="processing"
                       >进行中</span>
-                      <span v-else-if="DataItem.status==0" class="notStarted">未开始</span> -->
+                      <span v-else-if="DataItem.status==0" class="notStarted">未开始</span>-->
                     </div>
                     <div class="tabMeetingNumBox">
-                <div class="tabMeetingNum fl" :class="DataItem.status!=2?'TimeC0':'TimeC2'">
-                      {{DataItem.status==0?'火热报名中':DataItem.status==1 || DataItem.status==3?'报名即将截止':'报名已结束'}}
-                      
-                      </div>
+                      <div
+                        class="tabMeetingNum fl"
+                        :class="DataItem.status!=2?'TimeC0':'TimeC2'"
+                      >{{DataItem.status==0?'火热报名中':DataItem.status==1 || DataItem.status==3?'报名即将截止':'报名已结束'}}</div>
                       <div class="tabMeetingNumStatus fr">
                         <span v-if="DataItem.status==0" style="color:#FE7210">
-                             <img :src="require('../../assets/images/timeC0.png')">  {{CountdownTime(DataItem.beginTime)}}
+                          <img :src="require('../../assets/images/timeC0.png')">
+                          {{CountdownTime(DataItem.beginTime)}}
                         </span>
 
-                         <span v-if="DataItem.status==3 || DataItem.status==1" style="color:#66C103">
-                      <img :src="require('../../assets/images/timeC1.png')" /> 进行中
-                    </span>
+                        <span v-if="DataItem.status==3 || DataItem.status==1" style="color:#66C103">
+                          <img :src="require('../../assets/images/timeC1.png')"> 进行中
+                        </span>
 
-                    <span v-if="DataItem.status==2" style="color:#505050">
-                      <img :src="require('../../assets/images/timeC2.png')" /> 已结束
-                    </span>
-
+                        <span v-if="DataItem.status==2" style="color:#505050">
+                          <img :src="require('../../assets/images/timeC2.png')"> 已结束
+                        </span>
                       </div>
-
-                      
-
                     </div>
-                   
                   </div>
                 </div>
-
-
-
               </div>
             </li>
           </ul>
@@ -441,7 +436,6 @@
             >
               <div class="tabMeetingTopBox" v-if="tabsIndex==0">
                 <div class="orgLogo fl">
-                 
                   <img
                     :src="DataItem.mainPic==null?require('../../assets/images/myFans-Mask.png'):DataItem.mainPic"
                   >
@@ -466,7 +460,7 @@
                 <div class="tabMeetingTextBox fl">
                   <h4 class="tabMeetingTextTitle">{{DataItem.theme}}</h4>
                   <div class="tabMeetingTime">
-                    <span> {{CountdownTime(DataItem.beginTime)}}</span>
+                    <span>{{CountdownTime(DataItem.beginTime)}}</span>
                     <span>{{DataItem.region}}</span>
                   </div>
                   <div class="tabMeetingTagBox">
@@ -481,8 +475,6 @@
                     <div class="tabMeetingNum fr">{{DataItem.msg}}</div>
                   </div>
                 </div>
-
-
               </div>
             </li>
           </ul>
@@ -514,7 +506,8 @@ import {
   getPositioning,
   setStorage,
   timeLimit,
-  JIMinitchange,meetingBeTime
+  JIMinitchange,
+  meetingBeTime
 } from "../../assets/lib/myStorage.js";
 import MMap from "@/components/MMap";
 import {
@@ -558,6 +551,11 @@ export default {
   },
   data() {
     return {
+      tabMunesShow:false,
+       tabWidth: document.body.clientWidth,
+      activeName: "second",
+      active: 0,
+      cur: 1, //默认选中第一个tab
       showMapGuide: false,
       hide: false,
       show3: false,
@@ -748,21 +746,26 @@ export default {
     ...mapState(["city"])
   },
   methods: {
-    CountdownTime(time){
+    //  tabsIndex = index
+    handleClick() {},
+    tabsChange(index){
+  this.tabsIndex = index
+
+    },
+    CountdownTime(time) {
       // return time
       // console.log(time)
-      return meetingBeTime(time)
+      return meetingBeTime(time);
     },
     filterBelong(arr) {
       // console.log(arr)
-      if(arr){
- return arr.filter(e => {
-        return e.belong == 1;
-      });
-      }else{
-        return []
+      if (arr) {
+        return arr.filter(e => {
+          return e.belong == 1;
+        });
+      } else {
+        return [];
       }
-     
     },
     //唤醒IOS
     ios() {
@@ -818,9 +821,77 @@ export default {
         query: { meetingId: id }
       });
     },
-    tabClick(index) {
+    tabClick(keyword,index) {
+// console.log('on item click:', index)
+     let barLeft = 0;
+     document.getElementsByClassName('vux-tab-ink-bar')[0].style.right = '100%';
+     for (let i = 0; i < this.tabMunes.length;) {
+      //  console.log(document.getElementsByClassName('vux-tab-item')[i].innerText)
+       if (document.getElementsByClassName('vux-tab-item')[i].innerText === keyword) {
+        //  console.log('document.getElementsByClassName(\'vux-tab-item\')[' + index + '].offsetWidth = ' + document.getElementsByClassName('vux-tab-item')[i].offsetWidth)
+         barLeft += document.getElementsByClassName('vux-tab-item')[i].offsetWidth / 2
+         //为什么是22.5？因为底部bar长度为44px，这样做可以让bar的中心对齐tab-item的中心<br>       
+           barLeft -= 14.5
+         break;
+       }
+       barLeft += document.getElementsByClassName('vux-tab-item')[i].offsetWidth;
+       i += 1;
+     }
+     document.getElementsByClassName('vux-tab-ink-bar')[0].style.left = (barLeft + 'px');
+
+
       // this.infoTab = !this.infoTab
     },
+     // 函数控制tab-bar的宽度,如果tab标签页数量为1，则隐藏tab-bar
+      getBarWidth () {
+        if (this.tabMunes && this.tabMunes.length === 1) {
+          return '0px'
+        }
+        return '30px'
+      },
+
+  setTabWidth () {
+        // 页面完成刷新之后
+        if(this.tabMunesShow){
+        this.$nextTick(() => {
+        
+          let ofwidth = 0
+          let efwidth = 0
+          // efwidth为每一个tab-item的长度总和,因为tab-item的父级为flex布局,而tab-item的flex: none，所以初始化的时候，tab-item会根据自己的字体长度，自动扩张宽度。
+          for (let i = 0; i < this.$refs.tabBox.$children.length;) {
+            efwidth += this.$refs.tabBox.$children[i].$el.offsetWidth
+            i += 1
+          }
+          // 同样是计算初始化的时候，每一个tab-item的总宽度，但当tab-item总长度大于tab的总长度时，立马退出程序
+          for (let i = 0; i < this.$refs.tabBox.$children.length;) {
+            ofwidth += this.$refs.tabBox.$children[i].$el.offsetWidth
+            if (ofwidth > (this.$refs.tabP.clientWidth)) {
+              break
+            }
+            i += 1
+          }
+          // 假如tab-item的总宽度小于显示tabwidth，则评分tab的剩余空间，加到每一个tab-item中
+          if (ofwidth < (this.$refs.tabP.clientWidth)) {
+            for (let i = 0; i < this.$refs.tabBox.$children.length;) {
+              this.$refs.tabBox.$children[i].$el.style.width = (this.$refs.tabBox.$children[i].$el.clientWidth + (((this.$refs.tabP.clientWidth) - ofwidth) / this.$refs.tabBox.$children.length)) + 'px'
+              // console.log(((((document.body.clientWidth) - ofwidth) / this.$refs.tabBox.$children.length)) + 'px')
+              i += 1
+            }
+            this.tabWidth = (this.$refs.tabP.clientWidth)
+          } else {
+            this.tabWidth = efwidth
+          }
+        }, 1000)
+         }
+      },
+
+ clickFirstItem () {
+        setTimeout(() => {
+          this.$refs.tabBox.$children[1].onItemClick()
+        }, 200)
+      },
+
+
     demo01_onIndexChange(index) {
       this.demo01_index = index;
     },
@@ -838,6 +909,7 @@ export default {
       //  console.log(val.toString()===this.IndTypeData.toString())
     },
     show2Change() {
+      this.tabMunesShow = false
       this.show2 = true;
       let sotr = getStorage("industry");
 
@@ -866,6 +938,7 @@ export default {
                   });
                 });
                 this.IndType = [...newArr];
+                  this.tabMunesShow =true
               } else {
                 if (sotr) {
                   sotr = sotr.splice(0, 2);
@@ -879,16 +952,18 @@ export default {
                   });
 
                   this.IndType = [...sotr];
+                    this.tabMunesShow =true
                 } else {
                   this.IndType = [...this.IndTypeData];
+                    this.tabMunesShow =true
                 }
               }
+
             }
           });
         });
       } else {
         if (sotr) {
-         
           sotr.splice(0, 2);
           let newArr = [];
           this.IndTypeData.forEach((e, index) => {
@@ -899,8 +974,10 @@ export default {
             });
           });
           this.IndType = [...newArr];
+          //  this.tabMunesShow = true;
         } else {
           this.IndType = [...this.IndTypeData];
+          //  this.tabMunesShow = true;
         }
       }
     },
@@ -921,7 +998,7 @@ export default {
             "meetingdetails/meetingdetails/interested",
             intObj
           ).then(res => {
-            console.log(res)
+            console.log(res);
             if (res.data.code == 200) {
               if (res.data.data == null) {
                 let arr = ["关注", "推荐"],
@@ -965,12 +1042,13 @@ export default {
     },
     //获取导航栏菜单
     getTabMunes() {
+   
+      this.tabMunesShow =false
       let _that = this;
       let sotr = getStorage("industry");
-    
+
       //  console.log(sotr,JIM.isLogin())
       if (isLogin()) {
-         
         let userId = getStorage("userToken").userId;
         let intObj = {
           params: {
@@ -989,14 +1067,16 @@ export default {
                 this.tabMunes = [...["关注", "推荐"], ...res.data.data];
                 setStorage("industry", [...["关注", "推荐"], ...res.data.data]);
                 this.tabsIndex = 1;
+                this.tabMunesShow =true
+               
                 // setTimeout(function() {
                 //   _that.tabsIndex = 1;
                 // }, 16.8);
               } else {
                 this.show2 = true;
-                  this.IndType = [...this.IndTypeData];
-              console.log('空')
-
+                this.IndType = [...this.IndTypeData];
+                 this.tabMunesShow =true
+                console.log("空");
 
                 // if (sotr) {
                 //   sotr.splice(0, 2);
@@ -1024,12 +1104,15 @@ export default {
         });
       } else {
         if (sotr) {
-     
           this.tabMunes = sotr;
+           this.setTabWidth()
+      this.clickFirstItem()
+           this.tabMunesShow = true;
         } else {
+           this.tabMunesShow = false
           this.show2Change();
-          // console.log(111111);
           this.show2 = true;
+          
         }
       }
     },
@@ -1055,6 +1138,7 @@ export default {
               this.tabMunes = [...arr, ...serverArr];
               setStorage("industry", [...arr, ...serverArr]);
               this.tabsIndex = 1;
+                this.tabMunesShow = true;
             }
           });
         });
@@ -1063,6 +1147,7 @@ export default {
         this.tabMunes = [...arr, ...serverArr];
         this.show2 = false;
         this.tabsIndex = 1;
+          this.tabMunesShow = true;
       }
 
       // this.showToast = false;
@@ -1230,7 +1315,7 @@ export default {
                 arr.push(e.name);
               });
               this.filterData = arr;
-             
+
               this.mapListData = res.data.data.meetingShowList;
               this.MapTotal = res.data.data.totalCount;
             } else {
@@ -1280,9 +1365,9 @@ export default {
       goodObj.params.city = this.city.name
         ? this.city.name
         : this.PositObj.city;
-         if(goodObj.params.city=="全国"){
-            goodObj.params.city = ''
-          }
+      if (goodObj.params.city == "全国") {
+        goodObj.params.city = "";
+      }
       // console.log(obj.counter)
       getDataInfo(
         "get",
@@ -1319,9 +1404,9 @@ export default {
         dataObj.params.city = this.city.name
           ? this.city.name
           : this.PositObj.city;
-           if(dataObj.params.city=="全国"){
-            dataObj.params.city = ''
-          }
+        if (dataObj.params.city == "全国") {
+          dataObj.params.city = "";
+        }
         // console.log(dataObj)
         // let city =
         getDataInfo(
@@ -1334,7 +1419,7 @@ export default {
             if (res.data.data.meetingShowList.length < this.mapNum) {
               this.NoMapMore = true;
             }
-           
+
             this.MapTotal = res.data.data.totalCount;
             this.mapListData = res.data.data.meetingShowList;
             // console.log(this.mapListData)
@@ -1344,9 +1429,9 @@ export default {
         dataObj.params.city = this.city.name
           ? this.city.name
           : this.PositObj.city;
-           if(dataObj.params.city=="全国"){
-            dataObj.params.city = ''
-          }
+        if (dataObj.params.city == "全国") {
+          dataObj.params.city = "";
+        }
         dataObj.params.industry = this.tabMunes[index];
 
         getDataInfo("get", "meetingdetails/meetingByConditions", dataObj).then(
@@ -1401,15 +1486,14 @@ export default {
           pageSize: this.mapNum
         }
       };
- 
 
       if (index == 1) {
         dataObj.params.city = this.city.name
           ? this.city.name
           : this.PositObj.city;
-           if(dataObj.params.city=="全国"){
-            dataObj.params.city = ''
-          }
+        if (dataObj.params.city == "全国") {
+          dataObj.params.city = "";
+        }
         // console.log(dataObj)
         // let city =
         getDataInfo(
@@ -1436,9 +1520,9 @@ export default {
         dataObj.params.city = this.city.name
           ? this.city.name
           : this.PositObj.city;
-           if(dataObj.params.city=="全国"){
-            dataObj.params.city = ''
-          }
+        if (dataObj.params.city == "全国") {
+          dataObj.params.city = "";
+        }
         dataObj.params.industry = this.tabMunes[index];
 
         getDataInfo("get", "meetingdetails/meetingByConditions", dataObj).then(
@@ -1496,17 +1580,16 @@ export default {
         dataObj.params.city = this.city.name
           ? this.city.name
           : this.PositObj.city;
-          if(dataObj.params.city=="全国"){
-            dataObj.params.city = ''
-          }
-     
+        if (dataObj.params.city == "全国") {
+          dataObj.params.city = "";
+        }
+
         // let city =
         getDataInfo(
           "get",
           "meetingdetails/meetingdetailsListByGoodMeeting",
           dataObj
         ).then(res => {
-        
           if (res.data.code == 200) {
             this.show3 = false;
             if (res.data.data) {
@@ -1522,9 +1605,9 @@ export default {
         dataObj.params.city = this.city.name
           ? this.city.name
           : this.PositObj.city;
-           if(dataObj.params.city=="全国"){
-            dataObj.params.city = ''
-          }
+        if (dataObj.params.city == "全国") {
+          dataObj.params.city = "";
+        }
         dataObj.params.industry = this.tabMunes[type];
 
         getDataInfo("get", "meetingdetails/meetingByConditions", dataObj).then(
@@ -1594,9 +1677,8 @@ export default {
                 cityCode: stor ? stor.regionCode : res.data.data[0].regionCode
               }
             };
-           
+
             getDataInfo("get", "place", placeObj).then(resd => {
-           
               if (resd.data.code == 200) {
                 this.TaPosted = resd.data.data.data;
               }
@@ -1608,14 +1690,17 @@ export default {
   },
 
   mounted() {
-   
+    //  this.setTabWidth()
+    //   this.clickFirstItem()
     this.getOrderHight();
-       let wx_Url = 'meeting'
-      setStorage('wx_url',wx_Url)
+    let wx_Url = "meeting";
+    setStorage("wx_url", wx_Url);
     this.filterData = [this.tabTitle];
     this.getAllData(this.tabsIndex);
     this.getPlaceData();
     this.getTabMunes();
+    
+    
 
 
   },
@@ -1625,15 +1710,37 @@ export default {
       this.filterData = [this.tabMunes[n]];
       this.tabTitle = this.tabMunes[n];
     },
+    tabMunes(){
+      this.setTabWidth()
+      this.clickFirstItem()
+ 
+    },
+    show2(n,o){
+      if(n){
+        this.tabMunesShow =false
+         
+      }else{
+           this.tabMunesShow =true
+      }
+      //  this.setTabWidth()
+      // this.clickFirstItem()
+      // console.log(0)
+    }
+    //  this.setTabWidth()
+    //   this.clickFirstItem()
+
+    //  this.setTabWidth()
+    //   this.clickFirstItem()
+
     // IsShowMap(n, o) {
     //   if (n) {
     //     if(!getStorage('IsFirst')){
     //       this.showMapGuide = true;
     //        setStorage('IsFirst',true)
     //     }
-       
+
     //   }
-      
+
     // }
     //     IsShowMap(n,o){
     //       if(n){
@@ -1819,19 +1926,18 @@ export default {
 }
 
 .meeting-tab {
-//   .vux-tab{
-//  display:block !important; 
-//  overflow: hidden;
-//  .vux-tab-item{
-//   float: left;
-//   padding: 0 .4rem;
-//   width: 0;
-//  }
-// }
+  //   .vux-tab{
+  //  display:block !important;
+  //  overflow: hidden;
+  //  .vux-tab-item{
+  //   float: left;
+  //   padding: 0 .4rem;
+  //   width: 0;
+  //  }
+  // }
   .scrollable .vux-tab-item {
     // float: left;
 
-  
     -webkit-box-flex: 0;
     -webkit-flex: 0 0 20%;
     flex: 0 0 20%;
@@ -1865,4 +1971,79 @@ export default {
     }
   }
 }
+.tab-tilte {
+  div {
+    float: left;
+    font-size: 0.8rem;
+  }
+}
+
+.demo-text {
+  padding: 16px;
+  background: #fff;
+  p {
+    margin: 8px 0;
+  }
+}
+.meeting-list-tabs-box {
+  height: 40px;
+  width: 100%;
+  position: relative;
+  // background: #ccc;
+  overflow: hidden;
+  border-bottom: 1px solid #ccc;
+}
+.meeting-tabs-Box {
+  overflow: auto;
+  white-space: nowrap;
+  height: 50px;
+  // background: #ccc;
+  width: 88%;
+  //  overflow-x: hidden;
+  li {
+    // float: left;
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+    display: inline-block;
+    font-weight: 500;
+    div{
+      height: 2px;
+      width: 30px;
+      margin: .5rem auto 0 auto;
+
+    }
+  }
+  .tabs-List-active {
+    color: #fe666b;
+    font-size: 0.9rem;
+    .active-bar{
+      background: #fe666b;
+    }
+
+    // font-size: 1rem;
+  }
+}
+.meeting-tabBox{
+  border-bottom:1px solid #DCDCDC;
+}
+.meeting-tab{
+.vux-tab{
+.vux-tab-item{
+  display: inline-block;
+    width: auto;
+    height: 100%;
+    padding: 0 10px;
+    font-weight: 600;
+    flex: none;
+    // background-color: #f2f4f5;
+    background: none;
+}
+.vux-tab-selected{
+  font-size: 1rem;
+}
+} 
+
+}
+
+
 </style>

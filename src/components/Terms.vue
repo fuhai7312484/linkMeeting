@@ -478,7 +478,7 @@ export default {
 .H5-styleBox {
   text-align: left;
   font-size: 0.8rem;
-  background: #F8F8F8;
+  background: #fff;
   p {
     text-indent: 2em;
     span {

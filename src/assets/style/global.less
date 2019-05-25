@@ -34,6 +34,7 @@
   }
   .my-top-AvatarBox {
     // background: #000;
+    margin-top:35px; 
     width: 100%;
     height: 10rem;
     padding: 0 2rem;
@@ -186,10 +187,10 @@
     overflow: hidden;
   }
   span {
-    display: block;
+    display:block;
     float: left;
-    height: 10px;
-    line-height: 10px;
+    height: 20px;
+    line-height: 20px;
     font-size: 0.5rem;
     padding: 0 0.2rem;
     margin-right: 0.3rem;
@@ -207,9 +208,11 @@
   .listContent-tags {
     color: #505050;
     border: 1px solid #505050;
-    padding: .2rem .3rem; 
+    padding: 0rem .3rem; 
     font-size: .7rem;
     // height: 30px;
+    line-height: 20px;
+    max-height: 20px;
   }
   .sang {
     color: #b68c48;
@@ -534,8 +537,8 @@
 /*--------绑定手机号------------*/
 .bind-mobile-step1 {
   overflow: hidden;
-  padding-top: .4rem !important;
-  padding-bottom: .4rem !important;
+  padding-top: 1.2rem !important;
+  padding-bottom: 1.2rem !important;
   color: #323232;
   background: #fff;
   border-bottom: 1px solid #e6e6e6;
@@ -717,11 +720,11 @@
 }
 .meeting-flex-nov {
   color: #b4b4b4;
-  font-size: 0.9rem;
+  font-size: 0.7rem;
   font-weight: bold;
   text-align: right;
   img {
-    height: 20px;
+    height: 15px;
     margin: 0 0.2rem 0 0;
     vertical-align: middle;
   }
@@ -733,7 +736,7 @@
   text-align: right;
   position: absolute;
   right: 12px;
-  top: 8px;
+  top:-7px;
   img {
     height: 15px;
     // margin: 0 0.1rem 0 0;
@@ -1368,19 +1371,23 @@ h4.site-room-title {
 .siteHeaderBox {
   overflow: hidden;
   padding: 0.6rem 1rem;
+  position: relative;
   .siteHeaderTitle {
     color: #323232;
     font-size: 1.3rem;
   }
   .siteCity {
     font-size: 0.8rem;
-    font-weight: bold;
+    // font-weight: bold;
     margin: 0.7rem 0.8rem 0 0.8rem;
     
   }
   .siteListIcosBox {
     overflow: hidden;
     width: 30%;
+    position: absolute;
+    right: 0;
+    top: 10px;
   }
   .HeaderSearch {
     width: 40px;
@@ -1678,6 +1685,22 @@ h4.site-room-title {
       font-size: 0.7rem;
       vertical-align: top;
       text-overflow: ellipsis;
+      // border-left:1px solid #FE7176;
+    }
+
+    .Mmap-span-time{
+      display: inline-block;
+      // border-right:1px solid  #fff;
+      color: #323232;
+    
+    }
+    .Mmap-span-fgx{
+      display: inline-block;
+      width: 2px;
+    
+      height: 100%;
+      background: url(../images/fjx.png) no-repeat;
+    
     }
   }
   span {
@@ -1736,6 +1759,19 @@ h4.site-room-title {
       font-size: 0.7rem;
       vertical-align: top;
       text-overflow: ellipsis;
+    }
+    .Mmap-span-time{
+      display: inline-block;
+      // border-right:1px solid  #fff;
+      color: #fff;
+    
+    }
+    .Mmap-span-fgx{
+      display: inline-block;
+      width: 2px;
+      height: 100%;
+      background: url(../images/fjx.png) no-repeat;
+    
     }
   }
   span {
@@ -2074,7 +2110,7 @@ width: 95%;
 .login-account {
   // border-bottom:1px solid #e4e4e4;
   padding: 0.6rem 0;
-  margin: 1rem 0;
+  margin: 0rem 0 0 0;
 
   .weui-cells {
     font-size: 0.9rem;
@@ -2186,7 +2222,7 @@ width: 95%;
 .forgetPass {
   // height: 40px;
   // line-height: 40px;
-  margin-top: 0.8rem;
+  margin-top: 1.1rem;
   font-size: 0.8rem;
 }
 .backLogin {
@@ -2233,7 +2269,7 @@ width: 95%;
   right: 0;
   // background: #000;
   text-align: center;
-  border-bottom:1px solid #dcdcdc;
+  // border-bottom:1px solid #dcdcdc;
   img {
     height: 15px;
     vertical-align: middle;
@@ -2269,21 +2305,23 @@ width: 95%;
   height: 50px;
   width: 100%;
   box-sizing: border-box;
+  border-bottom:1px solid #E6E6E6; 
   // position: fixed;
   background: #fff;
   .downLogo {
-    height: 40px;
-    width: 40px;
+    height: 35px;
+    width: 35px;
+    margin-top:3px; 
     overflow: hidden;
     img {
-      height: 40px;
-      width: 40px;
+      height: 35px;
+      width: 35px;
       text-align: center;
     }
     // width: 10%;
     margin: 0.2rem 0.2rem;
-    background: #d8d8d8;
-    border-radius: 50%;
+    // background: #d8d8d8;
+    // border-radius: 50%;
     // border: 1px solid #979797;
     line-height: 40px;
     color: #fff;
@@ -2292,17 +2330,22 @@ width: 95%;
   }
   .downAppTitle {
     color: #fe666b;
-    height: 40px;
+    height: 20px;
     line-height: 50px;
     margin: 0 0.2rem;
+    img{
+      width: 175px;
+      height:17px;
+    }
   }
   .downAppBtn {
-    background: #fc6d6d;
+    background: #fff;
+    border:1px #FF6469 solid;
     font-size: 0.8rem;
     padding: 0.2rem 0.4rem;
-    color: #fff;
-    border-radius: 0.2rem;
-    margin: 15px 0;
+    color: #FF6469;
+    border-radius: 5px;
+    margin: 10px 0;
   }
 }
 
@@ -2319,7 +2362,7 @@ width: 95%;
   .OrganizerLogo {
     width: 60px;
     height: 60px;
-    margin-right: 0.5rem;
+    margin-right: 0.8rem;
     overflow: hidden;
     border-radius: 50%;
     img {
@@ -2453,11 +2496,20 @@ width: 95%;
   margin-bottom: 4rem;
   .meeting-title {
     line-height: 25px;
-    margin: 0.6rem 0;
+    margin: 0.6rem 0 1rem 0;
     font-weight: bold
   }
   .site-flex-v {
     text-align: right;
+    font-size: 0.7rem;
+    text-align: right;
+    position: absolute;
+    right: 12px;
+    top: 0px;
+    img{
+      height: 15px;
+      vertical-align: middle;
+    }
    
     // font-weight: bold;
   }
@@ -4185,8 +4237,10 @@ margin: .2rem 0;
   // margin-top:44px;
   // padding-top:44px;
   h2 {
-    text-align: center;
-    margin: 4rem 0 2rem 0;
+    text-align: left;
+    font-size: 1.2rem;
+    margin: 1.5rem 0 2rem 0;
+    padding: 0 .8rem;
   }
   .reminder-dlBox {
     overflow: hidden;
@@ -4198,7 +4252,7 @@ margin: .2rem 0;
       padding: 0.6rem 0;
     }
     dt {
-      width: 30%;
+      width: 25%;
       text-align: right;
       padding-right: 0.6rem;
       color: #969696;
@@ -4222,9 +4276,21 @@ margin: .2rem 0;
   .reminder-checkerBox {
     margin: 1rem 0;
   }
+  .reminder-GotoInfo{
+    overflow: hidden;
+    margin: 1rem 0;
+    padding: 1rem 2rem;
+  }
+  .reminder-GotoApp{
+    font-size: 0.8rem;
+    color: #505050;
+    text-decoration: underline;
+    text-align: center;
+  }
   .reminder-meetingDetails {
     font-size: 0.8rem;
-    color: #969696;
+    color: #505050;
+    text-decoration: underline;
     text-align: center;
   }
 
@@ -4632,3 +4698,23 @@ margin: .2rem 0;
   background-size: 100%;
 }
 
+.my-X-header{
+  height: 35px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  // background: #fff;
+  .my-X-headerGoback{
+    height: 25px;
+    width: 35px;
+    // background: #000;
+    text-align: center;
+    line-height: 35px;
+    padding-top:10px;
+    img{
+      width: 25px;
+    }
+
+  }
+}

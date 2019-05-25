@@ -14,7 +14,7 @@
             <div class="map-go-back" @click="$router.go(-1)"></div>
             <h3 class="map-headerTitle">我的收藏</h3>
           </div>
-<!-- <sticky :check-sticky-support="false" :offset="0">
+<sticky :check-sticky-support="false" :offset="0">
   
     <tab
       active-color="#fe666b"
@@ -31,54 +31,75 @@
         {{ item }}
       </tab-item>
     </tab>
-    </sticky> -->
+    </sticky>
     </div>
-    <!-- <swiper ref="swiperHeight" v-model="index" 
+    <swiper ref="swiperHeight" v-model="index" 
     :show-dots="false" 
     :style="{height:swiperH}" 
     :height="swiperH" 
     :autoheight="true" 
     :loop="true" 
     :min-moving-distance="120"  >
-      <swiper-item>  -->
-        <!-- <ul class="my-tab-swiper vux-center" ref="pubUiHF">
-          <li v-for="(taPos,index) in TaPosted" :key="index">
-            <flexbox v-if="taPos.type=='pub'">
+      <swiper-item> 
+        <div ref="pubUiHF0">
+
+ <div class="noData-default" v-if="TaPosted.length==0">
+            <p>
+              <img :src="require('../../assets/images/noData.png')">
+            </p>
+            <p>暂无收藏</p>
+          </div>
+
+       <!-- {{TaPosted}} -->
+        <ul class="my-tab-swiper vux-center" >
+         
+          <li v-for="(taPos,index) in TaPosted" :key="index" @click="gotoSiteDetail(taPos.id)">
+            <flexbox>
               <flexbox-item :span="1/4">
-                <div class="my-tab-swiperListImg"><img :src="taPos.img" /></div>
+                <div class="my-tab-swiperListImg">
+                  <span
+                    class="my-tab-imgTag"
+                    v-if="taPos.ptype!=null"
+                  >{{taPos.ptype==1?'政采':taPos.ptype==2?'央采':''}}</span>
+                  
+ <img :src="taPos.homepagePic?taPos.homepagePic:require('../../assets/images/noimg.png')"/>
+
+                  
+                  <!-- <img :src="taPos.img" /> -->
+                  </div>
               </flexbox-item>
               <flexbox-item :span="3/4">
                 <div class="my-tab-listContent">
-                  <h3>{{ taPos.city }}{{ taPos.title }}</h3>
+                  <h3>{{ taPos.name }}</h3>
                 </div>
 
                 <div class="my-tab-listContent mylistInfo">
-                  距离:{{ taPos.distance }} {{ taPos.area }}
+                  距离:{{ taPos.distance!=null?taPos.distance+'米':'暂无距离' }} &nbsp;&nbsp;&nbsp;{{ taPos.zone?taPos.zone.name:'' }}
                 </div>
 
                 <div class="my-tab-listContent mylistInfo">
-                  面积:{{ taPos.proportion }} 容纳:{{ taPos.hold }}
+                面积:{{ taPos.area!=null?taPos.area+'㎡':'暂无面积' }} &nbsp;&nbsp;&nbsp; 容纳:{{ taPos.falleryful!=null?taPos.falleryful+'人':'暂无人数' }}
                 </div>
 
                 <div class="my-tab-listContent mylistInfo">
-                  会议室:{{ taPos.meetingRoom }} 客房:{{ taPos.guestRoom }}
+                  会议室:{{ taPos.count}}间 &nbsp;&nbsp;&nbsp; 内高: {{ taPos.high!=null?taPos.high+'米':''}}
                 </div>
                 <flexbox :gutter="0">
-                  <flexbox-item :span="1/2" class="listContent-tagbox">
+                    <flexbox-item :span="2/3" class="listContent-tagbox">
+                    <span v-if="taPos.type!=null" class="listContent-tags sang">{{taPos.type}}</span>
                     <span
-                      v-for="(tag,index) in taPos.tag"
+                      v-for="(tag,index) in taPos.features"
+                      v-if="index<1"
                       :key="index"
                       class="listContent-tags"
-                    >
-                      {{ tag }}
-                    </span>
+                    >{{ tag.name }}</span>
                   </flexbox-item>
-                  <flexbox-item :span="1/2"> <h4>¥{{ taPos.price }}</h4> </flexbox-item>
+                  <flexbox-item :span="1/3"> <h4 style="text-align: right;">¥{{ taPos.priceHalfday!=null?taPos.priceHalfday:'0.0' }}起</h4> </flexbox-item>
                 </flexbox>
               </flexbox-item>
             </flexbox>
 
-            <flexbox v-if="taPos.type=='par'">
+            <!-- <flexbox v-if="taPos.type=='par'">
               <flexbox-item :span="2/3">
                 <div class="listContentPar">
                 <h3> {{ taPos.title }}</h3>
@@ -94,18 +115,25 @@
                 </div>
               
               </flexbox-item>
-            </flexbox>
+            </flexbox> -->
           </li>
         </ul>
-      </swiper-item> -->
+         </div>
+      </swiper-item>
 
-      <!-- <swiper-item>  -->
+      <swiper-item> 
+        <div ref="pubUiHF1">
          <div v-transfer-dom>
         <loading :show="show2" text="数据加载中..."></loading>
       </div>
 
-
-       <ul class="tabMeetingListUl padlr" v-if="!show2">
+<div class="noData-default" v-if="myCollData.length==0">
+            <p>
+              <img :src="require('../../assets/images/noData.png')">
+            </p>
+            <p>暂无收藏</p>
+          </div>
+       <ul class="tabMeetingListUl padlr"  v-if="!show2">
 
            <li class="tabMeetingList"
               v-for="(DataItem,index) in myCollData"
@@ -127,22 +155,28 @@
                   </span>
                 </div>
 
+
+
+
                 <div class="tabMeetingTextBox fl">
                   <h4 class="tabMeetingTextTitle">{{DataItem.theme}}</h4>
                   <div class="tabMeetingTime">
-                    <span>{{DataItem.beginTime}}</span>
+                    <span>{{CountdownTime(DataItem.beginTime)}}</span>
                     <span>{{DataItem.region}}</span>
                   </div>
                   <div class="tabMeetingTagBox">
                     <div class="tabMeetingTag fl">
-                      <span v-if="DataItem.status==0" class="IsOver">已结束</span>
-                      <!-- <span v-else-if="DataItem.status==1" class="LiveIn">直播中</span> -->
-                      <span v-else-if="DataItem.status==2 || DataItem.status==1" class="processing">进行中</span>
-                      <span v-else-if="DataItem.status==3" class="notStarted">未开始</span>
+                      <span v-if="DataItem.status==2" class="IsOver">已结束</span>
+                      <span
+                        v-else-if="DataItem.status==3 || DataItem.status==1"
+                        class="processing"
+                      >进行中</span>
+                      <span v-else-if="DataItem.status==0" class="notStarted">未开始</span>
                     </div>
                     <div class="tabMeetingNum fr">{{DataItem.msg}}</div>
                   </div>
                 </div>
+
               </div>
             </li>
 
@@ -150,43 +184,18 @@
 
         </ul>
 
+</div>
 
-
-
-         <!-- <ul class="my-tab-swiper vux-center" v-if="!show2">
- <li v-for="(taPos,index) in TaPosted" :key="index" v-if="taPos.type=='par'">
-   <flexbox>
-              <flexbox-item :span="2/3">
-                <div class="listContentPar">
-                <h3> {{ taPos.title }}</h3>
-                </div>
-                <div>{{taPos.time}}</div>
-                <h4>¥{{ taPos.price }}</h4>
-              </flexbox-item>
-              <flexbox-item :span="1/3"> 
-              
-              <div class="my-tab-parListImg">
-             
-                <img :src="taPos.img" />
-                </div>
-              
-              </flexbox-item>
-            </flexbox>
-
- </li>
-
-
-        </ul> -->
-         <!-- </swiper-item>
+         </swiper-item>
      
-    </swiper> -->
+    </swiper>
   </div>
 </template>
 <script>
 import {
   getStorage,
   checkToken,
-  getDataInfo
+  getDataInfo,meetingBeTime
 } from "../../assets/lib/myStorage.js";
   import {
     Group,
@@ -232,6 +241,7 @@ import {
         show2:true,
         list2: ["场地", "会议"],
         myCollData:[],
+        TaPosted:[],
          position: 'default',
       showPositionValue: false,
       textInfo:'',
@@ -240,7 +250,11 @@ import {
     },
 
     methods: {
-    
+     CountdownTime(time) {
+      // return time
+      // console.log(time)
+      return meetingBeTime(time);
+    },
       //页面跳转
        gotoDetails(id) {
        this.$router.push({
@@ -249,6 +263,12 @@ import {
         });
 
       // console.log(type,id)
+    },
+    gotoSiteDetail(id){
+ this.$router.push({
+          path: "/sitedetail/" + id,
+          query: { detailId: id }
+        });
     },
 
 
@@ -277,6 +297,16 @@ import {
       },
       getCollData(){
            let _that = this;
+            let siteObj={
+                params: {
+               type:'1',
+          flag:'0',
+          user: getStorage("userToken").userId,
+          currentPage: "1",
+          pageSize: "9999"
+            }
+            }
+
       let collObj = {
         params: {
           type:'1',
@@ -286,19 +316,38 @@ import {
           pageSize: "9999"
         }
       };
+      // console.log(siteObj)
       checkToken().then(Pdata => {
+       
+              getDataInfo("get", "reCollection/reCollection", siteObj).then(resd => {
+                // console.log(resd)
+                if(resd.data.code==200){
+                  this.TaPosted = resd.data.data
+                }else if (resd.data.code == 100101) {
+            _that.$router.push("/codelogin");
+          }
+              })
+
+
         getDataInfo("get", "reCollection/reCollection", collObj).then(res => {
           // console.log(res);
           if (res.data.code == 200) {
      
             this.myCollData =  res.data.data;
+
+           
             setTimeout(function() {
               _that.show2 = false;
             }, 500);
           } else if (res.data.code == 100101) {
-            _that.$router.push("/login");
+            _that.$router.push("/codelogin");
           }
         });
+
+
+         
+
+              
       });
       },
 
@@ -307,19 +356,18 @@ import {
       this.showPositionValue = true
     },
     },
+    updated() {
+this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height = this.$refs['pubUiHF'+this.index].offsetHeight +'px'
+  },
     mounted () {
       this.getCollData()
-    //  this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height = this.$refs.pubUiHF.offsetHeight +'px'
+    
+     this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height = this.$refs.pubUiHF0.offsetHeight +'px'
     },
     watch: {
-//       index(n,o){
-//         if(n==0){
-// this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height = this.$refs.pubUiHF.offsetHeight +'px'
-//         }else if(n==1){
-//  this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height =  this.$refs.parUiHF.offsetHeight +'px'
- 
-//         }
-//       }
+      index(n,o){
+         this.swiperH = this.$refs.swiperHeight.$el.children[0].style.height =  this.$refs['pubUiHF'+n].offsetHeight +'px'
+      }
     }
   };
 </script>

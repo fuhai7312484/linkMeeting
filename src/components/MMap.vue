@@ -61,7 +61,7 @@
                   </div>
                   <div class="tabMeetingTagBox">
              
- <div class="tabMeetingTag">
+        <div class="tabMeetingTag">
                   
                       <span v-for="(Tag,index) in DataItem.tags" :key="index" v-if="index<4">{{Tag}}</span>
                        
@@ -347,7 +347,7 @@ map.centerAndZoom(new BMap.Point(103.388611,35.563611), zoomNum);
         var htm =
           "<div class='Bmap-infoBox' data-id='" +
           this.data_info[i].id +
-          "'><h4 class='fl'><span class='Mmap-span'>" +
+          "'><h4 class='fl'><span class='Mmap-span-time'>"+ this.TimePro(this.data_info[i].beginTime)+"</span><span class='Mmap-span-fgx'> &nbsp;</span><span class='Mmap-span'>" +
           this.data_info[i].theme +
           "</span></h4><i class='bg-arrow-off'></i></div>";
 
@@ -363,7 +363,7 @@ map.centerAndZoom(new BMap.Point(103.388611,35.563611), zoomNum);
         markers.push(myRichMarkerObject);
         map.addOverlay(myRichMarkerObject);
       }
-
+      console.log(this.data_info)
       for (var i = 0; i < this.data_info.length; i++) {
         let _that = this;
         (function() {
@@ -391,6 +391,14 @@ map.centerAndZoom(new BMap.Point(103.388611,35.563611), zoomNum);
           });
         })();
       }
+    },
+
+    // 处理会议开始时间
+    TimePro(time){
+// console.llog(time)
+let arr = time.split(' ')
+let Y = arr[0].split('-')[1]+'月'+arr[0].split('-')[2]+'日'
+return Y
     },
     setMapHeight() {
       // if( this.showData){

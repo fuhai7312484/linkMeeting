@@ -424,6 +424,7 @@ export default new Router({
       // },
       component: lot
     },
+   
 
 //抽奖活动
     {

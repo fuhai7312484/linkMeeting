@@ -2,6 +2,7 @@
   <div class="box">
     <!-- {{myData}} -->
 
+
     <div>
       <div style="height:44px;">
         <sticky ref="sticky" :check-sticky-support="false" :disabled="disabled">
@@ -24,15 +25,11 @@
         <group class="my-myInfoBox">
           <!-- <cell :title="$t('Money')" @click.native="sexSelect" :is-loading="!money" :value="money"></cell> -->
           <cell
-            title=""
+            title="昵称(或名字)"
             :value="myData.name==null || myData.name==''?'未填写':myData.name"
             @click.native="myInputChange('name')"
             is-link
-          >
-          <div slot="title" class="myInfo-slot">
-昵称<span>(或名字)</span>
-          </div>
-          </cell>
+          ></cell>
 
           <cell
             title="性别"
@@ -43,46 +40,18 @@
         </group>
         <group class="my-myInfoBox">
           <cell
+            title="头衔(或职位职称)"
             :value="myData.technical==null||myData.technical==''?'未填写':myData.technical"
             is-link
             @click.native="myInputChange('technical')"
-          >
-          
-          <div slot="title" class="myInfo-slot">
-头衔<span>(或职位职称)</span>
-          </div>
-
-          </cell>
+          ></cell>
           <cell
             title="公司"
             :value="myData.company==null || myData.company=='' ?'未填写':myData.company"
             @click.native="myInputChange('company')"
             is-link
           ></cell>
-
-          <cell
-            title="手机号">
-            <div slot class="myInfo-slot-val">{{myData.mobile}} </div>
-            </cell>
-
-             <cell
-            title="邮箱"
-            :value="myData.email==null || myData.email=='' ?'未填写':myData.email"
-            @click.native="myInputChange('email')"
-            is-link
-          ></cell>
-
-
         </group>
-
-        
-<load-more :show-loading="false" :tip="'我的名片'" background-color="#505050"></load-more>
-<div class="my-carte">
-<img :src="require('../../assets/images/my-carte.png')">
-</div>
-
-
-
         <actionsheet v-model="sexSelect" :menus="sexMenus" @on-click-menu="sexClick" show-cancel></actionsheet>
 
         <!-- 头像 <img :src="myData.mainPic" /> <br/>
@@ -125,19 +94,6 @@
               v-model="myData.company"
             ></x-input>
           </div>
-
-
-
-          <div v-if="inputType=='email'"  class="my-infoNamefocus" @click="Namefocus" >
-            <x-input
-            ref="emailF"
-              :placeholder="myData.email==null || myData.email==''?'请填写邮箱':myData.email"
-              v-model="myData.email"
-            ></x-input>
-          </div>
-
-
-
         </div>
       </popup>
     </div>
@@ -168,7 +124,7 @@ import {
   Loading,
   Sticky,
   Actionsheet,
-  TransferDomDirective as TransferDom,LoadMore ,
+  TransferDomDirective as TransferDom,
   Toast,
   Popup,
   XInput
@@ -215,10 +171,10 @@ export default {
     Actionsheet,
     Toast,
     Popup,
-    XInput,LoadMore 
+    XInput
   },
   methods: {
-  
+    
 
     //null
 Namefocus(){
@@ -229,8 +185,6 @@ Namefocus(){
      this.$refs.techF.focus()
   }else if(this.inputType=='company'){
      this.$refs.compF.focus()
-  }else if(this.inputType=='email'){
-     this.$refs.emailF.focus()
   }
   // this.$refs.nameF.focus()
 // console.log(this.$refs.nameF.focus)
@@ -255,12 +209,16 @@ Namefocus(){
       };
       checkToken().then(Pdata => {
         getDataInfo("get", "user/userById", userObj).then(res => {
-          // console.log(res)
           if (res.data.code == 200) {
-            res.data.data.company == null? (res.data.data.company = ""): res.data.data.company;
-            res.data.data.name == null? (res.data.data.name = ""): res.data.data.name;
-            res.data.data.technical == null? (res.data.data.technical = ""): res.data.data.technical;
-            res.data.data.email == null?(res.data.data.email =""): res.data.data.email;
+            res.data.data.company == null
+              ? (res.data.data.company = "")
+              : res.data.data.company;
+            res.data.data.name == null
+              ? (res.data.data.name = "")
+              : res.data.data.name;
+            res.data.data.technical == null
+              ? (res.data.data.technical = "")
+              : res.data.data.technical;
             this.myData = res.data.data;
             setTimeout(function() {
               _that.show2 = false;
@@ -297,7 +255,7 @@ Namefocus(){
         });
       }
     },
-    //修改名称、职位、公司、邮箱
+    //修改名称、职位、公司
     myInputChange(type) {
       this.showInput = true;
       this.inputType = type;
@@ -313,9 +271,6 @@ Namefocus(){
         case "company":
           return "公司";
           break;
-         case "email":
-           return "邮箱";
-           break; 
       }
     },
     //登录IM
@@ -362,23 +317,12 @@ Namefocus(){
           ? this.myData.name
           : this.inputType == "technical"
           ? this.myData.technical
-          : this.inputType == "company"? this.myData.company: this.inputType == "email"?this.myData.email:"";
-          var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
-
-          // console.log(reg.test(val))
+          : this.inputType == "company"
+          ? this.myData.company
+          : "";
       // console.log(val)
       if (val != "") {
-        if(this.inputType=="email"){
-          if(!reg.test(val)){
-             this.toastInfo = {
-          showMsg: "请填写正确的邮箱",
-          showPositionValue: true,
-          toastType: "text"
-        };
-       
-            // return
-          }else{
-     let inputObj = {
+        let inputObj = {
           id: getStorage("userToken").userId
         };
         inputObj[this.inputType] = val;
@@ -402,41 +346,6 @@ Namefocus(){
             }
           });
         });
-
-
-          }
-        }else{
-
-               let inputObj = {
-          id: getStorage("userToken").userId
-        };
-        inputObj[this.inputType] = val;
-
-        checkToken().then(Pdata => {
-          getDataInfo("patch", "user/userByCondition", inputObj).then(res => {
-            if (res.data.code == 200) {
-              this.myData[this.inputType] = val;
-              if (this.inputType == "name") {
-                JIMinitchange(this.updateSelfInfo);
-              } else {
-                this.toastInfo = {
-                  showMsg: res.data.msg,
-                  showPositionValue: true,
-                  toastType: "success"
-                };
-
-                this.inputValue = this.inputType = "";
-                this.showInput = false;
-              }
-            }
-          });
-        });
-
-
-
-        }
-   
-
       } else {
         this.toastInfo = {
           showMsg: "请填写内容",
@@ -449,14 +358,7 @@ Namefocus(){
 
   mounted() {
     this.getMyData();
-  },
-  watch: {
-    showInput(n,o){
-      if(!n){
-         this.getMyData()
-      }
-    }
-  },
+  }
 };
 </script>
 <style lang="less">
@@ -536,25 +438,6 @@ Namefocus(){
     width: 178px;
     height: 178px;
     display: block;
-  }
-  .myInfo-slot{
-    span{
-      font-size: .9rem;
-      color: #787878;
-    }
-  }
-  .myInfo-slot-val{
-    color: #000000;
-  }
-  .my-carte{
-    width: 80%;
-    margin: 0 auto 1rem auto;
-    border:1px solid #DCDCDC;
-    border-radius:15px; 
-    box-sizing: border-box;
-    img{
-      width: 100%;
-    }
   }
 </style>
 

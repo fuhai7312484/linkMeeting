@@ -298,7 +298,7 @@ export default {
             }, 500);
           } else if (res.data.code == 400 || res.data.code == 100101) {
             setTimeout(function() {
-              _that.$router.push("/login");
+              _that.$router.push("/codelogin");
             }, 500);
           }
         });

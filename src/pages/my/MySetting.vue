@@ -39,7 +39,7 @@
 
           <div v-if="userData.pwdStatus" class="change-Password">
             <x-input
-              placeholder="输入旧密码(8-18位,数字+字母)"
+              placeholder="输入旧密码(3-18位)"
               ref="Oldpass"
               v-model="oldPassW"
               type="password"
@@ -47,7 +47,7 @@
             ></x-input>
             <x-input
               type="password"
-              placeholder="设置新密码(8-18位,数字+字母)"
+              placeholder="设置新密码(3-18位)"
               :is-type="codePassValue"
               ref="newpass"
               v-model="passObj.newPassword"
@@ -66,7 +66,7 @@
               type="password"
               :is-type="codePassValue"
               ref="newpass"
-              placeholder="设置新密码(8-18位,数字+字母)"
+              placeholder="设置新密码(3-18位)"
               v-model="passObj.newPassword"
               @on-change="change"
             ></x-input>
@@ -141,14 +141,27 @@ export default {
       },
       showInput: false,
       codePassValue: function(value) {
-        let regExp = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,18}$/;
-        let r = value.match(regExp);
 
-        return {
-          // valid: value.match(regExp),
-          valid: r != null,
-          msg: "密码格式不正确!"
-        };
+          if (value.length < 3 || value.length >= 18) {
+          return {
+            valid: false,
+            msg: "密码格式不正确!"
+          };
+        } else {
+          return {
+            valid: true
+          };
+        }
+
+        
+        // let regExp = /^[a-zA-Z0-9]{3,18}$/;
+        // let r = value.match(regExp);
+
+        // return {
+        //   // valid: value.match(regExp),
+        //   valid: r != null,
+        //   msg: "密码格式不正确!"
+        // };
       }
     };
   },
@@ -188,7 +201,7 @@ export default {
             }, 500);
           } else if (res.data.code == 400 || res.data.code == 100101) {
             setTimeout(function() {
-              _that.$router.push("/login");
+              _that.$router.push("/codelogin");
             }, 500);
           }
         });

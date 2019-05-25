@@ -556,7 +556,7 @@ export default {
         }
       };
       getDataInfo("get", "file/oplace", AssObj).then(res => {
-        console.log(res);
+        // console.log(res);
         if (res.data.code == 200) {
           this.showLoding = false
           if (this.$route.query.type == 1) {
@@ -574,10 +574,14 @@ export default {
             });
             this.tabMunes = muneArr;
             this.allImgData = arr;
-            console.log(tabMNub)
+            // console.log(tabMNub)
             this.filterData();
           } else if (this.$route.query.type == 0) {
             let arr = res.data.data;
+            // console.log(arr)
+            arr = arr.filter(e=>{
+              return e.fileType==0 || e.fileType==1
+            })
             arr.forEach(el => {
               el.src = el.objectKey;
             });

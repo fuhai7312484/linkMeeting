@@ -3,7 +3,9 @@
     <div class="my-top-boxs" :style="{backgroundImage: 'url(' + TaData.mainPic + ')' }"></div>
     <div class="my-top-boxsMak"></div>
     <div class="my-top-boxsContent">
-      <x-header :right-options="{showMore: true}" @on-click-more="showMenus = true"></x-header>
+      <!-- <x-header :right-options="{showMore: true}" @on-click-more="showMenus = true"></x-header> -->
+
+      
 
       <!-- <x-header
         :right-options="{showMore: true}"
@@ -184,10 +186,10 @@
                     <div class="tabMeetingNum">{{taPos.msg}}</div> -->
 
 
-                       <div class="tabMeetingTextBox fl">
+                       <div class="tabMeetingTextBox">
                     <h4 class="tabMeetingTextTitle">{{taPos.theme}}</h4>
                     <div class="tabMeetingTime">
-                      <span v-if="taPos.status==0" class="TimeC0">
+                      <!-- <span v-if="taPos.status==0" class="TimeC0">
                         <img :src="require('../../assets/images/timeC0.png')">
 
                         {{CountdownTime(taPos.beginTime)}}
@@ -200,7 +202,7 @@
                       </span> &nbsp;&nbsp;
                       <span>
                         <img :src="require('../../assets/images/timeAdd.png')">
-                      </span>
+                      </span> -->
 
                       {{addressSplit(taPos.address)}}
                     </div>
@@ -219,10 +221,28 @@
                       >进行中</span>
                         <span v-else-if="DataItem.status==0" class="notStarted">未开始</span>-->
                       </div>
-                      <div
-                        class="tabMeetingNum"
-                        :class="taPos.status==0?'TimeC0':'TimeC2'"
-                      >{{taPos.status==0?'火热报名中':taPos.status==1 || taPos.status==3?'报名即将截止':'报名已结束'}}</div>
+
+
+                              <div class="tabMeetingNumBox">
+                <div class="tabMeetingNum fl" :class="taPos.status!=2?'TimeC0':'TimeC2'">
+                      {{taPos.status==0?'火热报名中':taPos.status==1 || taPos.status==3?'报名即将截止':'报名已结束'}}
+                      
+                      </div>
+                      <div class="tabMeetingNumStatus fr">
+                        <span v-if="taPos.status==0" style="color:#FE7210">
+                             <img :src="require('../../assets/images/timeC0.png')">  {{CountdownTime(taPos.beginTime)}}
+                        </span>
+
+                         <span v-if="taPos.status==3 || taPos.status==1" style="color:#66C103">
+                      <img :src="require('../../assets/images/timeC1.png')" /> 进行中
+                    </span>
+
+                    <span v-if="taPos.status==2" style="color:#505050">
+                      <img :src="require('../../assets/images/timeC2.png')" /> 已结束
+                    </span>
+
+                      </div>
+                    </div>
                     </div>
                   </div>
 
@@ -288,6 +308,11 @@
               </flexbox-item>
             </flexbox>
 
+
+
+
+
+
             <flexbox v-if="taPos.typeCode=='par'">
               <!-- {{taPos}} -->
 
@@ -300,26 +325,13 @@
               <flexbox-item :span="2/3">
 
 
-                  <div class="tabMeetingTextBox fl">
+                  <div class="tabMeetingTextBox">
                     <h4 class="tabMeetingTextTitle">{{taPos.theme}}</h4>
                     <div class="tabMeetingTime">
-                      <span v-if="taPos.status==0" class="TimeC0">
-                        <img :src="require('../../assets/images/timeC0.png')">
-
-                        {{CountdownTime(taPos.beginTime)}}
-                      </span>
-                      <span v-if="taPos.status==3 || taPos.status==1" class="TimeC1">
-                        <img :src="require('../../assets/images/timeC1.png')"> 进行中
-                      </span>
-                      <span v-if="taPos.status==2" class="TimeC2">
-                        <img :src="require('../../assets/images/timeC2.png')"> 已结束
-                      </span> &nbsp;&nbsp;
-                      <span>
-                        <img :src="require('../../assets/images/timeAdd.png')">
-                      </span>
-
                       {{addressSplit(taPos.address)}}
                     </div>
+
+                    
                     <div class="tabMeetingTagBox">
                       <div class="tabMeetingTag">
                         <!-- {{DataItem.status}} -->
@@ -335,10 +347,38 @@
                       >进行中</span>
                         <span v-else-if="DataItem.status==0" class="notStarted">未开始</span>-->
                       </div>
+
+
+                          <div class="tabMeetingNumBox">
+                <div class="tabMeetingNum fl" :class="taPos.status!=2?'TimeC0':'TimeC2'">
+                      {{taPos.status==0?'火热报名中':taPos.status==1 || taPos.status==3?'报名即将截止':'报名已结束'}}
+                      
+                      </div>
+                      <div class="tabMeetingNumStatus fr">
+                        <span v-if="taPos.status==0" style="color:#FE7210">
+                             <img :src="require('../../assets/images/timeC0.png')">  {{CountdownTime(taPos.beginTime)}}
+                        </span>
+
+                         <span v-if="taPos.status==3 || taPos.status==1" style="color:#66C103">
+                      <img :src="require('../../assets/images/timeC1.png')" /> 进行中
+                    </span>
+
+                    <span v-if="taPos.status==2" style="color:#505050">
+                      <img :src="require('../../assets/images/timeC2.png')" /> 已结束
+                    </span>
+
+                      </div>
+
+                      
+
+                    </div>
+
+
+<!-- 
                       <div
                         class="tabMeetingNum"
                         :class="taPos.status==0?'TimeC0':'TimeC2'"
-                      >{{taPos.status==0?'火热报名中':taPos.status==1 || taPos.status==3?'报名即将截止':'报名已结束'}}</div>
+                      >{{taPos.status==0?'火热报名中':taPos.status==1 || taPos.status==3?'报名即将截止':'报名已结束'}}</div> -->
                     </div>
                   </div>
 
@@ -542,7 +582,7 @@ export default {
       });
 
       }else{
-         this.$router.push('/login');
+         this.$router.push('/codelogin');
       }
      
     },
@@ -572,7 +612,7 @@ if (this.TaData.isMyFollow == 1) {
               this.showPosition("middle");
             } else if (res.data.code == 400 || res.data.code == 100101) {
               setTimeout(function() {
-                _that.$router.push("/login");
+                _that.$router.push("/codelogin");
               }, 500);
             }
           });
@@ -592,7 +632,7 @@ if (this.TaData.isMyFollow == 1) {
               this.showPosition("middle");
             } else if (res.data.code == 400 || res.data.code == 100101) {
               setTimeout(function() {
-                _that.$router.push("/login");
+                _that.$router.push("/codelogin");
               }, 500);
             }
           });
@@ -600,7 +640,7 @@ if (this.TaData.isMyFollow == 1) {
       }
 
      }else{
-       this.$router.push('/login')
+       this.$router.push('/codelogin')
      }
       
 
@@ -670,7 +710,7 @@ if (this.TaData.isMyFollow == 1) {
               }, 500);
             } else if (res.data.code == 400 || res.data.code == 100101) {
               setTimeout(function() {
-                _that.$router.push("/login");
+                _that.$router.push("/codelogin");
               }, 500);
             }
           });

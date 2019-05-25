@@ -254,7 +254,7 @@ export default {
               this.RefundId = "";
               this.checklist001 = [];
             } else if (res.data.code == 100101) {
-              _that.$router.push("/login");
+              _that.$router.push("/codelogin");
             }
           }
         );
@@ -287,7 +287,7 @@ export default {
       };
       checkToken().then(Pdata => {
         getDataInfo("get", "meetingdetails/meTicket", DetailObj).then(res => {
-          // console.log(res);
+          console.log(res);
           if (res.data.code == 200) {
             this.detailData = res.data.data;
             this.show2 = false;
@@ -314,7 +314,7 @@ export default {
       setStorage('wx_url',wx_Url)
         WeChatLogin()
        }else{
-this.$router.push('/login')
+this.$router.push('/codelogin')
        }
 
      }

@@ -173,14 +173,16 @@ export default {
         };
       },
       codePassValue: function(value) {
-        let regExp = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,18}$/;
-        let r = value.match(regExp);
-
-        return {
-          // valid: value.match(regExp),
-          valid: r != null,
-          msg: "密码格式不正确!"
-        };
+           if (value.length < 3 || value.length >= 18) {
+          return {
+            valid: false,
+            msg: "密码格式不正确!"
+          };
+        } else {
+          return {
+            valid: true
+          };
+        }
       }
     };
   },
@@ -250,10 +252,9 @@ export default {
           mobile: this.maskValue
         };
         // console.log(SmsObj);
-
+        this.disabled = true
         getDataInfo("post", "user/sendSms", SmsObj).then(res => {
           let data = res.data;
-
           if (data.code === 200) {
             _that.VerCode = data.data;
             _that.showNext = "2";
@@ -319,7 +320,7 @@ export default {
                   stoRemove("login_url");
                 }, 500);
               } else {
-                _that.$router.push("/myindex");
+                _that.$router.push("/meeting");
               }
             }, 500);
           } else if (res.data.code == 1004) {

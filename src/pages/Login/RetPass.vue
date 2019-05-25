@@ -76,7 +76,7 @@
         <group class="login-account">
           <div class="fl" :style="{width:'80%'}">
             <x-input
-              placeholder="请输入密码(8-18位,数字+字母)"
+              placeholder="请输入密码(3-18位)"
               ref="refpass"
               :is-type="codePassValue"
               @on-change="refCodeChange"
@@ -150,14 +150,20 @@ export default {
         };
       },
       codePassValue: function(value) {
-        let regExp = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,18}$/;
-        let r = value.match(regExp);
+        // let regExp = /^[a-zA-Z0-9]{3,18}$/;
+        // let r = value.match(regExp);
 
-        return {
-          // valid: value.match(regExp),
-          valid: r != null,
-          msg: "密码格式不正确!"
-        };
+      if (value.length < 3 || value.length >= 18) {
+          return {
+            valid: false,
+            msg: "密码格式不正确!"
+          };
+        } else {
+          return {
+            valid: true
+          };
+        }
+        
       }
     };
   },
@@ -210,6 +216,7 @@ export default {
             //  alert(data.data)
             //   console.log(data.data)
             _that.VerCode = data.data;
+            
             _that.showNext = "2";
             _that.Resend = false;
             _that.Reacquire();
@@ -219,27 +226,28 @@ export default {
           }
         });
       } else if (this.showNext == "2") {
-        if(this.codeValue == this.VerCode){
+       
+        // if(this.codeValue == this.VerCode){
           (this.showLoading = true), (this.ResBtn = true);
            let newPass = {
             mobile: this.maskValue,
             newPassword: this.passW,
-            mobileCode: this.VerCode
+            mobileCode: this.codeValue
           };
              getDataInfo('put',"user/password", newPass).then(res => {
              if(res.data.code ==200){
               _that.showPositionValue = true;
              _that.showMsg = res.data.msg;
              setTimeout(function(){
-                          _that.$router.push('/login')
+                          _that.$router.push('/codelogin')
                      },1000)
              }
             //  console.log(res)
            })
-        }else{
-           this.showPositionValue = true;
-             this.showMsg = '验证码不正确';
-        }
+        // }else{
+        //    this.showPositionValue = true;
+        //      this.showMsg = '验证码不正确';
+        // }
       }
     },
     getOrderHight() {

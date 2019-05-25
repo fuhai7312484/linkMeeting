@@ -261,7 +261,7 @@ export default {
               this.TaPosted = res.data.data.myCoupons;
               this.show2 = false;
             } else if (res.data.code == 100101) {
-              _that.$router.push("/login");
+              _that.$router.push("/codelogin");
             }
           }
         );

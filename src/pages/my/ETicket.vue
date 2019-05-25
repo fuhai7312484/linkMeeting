@@ -219,13 +219,13 @@ export default {
                     this.IsFollow = fres.data.data == 1 ? true : false;
                     this.show2 = false;
                   } else if (res.data.code == 100101) {
-                    _that.$router.push("/login");
+                    _that.$router.push("/codelogin");
                   }
                 }
               );
             });
           } else if (res.data.code == 100101) {
-            _that.$router.push("/login");
+            _that.$router.push("/codelogin");
           }
         });
       });
@@ -246,7 +246,7 @@ export default {
       setStorage('wx_url',wx_Url)
         WeChatLogin()
        }else{
-this.$router.push('/login')
+this.$router.push('/codelogin')
        }
 
      }

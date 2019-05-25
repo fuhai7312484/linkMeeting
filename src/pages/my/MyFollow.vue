@@ -278,7 +278,7 @@ export default {
               _that.show2 = false;
             }, 500);
           } else if (res.data.code == 100101) {
-            _that.$router.push("/login");
+            _that.$router.push("/codelogin");
           }
         });
       });

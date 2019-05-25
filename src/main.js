@@ -8,20 +8,6 @@ import App from './App'
 import store from './store'
 import { getCookie } from "./assets/lib/myStorage";
 
-
-
-// import Home from './components/HelloFromVux'
-
-// Vue.use(VueRouter)
-
-// const routes = [{
-//   path: '/',
-//   component: Home
-// }]
-
-// const router = new VueRouter({
-//   routes
-// })
 import wx from "weixin-js-sdk";
 Vue.use(wx)
 
@@ -33,7 +19,6 @@ Vue.use(VideoPlayer)
 
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
-
 
 import preview from 'vue-photo-preview'
 import 'vue-photo-preview/dist/skin.css'
@@ -64,7 +49,7 @@ router.beforeEach((to, from, next) => {
     } else {
       // console.log('请先登录！')
       next({
-        path: "/login",
+        path: "/codelogin",
         query: { redirect: to.fullPath } // 将跳转的路由path作为参数，登录成功后跳转到该路由
       });
     }

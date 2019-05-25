@@ -93,7 +93,9 @@
               <img :src="require('../../assets/images/lianhuiyiLogo.png')">
             </div>
             <div class="downAppTitle fl">
-              <h4>链会议</h4>
+ <img :src="require('../../assets/images/bzj.png')">
+
+              <!-- <h4>链会议</h4> -->
             </div>
             <div class="downAppBtn fr" @click="godown">下载APP</div>
           </div>
@@ -206,13 +208,11 @@
         </flexbox-item> -->
       </flexbox>
 
-      <flexbox :gutter="0" class="linH padlr" :span="3.5/5">
+      <flexbox :gutter="0" class="linH padlr" :span="4.1/5">
         <flexbox-item class="listContent-tagbox">
           <div class="listContent-TtagsCenBox">
         
-            <!-- <span class="listContent-Ttags" v-if="meetingData.draftsVo.meetingTypeList.length!=0">    {{meetingData.draftsVo.meetingTypeList.length!=0?meetingData.draftsVo.meetingTypeList[0].name:''}}</span> -->
-
-            <!-- <span  v-for="(TypeList,index) in meetingData.draftsVo.meetingTypeList" :key="index" class="listContent-Ttags">{{TypeList.name}}</span> -->
+         
             <span
               v-for="(tag,i) in meetingData.draftsVo.meetingDetails.tags"
               :key="i"
@@ -222,7 +222,7 @@
         </flexbox-item>
 
 
-         <flexbox-item :span="1.5/5">
+         <flexbox-item :span=".9/5">
           <div :class="idensChange(0,meetingData.idens)?'meeting-flex-v':'meeting-flex-nov'">
             <img
               :src="idensChange(0,meetingData.idens)?require('../../assets/images/meeting-v.png'):require('../../assets/images/icon-uncertified.png')"
@@ -230,22 +230,13 @@
             {{idensChange(0,meetingData.idens)?'已认证':'未认证'}}
           </div>
         </flexbox-item>
-
-        <!-- <flexbox-item :span="1.5/5">
-          <div :class="idensChange(0,meetingData.idens)?'meeting-flex-v':'meeting-flex-nov'">
-            <img
-              :src="idensChange(0,meetingData.idens)?require('../../assets/images/meeting-v.png'):require('../../assets/images/icon-uncertified.png')"
-            >
-            {{idensChange(0,meetingData.idens)?'已认证':'未认证'}}
-          </div>
-        </flexbox-item>-->
       </flexbox>
-
-      <flexbox :gutter="0" class="magrTB padlr">
-        <flexbox-item :span="1.1/5">
+<div class="padlr">
+      <flexbox :gutter="0" class="magrTB">
+        <flexbox-item :span="1/5">
           <span class="meetingdetailTitles">会议时间：</span>
         </flexbox-item>
-        <flexbox-item :span="3.9/5">
+        <flexbox-item :span="4/5">
           <div class="meetingdetailInfo">
             {{getTimeLimit(meetingData.draftsVo.meetingDetails.beginTime,meetingData.draftsVo.meetingDetails.endTime)}}
             <!-- {{meetingData.draftsVo.meetingDetails.beginTime}}至{{meetingData.draftsVo.meetingDetails.endTime}} -->
@@ -253,12 +244,12 @@
           </div>
         </flexbox-item>
       </flexbox>
-
+</div>
       <flexbox :gutter="0" class="magrTB padlr">
-        <flexbox-item :span="1.1/5">
+        <flexbox-item :span="1/5">
           <span class="meetingdetailTitles">场地地址：</span>
         </flexbox-item>
-        <flexbox-item :span="3.9/5">
+        <flexbox-item :span="4/5">
           <router-link
             tag="div"
             class="meetingdetailInfo"
@@ -274,10 +265,10 @@
       </flexbox>
 
       <flexbox :gutter="0" class="magrTB padlr">
-        <flexbox-item :span="1.1/5">
+        <flexbox-item :span="1/5">
           <span class="meetingdetailTitles">主办单位：</span>
         </flexbox-item>
-        <flexbox-item :span="3.9/5">
+        <flexbox-item :span="4/5">
           <div class="meetingdetailInfo">
             <span
               v-for="(org,index) in comTypeList('主办单位')"
@@ -289,10 +280,10 @@
       </flexbox>
 
       <flexbox :gutter="0" class="magrTB padlr">
-        <flexbox-item :span="1.1/5">
+        <flexbox-item :span="1/5">
           <span class="meetingdetailTitles">承办单位：</span>
         </flexbox-item>
-        <flexbox-item :span="3.9/5">
+        <flexbox-item :span="4/5">
 
 
           <!-- <div class="meetingdetailInfo">
@@ -389,10 +380,10 @@
         v-for="(en,index) in comTypeList('自定义')"
         :key="index"
       >
-        <flexbox-item :span="1.1/5">
+        <flexbox-item :span="1/5">
           <span class="meetingdetailTitles">{{en.companyType}}：</span>
         </flexbox-item>
-        <flexbox-item :span="3.9/5">
+        <flexbox-item :span="4/5">
           <div
             class="meetingdetailInfo"
             @click="SupportChange(en)"
@@ -1133,7 +1124,7 @@ export default {
          let login_Url = '/meetDetail/'+this.$route.query.meetingId+'?meetingId='+this.$route.query.meetingId
         //  console.log(login_Url)
       setStorage('login_url',login_Url)
-        this.$router.push("/login");
+        this.$router.push("/codelogin");
         // console.log('去登录')
       }
     },
@@ -1242,7 +1233,7 @@ export default {
                 this.meetingData.userMeetingInfo.isMyFollow = 2;
               } else if (res.data.code == 400 || res.data.code == 100101) {
                 setTimeout(function() {
-                  _that.$router.push("/login");
+                  _that.$router.push("/codelogin");
                 }, 500);
               }
             });
@@ -1264,7 +1255,7 @@ export default {
                 this.meetingData.userMeetingInfo.isMyFollow = 1;
               } else if (res.data.code == 400 || res.data.code == 100101) {
                 setTimeout(function() {
-                  _that.$router.push("/login");
+                  _that.$router.push("/codelogin");
                 }, 500);
               }
             });

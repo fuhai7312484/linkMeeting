@@ -1,5 +1,25 @@
 <template>
   <div class="box">
+
+    <div>
+      <div style="height:50px;position: relative; z-index: 9997;">
+        <sticky :check-sticky-support="false">
+          <div class="downloadAppBox padlr">
+            <div class="downLogo fl">
+              <img :src="require('../assets/images/lianhuiyiLogo.png')">
+            </div>
+            <div class="downAppTitle fl">
+ <img :src="require('../assets/images/bzj.png')">
+
+              <!-- <h4>链会议</h4> -->
+            </div>
+            <div class="downAppBtn fr" @click="godown">下载APP</div>
+          </div>
+        </sticky>
+      </div>
+    </div>
+
+
     <div class="ticket-Box">
       <!-- <div style="height:44px;">
         <sticky ref="sticky" :check-sticky-support="false" :disabled="disabled">
@@ -32,7 +52,7 @@
 <!-- <router-link tag="div" to="/meeting" class="meetSuccessByHome" > 更多精彩会议</router-link> -->
 
       <div class="meetSuccessByHome" @click="godown">
-        更多精彩会议
+        更多精彩会议查看APP版
       </div>
       <!-- <div @click="weixinShareTimeline('这里是标题','这块是简介','http://www.baidu.com','logo.png')">分享给微信好友</div>
       <div>分享到朋友圈</div> -->
@@ -93,7 +113,7 @@ export default {
   components: {
     Sticky,
     Card,
-    Loading
+    Loading,
   },
   data() {
     return {
@@ -229,7 +249,7 @@ export default {
 @import "../assets/style/global.less";
 @import "~vux/src/styles/reset.less";
 .ticket-Box {
-  background: rgba(245, 245, 245, 1);
+  background:#fff;
   height: 100vh;
 }
 .router-link-active {

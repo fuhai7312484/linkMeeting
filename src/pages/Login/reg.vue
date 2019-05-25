@@ -191,14 +191,27 @@ export default {
         };
       },
       codePassValue: function(value) {
-        let regExp = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,18}$/;
-        let r = value.match(regExp);
 
-        return {
-          // valid: value.match(regExp),
-          valid: r != null,
-          msg: "密码格式不正确!"
-        };
+         if (value.length < 3 || value.length >= 18) {
+          return {
+            valid: false,
+            msg: "密码格式不正确!"
+          };
+        } else {
+          return {
+            valid: true
+          };
+        }
+
+        
+        // let regExp = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,18}$/;
+        // let r = value.match(regExp);
+
+        // return {
+        //   // valid: value.match(regExp),
+        //   valid: r != null,
+        //   msg: "密码格式不正确!"
+        // };
       }
     };
   },

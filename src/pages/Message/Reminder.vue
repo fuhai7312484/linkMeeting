@@ -9,6 +9,26 @@
 
     
     </div> -->
+
+    <div>
+      <div style="height:50px;position: relative; z-index: 9997;">
+        <sticky :check-sticky-support="false">
+          <div class="downloadAppBox padlr">
+            <div class="downLogo fl">
+              <img :src="require('../../assets/images/lianhuiyiLogo.png')">
+            </div>
+            <div class="downAppTitle fl">
+ <img :src="require('../../assets/images/bzj.png')">
+
+              <!-- <h4>链会议</h4> -->
+            </div>
+            <div class="downAppBtn fr" @click="godown">下载APP</div>
+          </div>
+        </sticky>
+      </div>
+    </div>
+
+
     <div class="reminder-contentBox" v-if="meetingData.meetingDetails">
       <div class="padlr">
         <h2>{{meetingData.meetingDetails.theme}}</h2>
@@ -32,7 +52,7 @@
               <p v-for="(org,index) in comTypeList('主办单位')" :key="index">{{org.companyName}}</p>
             </dd>
           </dl>
-          <dl>
+          <dl v-if="comTypeList('承办单位').length!=0">
             <dt class="fl">承办单位:</dt>
             <dd class="fl">
               <p v-for="(und,index) in comTypeList('承办单位')" :key="index">{{und.companyName}}</p>
@@ -45,7 +65,20 @@
               <p>{{isRestore.status==0?'不参会':isRestore.status==2?'待定':'确认参会'}}</p>
             </dd>
           </dl>
+  <load-more  v-if="isRestore.isReceipt=='0'" :tip="'请您选择'" :show-loading="false" background-color="#A0A0A0" class="Tip-loadMore" ></load-more>
+         
+         
+           <div class="meetSuccessBtn"  v-if="isRestore.isReceipt=='1'" @click="gotoMeeting">
+      查看会议详情
+      </div>
+<!-- <router-link tag="div" to="/meeting" class="meetSuccessByHome" > 更多精彩会议</router-link> -->
 
+      <div class="meetSuccessByHome"  v-if="isRestore.isReceipt=='1'" @click="godown">
+        更多精彩会议
+      </div>
+
+
+         
           <div class="reminder-checkerBox" v-if="isRestore.isReceipt=='0'">
             <checker
               v-model="ReqVal"
@@ -64,7 +97,11 @@
               </checker-item>
             </checker>
           </div>
-          <div class="reminder-meetingDetails" v-if="isRestore.isReceipt=='0'" @click="gotoMeeting">查看详情 >></div>
+          <div class="reminder-GotoInfo">
+<div class="reminder-GotoApp fl" @click="godown">更多精彩会议查看APP版</div>
+ <div class="reminder-meetingDetails fr" v-if="isRestore.isReceipt=='0'" @click="gotoMeeting">查看会议详情</div>
+          </div>
+         
         </div>
       </div>
 
@@ -102,14 +139,14 @@ import {
   getStorage,
   checkToken,
   getDataInfo,
-  JIMinitchange
+  JIMinitchange,wakeApp
 } from "../../assets/lib/myStorage.js";
 import {
   Loading,
-  TransferDomDirective as TransferDom,
+  TransferDomDirective as TransferDom, Sticky,
   Checker,
   CheckerItem,
-  Confirm,  Toast,
+  Confirm,  Toast,LoadMore
 } from "vux";
 export default {
   name: "Reminder",
@@ -120,7 +157,7 @@ export default {
     Checker,
     CheckerItem,
     Loading,
-    Confirm,  Toast,
+    Confirm,  Toast,LoadMore, Sticky,
   },
   data() {
     return {
@@ -140,6 +177,12 @@ export default {
     };
   },
   methods: {
+     godown() {
+       wakeApp()
+      // this.$router.push("/downApp");
+      // wakeApp()
+      // window.location.href = "https://www.pgyer.com/NSM9";
+    },
     checkerChange(val, itemDisabled) {
       this.valchange = true;
       this.ReqVal = val;
@@ -324,11 +367,11 @@ let _that = this
 }
 .ReqVal-item {
   width: 30%;
-  border: 1px solid #ececec;
+  border: 1px solid #FE666B;
   border-radius: 5rem;
   text-align: center;
   padding: 5px 0;
-  color: #787878;
+  color: #FE666B;
   // float: left;
   span {
     display: none;
@@ -342,6 +385,17 @@ let _that = this
   color: #fff;
   background: #ff576b;
   border: 1px solid #ff576b;
+}
+.Tip-loadMore{
+  margin: 1.5rem auto .8rem auto !important;
+  .Tip-loadMore::after{
+   width: 90px !important;
+  }
+}
+.reminder-confirm{
+  .weui-dialog__btn{
+    text-align: center;
+  }
 }
 </style>
 

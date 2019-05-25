@@ -10,7 +10,8 @@ export function getDataInfo(mode, url, obj) {
   //测试环境
   // let ipUrl = "http://192.168.1.165/lhy/v0.1/api/";
   //服务器正式环境
-  let ipUrl = "http://lianhuiyi.woneast.com/lhy/v0.1/api/";
+  // let ipUrl = "https://lianhuiyi.woneast.com/lhy/v0.1/api/";
+  let ipUrl = "https://lianhuiyi.woneast.com/lhy/v0.1/api/";
   // 外网测试服务器
   // let ipUrl = "http://47.92.227.226:8081/lhy/v0.1/api/";
   // let ipUrl = "http://192.168.1.170:8080/v0.1/api/";
@@ -52,7 +53,8 @@ export function getDataInfo(mode, url, obj) {
 //判断用户是否登录
 export function isLogin() {
   let token = getCookie("accessToken");
-  if (token) {
+  let userId = getStorage("userToken")
+  if (token&&userId) {
     return true;
   } else {
     return false;
@@ -73,7 +75,7 @@ export function WeChatLogin(){
     let code = GetQueryString("code");
     // var callback = "http%3a%2f%2f47.92.227.226%3a8081%2f%23%2fwxlogin";
     // var callback = "http%3a%2f%2f192.168.1.118%3a8080%2f%23%2fwxlogin";
-   var callback ='http%3a%2f%2flianhuiyi.woneast.com%2f%23%2fwxlogin';
+   var callback ='https%3a%2f%2flianhuiyi.woneast.com%2f%23%2fwxlogin';
     // 正式版
     var appId = "wx837aea6e0dd3f50e";
     // 开放平台APPID

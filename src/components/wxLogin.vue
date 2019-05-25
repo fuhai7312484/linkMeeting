@@ -169,9 +169,9 @@ this.$refs.bindmobile.focus()
         wxBObj.mobile = obj.mobile;
         wxBObj.qrcode = obj.qrcode;
       }
-      console.log(wxBObj)
+      // console.log(wxBObj)
       getDataInfo("post", "user/wlogin", wxBObj).then(res => {
-        console.log(res)
+        // console.log(res)
         if (res.data.code == 200) {
           let tokenInfo = res.data.data.tokenMap;
           let userInfo = {
@@ -187,7 +187,7 @@ this.$refs.bindmobile.focus()
               showPositionValue: true,
               toastType: "success"
             };
-            console.log(getStorage("wx_url"))
+            // console.log(getStorage("wx_url"))
             if (getStorage("wx_url")) {
               // stoRemove('wx_url')
               // console.log(getStorage('wx_url'))
@@ -328,7 +328,7 @@ this.$refs.bindmobile.focus()
     },
   },
   mounted() {
- 
+  
     if (getStorage("wx_url") && getStorage("wx_url") == "lottery") {
     
        WeChatLogin().then(res => {
@@ -353,7 +353,6 @@ this.$refs.bindmobile.focus()
          
        })
     } else {
- 
       WeChatLogin().then(res => {
         console.log(res);
         let code = GetQueryString("code");
@@ -442,15 +441,16 @@ this.$refs.bindmobile.focus()
   input{ padding: .5rem 0;}
 }
 .bind-mobile-title{
-
   .weui-input{
-font-size: 1rem;
+      font-size: 1rem;
   }
-  
 }
 .WXbindInfo-af{
   .weui-cells::before{
     border: 0;
+  }
+  .weui-cell__bd{
+    font-size: 1rem;
   }
 }
 .bind-mobile-oldMob{

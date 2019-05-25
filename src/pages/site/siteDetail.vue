@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <div>
+  <div>
       <div style="height:50px;position: relative; z-index: 9997;">
         <sticky :check-sticky-support="false">
           <div class="downloadAppBox padlr">
@@ -8,7 +8,9 @@
               <img :src="require('../../assets/images/lianhuiyiLogo.png')">
             </div>
             <div class="downAppTitle fl">
-              <h4>链会议</h4>
+ <img :src="require('../../assets/images/bzj.png')">
+
+              <!-- <h4>链会议</h4> -->
             </div>
             <div class="downAppBtn fr" @click="godown">下载APP</div>
           </div>
@@ -157,7 +159,46 @@
         <flexbox-item :span="3.5/5">
           <h3 class="site-flex-title">{{sitData.name}}</h3>
         </flexbox-item>
-        <flexbox-item :span="1.5/5">
+        <!-- <flexbox-item :span="1.5/5">
+         
+
+          <div :class="idensChange(1,sitData.idens)?'site-flex-v':'meeting-flex-nov'">
+            <img
+              :src="idensChange(1,sitData.idens)?require('../../assets/images/v.png'):require('../../assets/images/icon-uncertified.png')"
+            >
+            {{idensChange(1,sitData.idens)?'已认证':'未认证'}}
+          </div>
+        </flexbox-item> -->
+      </flexbox>
+      <flexbox :gutter="0" class="linH padlr" >
+        <flexbox-item class="listContent-tagbox" :span="4.1/5">
+          <!-- <div v-for="(TypeList,index) in meetingData.draftsVo.meetingTypeList" :key="index">
+            <span class="listContent-Ttags">{{TypeList.name}}</span>
+            <span class="listContent-tags">{{TypeList.industry}}</span>
+          </div>-->
+
+          <!-- <span class="listContent-Ttags">{{sitData.type}}</span> -->
+          <!-- <span
+            class="listContent-tags"
+            v-for="(Feat,index) in sitData.placeFeature"
+            :key="index"
+          >{{Feat.name}}</span> -->
+
+          <div class="listContent-TtagsCenBox">
+            <span
+              v-for="(Feat,i) in sitData.placeFeature"
+              :key="i"
+              v-if="i<=4"
+              class="listContent-tags"
+            >{{Feat.name}}</span>
+          </div>
+
+
+          <!-- <span class="listContent-tags">餐饮</span>
+          <span class="listContent-tags">游泳</span>-->
+        </flexbox-item>
+
+          <flexbox-item :span=".9/5">
           <!-- <div class="site-flex-v">
             <img :src="require('../../assets/images/v.png')">认证
           </div>-->
@@ -169,23 +210,7 @@
             {{idensChange(1,sitData.idens)?'已认证':'未认证'}}
           </div>
         </flexbox-item>
-      </flexbox>
-      <flexbox :gutter="0" class="linH padlr">
-        <flexbox-item class="listContent-tagbox">
-          <!-- <div v-for="(TypeList,index) in meetingData.draftsVo.meetingTypeList" :key="index">
-            <span class="listContent-Ttags">{{TypeList.name}}</span>
-            <span class="listContent-tags">{{TypeList.industry}}</span>
-          </div>-->
 
-          <span class="listContent-Ttags">{{sitData.type}}</span>
-          <span
-            class="listContent-tags"
-            v-for="(Feat,index) in sitData.placeFeature"
-            :key="index"
-          >{{Feat.name}}</span>
-          <!-- <span class="listContent-tags">餐饮</span>
-          <span class="listContent-tags">游泳</span>-->
-        </flexbox-item>
       </flexbox>
 
       <flexbox class="linH padlr">
@@ -780,7 +805,7 @@ export default {
                 this.IsFollow = 2;
               } else if (res.data.code == 400 || res.data.code == 100101) {
                 setTimeout(function() {
-                  _that.$router.push("/login");
+                  _that.$router.push("/codelogin");
                 }, 500);
               }
             });
@@ -802,7 +827,7 @@ export default {
                 this.IsFollow = 1;
               } else if (res.data.code == 400 || res.data.code == 100101) {
                 setTimeout(function() {
-                  _that.$router.push("/login");
+                  _that.$router.push("/codelogin");
                 }, 500);
               }
             });
@@ -1208,7 +1233,7 @@ export default {
           });
         } else {
           alert("请先登录");
-          this.$router.push("/login");
+          this.$router.push("/codelogin");
         }
       }
     },

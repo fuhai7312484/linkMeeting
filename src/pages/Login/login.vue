@@ -30,7 +30,7 @@
         <group class="login-account">
           <div class="fl" :style="{width:'80%'}">
             <x-input
-              placeholder="请输入密码(8-18位,数字+字母)"
+              placeholder="请输入密码(3-18位)"
               ref="refpass"
               :is-type="codePassValue"
               @on-change="refCodeChange"
@@ -55,28 +55,23 @@
       </div>
     </div>
     <div class="loginFooter">
-
-       <x-dialog v-model="showHideOnBlur" class="dialog-demo" hide-on-blur>
-          <div class="TermsBox">
-            <div class="TermsTitle">
-              <div @click="showHideOnBlur=false">
-                <span class="TermsClose">
-                 <x-icon type="ios-close-empty" size="30"></x-icon>
-                </span>
-              </div>
-
-              <h3>{{TermsTitle}}</h3>
+      <x-dialog v-model="showHideOnBlur" class="dialog-demo" hide-on-blur>
+        <div class="TermsBox">
+          <div class="TermsTitle">
+            <div @click="showHideOnBlur=false">
+              <span class="TermsClose">
+                <x-icon type="ios-close-empty" size="30"></x-icon>
+              </span>
             </div>
-            <div class="TermsContent padlr">
 
-  <terms :termsType="termsType"></terms>
-
-            </div>
-          
+            <h3>{{TermsTitle}}</h3>
           </div>
-        </x-dialog>
+          <div class="TermsContent padlr">
+            <terms :termsType="termsType"></terms>
+          </div>
+        </div>
+      </x-dialog>
 
-        
       <div class="weixinBtns">
         <!-- <span>
           <img src="../../assets/images/QQLogin.png">
@@ -85,16 +80,13 @@
           <img src="../../assets/images/weixin.png">
         </span>-->
 
-       
-
         <!-- {{termsType}} -->
       </div>登录即表示同意链会议
       <span @click="gotoTerms('FW')">服务条款</span> 和
       <span @click="gotoTerms('YS')">隐私条款</span>
     </div>
-   
 
-     <toast
+    <toast
       v-model="toastInfo.showPositionValue"
       width="15em"
       :type="toastInfo.toastType"
@@ -102,18 +94,6 @@
       :time="1500"
       is-show-mask
     >{{toastInfo.showMsg}}</toast>
-
-
-    
-
-
-
-
-
-
-
-
-
   </div>
 </template>
 <script>
@@ -125,14 +105,20 @@ import {
   setStorage,
   getCookie,
   removeCookie,
-  checkToken,isweixin,WeChatLogin,GetQueryString,getStorage,stoRemove
+  checkToken,
+  isweixin,
+  WeChatLogin,
+  GetQueryString,
+  getStorage,
+  stoRemove
 } from "../../assets/lib/myStorage.js";
 import {
   Group,
   XInput,
   XButton,
   Toast,
-  XDialog,  Popup,
+  XDialog,
+  Popup,
   TransferDomDirective as TransferDom
 } from "vux";
 import axios from "axios";
@@ -147,24 +133,25 @@ export default {
     XButton,
     Toast,
     Terms,
-    XDialog,Popup
+    XDialog,
+    Popup
   },
   name: "login",
 
   data() {
     return {
-      toastInfo:{
-          showMsg: "",
+      toastInfo: {
+        showMsg: "",
         showPositionValue: false,
         toastType: "success"
       },
-        wxNext: 1,
-         wxValue: "",
+      wxNext: 1,
+      wxValue: "",
       time: 60,
       BindCodeVal: "",
-      TermsTitle:'',
+      TermsTitle: "",
       showHideOnBlur: false,
-       Resend: true,
+      Resend: true,
       ResBtn: true,
       ResendTitle: "获取验证码",
       termsType: "",
@@ -177,9 +164,9 @@ export default {
       dx_djs: null,
       ResBtnP: true,
       wxshow1: false,
-      wxData:null,
+      wxData: null,
       disabled: true,
-       codeValuefun: function(value) {
+      codeValuefun: function(value) {
         let regExp = /^\d{6}\b/;
         let r = value.match(regExp);
         return {
@@ -188,23 +175,27 @@ export default {
         };
       },
       codePassValue: function(value) {
-        let regExp = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,18}$/;
-        let r = value.match(regExp);
-        return {
-          // valid: value.match(regExp),
-          valid: r != null,
-          msg: "密码格式不正确!"
-        };
+        // let regExp = /^[a-zA-Z0-9]{3,18}$/;
+        // let r = value.match(regExp);
+        if (value.length < 3 || value.length >= 18) {
+          return {
+            valid: false,
+            msg: "密码格式不正确!"
+          };
+        } else {
+          return {
+            valid: true
+          };
+        }
       }
     };
   },
- computed: {
+  computed: {
     ...mapState({
       codeUrl: state => state.codeUrl
     })
   },
   methods: {
-
     //点击绑定
     submitDataP() {
       let _that = this;
@@ -217,12 +208,12 @@ export default {
         wxProvince: this.wxData.province,
         wxCity: this.wxData.city,
         wxCountry: this.wxData.country,
-        wxUnionid:this.wxData.unionid
+        wxUnionid: this.wxData.unionid
       };
-    
+
       this.wxlogin(wxBObj, "sub");
     },
-     //验证输入的手机号是否正确来控制btn是否可点 refcode
+    //验证输入的手机号是否正确来控制btn是否可点 refcode
     refCodeChangeP(ev) {
       if (this.wxValue.length == 0 || this.BindCodeVal.length == 0) {
         this.ResBtnP = true;
@@ -237,7 +228,7 @@ export default {
         }
       }
     },
-     //验证码倒数
+    //验证码倒数
     Reacquire() {
       let _that = this;
       this.dx_djs = setInterval(() => {
@@ -292,13 +283,13 @@ export default {
     //服务条款
     gotoTerms(type) {
       this.showHideOnBlur = true;
-      switch(type){
+      switch (type) {
         case "FW":
-      this.TermsTitle = '注册协议及服务条款';
-      break;
-       case "YS":
-      this.TermsTitle = '链会议隐私条款';
-      break;
+          this.TermsTitle = "注册协议及服务条款";
+          break;
+        case "YS":
+          this.TermsTitle = "链会议隐私条款";
+          break;
       }
       this.termsType = type;
       // console.log(type)
@@ -311,13 +302,11 @@ export default {
     },
     //手机号填写错误提示信息
     mobileErrorChange(ev) {
-      
-       this.toastInfo = {
-              showMsg: '填写的手机号格式不正确',
-              showPositionValue: true,
-              toastType: "text"
-            };
-            
+      this.toastInfo = {
+        showMsg: "填写的手机号格式不正确",
+        showPositionValue: true,
+        toastType: "text"
+      };
     },
     //验证输入的手机号是否正确来控制btn是否可点 refcode
     refCodeChange(ev) {
@@ -344,12 +333,12 @@ export default {
 
       getDataInfo("post", "user/login", loginObj).then(res => {
         if (res.data.code == 200) {
-           this.toastInfo = {
-              showMsg: res.data.msg,
-              showPositionValue: true,
-              toastType: "text"
-            };
-        
+          this.toastInfo = {
+            showMsg: res.data.msg,
+            showPositionValue: true,
+            toastType: "text"
+          };
+
           this.userData = res.data.data;
           let tokenInfo = res.data.data.tokenMap;
           let userInfo = {
@@ -368,21 +357,20 @@ export default {
           //   _that.$router.go(-1)
           // }
 
-           setTimeout(function() {
-              if (getStorage('login_url')) {
-                _that.$router.push(getStorage('login_url'));
-                console.log(getStorage('login_url'))
-                setTimeout(function() {
-                  stoRemove("login_url");
-                }, 500);
-              } else {
-                _that.$router.push("/myindex");
-              }
-            }, 500);
-
+          setTimeout(function() {
+            if (getStorage("login_url")) {
+              _that.$router.push(getStorage("login_url"));
+              console.log(getStorage("login_url"));
+              setTimeout(function() {
+                stoRemove("login_url");
+              }, 500);
+            } else {
+              _that.$router.push("/meeting");
+            }
+          }, 500);
 
           // setTimeout(function() {
-            
+
           //   // location.hash = '/myindex'
 
           //   // console.log(window.location.hash,location.hash)
@@ -391,12 +379,11 @@ export default {
           //   _that.$router.push("/meeting");
           // }, 1000);
         } else if (res.data.code == 1003) {
-           this.toastInfo = {
-              showMsg: res.data.msg,
-              showPositionValue: true,
-              toastType: "text"
-            };
-
+          this.toastInfo = {
+            showMsg: res.data.msg,
+            showPositionValue: true,
+            toastType: "text"
+          };
         }
       });
     },
@@ -442,23 +429,23 @@ export default {
     //微信直接登录
     wxlogin(obj, type) {
       let _that = this;
-  
-        let wxBObj = {
-                wxOpenid: obj.wxOpenid,
-                wxNickname: obj.wxNickname,
-                wxHeadimgurl: obj.wxHeadimgurl,
-                wxProvince: obj.wxProvince,
-                wxCity:obj.wxCity,
-                wxCountry: obj.wxCountry,
-                wxUnionid:obj.wxUnionid,
-                // wxUnionid:obj.Unionid,
-              };
-              
-          if(type == 'sub'){
-            wxBObj.mobile = obj.mobile
-            wxBObj.qrcode = obj.qrcode
-          }
-        
+
+      let wxBObj = {
+        wxOpenid: obj.wxOpenid,
+        wxNickname: obj.wxNickname,
+        wxHeadimgurl: obj.wxHeadimgurl,
+        wxProvince: obj.wxProvince,
+        wxCity: obj.wxCity,
+        wxCountry: obj.wxCountry,
+        wxUnionid: obj.wxUnionid
+        // wxUnionid:obj.Unionid,
+      };
+
+      if (type == "sub") {
+        wxBObj.mobile = obj.mobile;
+        wxBObj.qrcode = obj.qrcode;
+      }
+
       getDataInfo("post", "user/wlogin", wxBObj).then(res => {
         // console.log(res)
         if (res.data.code == 200) {
@@ -477,21 +464,24 @@ export default {
               toastType: "success"
             };
 
-             if(getStorage('wx_url')){
-                // stoRemove('wx_url')
+            if (getStorage("wx_url")) {
+              // stoRemove('wx_url')
               // console.log(getStorage('wx_url'))
-              if(getStorage('wx_url')!= '/'||getStorage('wx_url')!='/meeting'){
+              if (
+                getStorage("wx_url") != "/" ||
+                getStorage("wx_url") != "/meeting"
+              ) {
                 // console.log(window.location.href.split('login'))
-                window.location.href = window.location.href.split('login')[0]+getStorage('wx_url')
-                setTimeout(function(){
-                   stoRemove('wx_url')
-                },500)
-               
+                window.location.href =
+                  window.location.href.split("login")[0] + getStorage("wx_url");
+                setTimeout(function() {
+                  stoRemove("wx_url");
+                }, 500);
               }
-            }else{
-                this.$router.push("/meeting");
+            } else {
+              this.$router.push("/meeting");
             }
-            
+
             // console.log(getCookie('wx_url'))
             // _that.$router.push("/meeting");
           } else if (type == "sub") {
@@ -506,27 +496,24 @@ export default {
           //  setTimeout(function(){
           //   _that.wxshow1 = false
           //  },2000)
-        }else if(res.data.code == 400){
-           this.toastInfo = {
-              showMsg: res.data.msg,
-              showPositionValue: true,
-              toastType: "text"
-            };
+        } else if (res.data.code == 400) {
+          this.toastInfo = {
+            showMsg: res.data.msg,
+            showPositionValue: true,
+            toastType: "text"
+          };
         }
       });
-    },
+    }
   },
   created() {
     this.getOrderHight();
   },
 
   mounted() {
-    if(isweixin()){
- WeChatLogin()
-
+    if (isweixin()) {
+      WeChatLogin();
     }
-  
-
   }
 };
 </script>
@@ -542,8 +529,8 @@ export default {
   text-align: center;
   color: #a0a0a0;
   font-size: 0.8rem;
-   .weui-dialog{
-    background: #F8F8F8 !important;
+  .weui-dialog {
+    background: #f8f8f8 !important;
   }
 }
 
@@ -594,5 +581,4 @@ export default {
     color: #fff;
   }
 }
-
 </style>
